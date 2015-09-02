@@ -25,8 +25,16 @@ type
   EtsAlignment = class(Exception);
 
 type
-  THorizontalAlignment = (haLeft, haRight, haCenter);
-  TVerticalAlignment   = (vaTop, vaBottom, vaCenter);
+  THorizontalAlignment = (
+    haLeft,
+    haRight,
+    haCenter
+  );
+  TVerticalAlignment   = (
+    vaTop,
+    vaBottom,
+    vaCenter
+  );
 
 type
   TtsAlignment = class(TPersistent)

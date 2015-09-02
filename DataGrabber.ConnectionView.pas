@@ -20,7 +20,8 @@ interface
 
 uses
   Winapi.Windows, Winapi.Messages,
-  System.Generics.Collections, System.SysUtils, System.Variants, System.Classes,
+  //System.Generics.Collections,
+  System.SysUtils, System.Variants, System.Classes,
   Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ComCtrls, Vcl.ToolWin,
   Vcl.ActnList, Vcl.ExtCtrls,
 

@@ -62,11 +62,12 @@ function DBXConnection: IConnection;
 
 implementation
 
+{$R *.dfm}
+
 uses
   ts.Data.NativeDBX;
 
-{$R *.dfm}
-
+  {TODO -oTS -cGeneral : Use ServiceLocator}
 var
   FConnection: TdmDBXConnection;
 

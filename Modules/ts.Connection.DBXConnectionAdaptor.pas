@@ -70,7 +70,7 @@ uses
 {$REGION 'construction and destruction'}
 procedure TDBXConnectionAdaptor.AfterConstruction;
 begin
-  inherited;
+  inherited AfterConstruction;
   FConnection := TSQLConnection.Create(nil);
   GetDriverNames(Protocols);
 end;
@@ -121,7 +121,7 @@ procedure TDBXConnectionAdaptor.AssignConnectionSettings;
 var
   B: Boolean;
 begin
-  inherited;
+  inherited AssignConnectionSettings;
   B := Connected;
   try
     if ConnectionSettings.Protocol <> '' then

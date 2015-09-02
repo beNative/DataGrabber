@@ -4,7 +4,7 @@ object frmRTTEye: TfrmRTTEye
   ActiveControl = btnLoad
   Caption = 'RTTEye'
   ClientHeight = 517
-  ClientWidth = 748
+  ClientWidth = 625
   Color = clBtnFace
   Font.Charset = ANSI_CHARSET
   Font.Color = clWindowText
@@ -18,14 +18,15 @@ object frmRTTEye: TfrmRTTEye
   object pnlMain: TPanel
     Left = 0
     Top = 0
-    Width = 413
+    Width = 290
     Height = 485
     Align = alClient
     BevelOuter = bvNone
     BorderWidth = 5
     TabOrder = 0
+    ExplicitWidth = 413
     object splVertical: TSplitter
-      Left = 398
+      Left = 275
       Top = 5
       Width = 10
       Height = 475
@@ -36,7 +37,7 @@ object frmRTTEye: TfrmRTTEye
     object tvRtti: TTreeView
       Left = 5
       Top = 5
-      Width = 393
+      Width = 270
       Height = 475
       Align = alClient
       BevelOuter = bvNone
@@ -54,19 +55,22 @@ object frmRTTEye: TfrmRTTEye
       OnChange = tvRttiChange
       OnCustomDrawItem = tvRttiCustomDrawItem
       OnDblClick = tvRttiDblClick
+      ExplicitLeft = -1
+      ExplicitTop = -11
     end
   end
   object pnlBottom: TPanel
     Left = 0
     Top = 485
-    Width = 748
+    Width = 625
     Height = 32
     Align = alBottom
     BevelOuter = bvNone
     BorderWidth = 5
     TabOrder = 1
+    ExplicitWidth = 748
     DesignSize = (
-      748
+      625
       32)
     object btnLoad: TButton
       Left = 0
@@ -93,15 +97,16 @@ object frmRTTEye: TfrmRTTEye
       TabOrder = 2
     end
     object EditSearch: TEdit
-      Left = 421
+      Left = 298
       Top = 4
       Width = 234
       Height = 21
       Anchors = [akTop, akRight]
       TabOrder = 3
+      ExplicitLeft = 421
     end
     object btnSearch: TButton
-      Left = 661
+      Left = 538
       Top = 1
       Width = 81
       Height = 27
@@ -109,10 +114,11 @@ object frmRTTEye: TfrmRTTEye
       Anchors = [akTop, akRight]
       Default = True
       TabOrder = 4
+      ExplicitLeft = 661
     end
   end
   object lvRtti: TListView
-    Left = 413
+    Left = 290
     Top = 0
     Width = 335
     Height = 485
@@ -132,6 +138,7 @@ object frmRTTEye: TfrmRTTEye
     RowSelect = True
     TabOrder = 2
     ViewStyle = vsReport
+    ExplicitLeft = 413
   end
   object aclMain: TActionList
     Left = 384

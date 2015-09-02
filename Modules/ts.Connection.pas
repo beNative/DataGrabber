@@ -51,8 +51,10 @@ type
     function CreateNativeDataSet: INativeDataSet; virtual; abstract;
 
   public
-    constructor Create(AOwner: TComponent; ASettings: TConnectionSettings = nil);
-      reintroduce; virtual;
+    constructor Create(
+      AOwner    : TComponent;
+      ASettings : TConnectionSettings = nil
+    ); reintroduce; virtual;
     procedure BeforeDestruction; override;
 
     property Connected: Boolean
@@ -95,7 +97,7 @@ procedure TdmConnection.BeforeDestruction;
 begin
   FreeAndNil(FProtocols);
   FreeAndNil(FConnectionSettings);
-  inherited;
+  inherited BeforeDestruction;
 end;
 {$ENDREGION}
 

@@ -49,7 +49,7 @@ uses
 {$REGION 'construction and destruction'}
 procedure TNativeADODataSet.AfterConstruction;
 begin
-  inherited;
+  inherited AfterConstruction;
   FDataSet := TADODataSet.Create(nil);
   FDataSet.Connection := Connection.Connection as TADOConnection;
 end;
@@ -57,7 +57,7 @@ end;
 procedure TNativeADODataSet.BeforeDestruction;
 begin
   FreeAndNil(FDataSet);
-  inherited;
+  inherited BeforeDestruction;
 end;
 {$ENDREGION}
 

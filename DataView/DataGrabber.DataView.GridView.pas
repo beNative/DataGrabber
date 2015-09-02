@@ -20,9 +20,11 @@ interface
 
 uses
   Winapi.Windows, Winapi.Messages,
-  System.SysUtils, System.Variants, System.Classes, System.Generics.Collections,
+  System.SysUtils, System.Variants, System.Classes,
   Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.Menus,
   Data.DB,
+
+  Spring.Collections,
 
   DDuce.Components.GridView, DDuce.Components.DBGridView,
 
@@ -42,14 +44,24 @@ type
     FData                   : IData;
     FGrid                   : TDBGridView;
     FGridSort               : TtsDBGridViewSort;
-    FEmptyCols              : TObjectList<TDBGridColumn>;
-    FConstCols              : TObjectList<TDBGridColumn>;
+    FEmptyCols              : IList<TDBGridColumn>;
+    FConstCols              : IList<TDBGridColumn>;
     FConstantColumnsVisible : Boolean;
     FEmptyColumnsVisible    : Boolean;
 
     function GetName: string;
     function GetDataSet: TDataSet;
     function GetRecordCount: Integer;
+    function GetConstantColumnsVisible: Boolean;
+    procedure SetConstantColumnsVisible(const Value: Boolean);
+    function GetEmptyColumnsVisible: Boolean;
+    procedure SetEmptyColumnsVisible(const Value: Boolean);
+    function GetData: IData;
+    procedure SetData(const Value: IData);
+    function GetSettings: IDataViewSettings;
+    procedure SetSettings(const Value: IDataViewSettings);
+    function GetPopupMenu: TPopupMenu;
+    procedure SetPopupMenu(const Value: TPopupMenu);
 
     procedure InitializeGridColumns;
     procedure InitializeGridColumn(AGridColumn: TDBGridColumn);
@@ -62,51 +74,34 @@ type
     procedure grdKeyPress(Sender: TObject; var Key: Char);
     procedure grdChanging(Sender: TObject; var Cell: TGridCell;
       var Selected: Boolean);
-
     procedure grdRowMultiSelect(Sender: TObject; Row: Integer;
       var Select: Boolean);
     procedure grdClearMultiSelect(Sender: TObject);
-
     procedure grdCheckClick(Sender: TObject; Cell: TGridCell);
     procedure grdGetCheckState(Sender: TObject; Cell: TGridCell;
       var CheckState: TCheckBoxState);
-
     procedure grdEditCanModify(Sender: TObject; Cell: TGridCell;
       var CanModify: Boolean);
-
     procedure grdCellAcceptCursor(Sender: TObject; Cell: TGridCell;
       var Accept: Boolean);
     procedure grdGetCellReadOnly(Sender: TObject; Cell: TGridCell;
       var CellReadOnly: Boolean);
     procedure grdGetCellText(Sender: TObject; Cell: TGridCell;
       var Value: string);
-
     procedure grdGetCellColors(Sender: TObject; Cell: TGridCell;
       Canvas: TCanvas);
-
     procedure grdMouseWheelUp(Sender: TObject; Shift: TShiftState;
       MousePos: TPoint; var Handled: Boolean);
     procedure grdMouseWheelDown(Sender: TObject; Shift: TShiftState;
       MousePos: TPoint; var Handled: Boolean);
 
-    function GetConstantColumnsVisible: Boolean;
-    procedure SetConstantColumnsVisible(const Value: Boolean);
-    function GetEmptyColumnsVisible: Boolean;
-    procedure SetEmptyColumnsVisible(const Value: Boolean);
-
-    function GetData: IData;
-    procedure SetData(const Value: IData);
-    function GetSettings: IDataViewSettings;
-    procedure SetSettings(const Value: IDataViewSettings);
-
-    procedure UpdateMultiSelection(const AFieldName  : string;
-                                   const AFieldValue : Variant);
-  private
-    function GetPopupMenu: TPopupMenu;
-    procedure SetPopupMenu(const Value: TPopupMenu);
+    procedure UpdateMultiSelection(
+      const AFieldName  : string;
+      const AFieldValue : Variant
+    );
 
   public
-
+    constructor Create;
     procedure AfterConstruction; override;
     procedure BeforeDestruction; override;
 
@@ -130,7 +125,6 @@ type
     function SelectionToFields(AQuoteItems: Boolean = True): string;
 
     procedure UpdateView;
-    constructor Create;
 
     property DataSet: TDataSet
        read GetDataSet;
@@ -154,26 +148,21 @@ type
       read GetPopupMenu write SetPopupMenu;
   end;
 
-//*****************************************************************************
-
 implementation
 
 {$R *.dfm}
 
 uses
-  Math,
+  System.Math,
 
   ts.Modules.ComponentInspector, ts.Classes.KeyValues;
 
-//*****************************************************************************
-// construction and destruction                                          BEGIN
-//*****************************************************************************
-
+{$REGION 'construction and destruction'}
 procedure TfrmGridView.AfterConstruction;
 begin
-  inherited;
-  FConstCols := TObjectList<TDBGridColumn>.Create(False);
-  FEmptyCols := TObjectList<TDBGridColumn>.Create(False);
+  inherited AfterConstruction;
+  FConstCols := TCollections.CreateObjectList<TDBGridColumn>(False);
+  FEmptyCols := TCollections.CreateObjectList<TDBGridColumn>(False);
   FConstantColumnsVisible := True;
   FEmptyColumnsVisible    := True;
 
@@ -228,25 +217,24 @@ begin
   FGridSort.SortedColumnColorEnabled := True;
 end;
 
-//-----------------------------------------------------------------------------
+constructor TfrmGridView.Create;
+begin
+  inherited Create(Application);
+end;
 
 procedure TfrmGridView.BeforeDestruction;
 begin
   if Assigned(FData) then
     FData.UnRegisterDataView(Self);
+  FConstCols := nil;
+  FEmptyCols := nil;
   FreeAndNil(FConstCols);
   FreeAndNil(FEmptyCols);
-  inherited;
+  inherited BeforeDestruction;
 end;
+{$ENDREGION}
 
-//*****************************************************************************
-// construction and destruction                                            END
-//*****************************************************************************
-
-//*****************************************************************************
-// property access methods                                               BEGIN
-//*****************************************************************************
-
+{$REGION 'property access methods'}
 function TfrmGridView.GetEmptyColumnsVisible: Boolean;
 begin
   Result := FEmptyColumnsVisible;
@@ -264,14 +252,10 @@ begin
   end;
 end;
 
-//-----------------------------------------------------------------------------
-
 function TfrmGridView.GetName: string;
 begin
   Result := inherited Name;
 end;
-
-//-----------------------------------------------------------------------------
 
 function TfrmGridView.GetPopupMenu: TPopupMenu;
 begin
@@ -283,8 +267,6 @@ begin
   FGrid.PopupMenu := Value;
 end;
 
-//-----------------------------------------------------------------------------
-
 function TfrmGridView.GetSettings: IDataViewSettings;
 begin
   Result := FSettings;
@@ -294,8 +276,6 @@ procedure TfrmGridView.SetSettings(const Value: IDataViewSettings);
 begin
   FSettings := Value;
 end;
-
-//-----------------------------------------------------------------------------
 
 function TfrmGridView.GetConstantColumnsVisible: Boolean;
 begin
@@ -314,14 +294,10 @@ begin
   end
 end;
 
-//-----------------------------------------------------------------------------
-
 function TfrmGridView.GetDataSet: TDataSet;
 begin
   Result := Data.DataSet;
 end;
-
-//-----------------------------------------------------------------------------
 
 function TfrmGridView.GetData: IData;
 begin
@@ -339,21 +315,13 @@ begin
   end;
 end;
 
-//-----------------------------------------------------------------------------
-
 function TfrmGridView.GetRecordCount: Integer;
 begin
   Result := Data.RecordCount;
 end;
+{$ENDREGION}
 
-//*****************************************************************************
-// property access methods                                                 END
-//*****************************************************************************
-
-//*****************************************************************************
-// event handlers                                                        BEGIN
-//*****************************************************************************
-
+{$REGION 'event handlers'}
 procedure TfrmGridView.dscMainDataChange(Sender: TObject; Field: TField);
 begin
   if Assigned(dscMain.DataSet) and Assigned(Field) and
@@ -370,16 +338,12 @@ begin
   FGridSort.SortDirection := gsNone;
 end;
 
-//-----------------------------------------------------------------------------
-
 procedure TfrmGridView.grdCellAcceptCursor(Sender: TObject; Cell: TGridCell;
   var Accept: Boolean);
 begin
   Accept := Accept and (not FGrid.Columns[Cell.Col].ReadOnly) and
     (not IsCellReadOnly(Cell));
 end;
-
-//-----------------------------------------------------------------------------
 
 procedure TfrmGridView.grdChanging(Sender: TObject; var Cell: TGridCell;
   var Selected: Boolean);
@@ -393,8 +357,6 @@ begin
     end;
   end;
 end;
-
-//-----------------------------------------------------------------------------
 
 procedure TfrmGridView.grdCheckClick(Sender: TObject; Cell: TGridCell);
 var
@@ -422,22 +384,16 @@ begin
   end;
 end;
 
-//-----------------------------------------------------------------------------
-
 procedure TfrmGridView.grdClearMultiSelect(Sender: TObject);
 begin
   (Data as IDataSelection).SelectedRecords.Clear;
 end;
-
-//-----------------------------------------------------------------------------
 
 procedure TfrmGridView.grdEditCanModify(Sender: TObject; Cell: TGridCell;
   var CanModify: Boolean);
 begin
   CanModify := CanModify and not IsCellReadOnly(Cell);
 end;
-
-//-----------------------------------------------------------------------------
 
 procedure TfrmGridView.grdGetCellColors(Sender: TObject; Cell: TGridCell;
   Canvas: TCanvas);
@@ -473,15 +429,11 @@ begin
   end;
 end;
 
-//-----------------------------------------------------------------------------
-
 procedure TfrmGridView.grdGetCellReadOnly(Sender: TObject; Cell: TGridCell;
   var CellReadOnly: Boolean);
 begin
   CellReadOnly := CellReadOnly and IsCellReadOnly(Cell);
 end;
-
-//-----------------------------------------------------------------------------
 
 procedure TfrmGridView.grdGetCellText(Sender: TObject; Cell: TGridCell;
   var Value: string);
@@ -492,8 +444,6 @@ begin
   if IsCheckBoxField(GV.Columns[Cell.Col].FieldName) then
     Value := '';
 end;
-
-//-----------------------------------------------------------------------------
 
 procedure TfrmGridView.grdGetCheckState(Sender: TObject; Cell: TGridCell;
   var CheckState: TCheckBoxState);
@@ -510,8 +460,6 @@ begin
     CheckState := cbUnchecked;
 end;
 
-//-----------------------------------------------------------------------------
-
 procedure TfrmGridView.grdKeyPress(Sender: TObject; var Key: Char);
 var
   GV   : TDBGridView;
@@ -520,8 +468,6 @@ begin
   if GV.Editing and (Key = '.') and (GV.SelectedField is TFloatField) then
     Key := ',';
 end;
-
-//-----------------------------------------------------------------------------
 
 procedure TfrmGridView.grdMouseWheelDown(Sender: TObject; Shift: TShiftState;
   MousePos: TPoint; var Handled: Boolean);
@@ -537,8 +483,6 @@ begin
   end
 end;
 
-//-----------------------------------------------------------------------------
-
 procedure TfrmGridView.grdMouseWheelUp(Sender: TObject; Shift: TShiftState;
   MousePos: TPoint; var Handled: Boolean);
 var
@@ -552,8 +496,6 @@ begin
     Handled := True;
   end
 end;
-
-//-----------------------------------------------------------------------------
 
 procedure TfrmGridView.grdRowMultiSelect(Sender: TObject; Row: Integer;
   var Select: Boolean);
@@ -576,54 +518,23 @@ begin
 //    Abort;
 //  end;
 end;
+{$ENDREGION}
 
-//*****************************************************************************
-// event handlers                                                          END
-//*****************************************************************************
-
-procedure TfrmGridView.AssignParent(AParent: TWinControl);
+{$REGION 'private methods'}
+function TfrmGridView.IsCellReadOnly(const ACell: TGridCell): Boolean;
 begin
-  Parent      := AParent;
-  BorderStyle := bsNone;
-  Align       := alClient;
-  Visible     := True;
+  Result := False;
 end;
 
-//-----------------------------------------------------------------------------
-
-procedure TfrmGridView.AutoSizeColumns;
+function TfrmGridView.IsCheckBoxField(const AFieldName: string): Boolean;
 begin
-  FGrid.AutoSizeCols;
+  Result := Data.IsCheckBoxField(AFieldName);
 end;
 
-//-----------------------------------------------------------------------------
-
-procedure TfrmGridView.Copy;
+function TfrmGridView.IsLookupField(const AFieldName: string): Boolean;
 begin
-
+  Result := Data.IsLookupField(AFieldName);
 end;
-
-constructor TfrmGridView.Create;
-begin
-  inherited Create(Application);
-end;
-
-//-----------------------------------------------------------------------------
-
-procedure TfrmGridView.EndUpdate;
-begin
-  FGrid.UnLockLayout(False);
-  FGrid.UnLockUpdate(True);
-end;
-
-//-----------------------------------------------------------------------------
-
-procedure TfrmGridView.HideSelectedColumns;
-begin
-
-end;
-
-//-----------------------------------------------------------------------------
 
 procedure TfrmGridView.InitializeGridColumn(AGridColumn: TDBGridColumn);
 var
@@ -645,8 +556,6 @@ begin
   end;
 end;
 
-//-----------------------------------------------------------------------------
-
 procedure TfrmGridView.InitializeGridColumns;
 var
   I : Integer;
@@ -661,29 +570,47 @@ begin
     EndUpdate;
   end;
 end;
+{$ENDREGION}
 
-//-----------------------------------------------------------------------------
+{$REGION 'public methods'}
+procedure TfrmGridView.AssignParent(AParent: TWinControl);
+begin
+  Parent      := AParent;
+  BorderStyle := bsNone;
+  Align       := alClient;
+  Visible     := True;
+end;
+
+procedure TfrmGridView.AutoSizeColumns;
+begin
+  FGrid.AutoSizeCols;
+end;
+
+procedure TfrmGridView.Copy;
+begin
+
+end;
+
+procedure TfrmGridView.BeginUpdate;
+begin
+  FGrid.LockLayout;
+  FGrid.LockUpdate;
+end;
+
+procedure TfrmGridView.EndUpdate;
+begin
+  FGrid.UnLockLayout(False);
+  FGrid.UnLockUpdate(True);
+end;
+
+procedure TfrmGridView.HideSelectedColumns;
+begin
+
+end;
 
 procedure TfrmGridView.Inspect;
 begin
   InspectComponent(FGridSort);
-end;
-
-//-----------------------------------------------------------------------------
-
-function TfrmGridView.IsCellReadOnly(const ACell: TGridCell): Boolean;
-begin
-  Result := False;
-end;
-
-function TfrmGridView.IsCheckBoxField(const AFieldName: string): Boolean;
-begin
-  Result := Data.IsCheckBoxField(AFieldName);
-end;
-
-function TfrmGridView.IsLookupField(const AFieldName: string): Boolean;
-begin
-  Result := Data.IsLookupField(AFieldName);
 end;
 
 function TfrmGridView.SelectionToCommaText(AQuoteItems: Boolean): string;
@@ -712,8 +639,6 @@ begin
 
 end;
 
-//-----------------------------------------------------------------------------
-
 procedure TfrmGridView.ShowAllColumns;
 var
   I: Integer;
@@ -725,8 +650,6 @@ begin
   FEmptyColumnsVisible    := True;
   FConstantColumnsVisible := True;
 end;
-
-//-----------------------------------------------------------------------------
 
 procedure TfrmGridView.UpdateColumnLists;
 var
@@ -794,11 +717,6 @@ begin
     EndUpdate;
   end;
 end;
-
-procedure TfrmGridView.BeginUpdate;
-begin
-  FGrid.LockLayout;
-  FGrid.LockUpdate;
-end;
+{$ENDREGION}
 
 end.
