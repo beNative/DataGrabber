@@ -27,25 +27,25 @@ unit ts.Classes.ListReport;
   Author: Tim Sinaeve
 }
 
-//=============================================================================
-// BuildReportLayout
-//   -> CreatePage
-//   -> CreateHeader -> CreateHeaderBody
-//                   -> CreateHeaderChildBody
-//   -> CreateColumnHeader
-//   -> CreateGroupMemoBand
-//   -> CreateDataBand
-//   -> CreateColumnFooter
-//   -> CreateDataBandFooter
-//   -> CreateFooter -> CreateFooterBody
+{
+ BuildReportLayout
+   -> CreatePage
+   -> CreateHeader -> CreateHeaderBody
+                   -> CreateHeaderChildBody
+   -> CreateColumnHeader
+   -> CreateGroupMemoBand
+   -> CreateDataBand
+   -> CreateColumnFooter
+   -> CreateDataBandFooter
+   -> CreateFooter -> CreateFooterBody
 
-// End user methods:
-//   - DesignReport
-//   - PreviewReport
-//   - ClearReport
-//   - PrintReport
-//   - ExportReport
-//=============================================================================
+ End user methods:
+   - DesignReport
+   - PreviewReport
+   - ClearReport
+   - PrintReport
+   - ExportReport
+}
 
 {
   KNOWN ISSUES - TODO
@@ -579,17 +579,14 @@ const
   FONTSIZE_REPORT_SUBTITLE  = 8;
   MAX_FIELD_SIZE            = 200;
 
-//=============================================================================
-
 implementation
 
 uses
   System.Math, System.Variants, System.StrUtils,
   Vcl.Forms, Vcl.Controls, Vcl.Printers,
 
-  { Uncomment this when you want to have the FastReport designer compiled into
-    your application. }
-
+  { Comment this if you do not want to have the FastReport designer compiled
+    into your application. }
   frxDesgn, frxDsgnIntf,
 
   ts.Utils;

@@ -53,7 +53,7 @@ type
 
     property Value : Variant
       read FValue write SetValue;
-  end; // TSQLParam
+  end;
 
   TSQLParamClass = class of TSQLParam;
 

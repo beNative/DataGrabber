@@ -18,7 +18,9 @@ unit ts.Components.DBGridViewSort;
 
 { Author: Tim Sinaeve }
 
-{ Helper component to implement sortable columns in a DB Gridview }
+{ Helper component to implement sortable columns in a DB Gridview.
+  (DDuce.Components.GridView, DDuce.Components.DBGridView).
+ }
 
 {
   KNOWN ISSUES
@@ -29,6 +31,10 @@ unit ts.Components.DBGridViewSort;
   - on opening / closing the dataset we should clear the current indexname
       => detect state changes of the dataset with a datasource?
       => clear FSortedFieldName and FSortDirection
+
+  TODO
+    - use anonymous callback function to implement sorting logic on the dataset,
+      so we can remove depencies on TClientDataSet and TZAbstractRODataset
 }
 
 interface
@@ -176,9 +182,9 @@ type
 implementation
 
 uses
-  Forms, Controls,
+  Vcl.Forms, Vcl.Controls,
 
-  //ZAbstractRODataSet,
+    //ZAbstractRODataSet,
 
   ts.Utils, ts.DBUtils;
 
@@ -198,14 +204,10 @@ end;
 {$ENDREGION}
 
 {$REGION 'property access methods'}
-//---|AlphaBlendValue|---------------------------------------------------------
-
 procedure TtsCustomDBGridViewSort.SetAlphaBlendValue(const Value: Byte);
 begin
   FAlphaBlendValue := Value;
 end;
-
-//---|DataSet|-----------------------------------------------------------------
 
 function TtsCustomDBGridViewSort.GetDataSet: TDataSet;
 begin
@@ -214,8 +216,6 @@ begin
   else
     Result := nil;
 end;
-
-//---|DBGridView|--------------------------------------------------------------
 
 procedure TtsCustomDBGridViewSort.SetDBGridView(const Value: TDBGridView);
 begin
@@ -227,14 +227,10 @@ begin
   end;
 end;
 
-//---|GotoFirstAfterSort|------------------------------------------------------
-
 procedure TtsCustomDBGridViewSort.SetGotoFirstAfterSort(const Value: Boolean);
 begin
   FGotoFirstAfterSort := Value;
 end;
-
-//---|SortDirection|-----------------------------------------------------------
 
 procedure TtsCustomDBGridViewSort.SetSortDirection(
   const Value: TGridSortDirection);
@@ -245,8 +241,6 @@ begin
   end;
 end;
 
-//---|SortedColumnColor|-------------------------------------------------------
-
 procedure TtsCustomDBGridViewSort.SetSortedColumnColor(const Value: TColor);
 begin
   if Value <> SortedColumnColor then
@@ -254,8 +248,6 @@ begin
     FSortedColumnColor := Value;
   end;
 end;
-
-//---|SortedColumnColorEnabled|------------------------------------------------
 
 procedure TtsCustomDBGridViewSort.SetSortedColumnColorEnabled(
   const Value: Boolean);
@@ -265,8 +257,6 @@ begin
     FSortedColumnColorEnabled := Value;
   end;
 end;
-
-//---|SortedFieldName|---------------------------------------------------------
 
 procedure TtsCustomDBGridViewSort.SetSortedFieldName(const Value: string);
 begin

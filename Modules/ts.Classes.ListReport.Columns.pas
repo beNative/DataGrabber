@@ -16,27 +16,28 @@
 
 unit ts.Classes.ListReport.Columns;
 
-//=============================================================================
-// This unit consists of a TCollection/TCollectionItem implementation represen-
-// ting the properties of a list report.
+{
+ This unit consists of a TCollection/TCollectionItem implementation represen-
+ ting the properties of a list report.
+ It has no notion of the underlying report engine.
 
-// the TtsListReportColumns class holds the list of column properties and
-// report settings:
-//   - Items (the actual columns of the report)
-//
-// each column item (TtsListReportColumn) holds the following properties:
-//   - Font
-//   - Title
-//   - TitleAlignment
-//   - TitleCellColor
-//   - TitleBorders
-//   - Alignment
-//   - CellBorders
-//   - CellColor
-//   - Index
-//   - SuppressRepeated [False]
-//   - HideZeros [False]
-//=============================================================================
+ The TtsListReportColumns class holds the list of column properties and
+ report settings:
+   - Items (the actual columns of the report)
+
+ each column item (TtsListReportColumn) holds the following properties:
+   - Font
+   - Title
+   - TitleAlignment
+   - TitleCellColor
+   - TitleBorders
+   - Alignment
+   - CellBorders
+   - CellColor
+   - Index
+   - SuppressRepeated [False]
+   - HideZeros [False]
+}
 
 {
   TODO
@@ -318,16 +319,6 @@ uses
 
 resourcestring
   SDuplicateName      = 'Item with name %s already exist in collection of %s';
-
-{
-_______________________________________________________________________________
-_______________________________________________________________________________
-
-
-_______________________________________________________________________________
-_______________________________________________________________________________
-
-}
 
 {$REGION 'TtsListReportColumns'}
 {$REGION 'construction and destruction'}
