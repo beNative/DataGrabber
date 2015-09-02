@@ -118,6 +118,7 @@ type
       Integer;
     procedure SetMaxWidth(const Value: Extended);
     procedure SetMinWidth(const Value: Extended);
+
   protected
     // protected property access methods
     procedure SetDisplayName(const Value: string); override;

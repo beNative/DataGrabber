@@ -1,12 +1,28 @@
-unit ts.Connection.ZEOSConnectionAdaptor;
+{
+  Copyright (C) 2013-2015 Tim Sinaeve tim.sinaeve@gmail.com
 
-//*****************************************************************************
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+}
+
+unit ts.Connection.ZEOSConnectionAdaptor;
 
 interface
 
 uses
-  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, DB,
+  Winapi.Windows, Winapi.Messages,
+  System.SysUtils, System.Variants, System.Classes,
+  Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs,
+  Data.DB,
 
   ZAbstractConnection, ZConnection, ZAbstractRODataset, ZSqlMetadata,
   ZSqlProcessor, ZSqlMonitor,
@@ -14,8 +30,6 @@ uses
   ts.Interfaces,
 
   ts.Connection.CustomConnectionAdaptor;
-
-//=============================================================================
 
 type
   TZEOSConnectionAdaptor = class(TCustomConnectionAdaptor, IConnection)
@@ -40,20 +54,15 @@ type
 
   end;
 
-//*****************************************************************************
-
 implementation
 
 uses
   ts.Data.NativeZEOS;
 
-//*****************************************************************************
-// construction and destruction                                          BEGIN
-//*****************************************************************************
-
+{$REGION 'construction and destruction'}
 procedure TZEOSConnectionAdaptor.AfterConstruction;
 begin
-  inherited;
+  inherited AfterConstruction;
   FConnection := TZConnection.Create(nil);
   FConnection.GetProtocolNames(Protocols);
 end;
@@ -61,44 +70,30 @@ end;
 procedure TZEOSConnectionAdaptor.BeforeDestruction;
 begin
   FConnection.Free;
-  inherited;
+  inherited BeforeDestruction;
 end;
+{$ENDREGION}
 
-//*****************************************************************************
-// construction and destruction                                            END
-//*****************************************************************************
-
-//*****************************************************************************
-// property access methods                                               BEGIN
-//*****************************************************************************
-
+{$REGION 'property access methods'}
 function TZEOSConnectionAdaptor.GetConnected: Boolean;
 begin
   Result := FConnection.Connected;
 end;
-
-//-----------------------------------------------------------------------------
 
 function TZEOSConnectionAdaptor.GetConnection: TComponent;
 begin
   Result := FConnection;
 end;
 
-//-----------------------------------------------------------------------------
-
 function TZEOSConnectionAdaptor.GetConnectionString: string;
 begin
   Result := FConnection.Properties.Text;
 end;
 
-//-----------------------------------------------------------------------------
-
 function TZEOSConnectionAdaptor.GetConnectionType: string;
 begin
   Result := 'ZEOS';
 end;
-
-//-----------------------------------------------------------------------------
 
 procedure TZEOSConnectionAdaptor.SetConnected(const Value: Boolean);
 begin
@@ -107,15 +102,9 @@ begin
     FConnection.Connected := Value;
   end;
 end;
+{$ENDREGION}
 
-//*****************************************************************************
-// property access methods                                                 END
-//*****************************************************************************
-
-//*****************************************************************************
-// protected methods                                                     BEGIN
-//*****************************************************************************
-
+{$REGION 'protected methods'}
 procedure TZEOSConnectionAdaptor.AssignConnectionSettings;
 var
   B: Boolean;
@@ -136,8 +125,6 @@ begin
   end;
 end;
 
-//-----------------------------------------------------------------------------
-
 procedure TZEOSConnectionAdaptor.AssignConnectionString(const AValue: string);
 var
   B: Boolean;
@@ -151,22 +138,15 @@ begin
   end;
 end;
 
-//-----------------------------------------------------------------------------
-
 function TZEOSConnectionAdaptor.CreateNativeDataSet: INativeDataSet;
 begin
   Result := TNativeZEOSDataSet.Create(Self);
 end;
 
-//-----------------------------------------------------------------------------
-
 function TZEOSConnectionAdaptor.Execute(const ACommandText: string): Boolean;
 begin
   Result := FConnection.ExecuteDirect(ACommandText);
 end;
-
-//*****************************************************************************
-// protected methods                                                       END
-//*****************************************************************************
+{$ENDREGION}
 
 end.

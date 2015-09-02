@@ -25,7 +25,10 @@ uses
 
   DataGrabber.Interfaces;
 
-procedure AddToolbarButtons(AToolBar: TToolbar; AManager: IConnectionViewManager);
+procedure AddToolbarButtons(
+  AToolBar : TToolbar;
+  AManager : IConnectionViewManager
+);
 
 function CreateInspector(
   AOwner  : TComponent;

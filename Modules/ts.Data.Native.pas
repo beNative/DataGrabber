@@ -16,7 +16,7 @@
 
 unit ts.Data.Native;
 
-{ TNativeDataSet is an interfaced object acting as an adaptor class for the
+{ TNativeDataSet is an interfaced object acting as an adapter class for the
   underlying native dataset. }
 
 interface
@@ -32,6 +32,7 @@ type
     FConnection: IConnection;
 
     function GetConnection: IConnection;
+
   protected
     function GetDataSet: TDataSet; virtual; abstract;
 

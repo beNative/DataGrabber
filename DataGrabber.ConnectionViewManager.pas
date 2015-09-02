@@ -224,7 +224,7 @@ implementation
 {$R *.dfm}
 
 uses
-  Vcl.Forms, Clipbrd,
+  Vcl.Forms, Vcl.Clipbrd,
 
   ts.Modules.ComponentInspector,
 
@@ -524,7 +524,7 @@ end;
 procedure TdmConnectionViewManager.actExecuteLimitedExecute(Sender: TObject);
 begin
   ActiveData.MaxRecords := 100;
-  //Execute(FEditor.Text);
+  Execute(FEditor.Text);
 end;
 
 procedure TdmConnectionViewManager.actPrintExecute(Sender: TObject);

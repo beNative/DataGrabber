@@ -27,12 +27,12 @@ uses
   VirtualTrees,
 
   cxGraphics, cxControls, cxLookAndFeels, cxLookAndFeelPainters,
-  cxPCdxBarPopupMenu, cxPC, dxDockControl, dxDockPanel,
+  cxPCdxBarPopupMenu, cxPC, dxDockControl, dxDockPanel, dxBarBuiltInMenu,
+  dxSkinsCore, dxSkinsDefaultPainters, dxSkinscxPCPainter,
 
   ts.Interfaces,
 
-  DataGrabber.Interfaces, DataGrabber.ConnectionProfiles, dxSkinsCore,
-  dxSkinsDefaultPainters, dxSkinscxPCPainter, dxBarBuiltInMenu;
+  DataGrabber.Interfaces, DataGrabber.ConnectionProfiles;
 
 {
    A connectionview consists of

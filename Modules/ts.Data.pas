@@ -857,7 +857,7 @@ end;
 
 procedure TdmCustomModule.AfterExecute;
 begin
-//  EnumerateDataViews(DataViewAfterExecute);
+  EnumerateDataViews(DataViewAfterExecute);
 end;
 
 { Assignes all dataset components to the given connection. }

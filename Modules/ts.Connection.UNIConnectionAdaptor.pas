@@ -1,12 +1,28 @@
-unit ts.Connection.UNIConnectionAdaptor;
+{
+  Copyright (C) 2013-2015 Tim Sinaeve tim.sinaeve@gmail.com
 
-//*****************************************************************************
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+}
+
+unit ts.Connection.UNIConnectionAdaptor;
 
 interface
 
 uses
-  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, DB,
+  Winapi.Windows, Winapi.Messages,
+  System.SysUtils, System.Variants, System.Classes,
+  Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs,
+  Data.DB,
 
   UniProvider, DBAccess, UniDacVcl, Uni,
 
@@ -25,8 +41,6 @@ uses
   ts.Interfaces,
 
   ts.Connection.CustomConnectionAdaptor;
-
-//=============================================================================
 
 type
   TUNIConnectionAdaptor = class(TCustomConnectionAdaptor, IConnection)
@@ -52,17 +66,12 @@ type
 
   end;
 
-//*****************************************************************************
-
 implementation
 
 uses
   ts.Data.NativeUNI;
 
-//*****************************************************************************
-// construction and destruction                                          BEGIN
-//*****************************************************************************
-
+{$REGION 'construction and destruction'}
 procedure TUNIConnectionAdaptor.AfterConstruction;
 begin
   inherited;
@@ -75,15 +84,9 @@ begin
   FConnection.Free;
   inherited;
 end;
+{$ENDREGION}
 
-//*****************************************************************************
-// construction and destruction                                            END
-//*****************************************************************************
-
-//*****************************************************************************
-// property access methods                                               BEGIN
-//*****************************************************************************
-
+{$REGION 'property access methods'}
 function TUNIConnectionAdaptor.GetConnected: Boolean;
 begin
   Result := FConnection.Connected;
@@ -97,35 +100,23 @@ begin
   end;
 end;
 
-//-----------------------------------------------------------------------------
-
 function TUNIConnectionAdaptor.GetConnection: TComponent;
 begin
   Result := FConnection;
 end;
-
-//-----------------------------------------------------------------------------
 
 function TUNIConnectionAdaptor.GetConnectionString: string;
 begin
 //
 end;
 
-//-----------------------------------------------------------------------------
-
 function TUNIConnectionAdaptor.GetConnectionType: string;
 begin
   Result := 'UNI';
 end;
+{$ENDREGION}
 
-//*****************************************************************************
-// property access methods                                                 END
-//*****************************************************************************
-
-//*****************************************************************************
-// protected methods                                                     BEGIN
-//*****************************************************************************
-
+{$REGION 'protected methods'}
 procedure TUNIConnectionAdaptor.AssignConnectionSettings;
 var
   B: Boolean;
@@ -149,30 +140,21 @@ begin
   end;
 end;
 
-//-----------------------------------------------------------------------------
-
 procedure TUNIConnectionAdaptor.AssignConnectionString(const AValue: string);
 begin
   inherited;
 // TODO
 end;
 
-//-----------------------------------------------------------------------------
-
 function TUNIConnectionAdaptor.CreateNativeDataSet: INativeDataSet;
 begin
   Result := TNativeUNIDataSet.Create(Self);
 end;
 
-//-----------------------------------------------------------------------------
-
 function TUNIConnectionAdaptor.Execute(const ACommandText: string): Boolean;
 begin
   Result := FConnection.ExecSQL(ACommandText, []);
 end;
-
-//*****************************************************************************
-// protected methods                                                       END
-//*****************************************************************************
+{$ENDREGION}
 
 end.

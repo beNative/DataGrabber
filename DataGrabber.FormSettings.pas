@@ -77,7 +77,7 @@ begin
     FormStyle := Form.FormStyle;
   end
   else
-    inherited;
+    inherited Assign(Source);
 end;
 
 procedure TFormSettings.AssignTo(Dest: TPersistent);

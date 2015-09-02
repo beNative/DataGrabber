@@ -29,7 +29,7 @@ uses
   MidasLib,
 
   cxGraphics, cxControls, cxButtons, cxLookAndFeels, cxLookAndFeelPainters,
-  dxDockPanel,
+  dxDockPanel, cxPC, cxClasses, dxDockControl,
 
   SynEdit,
 
@@ -37,17 +37,11 @@ uses
 
   VirtualTrees,
 
-  //ZScriptParser, ZTokenizer,
-
   ts.Interfaces, ts.Classes.ConnectionSettings, ts.Data, DataGrabber.Data,
 
   ts.Modules.DataInspector, ts.Modules.FieldInspector,
 
-  DataGrabber.EditorView, DataGrabber.Interfaces, DataGrabber.Settings, cxPC,
-  cxClasses, dxDockControl;
-  //DataGrabber.VirtualDBTree,
-
-  //DataGrabber.RepositoryData,
+  DataGrabber.EditorView, DataGrabber.Interfaces, DataGrabber.Settings;
 
 {
   TODO:
@@ -224,9 +218,10 @@ implementation
 uses
   Vcl.Clipbrd,
 
-  ts.Modules.ComponentInspector, ts.Utils, ts.Modules.RTTEye,
-
   Spring.Services,
+
+  ts.Utils,
+  ts.Modules.ComponentInspector,  ts.Modules.RTTEye,
 
   DataGrabber.Utils, DataGrabber.Resources, DataGrabber.SettingsDialog,
   DataGrabber.ModelData,

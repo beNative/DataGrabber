@@ -56,10 +56,9 @@ type
     procedure AfterConstruction; override;
     constructor Create; reintroduce; virtual;
     procedure CopyToClipboard;
-
+    procedure FillCompletionLists(ATables, AAttributes : TStrings);
 
     procedure SetFocus; override;
-    procedure FillCompletionLists(ATables, AAttributes : TStrings);
 
     property EditorFocused: Boolean
       read GetEditorFocused;

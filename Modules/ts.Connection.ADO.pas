@@ -54,7 +54,6 @@ type
     procedure GetSchemaNames(AList : TStrings);
 
   public
-
     procedure AfterConstruction; override;
     constructor Create;
 
@@ -103,6 +102,11 @@ procedure TdmADOConnection.AfterConstruction;
 begin
   inherited AfterConstruction;
   GetProviderNames(Protocols);
+end;
+
+constructor TdmADOConnection.Create;
+begin
+  inherited Create(Application);
 end;
 {$ENDREGION}
 
@@ -168,12 +172,6 @@ begin
   end;
 end;
 
-
-constructor TdmADOConnection.Create;
-begin
-  inherited Create(Application);
-end;
-
 function TdmADOConnection.CreateNativeDataSet: INativeDataSet;
 begin
   Result := TNativeADODataSet.Create(Self);
@@ -184,7 +182,6 @@ begin
   conADO.Execute(ACommandText);
   Result := True;
 end;
-{$ENDREGION}
 
 procedure TdmADOConnection.GetFieldNames(AList: TStrings;
   const ATableName: string; const ASchemaName: string);
@@ -262,5 +259,6 @@ begin
     DS.Free;
   end;
 end;
+{$ENDREGION}
 
 end.

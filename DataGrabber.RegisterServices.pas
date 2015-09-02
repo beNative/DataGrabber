@@ -18,22 +18,44 @@ unit DataGrabber.RegisterServices;
 
 interface
 
+{$I 'DataGrabber.inc'}
+
 procedure RegisterServices;
 
 implementation
 
 uses
-  Forms, SysUtils,
+  System.SysUtils,
+  Vcl.Forms,
 
   ts.Interfaces,
-  ts.Connection.ADOConnectionAdaptor, ts.Connection.DBXConnectionAdaptor,
-  //ts.Connection.ZEOSConnectionAdaptor, ts.Connection.UNIConnectionAdaptor,
+  {$IFDEF ADO}
+  ts.Connection.ADOConnectionAdaptor,
+  {$ENDIF}
+
+  {$IFDEF DBX}
+  ts.Connection.DBXConnectionAdaptor,
+  {$ENDIF}
+
+  {$IFDEF ZEOSDBO}
+    ts.Connection.ZEOSConnectionAdaptor,
+  {$ENDIF}
+
+  {$IFDEF UNIDAC}
+    ts.Connection.UNIConnectionAdaptor,
+  {$ENDIF}
 
   DataGrabber.ConnectionViewManager, DataGrabber.Settings,
   DataGrabber.Interfaces, DataGrabber.EditorView,
 
-  DataGrabber.DataView.cxGrid, DataGrabber.DataView.GridView,
-  DataGrabber.DataView.VirtualDBGrid, //DataGrabber.KGrid,
+  {$IFDEF DEVEXPRESS}
+  DataGrabber.DataView.cxGrid,
+  {$ENDIF}
+  DataGrabber.DataView.GridView,
+  DataGrabber.DataView.VirtualDBGrid,
+  {$IFDEF KGRID}
+  DataGrabber.KGrid,
+  {$ENDIF}
   DataGrabber.ConnectionView,
 
   Spring, Spring.Container.Common, Spring.Container, Spring.Services;
@@ -58,28 +80,38 @@ begin
   GlobalContainer.RegisterType<TfrmConnectionView>
                  .Implements<IConnectionView>;
 
+  {$IFDEF ADO}
   GlobalContainer.RegisterType<TADOConnectionAdaptor>
                  .Implements<IConnection>('ADO')
                  .AsSingleton(TRefCounting.True)
                  .AsPooled(MIN_POOLSIZE, MAX_POOLSIZE);
+  {$ENDIF}
 
-//  GlobalContainer.RegisterType<TZEOSConnectionAdaptor>
-//                 .Implements<IConnection>('ZEOS')
-//                 .AsSingleton(TRefCounting.True);
-                 //.AsPooled(MIN_POOLSIZE, MAX_POOLSIZE);
+  {$IFDEF ZEOSDBO}
+  GlobalContainer.RegisterType<TZEOSConnectionAdaptor>
+                 .Implements<IConnection>('ZEOS')
+                 .AsSingleton(TRefCounting.True);
+                 .AsPooled(MIN_POOLSIZE, MAX_POOLSIZE);
+  {$ENDIF}
 
-//  GlobalContainer.RegisterType<TUNIConnectionAdaptor>
-//                 .Implements<IConnection>('UNI')
-//                 .AsSingleton(TRefCounting.True);
-                 //.AsPooled(MIN_POOLSIZE, MAX_POOLSIZE);
+  {$IFDEF UNIDAC}
+  GlobalContainer.RegisterType<TUNIConnectionAdaptor>
+                 .Implements<IConnection>('UNI')
+                 .AsSingleton(TRefCounting.True);
+                 .AsPooled(MIN_POOLSIZE, MAX_POOLSIZE);
+  {$ENDIF}
 
+  {$IFDEF DBX}
   GlobalContainer.RegisterType<TDBXConnectionAdaptor>
                  .Implements<IConnection>('DBX')
                  .AsSingleton(TRefCounting.True)
                  .AsPooled(MIN_POOLSIZE, MAX_POOLSIZE);
+  {$ENDIF}
 
+  {$IFDEF DEVEXPRESS}
   GlobalContainer.RegisterType<TfrmcxGrid>
                  .Implements<IDGDataView>('cxGrid');
+  {$ENDIF}
 
   GlobalContainer.RegisterType<TfrmGridView>
                  .Implements<IDGDataView>('GridView');
