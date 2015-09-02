@@ -1,0 +1,2 @@
+inherited dmCustomAdmin: TdmCustomAdmin
+end
