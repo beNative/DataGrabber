@@ -23,6 +23,21 @@ const
   SFieldItem     = '\color{clRed}field\column{}\color{clBlack}%s';
   SProcedureItem = '\color{clPurple}procedure\column{}\color{clBlack}%s';
 
+resourcestring
+  SFetchingData       = 'Fetching data...';
+  SUpdatingView       = 'Updating view...';
+  SReady              = 'Ready';
+  SRecordCount        = '%d records';
+  SFieldCount         = '%d fields';
+  SConstantFieldCount = '%d constant fields';
+  SEmptyFieldCount    = '%d empty fields';
+  SUpdateable         = 'Updateable';
+  SReadOnly           = 'ReadOnly';
+  SProviderMode       = 'Provider mode';
+  SNativeMode         = 'Native mode';
+  SConnected          = 'Connected';
+  SDisconnected       = 'Disconnected';
+
 implementation
 
 end.

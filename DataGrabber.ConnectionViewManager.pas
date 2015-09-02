@@ -224,13 +224,11 @@ implementation
 {$R *.dfm}
 
 uses
-  Vcl.Forms, Vcl.Clipbrd,
+  Vcl.Forms, Vcl.Clipbrd, Vcl.Dialogs,
 
   ts.Modules.ComponentInspector,
 
-  DataGrabber.SettingsDialog,
-
-  DataGrabber.ConnectionView,
+  DataGrabber.SettingsDialog, DataGrabber.ConnectionView,
 
   Spring.Services;
 
@@ -314,7 +312,7 @@ end;
 
 procedure TdmConnectionViewManager.actGridModeExecute(Sender: TObject);
 begin
-//
+  ShowMessage('Not supported yet.');
 end;
 
 procedure TdmConnectionViewManager.actGridViewExecute(Sender: TObject);
@@ -370,7 +368,7 @@ end;
 procedure TdmConnectionViewManager.actSelectionAsWhereInExecute(
   Sender: TObject);
 begin
-//
+  ShowMessage('Not supported yet.');
 end;
 
 procedure TdmConnectionViewManager.actSelectionAsWikiExecute(Sender: TObject);
@@ -407,12 +405,12 @@ end;
 
 procedure TdmConnectionViewManager.actInspectExecute(Sender: TObject);
 begin
-//
+  ShowMessage('Not supported yet.');
 end;
 
 procedure TdmConnectionViewManager.actInspectFieldsExecute(Sender: TObject);
 begin
-//   FFieldInspector.Show;
+  FFieldInspector.Show;
 end;
 
 procedure TdmConnectionViewManager.actInspectGridExecute(Sender: TObject);
@@ -473,6 +471,7 @@ end;
 {$REGION 'ActiveData actions'}
 procedure TdmConnectionViewManager.actDataInspectorExecute(Sender: TObject);
 begin
+  ShowMessage('Not supported yet.');
 //  FSettings.DataInspectorVisible := actDataInspector.Checked;
 //  if actDataInspector.Checked then
 //    ShowToolWindow(FDataInspector)
@@ -488,6 +487,7 @@ end;
 
 procedure TdmConnectionViewManager.actCommitTransactionExecute(Sender: TObject);
 begin
+  ShowMessage('Not supported yet.');
 //  ActiveDataView
 //
 end;
@@ -524,7 +524,7 @@ end;
 procedure TdmConnectionViewManager.actExecuteLimitedExecute(Sender: TObject);
 begin
   ActiveData.MaxRecords := 100;
-  Execute(FEditor.Text);
+  //Execute(FEditor.Text);
 end;
 
 procedure TdmConnectionViewManager.actPrintExecute(Sender: TObject);
@@ -599,11 +599,11 @@ end;
 
 {$REGION 'protected methods'}
 procedure TdmConnectionViewManager.ApplySettings;
-var
-  S  : string;
-  //CP : TConnectionProfile;
+//var
+//  S  : string;
+//  CP : TConnectionProfile;
 begin
-  ActiveConnectionView.ApplySettings;
+//  ActiveConnectionView.ApplySettings;
 //  vstProfiles.RootNodeCount := FSettings.ConnectionProfiles.Count;
 //  if Assigned(vstProfiles.FocusedNode) then
 //  begin

@@ -45,30 +45,23 @@ uses
 
 {
   TODO:
-    - registration mechanism for dataviews (maybe we can use a modulemanager).
+    - registration mechanism for dataviews + use Spring.Services
     - autosize form (to data)
-
     - testing !!!
-    - query tree
+    - query tree (using gaSQLParser)
     - multiple statements => multiple resultsets
-    - log executed statements to database
-    -  Enkel ‘populaire’ velden tonen (instelbaar via stringlist) :=> eventueel
-       meerdere sets (per profile?)
-    -  Auto hide empty/constant rows
-    -  Versie info (delphi compiler + build date + platform)
-    -  Bindings in settings
+    - log executed statements to a local database
+    - Use bindings in settings
     -  Select <selected fields?> Where in
-    -  Presenter voor vertical grid
-    -  Meervoudige selectie in vertical grid? => selection delimited quoted text fieldnames
-    -  Docking
-    -  Datainspector -> groepering per tabel?
-    -  Presenters als algemene basis
+    -  Presenter for vertical grid
+    -  Multiselect in vertical grid? => selection delimited quoted text fieldnames
+    -  Datainspector -> group by table?
     -  Store executed sql’s
     -  Multiple sessions
-    -  Smart grouping (rekening houden met gemeenschappelijke prefixes van velden (vb. Datum…, Coupe…., Last…)
-    -  Working set van tables (meta info en links cachen voor deze tabellen profile->VisibleItems)
+    -  Smart grouping (detect common field prefixes/suffixes (vb. Date, ...Id,)
+    -  Working set of tables (cache meta info and links and make them
+       customizable as a profile setting)
     -  Statement builder
-    - introduce DDuce
 }
 
 type
@@ -160,9 +153,6 @@ type
     {$ENDREGION}
 
   private
-    //FTree           : TfrmVirtualDBTree;
-    //FScriptParser   : TZSQLScriptParser;
-    //FTokenizer      : IZTokenizer;
     //FRepositoryData : TdmRepositoryData;
     //FSyncEditor     : Boolean;
     FManager  : IConnectionViewManager;
@@ -229,10 +219,6 @@ uses
   DataGrabber.ConnectionProfiles, DataGrabber.Factories,
   DataGrabber.RegisterServices;
 
-resourcestring
-  SFetchingData = 'Fetching data...';
-  SUpdatingView = 'Updating view...';
-
 {$REGION 'construction and destruction'}
 procedure TfrmMain.AfterConstruction;
 begin
@@ -242,13 +228,6 @@ begin
   tlbMain.DrawingStyle := dsNormal;
   InitializeActions;
 
-  // TODO: not used for the moment
-//  FTokenizer    := TZTokenizer.Create;
-//  FScriptParser := TZSQLScriptParser.CreateWithTokenizer(FTokenizer);
-//  FScriptParser.DelimiterType := dtEmptyLine;
-//  FScriptParser.Delimiter := '';
-//  FScriptParser.CleanupStatements := False;
-
 // TODO : trace memory leaks in repository view
 //  FRepositoryData := TdmRepositoryData.Create(Self);
 //  FTree := TfrmVirtualDBTree.Create(Self);
@@ -256,22 +235,21 @@ begin
 //  FTree.DataSet.Active := True;
 //  dscRepository.DataSet := FTree.DataSet;
 
+// todo: move to connectionview
 //  FSettings.FormSettings.AssignTo(Self);
 //  pnlConnectionProfiles.Width := FSettings.FormSettings.VSplitterPos;
 //  pnlTop.Height               := FSettings.FormSettings.HSplitterPos;
-  pnlStatus.Caption := 'Ready';
+  pnlStatus.Caption := SReady;
 
   FTables := TStringList.Create;
   FFields := TStringList.Create;
 
-  if FileExists('tablenames.txt') then
-    FTables.LoadFromFile('tablenames.txt');
+//  if FileExists('tablenames.txt') then
+//    FTables.LoadFromFile('tablenames.txt');
 //
 //  Editor.FillCompletionLists(FTables, FFields);
 
   SetWindowSizeGrip(pnlStatusBar.Handle, True);
-  // TSI
-  //actToggleRepositoryTree.Visible := False;
 end;
 
 procedure TfrmMain.BeforeDestruction;
@@ -348,7 +326,6 @@ begin
 //  finally
 //    Tables.Free;
 //  end;
-
 end;
 
 procedure TfrmMain.actSyncEditorWithRepositoryExecute(Sender: TObject);
@@ -616,23 +593,23 @@ var
 begin
   if Assigned(Data) and  Assigned(Data.DataSet) and Data.DataSet.Active then
   begin
-    pnlRecordCount.Caption := Format('%d records', [Data.RecordCount]);
-    pnlFieldCount.Caption  := Format('%d fields', [Data.DataSet.FieldCount]);
+    pnlRecordCount.Caption := Format(SRecordCount, [Data.RecordCount]);
+    pnlFieldCount.Caption  := Format(SFieldCount, [Data.DataSet.FieldCount]);
     pnlConstantFieldsCount.Caption :=
-      Format('%d constant fields', [(Data as IFieldLists).ConstantFields.Count]);
+      Format(SConstantFieldCount, [(Data as IFieldLists).ConstantFields.Count]);
     pnlEmptyFieldsCount.Caption :=
-      Format('%d empty fields', [(Data as IFieldLists).EmptyFields.Count]);
+      Format(SEmptyFieldCount, [(Data as IFieldLists).EmptyFields.Count]);
     if Data.CanModify then
-      S := 'Updateable'
+      S := SUpdateable
     else
-      S := 'ReadOnly';
+      S := SReadOnly;
     if Data.ProviderMode then
     begin
-      pnlProviderMode.Caption := 'Provider mode';
+      pnlProviderMode.Caption := SProviderMode;
     end
     else
     begin
-      pnlProviderMode.Caption :=  'Native mode';
+      pnlProviderMode.Caption := SNativeMode;
     end;
     //actProviderMode.Checked := Data.ProviderMode;
   end
@@ -646,11 +623,11 @@ begin
     pnlEmptyFieldsCount.Caption    := '';
     if Assigned(Settings) and Settings.ProviderMode then
     begin
-      pnlProviderMode.Caption := 'Provider mode';
+      pnlProviderMode.Caption := SProviderMode;
     end
     else
     begin
-      pnlProviderMode.Caption :=  'Native mode';
+      pnlProviderMode.Caption := SNativeMode;
     end;
     //actProviderMode.Checked := Settings.ProviderMode;
   end;
@@ -661,9 +638,9 @@ begin
     pnlGridType.Caption := Settings.GridType;
   end;
   if Assigned(Data) and Assigned(Data.Connection) and Data.Connection.Connected then
-    pnlConnectionStatus.Caption := 'Connected'
+    pnlConnectionStatus.Caption := SConnected
   else
-    pnlConnectionStatus.Caption := 'Disconnected';
+    pnlConnectionStatus.Caption := SDisconnected;
 
   pnlEditMode.Caption := S;
   OptimizeWidth(pnlStatus);
