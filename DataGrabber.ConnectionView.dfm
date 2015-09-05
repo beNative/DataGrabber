@@ -46,43 +46,6 @@ object frmConnectionView: TfrmConnectionView
       Align = alLeft
       BevelOuter = bvNone
       TabOrder = 0
-      object vstProfiles: TVirtualStringTree
-        Left = 0
-        Top = 0
-        Width = 209
-        Height = 249
-        Align = alClient
-        Colors.GridLineColor = clMedGray
-        Colors.TreeLineColor = clMedGray
-        EditDelay = 250
-        Header.AutoSizeIndex = 0
-        Header.Font.Charset = DEFAULT_CHARSET
-        Header.Font.Color = clWindowText
-        Header.Font.Height = -11
-        Header.Font.Name = 'Tahoma'
-        Header.Font.Style = []
-        Header.Options = [hoAutoResize, hoColumnResize, hoDrag, hoShowSortGlyphs, hoVisible]
-        Header.Style = hsFlatButtons
-        HintMode = hmTooltip
-        IncrementalSearch = isAll
-        LineStyle = lsSolid
-        SelectionBlendFactor = 90
-        TabOrder = 0
-        TreeOptions.PaintOptions = [toShowBackground, toShowHorzGridLines, toThemeAware, toUseBlendedImages, toGhostedIfUnfocused, toUseBlendedSelection, toUseExplorerTheme, toHideTreeLinesIfThemed]
-        TreeOptions.SelectionOptions = [toExtendedFocus, toFullRowSelect, toRightClickSelect, toSimpleDrawSelection]
-        OnBeforeCellPaint = vstProfilesBeforeCellPaint
-        OnFocusChanged = vstProfilesFocusChanged
-        OnGetText = vstProfilesGetText
-        OnPaintText = vstProfilesPaintText
-        Columns = <
-          item
-            Alignment = taCenter
-            CheckType = ctNone
-            Position = 0
-            Width = 209
-            WideText = 'Profiles'
-          end>
-      end
     end
     object pnlEditor: TPanel
       Left = 217

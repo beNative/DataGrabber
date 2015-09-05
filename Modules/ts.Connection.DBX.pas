@@ -58,27 +58,12 @@ type
 
   end;
 
-function DBXConnection: IConnection;
-
 implementation
 
 {$R *.dfm}
 
 uses
   ts.Data.NativeDBX;
-
-  {TODO -oTS -cGeneral : Use ServiceLocator}
-var
-  FConnection: TdmDBXConnection;
-
-{$REGION 'interfaced routines'}
-function DBXConnection: IConnection;
-begin
-  if not Assigned(FConnection) then
-    FConnection := TdmDBXConnection.Create(Application);
-  Result := FConnection;
-end;
-{$ENDREGION}
 
 {$REGION 'construction and destruction'}
 procedure TdmDBXConnection.AfterConstruction;

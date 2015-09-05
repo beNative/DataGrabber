@@ -265,20 +265,7 @@ begin
 //  FSettings.Save;
 
   FreeAndNil(FConnectionViewList);
-//  if Assigned(FView) then
-//  begin
-//    (FView as TComponent).Free;
-//  end;
-//  FView := nil;
-//  if Assigned(FData) then
-//  begin
-//    (FData as TComponent).Free;
-//  end;
-//  FData := nil;
-//  FreeAndNil(FTables);
-//  FreeAndNil(FFields);
-//  FreeAndNil(FScriptParser);
-  inherited;
+  inherited BeforeDestruction;
 end;
 {$ENDREGION}
 
@@ -619,15 +606,15 @@ begin
 //  end
 //  else
 //    FSettings.DefaultConnectionProfile := '';
-
-  //CreateData(FSettings.ConnectionType);
+////
+//  CreateData(FSettings.ConnectionType);
 //  FData.Connection.ConnectionSettings.Assign(FSettings.ConnectionSettings);
 //  FData.PacketRecords := FSettings.PacketRecords;
 //  FData.ProviderMode  := FSettings.ProviderMode;
 //  FData.FetchOnDemand := FSettings.FetchOnDemand;
-
+////
 //  CreateView(FSettings.GridType);
-
+////
 //  S := FSettings.ConnectionType;
 //  if S = 'ADO' then
 //    actADO.Checked := True

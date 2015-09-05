@@ -45,6 +45,10 @@ uses
     ts.Connection.UNIConnectionAdaptor,
   {$ENDIF}
 
+  {$IFDEF FIREDAC}
+    ts.Connection.FireDACConnectionAdaptor,
+  {$ENDIF}
+
   DataGrabber.ConnectionViewManager, DataGrabber.Settings,
   DataGrabber.Interfaces, DataGrabber.EditorView,
 
@@ -90,14 +94,21 @@ begin
   {$IFDEF ZEOSDBO}
   GlobalContainer.RegisterType<TZEOSConnectionAdaptor>
                  .Implements<IConnection>('ZEOS')
-                 .AsSingleton(TRefCounting.True);
+                 .AsSingleton(TRefCounting.True)
                  .AsPooled(MIN_POOLSIZE, MAX_POOLSIZE);
   {$ENDIF}
 
   {$IFDEF UNIDAC}
   GlobalContainer.RegisterType<TUNIConnectionAdaptor>
                  .Implements<IConnection>('UNI')
-                 .AsSingleton(TRefCounting.True);
+                 .AsSingleton(TRefCounting.True)
+                 .AsPooled(MIN_POOLSIZE, MAX_POOLSIZE);
+  {$ENDIF}
+
+  {$IFDEF FIREDAC}
+  GlobalContainer.RegisterType<TFireDACConnectionAdaptor>
+                 .Implements<IConnection>('FireDAC')
+                 .AsSingleton(TRefCounting.True)
                  .AsPooled(MIN_POOLSIZE, MAX_POOLSIZE);
   {$ENDIF}
 

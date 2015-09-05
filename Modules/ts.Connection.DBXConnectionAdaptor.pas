@@ -78,7 +78,7 @@ end;
 procedure TDBXConnectionAdaptor.BeforeDestruction;
 begin
   FConnection.Free;
-  inherited;
+  inherited BeforeDestruction;
 end;
 {$ENDREGION}
 

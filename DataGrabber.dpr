@@ -57,7 +57,11 @@ uses
   DataGrabber.Factories in 'DataGrabber.Factories.pas',
   DataGrabber.Interfaces in 'DataGrabber.Interfaces.pas',
   DataGrabber.MainForm in 'DataGrabber.MainForm.pas' {frmMain},
-  ts.Classes.KeyValues in 'Modules\ts.Classes.KeyValues.pas';
+  ts.Classes.KeyValues in 'Modules\ts.Classes.KeyValues.pas',
+  ts.Connection.FireDAC in 'Modules\ts.Connection.FireDAC.pas' {dmFireDACConnection: TDataModule},
+  ts.Data.NativeFireDAC in 'Modules\ts.Data.NativeFireDAC.pas',
+  Unit1 in 'Unit1.pas' {Form1},
+  ts.Connection.FireDACConnectionAdaptor in 'Modules\ts.Connection.FireDACConnectionAdaptor.pas';
 
 {$R *.res}
 
@@ -69,5 +73,7 @@ begin
   RegisterServices;
   //Application.CreateForm(TdmRepositoryData, dmRepositoryData);
   Application.CreateForm(TfrmMain, frmMain);
+  Application.CreateForm(TdmFireDACConnection, dmFireDACConnection);
+  Application.CreateForm(TForm1, Form1);
   Application.Run;
 end.
