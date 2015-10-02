@@ -1,5 +1,5 @@
 # DataGrabber
-A query tool that started its career as [skunkware!](https://en.wikipedia.org/wiki/SCO_Skunkware) and is trying to evolve now towards a better future ;)
+A query tool that started its career as [Skunkware](https://en.wikipedia.org/wiki/SCO_Skunkware) and is trying to evolve now towards a better future ;)
 
 Connection topologies:
 - UNIDAC (optional)
