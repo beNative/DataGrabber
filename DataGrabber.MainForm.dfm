@@ -262,8 +262,8 @@ object frmMain: TfrmMain
     end
   end
   object aclMain: TActionList
-    Left = 264
-    Top = 296
+    Left = 80
+    Top = 8
     object actAddConnectionView: TAction
       Caption = 'Add connectionview'
       ShortCut = 16462
@@ -271,8 +271,8 @@ object frmMain: TfrmMain
     end
   end
   object ppm: TPopupMenu
-    Left = 208
-    Top = 296
+    Left = 16
+    Top = 8
     object mniGroupBySelection: TMenuItem
       Caption = 'Group by selected columns'
       ShortCut = 16455
@@ -361,8 +361,8 @@ object frmMain: TfrmMain
     end
   end
   object ppmConnectionTypes: TPopupMenu
-    Left = 336
-    Top = 296
+    Left = 16
+    Top = 88
     object mniADO: TMenuItem
       AutoCheck = True
       Caption = 'ADO'
@@ -381,8 +381,8 @@ object frmMain: TfrmMain
     end
   end
   object ppmGridTypes: TPopupMenu
-    Left = 432
-    Top = 296
+    Left = 128
+    Top = 88
     object mnicxGrid: TMenuItem
       AutoCheck = True
       Caption = 'TcxGrid'
@@ -399,11 +399,6 @@ object frmMain: TfrmMain
       AutoCheck = True
       Caption = 'VirtualDBGrid'
     end
-  end
-  object dscRepository: TDataSource
-    OnDataChange = dscRepositoryDataChange
-    Left = 528
-    Top = 296
   end
   object dcmMain: TdxDockingManager
     Color = clBtnFace
@@ -423,8 +418,8 @@ object frmMain: TfrmMain
     OnCreateLayoutSite = dcmMainCreateLayoutSite
     OnCreateSideContainer = dcmMainCreateSideContainer
     OnCreateTabContainer = dcmMainCreateTabContainer
-    Left = 352
-    Top = 120
+    Left = 272
+    Top = 8
     PixelsPerInch = 96
   end
 end

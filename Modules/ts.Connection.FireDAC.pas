@@ -33,20 +33,20 @@ uses
 
 type
   TdmFireDACConnection = class(TdmConnection, IConnection)
-    conFireDAC: TFDConnection;
-    FDManager1: TFDManager;
+    conFireDAC : TFDConnection;
+    FDManager  : TFDManager;
 
   protected
-    function GetConnected: Boolean;
-    procedure SetConnected(const Value: Boolean);
-    function GetConnectionString: string;
-    procedure SetConnectionString(const Value: string);
-    function GetConnectionType: string;
-    function GetProtocols: TStrings;
+    function GetConnected: Boolean; override;
+    procedure SetConnected(const Value: Boolean); override;
+    function GetConnectionString: string; override;
+    procedure SetConnectionString(const Value: string); override;
+    function GetConnectionType: string; override;
+    function GetProtocols: TStrings; override;
+    function GetConnection: TComponent; override;
 
-    function GetConnection: TComponent;
-    function CreateNativeDataSet: INativeDataSet;
-    function Execute(const ACommandText: string): Boolean;
+    function CreateNativeDataSet: INativeDataSet; override;
+    function Execute(const ACommandText: string): Boolean; override;
 
     property Connected: Boolean
       read GetConnected write SetConnected;
@@ -63,13 +63,7 @@ type
     property Protocols: TStrings
       read GetProtocols;
 
-
-  public
-    { Public declarations }
   end;
-
-var
-  dmFireDACConnection: TdmFireDACConnection;
 
 implementation
 
@@ -80,6 +74,7 @@ uses
 
 {$R *.dfm}
 
+{$REGION 'property access methods'}
 function TdmFireDACConnection.GetConnected: Boolean;
 begin
   Result := conFireDAC.Connected;
@@ -107,14 +102,17 @@ end;
 
 function TdmFireDACConnection.GetProtocols: TStrings;
 begin
-  FDManager1.GetDriverNames(Protocols);
+  FDManager.GetDriverNames(Protocols);
+  Result := Protocols;
 end;
 
 function TdmFireDACConnection.GetConnection: TComponent;
 begin
   Result := conFireDAC;
 end;
+{$ENDREGION}
 
+{$REGION 'protected methods'}
 function TdmFireDACConnection.CreateNativeDataSet: INativeDataSet;
 begin
   Result := TNativeFireDACDataSet.Create(Self);
@@ -124,5 +122,6 @@ function TdmFireDACConnection.Execute(const ACommandText: string): Boolean;
 begin
   Result := conFireDAC.ExecSQL(ACommandText) <> 0;
 end;
+{$ENDREGION}
 
 end.

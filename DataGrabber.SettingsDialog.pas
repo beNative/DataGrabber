@@ -395,7 +395,7 @@ begin
   FSettings.GridCellColoring := chkGridCellColoringEnabled.Checked;
   FSettings.ConnectionType := rgpConnectionType.Items
     [rgpConnectionType.ItemIndex];
-  FSettings.GridType := rgpGridTypes.Items[rgpGridTypes.ItemIndex];
+//  FSettings.GridType := rgpGridTypes.Items[rgpGridTypes.ItemIndex];
   if Assigned(ApplySettingsMethod) then
     ApplySettingsMethod;
 end;

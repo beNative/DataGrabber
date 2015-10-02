@@ -34,7 +34,6 @@ type
 
     procedure ConnectionSettingsChanged(Sender: TObject);
 
-    function GetProtocols: TStrings;
   protected
     procedure AssignConnectionString(const AValue: string); virtual; abstract;
     procedure AssignConnectionSettings; virtual; abstract;
@@ -49,6 +48,7 @@ type
     function GetConnection: TComponent; virtual; abstract;
     function Execute(const ACommandText: string): Boolean; virtual; abstract;
     function CreateNativeDataSet: INativeDataSet; virtual; abstract;
+    function GetProtocols: TStrings; virtual;
 
   public
     constructor Create(

@@ -34,12 +34,11 @@ uses
 
 type
   TFireDACConnectionAdaptor = class(TCustomConnectionAdaptor, IConnection, IMetaData)
-   private
-      FConnection       : TFDConnection;
-      //FManager          : TFDManager;
-      FConnectionString : string;
+  private
+    FConnection       : TFDConnection;
+    FConnectionString : string;
 
-   protected
+  protected
     function GetConnectionType: string; override;
     function GetConnected: Boolean; override;
     procedure SetConnected(const Value: Boolean); override;
@@ -68,21 +67,16 @@ type
 
 implementation
 
-{ TFireDACConnectionAdaptor }
-
 {$REGION 'construction and destruction'}
 procedure TFireDACConnectionAdaptor.AfterConstruction;
 begin
   inherited AfterConstruction;
   FConnection := TFDConnection.Create(nil);
-  //FManager := TFDManager.Create(nil);
-
 end;
 
 procedure TFireDACConnectionAdaptor.BeforeDestruction;
 begin
   FConnection.Free;
-  //FManager.Free;
   inherited BeforeDestruction;
 end;
 {$ENDREGION}

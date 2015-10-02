@@ -55,7 +55,7 @@ type
 
   public
     procedure AfterConstruction; override;
-    constructor Create;
+    constructor Create; reintroduce; virtual;
 
   end;
 

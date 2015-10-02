@@ -20,7 +20,6 @@ interface
 
 uses
   Winapi.Windows, Winapi.Messages,
-  //System.Generics.Collections,
   System.SysUtils, System.Variants, System.Classes,
   Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ComCtrls, Vcl.ToolWin,
   Vcl.ActnList, Vcl.ExtCtrls,
@@ -61,7 +60,6 @@ type
     pnlTop        : TPanel;
     splHorizontal : TSplitter;
     splVertical   : TSplitter;
-    vstProfiles   : TVirtualStringTree;
 
     procedure vstProfilesBeforeCellPaint(
           Sender        : TBaseVirtualTree;
@@ -73,11 +71,11 @@ type
       var ContentRect   : TRect
     );
     procedure vstProfilesGetText(
-           Sender   : TBaseVirtualTree;
-           Node     : PVirtualNode;
-           Column   : TColumnIndex;
-           TextType : TVSTTextType;
-      var CellText  : string
+          Sender   : TBaseVirtualTree;
+          Node     : PVirtualNode;
+          Column   : TColumnIndex;
+          TextType : TVSTTextType;
+      var CellText : string
     );
     procedure tlbGridCustomDraw(
             Sender      : TToolBar;
@@ -104,6 +102,7 @@ type
     FEditorView     : IEditorView;
     FActiveDataView : IDGDataView;
     FActiveData     : IData;
+    vstProfiles   : TVirtualStringTree;
 
     function GetManager: IConnectionViewManager;
     function GetForm: TForm;
@@ -171,7 +170,6 @@ begin
   FEditorView := AEditorView;
   FActiveDataView := ADataView;
   ActiveDataView.AssignParent(pnlBottom);
-
   //FActiveData := AData;
 end;
 
@@ -179,6 +177,9 @@ procedure TfrmConnectionView.AfterConstruction;
 begin
   inherited AfterConstruction;
   InitializeEditorView;
+  vstProfiles := TVirtualStringTree.Create(Self);
+  vstProfiles.Parent := pnlProfiles;
+  vstProfiles.Align := alClient;
   vstProfiles.RootNodeCount := Manager.Settings.ConnectionProfiles.Count;
   // TODO: select default node
   vstProfiles.FocusedNode := vstProfiles.GetFirstVisible;

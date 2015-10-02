@@ -74,7 +74,6 @@ type
     actAddConnectionView          : TAction;
     dcmMain                       : TdxDockingManager;
     dsConnectionViews             : TdxDockSite;
-    dscRepository                 : TDataSource;
     mniADO                        : TMenuItem;
     mniCopy                       : TMenuItem;
     mniCopyTextTable              : TMenuItem;
@@ -130,15 +129,12 @@ type
     {$REGION 'action handlers'}
     procedure actCopyExecute(Sender: TObject);
     procedure actToggleFullScreenExecute(Sender: TObject);
-    procedure actToggleRepositoryTreeExecute(Sender: TObject);
-    procedure actSyncEditorWithRepositoryExecute(Sender: TObject);
     procedure actRttiExecute(Sender: TObject);
     procedure actCreateModelExecute(Sender: TObject);
     procedure actAddConnectionViewExecute(Sender: TObject);
     {$ENDREGION}
 
     {$REGION 'event handlers'}
-    procedure dscRepositoryDataChange(Sender: TObject; Field: TField);
     procedure tlbMainCustomDraw(Sender: TToolBar; const ARect: TRect;
       var DefaultDraw: Boolean);
     procedure FormShortCut(var Msg: TWMKey; var Handled: Boolean);
@@ -153,19 +149,12 @@ type
     {$ENDREGION}
 
   private
-    //FRepositoryData : TdmRepositoryData;
-    //FSyncEditor     : Boolean;
     FManager  : IConnectionViewManager;
     FSettings : IDGSettings;
 
     FTables        : TStringList;
     FFields        : TStringList;
     FLastPanel     : TdxDockPanel;
-
-    procedure WMMove(var AMessage: TWMMove); message WM_MOVE;
-    procedure WMSize(var AMessage: TWMSize); message WM_SIZING;
-
-    procedure EditorStatusChange(Sender: TObject; Changes: TSynStatusChanges);
 
   protected
     function GetData: IData;
@@ -180,7 +169,6 @@ type
 
     procedure ShowToolWindow(AForm: TForm);
     procedure HideToolWindow(AForm: TForm);
-    procedure RepositionToolWindows;
 
   public
     procedure AfterConstruction; override;
@@ -228,17 +216,6 @@ begin
   tlbMain.DrawingStyle := dsNormal;
   InitializeActions;
 
-// TODO : trace memory leaks in repository view
-//  FRepositoryData := TdmRepositoryData.Create(Self);
-//  FTree := TfrmVirtualDBTree.Create(Self);
-//  FTree.DataSet := FRepositoryData.DataSet;
-//  FTree.DataSet.Active := True;
-//  dscRepository.DataSet := FTree.DataSet;
-
-// todo: move to connectionview
-//  FSettings.FormSettings.AssignTo(Self);
-//  pnlConnectionProfiles.Width := FSettings.FormSettings.VSplitterPos;
-//  pnlTop.Height               := FSettings.FormSettings.HSplitterPos;
   pnlStatus.Caption := SReady;
 
   FTables := TStringList.Create;
@@ -246,7 +223,6 @@ begin
 
 //  if FileExists('tablenames.txt') then
 //    FTables.LoadFromFile('tablenames.txt');
-//
 //  Editor.FillCompletionLists(FTables, FFields);
 
   SetWindowSizeGrip(pnlStatusBar.Handle, True);
@@ -254,40 +230,10 @@ end;
 
 procedure TfrmMain.BeforeDestruction;
 begin
-//  FSettings.FormSettings.Assign(Self);
-//  FSettings.FormSettings.VSplitterPos := pnlConnectionProfiles.Width;
-//  FSettings.FormSettings.HSplitterPos := pnlTop.Height;
-//  FSettings.Save;
-//  if Assigned(FView) then
-//  begin
-//    (FView as TComponent).Free;
-//  end;
-//  FView := nil;
-//  if Assigned(FData) then
-//  begin
-//    (FData as TComponent).Free;
-//  end;
-//  FData := nil;
   FreeAndNil(FTables);
   FreeAndNil(FFields);
-  //FreeAndNil(FScriptParser);
   FManager := nil;
   inherited BeforeDestruction;
-
-end;
-{$ENDREGION}
-
-{$REGION 'message handlers'}
-procedure TfrmMain.WMMove(var AMessage: TWMMove);
-begin
-  AMessage.Result := 0;
-  RepositionToolWindows;
-end;
-
-procedure TfrmMain.WMSize(var AMessage: TWMSize);
-begin
-  AMessage.Result := 0;
-  RepositionToolWindows;
 end;
 {$ENDREGION}
 
@@ -328,13 +274,6 @@ begin
 //  end;
 end;
 
-procedure TfrmMain.actSyncEditorWithRepositoryExecute(Sender: TObject);
-begin
-//  FSyncEditor := actSyncEditorWithRepository.Checked;
-//  if FSyncEditor then
-//    FEditor.Text := dscRepository.DataSet.FieldByName('Text').AsString;
-end;
-
 procedure TfrmMain.actAddConnectionViewExecute(Sender: TObject);
 begin
   AddConnectionView;
@@ -346,15 +285,6 @@ begin
 //    WindowState := wsMaximized
 //  else
 //    WindowState := wsNormal;
-end;
-
-procedure TfrmMain.actToggleRepositoryTreeExecute(Sender: TObject);
-begin
-//  FSettings.RepositoryVisible := actToggleRepositoryTree.Checked;
-//  if actToggleRepositoryTree.Checked then
-//    ShowToolWindow(FTree)
-//  else
-//    HideToolWindow(FTree);
 end;
 
 procedure TfrmMain.actRttiExecute(Sender: TObject);
@@ -394,25 +324,6 @@ procedure TfrmMain.dcmMainCreateTabContainer(Sender: TdxCustomDockControl;
   ATabContainer: TdxTabContainerDockSite);
 begin
   ATabContainer.CaptionButtons := [cbClose];
-end;
-
-procedure TfrmMain.dscRepositoryDataChange(Sender: TObject; Field: TField);
-begin
-//  if (Field = nil) and Assigned(FEditor) and FTree.Visible and FSyncEditor then
-//  begin
-//    FEditor.Text := dscRepository.DataSet.FieldByName('Text').AsString;
-//  end;
-end;
-
-procedure TfrmMain.EditorStatusChange(Sender: TObject;
-  Changes: TSynStatusChanges);
-begin
-//  if FTree.Visible and FSyncEditor and (FEditor.Text <> '') then
-//  begin
-//    if not (dscRepository.DataSet.State in dsEditModes) then
-//      dscRepository.DataSet.Edit;
-//    dscRepository.DataSet.FieldByName('Text').AsString := FEditor.Text;
-//  end;
 end;
 
 { Needed to route shortcuts to the actionlist in the data module. }
@@ -503,10 +414,6 @@ end;
 procedure TfrmMain.InitializeActions;
 begin
   AddToolbarButtons(tlbMain, Manager);
-//  btnSyncEditorWithRepository.Action :=
-//    ConnectionViewManager['actSyncEditorWithRepository'];
-//  btnToggleRepositoryTree.Action :=
-//    ConnectionViewManager['actToggleRepositoryTree'];
 end;
 {$ENDREGION}
 
@@ -517,7 +424,6 @@ begin
   begin
     LockPaint(AForm);
     try
-      RepositionToolWindows;
       AForm.BorderStyle := bsSizeToolWin;
       AForm.Visible := True;
       ShowWindow(AForm.Handle, SW_SHOWNOACTIVATE);
@@ -536,28 +442,6 @@ begin
   begin
     ShowWindow(AForm.Handle, SW_HIDE);
   end;
-end;
-
-procedure TfrmMain.RepositionToolWindows;
-begin
-//  if Assigned(FDataInspector) then
-//  begin
-//    with FDataInspector do
-//    begin
-//      Left   := Self.Left + Self.Width;
-//      Top    := Self.Top;
-//      Height := Self.Height;
-//    end;
-//  end;
-//  if Assigned(FTree) then
-//  begin
-//    with FTree do
-//    begin
-//      Left   := Self.Left - Width;
-//      Top    := Self.Top;
-//      Height := Self.Height;
-//    end;
-//  end;
 end;
 
 procedure TfrmMain.UpdateActions;
