@@ -18,7 +18,7 @@ unit DataGrabber.RegisterServices;
 
 interface
 
-{$I 'DataGrabber.inc'}
+{$I DataGrabber.inc}
 
 procedure RegisterServices;
 
@@ -56,7 +56,6 @@ uses
   DataGrabber.DataView.cxGrid,
   {$ENDIF}
   DataGrabber.DataView.GridView,
-  DataGrabber.DataView.VirtualDBGrid,
   {$IFDEF KGRID}
   DataGrabber.KGrid,
   {$ENDIF}
@@ -126,9 +125,6 @@ begin
 
   GlobalContainer.RegisterType<TfrmGridView>
                  .Implements<IDGDataView>('GridView');
-
-  GlobalContainer.RegisterType<TfrmVirtualDBGrid>
-                 .Implements<IDGDataView>('VirtualDBGrid');
 
   GlobalContainer.RegisterType<TfrmEditorView>
                  .Implements<IEditorView>;

@@ -105,7 +105,7 @@ function TdmDBXConnection.GetConnectionType: string;
 begin
   Result := 'DBX';
 end;
-
+{$ENDREGION}
 
 {$REGION 'protected methods'}
 procedure TdmDBXConnection.AssignConnectionSettings;

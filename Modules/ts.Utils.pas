@@ -229,8 +229,9 @@ procedure DebugString(const AString: string; const Args: array of const); overlo
 implementation
 
 uses
-  Forms, ActiveX, Math, Variants, StrUtils, StdCtrls, Messages, GraphUtil,
-  Character, Winapi.ShellAPI;
+  Winapi.ShellAPI, Winapi.ActiveX, Winapi.Messages,
+  System.Math, System.Variants, System.StrUtils, System.Character,
+  Vcl.StdCtrls, Vcl.Forms, Vcl.GraphUtil;
 
 resourcestring
   SNoCorrespondingFieldType = 'No corresponding fieldtype found for Variant ' +
@@ -242,8 +243,6 @@ resourcestring
 
 var
   FContext: TRttiContext;
-
-// non-interfaced routines                                               BEGIN
 
 // code used by SetWindowSizeGrip
 

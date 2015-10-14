@@ -102,7 +102,7 @@ type
     FEditorView     : IEditorView;
     FActiveDataView : IDGDataView;
     FActiveData     : IData;
-    vstProfiles   : TVirtualStringTree;
+    vstProfiles     : TVirtualStringTree;
 
     function GetManager: IConnectionViewManager;
     function GetForm: TForm;
@@ -114,8 +114,7 @@ type
   protected
     procedure Copy;
     procedure InitializeEditorView;
-    //procedure CreateView(const AGridType: string);
-//    procedure CreateData(const AConnectionType: string);
+
     procedure UpdateActions; override;
 
     procedure ApplySettings;
@@ -124,9 +123,8 @@ type
 
   public
     procedure AfterConstruction; override;
-    procedure BeforeDestruction; override;
     constructor Create(
-      AOwner: TComponent;
+      AOwner      : TComponent;
       AEditorView : IEditorView;
       ADataView   : IDGDataView;
       AData       : IData
@@ -170,7 +168,7 @@ begin
   FEditorView := AEditorView;
   FActiveDataView := ADataView;
   ActiveDataView.AssignParent(pnlBottom);
-  //FActiveData := AData;
+  FActiveData := AData;
 end;
 
 procedure TfrmConnectionView.AfterConstruction;
@@ -181,16 +179,14 @@ begin
   vstProfiles.Parent := pnlProfiles;
   vstProfiles.Align := alClient;
   vstProfiles.RootNodeCount := Manager.Settings.ConnectionProfiles.Count;
+  vstProfiles.OnBeforeCellPaint := vstProfilesBeforeCellPaint;
+  vstProfiles.OnGetText         := vstProfilesGetText;
+  vstProfiles.OnFocusChanged    := vstProfilesFocusChanged;
+  vstProfiles.OnPaintText       := vstProfilesPaintText;
   // TODO: select default node
   vstProfiles.FocusedNode := vstProfiles.GetFirstVisible;
   InitializeControls;
   ApplySettings;
-end;
-
-procedure TfrmConnectionView.BeforeDestruction;
-begin
-  //FreeAndNil(FConnections);
-  inherited;
 end;
 
 procedure TfrmConnectionView.InitializeEditorView;
@@ -205,42 +201,6 @@ begin
   F.Align          := alClient;
   F.Visible        := True;
 end;
-
-//procedure TfrmConnectionView.CreateView(const AGridType: string);
-//begin
-//  FActiveDataView := ServiceLocator.GetService<IDGDataView>('cxGrid');
-//  FActiveDataView.PopupMenu := Manager.ConnectionViewPopupMenu;
-//  ActiveDataView.AssignParent(pnlBottom);
-//  if Assigned(Manager.Settings) then
-//  begin
-//    ActiveDataView.Settings := Manager.Settings as IDataViewSettings;
-//  end;
-//  if Assigned(ActiveData) then
-//  begin
-//    ActiveDataView.Data := ActiveData;
-//  end;
-//end;
-
-//procedure TfrmConnectionView.CreateData(const AConnectionType: string);
-//var
-//  C : IConnection;
-//begin
-//  if ServiceLocator.TryGetService<IConnection>(AConnectionType, C) then
-//  begin
-//    if Assigned(ActiveData) then
-//    begin
-//      (FActiveData as TObject).Free;
-//    end;
-//    FActiveData := nil;
-//    FActiveData := TdmData.Create(Self, C);
-//    //FActiveData.ProviderMode := Manager.Settings.ProviderMode;
-//    if Assigned(ActiveDataView) then
-//    begin
-//      ActiveDataView.Data := ActiveData;
-//      //FDataInspector.Data := Data;
-//    end;
-//  end;
-//end;
 {$ENDREGION}
 
 {$REGION 'event handlers'}

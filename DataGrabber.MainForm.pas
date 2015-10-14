@@ -45,6 +45,7 @@ uses
 
 {
   TODO:
+    - replace dx docking with TChromeTab
     - registration mechanism for dataviews + use Spring.Services
     - autosize form (to data)
     - testing !!!
@@ -374,7 +375,6 @@ var
   DP  : TdxDockPanel;
   CV  : IConnectionView;
   I   : Integer;
-  N   : Integer;
 begin
   LockPaint(Self);
   dxDockingController.BeginUpdate;
@@ -513,7 +513,6 @@ begin
     begin
       pnlProviderMode.Caption := SNativeMode;
     end;
-    //actProviderMode.Checked := Settings.ProviderMode;
   end;
 
   if Assigned(Settings) then

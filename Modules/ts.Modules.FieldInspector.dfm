@@ -30,8 +30,6 @@ object frmFieldInspector: TfrmFieldInspector
     Align = alLeft
     BevelOuter = bvNone
     TabOrder = 0
-    ExplicitLeft = 199
-    ExplicitTop = 8
   end
   object pnlRight: TPanel
     Left = 192
@@ -41,9 +39,5 @@ object frmFieldInspector: TfrmFieldInspector
     Align = alClient
     BevelOuter = bvNone
     TabOrder = 1
-    ExplicitLeft = 8
-    ExplicitTop = 8
-    ExplicitWidth = 185
-    ExplicitHeight = 41
   end
 end

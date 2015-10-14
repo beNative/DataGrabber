@@ -42,9 +42,9 @@ type
       Node: PVirtualNode; Column: TColumnIndex);
 
   private
-    FData   : IData;
-    piField : TPropertyInspector;
-    vstFields: TVirtualStringTree;
+    FData     : IData;
+    piField   : TPropertyInspector;
+    vstFields : TVirtualStringTree;
 
     function GetData: IData;
     function GetDataSet: TDataSet;

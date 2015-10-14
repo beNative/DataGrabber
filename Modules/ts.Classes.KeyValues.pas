@@ -65,14 +65,10 @@ unit ts.Classes.KeyValues;
   TODO => make it safe when the KeyValues instance is destroyed.
 }
 
-
-
 interface
 
 uses
   SysUtils, Classes;
-
-//=============================================================================
 
 type
   TtsKeyValues = class;
@@ -115,8 +111,6 @@ type
   end;
 
   TtsKeyValueClass = class of TtsKeyValue;
-
-//=============================================================================
 
   TtsKeyValues = class(TCollection)
   private
@@ -187,24 +181,19 @@ type
     { Provides indexed access to the list of collection items. }
     property Items[Index: Integer]: TtsKeyValue
       read GetItem write SetItem;
-  end; // TtsKeyValues
-
-
+  end;
 
 implementation
 
 uses
-  Variants, Windows,
+  Winapi.Windows,
+  System.Variants,
 
   ts.Utils;
-
-//=============================================================================
 
 resourcestring
   SParamNotFoundError = 'Error: Param with name ''%s'' not found';
   SDuplicateName      = 'Item with name %s already exist in collection of %s';
-
-//=============================================================================
 
 type
   { A custom variant type that implements the mapping from the property names
@@ -226,8 +215,6 @@ type
                          const Value : TVarData): Boolean; override;
   end;
 
-
-
 type
   { Our customized layout of the variants record data. We only need a reference
     to the TtsKeyValues instance. }
@@ -238,17 +225,11 @@ type
     Reserved4                       : LongInt;
   end;
 
-
-
 var
   { The global instance of the custom variant type. The data of the custom
     variant is stored in a TVarData record (which is common to all variants),
     but the methods and properties are implemented in this class instance. }
   VarDataRecordType : TVarDataRecordType = nil;
-
-
-// non-interfaced routines                                               BEGIN
-
 
 { A global function the get our custom VarType value. This may vary and thus
   is determined at runtime. }
@@ -257,8 +238,6 @@ function VarDataRecord: TVarType;
 begin
   Result := VarDataRecordType.VarType;
 end;
-
-
 
 { A global function that fills the TVarData fields of the Variant with the
   correct values. }
@@ -270,24 +249,7 @@ begin
   TVarDataRecordData(Result).KeyValues := AKeyValues;
 end;
 
-
-// non-interfaced routines                                                 END
-
-
-{
-_______________________________________________________________________________
-_______________________________________________________________________________
-
-                             TVarDataRecordType
-_______________________________________________________________________________
-_______________________________________________________________________________
-
-}
-
-
 // public methods                                                        BEGIN
-
-
 procedure TVarDataRecordType.Clear(var V: TVarData);
 begin
   { No fancy things to do here, we are only holding a referece to a
@@ -536,8 +498,6 @@ begin
   Result := InterlockedIncrement(FRefCount);
 end;
 
-
-
 { IInterface support }
 
 function TtsKeyValues._Release: Integer;
@@ -546,8 +506,6 @@ begin
   if Result = 0 then
     Destroy;
 end;
-
-
 
 { IInterface support }
 
@@ -559,8 +517,6 @@ begin
     Result := E_NOINTERFACE;
 end;
 
-
-
 function TtsKeyValues.IndexOf(const AName: string): Integer;
 begin
   for Result := 0 to Pred(Count) do
@@ -568,8 +524,6 @@ begin
       Exit;
   Result := -1;
 end;
-
-
 
 { The FindItemID method returns the item in the collection whose ID property
   is passed to it as a parameter. If no item has the specified ID, FindItemID

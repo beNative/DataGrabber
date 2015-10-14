@@ -16,8 +16,6 @@
 
 unit ts.Modules.DataInspector;
 
-{ Author: Tim Sinaeve }
-
 {
   TODO: support for custom inplace editors, especially for memo-fields
 }
@@ -43,7 +41,6 @@ type
     aclMain            : TActionList;
     actHideEmptyFields : TAction;
     dscMain            : TDataSource;
-    //ispMain            : TExInspector;
     mniHideEmptyFields : TMenuItem;
     pnlMain            : TPanel;
     ppmMain            : TPopupMenu;

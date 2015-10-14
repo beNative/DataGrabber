@@ -44,7 +44,6 @@ uses
   ts.Connection.DBXConnectionAdaptor in 'Modules\ts.Connection.DBXConnectionAdaptor.pas',
   DataGrabber.DataView.cxGrid in 'DataView\DataGrabber.DataView.cxGrid.pas' {frmcxGrid: TFrame},
   DataGrabber.DataView.GridView in 'DataView\DataGrabber.DataView.GridView.pas' {frmGridView},
-  DataGrabber.DataView.VirtualDBGrid in 'DataView\DataGrabber.DataView.VirtualDBGrid.pas',
   ts.Connection.CustomConnectionAdaptor in 'Modules\ts.Connection.CustomConnectionAdaptor.pas',
   ts.Connection in 'Modules\ts.Connection.pas' {dmConnection: TDataModule},
   DataGrabber.RegisterServices in 'DataGrabber.RegisterServices.pas',

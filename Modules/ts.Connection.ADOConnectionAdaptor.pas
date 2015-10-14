@@ -74,14 +74,7 @@ const
     'User ID=%s;' +                   // "" when empty
     'Password=%s;' +                  // "" when empty
     'Initial Catalog=%s;' +           // database name
-    'Data Source=%s';                  // Servername
-
-//Provider=SQLOLEDB.1;Password=balta;Persist Security Info=True;User ID=TSI;Initial Catalog=ITC;Data Source=DEVELOP
-//Provider=SQLOLEDB.1;Persist Security Info=False;User ID=TSI;Initial Catalog=ITC;Data Source=DEVELOP
-//Provider=MSDASQL.1;Persist Security Info=False;Data Source=itc;Initial Catalog=ITC
-//Provider=SQLNCLI10.1;Integrated Security=SSPI;Persist Security Info=False;User ID="";Initial Catalog=ITC;Data Source=DEVELOP;Initial File Name="";Server SPN=""
-//Provider=SQLNCLI.1;Integrated Security=SSPI;Persist Security Info=False;Initial Catalog=ITC;Data Source=DEVELOP
-//Provider=SQLOLEDB.1;Integrated Security=SSPI;Persist Security Info=False;Initial Catalog=ITC;Data Source=DEVELOP
+    'Data Source=%s';                 // Servername
 
 {$REGION 'construction and destruction'}
 procedure TADOConnectionAdaptor.AfterConstruction;

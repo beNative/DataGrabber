@@ -16,8 +16,6 @@
 
 unit ts.Data;
 
-{ Author: Tim Sinaeve }
-
 {
   Base module for generic SQL table administration (SELECT/INSERT/DELETE/UPDATE).
 

@@ -27,7 +27,7 @@ object frmSettingsDialog: TfrmSettingsDialog
     Top = 3
     Width = 382
     Height = 406
-    ActivePage = tsConnection
+    ActivePage = tsConnectionProfiles
     Align = alTop
     Anchors = [akLeft, akTop, akRight, akBottom]
     Images = imlMain
@@ -35,10 +35,6 @@ object frmSettingsDialog: TfrmSettingsDialog
     object tsConnection: TTabSheet
       Caption = 'Connection'
       ImageIndex = 10
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       DesignSize = (
         374
         377)
@@ -138,10 +134,6 @@ object frmSettingsDialog: TfrmSettingsDialog
     object tsDisplay: TTabSheet
       Caption = 'Display'
       ImageIndex = 5
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       DesignSize = (
         374
         377)
@@ -240,10 +232,6 @@ object frmSettingsDialog: TfrmSettingsDialog
     object tsConnectionProfiles: TTabSheet
       Caption = 'Connection Profiles'
       ImageIndex = 9
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object splVertical: TSplitter
         Left = 185
         Top = 0
@@ -306,10 +294,6 @@ object frmSettingsDialog: TfrmSettingsDialog
     object tsXML: TTabSheet
       Caption = 'XML settings'
       ImageIndex = 11
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
     end
   end
   object btnApply: TButton
@@ -436,7 +420,7 @@ object frmSettingsDialog: TfrmSettingsDialog
     Left = 296
     Top = 352
     Bitmap = {
-      494C01010E001000380010001000FFFFFFFF2110FFFFFFFFFFFFFFFF424D3600
+      494C01010E0010003C0010001000FFFFFFFF2110FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000004000000001002000000000000040
       0000000000000000000000000000000000000000000000000000000000000000
       00000000000000000000000000000000000000000000151616162E323539404B
