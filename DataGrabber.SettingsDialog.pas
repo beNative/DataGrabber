@@ -27,7 +27,8 @@ uses
 
   VirtualTrees,
 
-  DDuce.Components.PropertyInspector, DDuce.Components.XMLTree,
+  DDuce.Components.PropertyInspector,
+  //DDuce.Components.XMLTree,
 
   DataGrabber.Interfaces, DataGrabber.Settings, DataGrabber.PropertyEditors;
 

@@ -21,7 +21,8 @@ interface
 uses
   System.Classes, Vcl.ComCtrls, Vcl.Controls,
 
-  DDuce.Components.PropertyInspector, DDuce.Components.XMLTree,
+  DDuce.Components.PropertyInspector,
+  //DDuce.Components.XMLTree,
 
   DataGrabber.Interfaces;
 
@@ -36,11 +37,11 @@ function CreateInspector(
   AObject : TPersistent = nil
 ): TPropertyInspector;
 
-function CreateXMLTree(
-        AOwner  : TComponent;
-        AParent : TWinControl;
-  const AXML    : string = ''
-): TXMLTree;
+//function CreateXMLTree(
+//        AOwner  : TComponent;
+//        AParent : TWinControl;
+//  const AXML    : string = ''
+//): TXMLTree;
 
 implementation
 
@@ -100,17 +101,17 @@ begin
   Result := PI;
 end;
 
-function CreateXMLTree(AOwner: TComponent; AParent: TWinControl;
-  const AXML : string = ''): TXMLTree;
-var
-  XT : TXMLTree;
-begin
-  XT := TXMLTree.Create(AOwner);
-  XT.Parent := AParent;
-  XT.Align  := alClient;
-  if AXML <> '' then
-    XT.XML := AXML;
-  Result := XT;
-end;
+//function CreateXMLTree(AOwner: TComponent; AParent: TWinControl;
+//  const AXML : string = ''): TXMLTree;
+//var
+//  XT : TXMLTree;
+//begin
+//  XT := TXMLTree.Create(AOwner);
+//  XT.Parent := AParent;
+//  XT.Align  := alClient;
+//  if AXML <> '' then
+//    XT.XML := AXML;
+//  Result := XT;
+//end;
 
 end.
