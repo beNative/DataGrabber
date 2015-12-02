@@ -26,13 +26,6 @@ uses
   Vcl.Graphics, Vcl.Dialogs, Vcl.StdCtrls, Vcl.Grids, Vcl.ComCtrls,
   Data.DB, Data.Win.ADODB,
 
-  MidasLib,
-
-  cxGraphics, cxControls, cxButtons, cxLookAndFeels, cxLookAndFeelPainters,
-  dxDockPanel, cxPC, cxClasses, dxDockControl,
-
-  SynEdit,
-
   DDuce.Components.PropertyInspector,
 
   VirtualTrees,
@@ -70,11 +63,9 @@ type
 
 type
   TfrmMain = class(TForm)
-    {$region 'designer controls'}
+    {$REGION 'designer controls'}
     aclMain                       : TActionList;
     actAddConnectionView          : TAction;
-    dcmMain                       : TdxDockingManager;
-    dsConnectionViews             : TdxDockSite;
     mniADO                        : TMenuItem;
     mniCopy                       : TMenuItem;
     mniCopyTextTable              : TMenuItem;
@@ -125,13 +116,9 @@ type
     ppmConnectionTypes            : TPopupMenu;
     ppmGridTypes                  : TPopupMenu;
     tlbMain                       : TToolBar;
-    {$endregion}
+    {$ENDREGION}
 
     {$REGION 'action handlers'}
-    procedure actCopyExecute(Sender: TObject);
-    procedure actToggleFullScreenExecute(Sender: TObject);
-    procedure actRttiExecute(Sender: TObject);
-    procedure actCreateModelExecute(Sender: TObject);
     procedure actAddConnectionViewExecute(Sender: TObject);
     {$ENDREGION}
 
@@ -139,23 +126,11 @@ type
     procedure tlbMainCustomDraw(Sender: TToolBar; const ARect: TRect;
       var DefaultDraw: Boolean);
     procedure FormShortCut(var Msg: TWMKey; var Handled: Boolean);
-    procedure dcmMainCreateFloatSite(Sender: TdxCustomDockControl;
-      AFloatSite: TdxFloatDockSite);
-    procedure dcmMainCreateTabContainer(Sender: TdxCustomDockControl;
-      ATabContainer: TdxTabContainerDockSite);
-    procedure dcmMainCreateLayoutSite(Sender: TdxCustomDockControl;
-      ALayoutSite: TdxLayoutDockSite);
-    procedure dcmMainCreateSideContainer(Sender: TdxCustomDockControl;
-      ASideContainer: TdxSideContainerDockSite);
     {$ENDREGION}
 
   private
     FManager  : IConnectionViewManager;
     FSettings : IDGSettings;
-
-    FTables        : TStringList;
-    FFields        : TStringList;
-    FLastPanel     : TdxDockPanel;
 
   protected
     function GetData: IData;
@@ -197,10 +172,11 @@ implementation
 uses
   Vcl.Clipbrd,
 
-  Spring.Services,
+  Spring.Container,
 
   ts.Utils,
-  ts.Modules.ComponentInspector,  ts.Modules.RTTEye,
+
+  DDuce.Forms.ComponentInspector,
 
   DataGrabber.Utils, DataGrabber.Resources, DataGrabber.SettingsDialog,
   DataGrabber.ModelData,
@@ -212,85 +188,25 @@ uses
 procedure TfrmMain.AfterConstruction;
 begin
   inherited AfterConstruction;
-  FManager := ServiceLocator.GetService<IConnectionViewManager>;
+  FManager := GlobalContainer.Resolve<IConnectionViewManager>;
   AddConnectionView;
   tlbMain.DrawingStyle := dsNormal;
   InitializeActions;
-
   pnlStatus.Caption := SReady;
-
-  FTables := TStringList.Create;
-  FFields := TStringList.Create;
-
-//  if FileExists('tablenames.txt') then
-//    FTables.LoadFromFile('tablenames.txt');
-//  Editor.FillCompletionLists(FTables, FFields);
-
   SetWindowSizeGrip(pnlStatusBar.Handle, True);
 end;
 
 procedure TfrmMain.BeforeDestruction;
 begin
-  FreeAndNil(FTables);
-  FreeAndNil(FFields);
   FManager := nil;
   inherited BeforeDestruction;
 end;
 {$ENDREGION}
 
 {$REGION 'action handlers'}
-procedure TfrmMain.actCopyExecute(Sender: TObject);
-begin
-//  if not FEditor.EditorFocused then
-//    View.Copy
-//  else
-//    Editor.CopyToClipboard;
-end;
-
-procedure TfrmMain.actCreateModelExecute(Sender: TObject);
-//var
-//  Tables: TStringList;
-//  Fields: TStringList;
-//  S      : string;
-begin
-//  Tables := TStringList.Create;
-//  try
-//    Fields := TStringList.Create;
-//    try
-//      if Supports(Data.Connection, IMetaData) then
-//      begin
-//        (Data.Connection as IMetaData).GetTableNames(Tables);
-//        ModelData.AddTables(Tables);
-//        for S in Tables do
-//        begin
-//          (Data.Connection as IMetaData).GetFieldNames(Fields, S);
-//          ModelData.AddFields(S, Fields);
-//        end;
-//      end;
-//    finally
-//      Fields.Free;
-//    end;
-//  finally
-//    Tables.Free;
-//  end;
-end;
-
 procedure TfrmMain.actAddConnectionViewExecute(Sender: TObject);
 begin
   AddConnectionView;
-end;
-
-procedure TfrmMain.actToggleFullScreenExecute(Sender: TObject);
-begin
-//  if actToggleFullScreen.Checked then
-//    WindowState := wsMaximized
-//  else
-//    WindowState := wsNormal;
-end;
-
-procedure TfrmMain.actRttiExecute(Sender: TObject);
-begin
-  ShowRTTEye;
 end;
 {$ENDREGION}
 
@@ -299,32 +215,6 @@ procedure TfrmMain.tlbMainCustomDraw(Sender: TToolBar; const ARect: TRect;
   var DefaultDraw: Boolean);
 begin
   Sender.Canvas.FillRect(ARect);
-end;
-
-procedure TfrmMain.dcmMainCreateFloatSite(Sender: TdxCustomDockControl;
-  AFloatSite: TdxFloatDockSite);
-begin
-  AFloatSite.FloatWidth := (Width div 2);
-  AFloatSite.FloatHeight := (Height div 3) * 2;
-end;
-
-procedure TfrmMain.dcmMainCreateLayoutSite(Sender: TdxCustomDockControl;
-  ALayoutSite: TdxLayoutDockSite);
-begin
-  ALayoutSite.CaptionButtons := [cbClose];
-end;
-
-procedure TfrmMain.dcmMainCreateSideContainer(Sender: TdxCustomDockControl;
-  ASideContainer: TdxSideContainerDockSite);
-begin
-  ASideContainer.CaptionButtons := [];
-  ASideContainer.ShowCaption := False;
-end;
-
-procedure TfrmMain.dcmMainCreateTabContainer(Sender: TdxCustomDockControl;
-  ATabContainer: TdxTabContainerDockSite);
-begin
-  ATabContainer.CaptionButtons := [cbClose];
 end;
 
 { Needed to route shortcuts to the actionlist in the data module. }
@@ -372,43 +262,17 @@ end;
 
 function TfrmMain.AddConnectionView: IConnectionView;
 var
-  DP  : TdxDockPanel;
   CV  : IConnectionView;
   I   : Integer;
+  P   : TPanel;
 begin
   LockPaint(Self);
-  dxDockingController.BeginUpdate;
-  DP := TdxDockPanel.Create(Self);
-  DP.ShowSingleTab := False;
-  DP.CaptionButtons := [cbClose];
-  for I := 0 to dxDockingController.DockControlCount - 1 do
-  begin
-    if dxDockingController.DockControls[I] is TdxDockSite then
-    begin
-      if Assigned(FLastPanel) then
-      begin
-        DP.DockTo(FLastPanel, dtClient, -1);
-      end
-      else
-      begin
-        DP.DockTo(
-          TdxCustomDockControl(dxDockingController.DockControls[I]),
-          dtClient,
-          -1
-        );
-      end;
-      Break;
-    end;
-  end;
   CV := Manager.AddConnectionView;
-  CV.Form.Parent := DP;
-  DP.ShowCaption := True;
+  CV.Form.Parent := pnlConnectionViews;
   CV.Form.BorderStyle := bsNone;
   CV.Form.Align := alClient;
   CV.Form.Visible := True;
-  FLastPanel := DP;
   UnlockPaint(Self);
-  dxDockingController.EndUpdate;
 end;
 
 procedure TfrmMain.InitializeActions;
@@ -447,25 +311,12 @@ end;
 procedure TfrmMain.UpdateActions;
 var
   V: IConnectionView;
-  D: TdxCustomDockControl;
 begin
   inherited UpdateActions;
   UpdateStatusBar;
   if Assigned(Manager.ActiveConnectionView) then
   begin
     V := Manager.ActiveConnectionView;
-    D := dxDockingController.GetDockControlForWindow(V.Form.Handle);
-
-    if Assigned(D) then
-    begin
-      D.Caption := V.Form.Caption;
-      if Assigned(D.TabContainer) then
-      begin
-        D.ManagerColor := True;
-        D.TabContainer.TabsProperties.Options :=
-            D.TabContainer.TabsProperties.Options + [pcoUsePageColorForTab];
-      end;
-    end;
   end;
 end;
 {$ENDREGION}
@@ -495,7 +346,6 @@ begin
     begin
       pnlProviderMode.Caption := SNativeMode;
     end;
-    //actProviderMode.Checked := Data.ProviderMode;
   end
   else
   begin

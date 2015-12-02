@@ -230,7 +230,7 @@ uses
 
   DataGrabber.SettingsDialog, DataGrabber.ConnectionView,
 
-  Spring.Services;
+  Spring.Container;
 
 {$REGION 'construction and destruction'}
 constructor TdmConnectionViewManager.Create(ASettings: IDGSettings);
@@ -748,16 +748,16 @@ var
   D  : IData;
   C  : IConnection;
 begin
-  EV := ServiceLocator.GetService<IEditorView>;
+  EV := GlobalContainer.Resolve<IEditorView>;
   //DV := ServiceLocator.GetService<IDGDataView>(Settings.GridType);
-  DV := ServiceLocator.GetService<IDGDataView>('cxGrid');
+  DV := GlobalContainer.Resolve<IDGDataView>('cxGrid');
   DV.PopupMenu := ConnectionViewPopupMenu;
   FActiveConnectionView := CV;
 
   FActiveDataView := DV;
 
 
-  C := ServiceLocator.GetService<IConnection>(Settings.ConnectionType);
+  C := GlobalContainer.Resolve<IConnection>(Settings.ConnectionType);
   D            := TdmData.Create(Self, C);
   DV.Data      := D;
   FActiveData := D;

@@ -27,8 +27,7 @@ uses
 
   VirtualTrees,
 
-  DDuce.Components.PropertyInspector,
-  //DDuce.Components.XMLTree,
+  DDuce.Components.PropertyInspector, DDuce.Components.XMLTree,
 
   DataGrabber.Interfaces, DataGrabber.Settings, DataGrabber.PropertyEditors;
 
@@ -166,7 +165,7 @@ uses
 
   DataGrabber.ConnectionProfiles, DataGrabber.Utils, DataGrabber.Factories,
 
-  Spring.Services;
+  Spring.Container;
 
 {$REGION 'interfaced routines'}
 procedure ExecuteSettingsDialog(ASettings: IDGSettings;
@@ -449,7 +448,8 @@ begin
   vstProfiles.OnFocusChanged := vstProfilesFocusChanged;
   vstProfiles.OnBeforeCellPaint := vstProfilesBeforeCellPaint;
 
-  for C in ServiceLocator.GetAllServices<IConnection> do
+
+  for C in GlobalContainer.ResolveAll<IConnection> do
   begin
     I := rgpConnectionType.Items.Add(C.ConnectionType);
     if SameText(C.ConnectionType, FSettings.ConnectionType) then
@@ -457,7 +457,7 @@ begin
   end;
 
   rgpGridTypes.Items.Clear;
-  for DV in ServiceLocator.GetAllServices<IDGDataView> do
+  for DV in GlobalContainer.ResolveAll<IDGDataView> do
   begin
     S := DV.Name;
     rgpGridTypes.Items.Add(S);
