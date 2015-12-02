@@ -294,10 +294,6 @@ object frmSettingsDialog: TfrmSettingsDialog
     object tsXML: TTabSheet
       Caption = 'XML settings'
       ImageIndex = 11
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
     end
   end
   object btnApply: TButton
@@ -353,6 +349,14 @@ object frmSettingsDialog: TfrmSettingsDialog
     Images = imlMain
     SelectedImageIndex = 0
     TabOrder = 4
+  end
+  object btnConnectionString: TButton
+    Left = 168
+    Top = 232
+    Width = 75
+    Height = 25
+    Action = actConnectionString
+    TabOrder = 5
   end
   object aclMain: TActionList
     Images = imlMain
@@ -416,6 +420,10 @@ object frmSettingsDialog: TfrmSettingsDialog
       Hint = 'Duplicate'
       ImageIndex = 13
       OnExecute = actDuplicateExecute
+    end
+    object actConnectionString: TAction
+      Caption = 'actConnectionString'
+      OnExecute = actConnectionStringExecute
     end
   end
   object imlMain: TImageList

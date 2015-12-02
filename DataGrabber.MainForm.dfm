@@ -249,17 +249,6 @@ object frmMain: TfrmMain
     Align = alClient
     BevelOuter = bvNone
     TabOrder = 2
-    object dsConnectionViews: TdxDockSite
-      Left = 0
-      Top = 0
-      Width = 1082
-      Height = 553
-      Align = alClient
-      AutoSize = True
-      DockingType = 5
-      OriginalWidth = 1082
-      OriginalHeight = 553
-    end
   end
   object aclMain: TActionList
     Left = 80
@@ -308,7 +297,6 @@ object frmMain: TfrmMain
     object mniCopy: TMenuItem
       Caption = 'Copy'
       ShortCut = 16451
-      OnClick = actCopyExecute
     end
     object mniCopyWikiTable: TMenuItem
       Caption = 'Selection as Wiki'
@@ -399,27 +387,5 @@ object frmMain: TfrmMain
       AutoCheck = True
       Caption = 'VirtualDBGrid'
     end
-  end
-  object dcmMain: TdxDockingManager
-    Color = clBtnFace
-    DockZonesWidth = 100
-    Font.Charset = DEFAULT_CHARSET
-    Font.Color = clBlack
-    Font.Height = -11
-    Font.Name = 'Tahoma'
-    Font.Style = []
-    LookAndFeel.Kind = lfUltraFlat
-    LookAndFeel.NativeStyle = False
-    Options = [doActivateAfterDocking, doFloatingOnTop, doTabContainerHasCaption, doSideContainerHasCaption, doSideContainerCanClose, doSideContainerCanInTabContainer, doRedrawOnResize, doFillDockingSelection]
-    ResizeZonesWidth = 6
-    SelectionFrameWidth = 8
-    UseDefaultSitesProperties = False
-    OnCreateFloatSite = dcmMainCreateFloatSite
-    OnCreateLayoutSite = dcmMainCreateLayoutSite
-    OnCreateSideContainer = dcmMainCreateSideContainer
-    OnCreateTabContainer = dcmMainCreateTabContainer
-    Left = 272
-    Top = 8
-    PixelsPerInch = 96
   end
 end

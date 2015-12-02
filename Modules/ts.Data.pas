@@ -1051,6 +1051,7 @@ begin
       begin
         ClientDataSet.PacketRecords := -1; // fetch all records
       end;
+
       ClientDataSet.Active := True;
 //      if ClientDataSet.PacketRecords > 0 then
 //        N := ClientDataSet.PacketRecords

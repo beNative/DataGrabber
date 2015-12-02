@@ -27,8 +27,7 @@ uses
 
   VirtualTrees,
 
-  DDuce.Components.PropertyInspector,
-  //DDuce.Components.XMLTree,
+  DDuce.Components.PropertyInspector, DDuce.Components.XMLTree,
 
   DataGrabber.Interfaces, DataGrabber.Settings, DataGrabber.PropertyEditors;
 
@@ -88,6 +87,8 @@ type
     tsConnectionProfiles           : TTabSheet;
     tsDisplay                      : TTabSheet;
     tsXML                          : TTabSheet;
+    actConnectionString: TAction;
+    btnConnectionString: TButton;
     {$ENDREGION}
 
     procedure actApplyExecute(Sender: TObject);
@@ -122,6 +123,7 @@ type
     procedure vstProfilesBeforeCellPaint(Sender: TBaseVirtualTree;
       TargetCanvas: TCanvas; Node: PVirtualNode; Column: TColumnIndex;
       CellPaintMode: TVTCellPaintMode; CellRect: TRect; var ContentRect: TRect);
+    procedure actConnectionStringExecute(Sender: TObject);
 
   private
     FSettings            : IDGSettings;
@@ -163,10 +165,12 @@ implementation
 
 uses
   ts.Utils, ts.Interfaces,
+  Data.DBConnAdmin, Data.Win.ADOConEd, Data.Win.ADODB,
+
 
   DataGrabber.ConnectionProfiles, DataGrabber.Utils, DataGrabber.Factories,
 
-  Spring.Services;
+  Spring.Container;
 
 {$REGION 'interfaced routines'}
 procedure ExecuteSettingsDialog(ASettings: IDGSettings;
@@ -244,6 +248,19 @@ procedure TfrmSettingsDialog.actCloseExecute(Sender: TObject);
 begin
   Apply;
   Close;
+end;
+
+procedure TfrmSettingsDialog.actConnectionStringExecute(Sender: TObject);
+var
+  AC : TADOConnection;
+begin
+  AC := TADOConnection.Create(Self);
+  try
+    EditConnectionString(AC);
+  finally
+    AC.Free;
+  end;
+  //GetConnectionAdmin.
 end;
 
 procedure TfrmSettingsDialog.actDeleteExecute(Sender: TObject);
@@ -449,7 +466,8 @@ begin
   vstProfiles.OnFocusChanged := vstProfilesFocusChanged;
   vstProfiles.OnBeforeCellPaint := vstProfilesBeforeCellPaint;
 
-  for C in ServiceLocator.GetAllServices<IConnection> do
+
+  for C in GlobalContainer.ResolveAll<IConnection> do
   begin
     I := rgpConnectionType.Items.Add(C.ConnectionType);
     if SameText(C.ConnectionType, FSettings.ConnectionType) then
@@ -457,7 +475,7 @@ begin
   end;
 
   rgpGridTypes.Items.Clear;
-  for DV in ServiceLocator.GetAllServices<IDGDataView> do
+  for DV in GlobalContainer.ResolveAll<IDGDataView> do
   begin
     S := DV.Name;
     rgpGridTypes.Items.Add(S);

@@ -51,7 +51,7 @@ implementation
 uses
   System.SysUtils,
 
-  Spring.Services;
+  Spring.Container;
 
 {$REGION 'TProtocolPropertyEditor'}
 function TProtocolPropertyEditor.GetAttrs: TPropertyAttributes;
@@ -70,7 +70,7 @@ var
 begin
   if ConnectionProfile.ConnectionType <> '' then
   begin
-    S := ServiceLocator.GetService<IConnection>(ConnectionProfile.ConnectionType);
+    S := GlobalContainer.Resolve<IConnection>(ConnectionProfile.ConnectionType);
     AValues.Assign(S.Protocols);
   end;
 end;
@@ -86,7 +86,7 @@ procedure TConnectionTypePropertyEditor.GetValues(AValues: TStrings);
 var
   C : IConnection;
 begin
-  for C in ServiceLocator.GetAllServices<IConnection> do
+  for C in GlobalContainer.ResolveAll<IConnection> do
     AValues.Add(C.ConnectionType);
 end;
 {$ENDREGION}
