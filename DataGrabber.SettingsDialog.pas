@@ -117,7 +117,7 @@ type
     procedure vstProfilesFocusChanged(Sender: TBaseVirtualTree;
       Node: PVirtualNode; Column: TColumnIndex);
     procedure piConnectionProfilesGetEditorClass(Sender: TObject;
-      AInstance: TPersistent; APropInfo: PPropInfo;
+      AInstance: TObject; APropInfo: PPropInfo;
       var AEditorClass: TPropertyEditorClass);
     procedure vstProfilesBeforeCellPaint(Sender: TBaseVirtualTree;
       TargetCanvas: TCanvas; Node: PVirtualNode; Column: TColumnIndex;
@@ -307,7 +307,7 @@ begin
 end;
 
 procedure TfrmSettingsDialog.piConnectionProfilesGetEditorClass(Sender: TObject;
-  AInstance: TPersistent; APropInfo: PPropInfo;
+  AInstance: TObject; APropInfo: PPropInfo;
   var AEditorClass: TPropertyEditorClass);
 begin
   if APropInfo.Name = 'Protocol' then

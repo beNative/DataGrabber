@@ -226,7 +226,7 @@ implementation
 uses
   Vcl.Forms, Vcl.Clipbrd, Vcl.Dialogs,
 
-  ts.Modules.ComponentInspector,
+  DDuce.Forms.ComponentInspector,
 
   DataGrabber.SettingsDialog, DataGrabber.ConnectionView,
 

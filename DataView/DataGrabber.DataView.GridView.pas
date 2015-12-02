@@ -155,7 +155,9 @@ implementation
 uses
   System.Math,
 
-  ts.Modules.ComponentInspector, ts.Classes.KeyValues;
+  DDuce.Forms.ComponentInspector,
+
+  ts.Classes.KeyValues;
 
 {$REGION 'construction and destruction'}
 procedure TfrmGridView.AfterConstruction;

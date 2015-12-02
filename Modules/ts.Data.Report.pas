@@ -76,7 +76,8 @@ uses
   System.SysUtils, System.Variants,
   Vcl.Forms, Vcl.Controls,
 
-  ts.Modules.ComponentInspector;
+  DDuce.Forms.ComponentInspector;
+
 
 {$REGION 'construction and destruction'}
 constructor TDataReport.Create(const AData: IData);

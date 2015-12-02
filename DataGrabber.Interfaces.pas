@@ -25,7 +25,8 @@ uses
 
   DataGrabber.ConnectionProfiles, DataGrabber.FormSettings,
 
-  SynEdit,
+  //SynEdit,
+  BCEditor.Editor.Base, BCEditor.Editor,
 
   ts.Classes.ConnectionSettings, ts.Interfaces;
 
@@ -247,8 +248,8 @@ type
     function GetColor: TColor;
     procedure SetColor(const Value: TColor);
     function GetEditorFocused: Boolean;
-    function GetOnStatusChange: TStatusChangeEvent;
-    procedure SetOnStatusChange(const Value: TStatusChangeEvent);
+//    function GetOnStatusChange: TStatusChangeEvent;
+//    procedure SetOnStatusChange(const Value: TStatusChangeEvent);
 
     procedure FillCompletionLists(ATables, AAttributes : TStrings);
     procedure CopyToClipboard;
@@ -263,8 +264,8 @@ type
     property Text: string
       read GetText write SetText;
 
-    property OnStatusChange: TStatusChangeEvent
-      read GetOnStatusChange write SetOnStatusChange;
+//    property OnStatusChange: TStatusChangeEvent
+//      read GetOnStatusChange write SetOnStatusChange;
   end;
 
   ISelection = interface
