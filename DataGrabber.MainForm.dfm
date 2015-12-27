@@ -74,7 +74,7 @@ object frmMain: TfrmMain
       Margins.Right = 1
       Margins.Bottom = 1
       Align = alLeft
-      BevelInner = bvLowered
+      BevelKind = bkFlat
       BevelOuter = bvNone
       TabOrder = 0
     end
@@ -90,7 +90,7 @@ object frmMain: TfrmMain
       Margins.Right = 1
       Margins.Bottom = 1
       Align = alLeft
-      BevelInner = bvLowered
+      BevelKind = bkFlat
       BevelOuter = bvNone
       TabOrder = 1
     end
@@ -106,7 +106,7 @@ object frmMain: TfrmMain
       Margins.Right = 1
       Margins.Bottom = 1
       Align = alLeft
-      BevelInner = bvLowered
+      BevelKind = bkFlat
       BevelOuter = bvNone
       TabOrder = 2
     end
@@ -122,7 +122,7 @@ object frmMain: TfrmMain
       Margins.Right = 1
       Margins.Bottom = 1
       Align = alLeft
-      BevelInner = bvLowered
+      BevelKind = bkFlat
       BevelOuter = bvNone
       TabOrder = 3
     end
@@ -138,7 +138,7 @@ object frmMain: TfrmMain
       Margins.Right = 1
       Margins.Bottom = 1
       Align = alLeft
-      BevelInner = bvLowered
+      BevelKind = bkFlat
       BevelOuter = bvNone
       PopupMenu = ppmConnectionTypes
       TabOrder = 4
@@ -155,7 +155,7 @@ object frmMain: TfrmMain
       Margins.Right = 1
       Margins.Bottom = 1
       Align = alLeft
-      BevelInner = bvLowered
+      BevelKind = bkFlat
       BevelOuter = bvNone
       PopupMenu = ppmGridTypes
       TabOrder = 5
@@ -172,7 +172,7 @@ object frmMain: TfrmMain
       Margins.Right = 1
       Margins.Bottom = 1
       Align = alLeft
-      BevelInner = bvLowered
+      BevelKind = bkFlat
       BevelOuter = bvNone
       TabOrder = 6
     end
@@ -188,7 +188,7 @@ object frmMain: TfrmMain
       Margins.Right = 1
       Margins.Bottom = 1
       Align = alLeft
-      BevelInner = bvLowered
+      BevelKind = bkFlat
       BevelOuter = bvNone
       TabOrder = 7
     end
@@ -204,7 +204,7 @@ object frmMain: TfrmMain
       Margins.Right = 1
       Margins.Bottom = 1
       Align = alLeft
-      BevelInner = bvLowered
+      BevelKind = bkFlat
       BevelOuter = bvNone
       TabOrder = 8
     end
@@ -220,7 +220,7 @@ object frmMain: TfrmMain
       Margins.Right = 1
       Margins.Bottom = 1
       Align = alLeft
-      BevelInner = bvLowered
+      BevelKind = bkFlat
       BevelOuter = bvNone
       TabOrder = 9
     end
@@ -236,7 +236,7 @@ object frmMain: TfrmMain
       Margins.Right = 1
       Margins.Bottom = 1
       Align = alLeft
-      BevelInner = bvLowered
+      BevelKind = bkFlat
       BevelOuter = bvNone
       TabOrder = 10
     end
