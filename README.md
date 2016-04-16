@@ -1,5 +1,5 @@
 # DataGrabber
-A query tool that started its career as [Skunkware](https://en.wikipedia.org/wiki/SCO_Skunkware) and is trying to evolve now towards a better future ;)
+This is a query tool that started years ago and is now being ported and extended to support Delphi10Seattle.
 
 Connection topologies:
 - UNIDAC (optional)
@@ -8,22 +8,13 @@ Connection topologies:
 - FireDAC (todo)
 - dbExpress
 
-External dependencies
+External dependencies:
+- Spring4D
+- DDuce
+- Virtual Treeview
+- ZeosDBO
 
-SynEdit
-
-Spring4D
-
-DDuce
-
-Virtual Treeview
-
-ZeosDBO
-
-Commercial components
-
-FastReport
-
-DevExpress
-
-UniDac
+Commercial components (optional):
+- FastReport
+- DevExpress
+- UniDac
