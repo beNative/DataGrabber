@@ -24,14 +24,14 @@ interface
 
 uses
   Winapi.Windows, Winapi.Messages, System.Generics.Collections,
-  System.SysUtils, System.Variants, System.Classes,
+  System.SysUtils, System.Variants, System.Classes, System.Actions,
   Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.Grids, Vcl.StdCtrls,
   Vcl.ExtCtrls, Vcl.ActnList, Vcl.Menus,
   Data.DB,
 
   DDuce.Components.GridView, DDuce.Components.Inspector,
 
-  ts.Interfaces, System.Actions;
+  ts.Interfaces;
 
 const
   MAX_WIDTH = 400;

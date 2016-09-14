@@ -16,7 +16,7 @@
 
 unit DataGrabber.EditorView;
 
-{ Simple SynEdit-based SQL editor. }
+{ Simple BCEditor-based SQL editor. }
 
 interface
 
@@ -33,8 +33,6 @@ type
   TfrmEditorView = class(TForm, IEditorView)
   private
     FSynEditor : TBCEditor;
-//    FSynSQL    : TSynSQLSyn;
-//    FSynCP     : TSynCompletionProposal;
 
     function GetText: string;
     procedure SetText(const Value: string);

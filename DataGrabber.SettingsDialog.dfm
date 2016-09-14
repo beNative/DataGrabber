@@ -35,10 +35,6 @@ object frmSettingsDialog: TfrmSettingsDialog
     object tsConnection: TTabSheet
       Caption = 'Connection'
       ImageIndex = 10
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       DesignSize = (
         374
         377)
@@ -134,14 +130,18 @@ object frmSettingsDialog: TfrmSettingsDialog
           'ZEOS')
         TabOrder = 1
       end
+      object btnConnectionString: TButton
+        Left = 3
+        Top = 207
+        Width = 153
+        Height = 25
+        Action = actConnectionString
+        TabOrder = 2
+      end
     end
     object tsDisplay: TTabSheet
       Caption = 'Display'
       ImageIndex = 5
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       DesignSize = (
         374
         377)
@@ -240,10 +240,6 @@ object frmSettingsDialog: TfrmSettingsDialog
     object tsConnectionProfiles: TTabSheet
       Caption = 'Connection Profiles'
       ImageIndex = 9
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object splVertical: TSplitter
         Left = 185
         Top = 0
@@ -361,14 +357,6 @@ object frmSettingsDialog: TfrmSettingsDialog
     Images = imlMain
     SelectedImageIndex = 0
     TabOrder = 4
-  end
-  object btnConnectionString: TButton
-    Left = 168
-    Top = 232
-    Width = 75
-    Height = 25
-    Action = actConnectionString
-    TabOrder = 5
   end
   object aclMain: TActionList
     Images = imlMain

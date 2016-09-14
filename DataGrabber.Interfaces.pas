@@ -25,7 +25,6 @@ uses
 
   DataGrabber.ConnectionProfiles, DataGrabber.FormSettings,
 
-  //SynEdit,
   BCEditor.Editor.Base, BCEditor.Editor,
 
   ts.Classes.ConnectionSettings, ts.Interfaces;
@@ -288,6 +287,7 @@ type
       read GetMergeColumnCells write SetMergeColumnCells;
   end;
 
+  // TODO: use Spring - IList
   IFieldLists = interface
   ['{DB8D457B-101A-4994-9CBB-CAB24EE27ECF}']
     function GetConstantFields: TObjectList<TField>;
@@ -315,8 +315,10 @@ type
 
     property ConstantFieldsVisible: Boolean
       read GetConstantFieldsVisible write SetConstantFieldsVisible;
+
     property EmptyFieldsVisible: Boolean
       read GetEmptyFieldsVisible write SetEmptyFieldsVisible;
+
     property ShowFavoriteFieldsOnly: Boolean
       read GetShowFavoriteFieldsOnly write SetShowFavoriteFieldsOnly;
   end;

@@ -40,7 +40,6 @@ type
     FPacketRecords      : Integer;
     FProviderMode       : Boolean;
 
-    // private property access methods
     procedure SetCollection(const Value: TConnectionProfiles); reintroduce;
     function GetCollection: TConnectionProfiles;
     function GetVisibleItems: string;
@@ -105,9 +104,9 @@ type
 
   TConnectionProfiles = class(TOwnedCollection)
   private
-    // property access methods
     function GetItem(Index: Integer): TConnectionProfile;
     procedure SetItem(Index: Integer; const Value: TConnectionProfile);
+
   protected
     procedure SetItemName(Item: TCollectionItem); override;
     procedure Update(AItem: TCollectionItem); override;

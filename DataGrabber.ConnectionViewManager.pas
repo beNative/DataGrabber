@@ -226,7 +226,7 @@ implementation
 uses
   Vcl.Forms, Vcl.Clipbrd, Vcl.Dialogs,
 
-  DDuce.Forms.ComponentInspector,
+  DDuce.ObjectInspector,
 
   DataGrabber.SettingsDialog, DataGrabber.ConnectionView,
 
@@ -516,19 +516,19 @@ end;
 
 procedure TdmConnectionViewManager.actPrintExecute(Sender: TObject);
 begin
-  (ActiveData as IDataReport).PrintReport;
+//  (ActiveData as IDataReport).PrintReport;
 end;
 
 procedure TdmConnectionViewManager.actDesignerExecute(Sender: TObject);
 begin
-  (ActiveData as IDataReport).EditProperties;
-  (ActiveData as IDataReport).DesignReport;
+//  (ActiveData as IDataReport).EditProperties;
+//  (ActiveData as IDataReport).DesignReport;
 end;
 
 procedure TdmConnectionViewManager.actPreviewExecute(Sender: TObject);
 begin
-  (ActiveData as IDataReport).ReportTitle := 'DataGrabber';
-  (ActiveData as IDataReport).PreviewReport;
+//  (ActiveData as IDataReport).ReportTitle := 'DataGrabber';
+//  (ActiveData as IDataReport).PreviewReport;
 end;
 {$ENDREGION}
 {$ENDREGION}
@@ -734,7 +734,8 @@ begin
   for I := 0 to FConnectionViewList.Count - 1 do
   begin
     CV := FConnectionViewList[I] as IConnectionView;
-    CV.Form.Caption := Format('(%d) %s', [I + 1, CV.ActiveConnectionProfile.Name]);
+    if Assigned(CV.ActiveConnectionProfile) then
+      CV.Form.Caption := Format('(%d) %s', [I + 1, CV.ActiveConnectionProfile.Name]);
   end;
 end;
 {$ENDREGION}

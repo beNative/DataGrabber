@@ -155,7 +155,7 @@ implementation
 uses
   System.Math,
 
-  DDuce.Forms.ComponentInspector,
+  DDuce.ObjectInspector,
 
   ts.Classes.KeyValues;
 

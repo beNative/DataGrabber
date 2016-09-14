@@ -183,7 +183,7 @@ uses
 
   cxGridDBDataDefinitions, cxGridCommon,
 
-  DDuce.Forms.ComponentInspector;
+  DDuce.ObjectInspector;
 
 {$REGION 'non-interfaced routines'}
 function GetTextWidth(const AText: string): Integer;

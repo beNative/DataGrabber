@@ -176,7 +176,7 @@ uses
 
   ts.Utils,
 
-  DDuce.Forms.ComponentInspector,
+  DDuce.ObjectInspector,
 
   DataGrabber.Utils, DataGrabber.Resources, DataGrabber.SettingsDialog,
   DataGrabber.ModelData,

@@ -195,56 +195,6 @@ begin
 end;
 {$ENDREGION}
 
-{
-Useage:
-  Fill(ListBox.Items, Beatles.GetEnumerator);
-  Fill(ListBox.Items, Memo.Lines.GetEnumerator);
-
-}
-
-//procedure Fill(Strings: TStrings; Enumerator: TObject);
-//var
-//  Context: TRttiContext;
-//  EnumType: TRttiType;
-//  Current: TRttiProperty;
-//  MoveNext: TRttiMethod;
-//  Value: TValue;
-//begin
-//  Context := TRttiContext.Create;
-//  try
-//    EnumType := Context.GetType(Enumerator.ClassType);
-//
-//    // Find the Current property
-//    Current := EnumType.GetProperty('Current');
-//    if (Current = nil) or
-//      not (Current.PropertyType.TypeKind in
-//        [tkString, tkUString, tkClass]) then
-//      raise Exception.Create('Invalid Current property');
-//
-//    // Find the MoveNext property
-//    MoveNext := EnumType.GetMethod('MoveNext');
-//    if (MoveNext = nil) or (Length(MoveNext.GetParameters) > 0) or
-//      (MoveNext.MethodKind <> mkFunction) or
-//      (MoveNext.ReturnType.Handle <> TypeInfo(Boolean)) then
-//      raise Exception.Create('Invalid MoveNext method');
-//
-//    // while MoveNext do
-//    while MoveNext.Invoke(Enumerator, []).AsBoolean do
-//    begin
-//      // Value := Current
-//      Value := Current.GetValue(Enumerator);
-//      case Value.Kind of
-//        tkClass: Strings.Add(Value.AsObject.ToString);
-//        tkUString, tkString: Strings.Add(Value.AsString);
-//        tkClassRef: Strings.Add(Value.AsClass.ClassName);
-//        // Any other types you want to support go here
-//      end;
-//    end;
-//  finally
-//    Context.Free;
-//  end;
-//end;
-
 function ContainsFocus(AControl: TWinControl): Boolean;
 var
   H : HWND;

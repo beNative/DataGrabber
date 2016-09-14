@@ -34,7 +34,8 @@ uses
 
   ts.Classes.SQL.CompoundCondition, ts.Classes.SQL.Params,
   ts.Classes.ConnectionSettings,
-  ts.Classes.ListReport, ts.Classes.KeyValues,
+  //ts.Classes.ListReport,
+  ts.Classes.KeyValues,
 
   ts.Modules.List.Columns;
 
@@ -295,7 +296,7 @@ type
     property MaxSelectionCount : Integer
       read GetMaxSelectionCount write SetMaxSelectionCount;
   end;
-
+(*
 type
   IDataReport = interface
   ['{E59E2ED1-FCAB-4AD4-BD4C-8FC0A3DC25B6}']
@@ -318,6 +319,7 @@ type
     property Prepared : Boolean
       read GetPrepared write SetPrepared;
   end;
+  *)
 
 //-----------------------------------------------------------------------------
 
@@ -342,8 +344,8 @@ type
     procedure AssignToDataSet(ADataSet : TDataSet);
     procedure AssignFromDataSet(ADataSet: TDataSet);
 
-    procedure AssignToReport(AReport : TtsFRListReport);
-    procedure AssignFromReport(AReport : TtsFRListReport);
+//    procedure AssignToReport(AReport : TtsFRListReport);
+//    procedure AssignFromReport(AReport : TtsFRListReport);
 
     procedure Save;
     function Load: Boolean;

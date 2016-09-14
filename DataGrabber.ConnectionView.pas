@@ -28,15 +28,15 @@ uses
 
   cxGraphics, cxControls, cxLookAndFeels, cxLookAndFeelPainters,
   cxPCdxBarPopupMenu, cxPC, dxDockControl, dxDockPanel, dxBarBuiltInMenu,
-  dxSkinsCore, dxSkinsDefaultPainters, dxSkinscxPCPainter,
+  dxSkinsCore,
 
   ts.Interfaces,
 
   DataGrabber.Interfaces, DataGrabber.ConnectionProfiles;
 
 {
-   A connectionview consists of
-     - one editor(view)
+   A IConnectionView instance consists of
+     - one editor (view)
      - one or more dataviews corresponding to the user input in the editor
      - a list of connectionprofiles
 
