@@ -51,6 +51,8 @@ type
     procedure SetAlias(const Value: string);
     procedure SetName(const Value: string);
     procedure SetTable(const Value: TSQLTable);
+
+  public
     property Table: TSQLTable
       read GetTable write SetTable;
 

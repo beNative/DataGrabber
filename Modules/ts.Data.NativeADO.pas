@@ -95,7 +95,7 @@ begin
     FDataSet.CursorLocation := clUseClient;
     FDataSet.CursorType     := ctStatic;
   end;
-  inherited;
+  inherited UpdateProviderMode(AEnabled);
 end;
 {$ENDREGION}
 

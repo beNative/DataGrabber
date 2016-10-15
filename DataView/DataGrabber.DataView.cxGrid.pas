@@ -86,6 +86,7 @@ type
     function GetSettings: IDataViewSettings;
     procedure SetSettings(const Value: IDataViewSettings);
 
+  protected
     procedure CopySelectionToClipboard(AController: TcxGridTableController;
       AIncludeHeader: Boolean = False);
     function SelectionToDelimitedTable(

@@ -82,8 +82,7 @@ end;
 { If the native dataset is used in provider mode (with datasetprovider and
   clientdataset) adjustments can be done to the dataset here before it is
   opened. Certain connections always require providermode (DBX), and will
-  set AEnabled explicitly.
-}
+  set AEnabled explicitly. }
 
 procedure TNativeDataSet.UpdateProviderMode(var AEnabled: Boolean);
 begin

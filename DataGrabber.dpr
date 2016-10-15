@@ -118,7 +118,6 @@ uses
   BCEditor.Editor.LeftMargin.LineNumbers in '..\..\components\TBCEditor\Source\BCEditor.Editor.LeftMargin.LineNumbers.pas',
   BCEditor.Editor.LeftMargin.LineState in '..\..\components\TBCEditor\Source\BCEditor.Editor.LeftMargin.LineState.pas',
   BCEditor.Editor.LeftMargin in '..\..\components\TBCEditor\Source\BCEditor.Editor.LeftMargin.pas',
-  BCEditor.Editor.LineSpacing in '..\..\components\TBCEditor\Source\BCEditor.Editor.LineSpacing.pas',
   BCEditor.Editor.MatchingPair.Colors in '..\..\components\TBCEditor\Source\BCEditor.Editor.MatchingPair.Colors.pas',
   BCEditor.Editor.MatchingPair in '..\..\components\TBCEditor\Source\BCEditor.Editor.MatchingPair.pas',
   BCEditor.Editor.Minimap.Colors in '..\..\components\TBCEditor\Source\BCEditor.Editor.Minimap.Colors.pas',

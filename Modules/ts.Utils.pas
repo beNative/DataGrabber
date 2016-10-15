@@ -791,7 +791,7 @@ begin
         begin
           AVarRecArray[I].VType := vtString;
           New(AVarRecArray[I].VString);
-          AVarRecArray[I].VString^ := AVariant[I];
+          AVarRecArray[I].VString^ := ShortString(AVariant[I]);
         end;
       varVariant:
         begin
@@ -1020,9 +1020,10 @@ begin
                Inc(I, 2);
                if I > Length(APattern) then
                begin
-                 AArgs[iArgIndex].VString^ :=
-                   Copy(ASource, J, Min(Length(ASource) + 1 - J, iMaxLen));
-                 break;
+                 AArgs[iArgIndex].VString^ := ShortString(
+                   Copy(ASource, J, Min(Length(ASource) + 1 - J, iMaxLen))
+                 );
+                 Break;
                end
                else
                begin
@@ -1031,8 +1032,9 @@ begin
                  while (J <= Length(ASource)) and (ASource[J] <> c) do
                    Inc(J);
                  iEnd := J;
-                 AArgs[iArgIndex].VString^ :=
-                   Copy(ASource, iStart, Min(iEnd - iStart, iMaxLen));
+                 AArgs[iArgIndex].VString^ := ShortString(
+                   Copy(ASource, iStart, Min(iEnd - iStart, iMaxLen))
+                 );
                  Inc(iArgIndex, 2);
                end;
                Inc(Result);

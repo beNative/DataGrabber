@@ -263,8 +263,6 @@ end;
 function TfrmMain.AddConnectionView: IConnectionView;
 var
   CV  : IConnectionView;
-  I   : Integer;
-  P   : TPanel;
 begin
   LockPaint(Self);
   CV := Manager.AddConnectionView;

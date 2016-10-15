@@ -68,7 +68,7 @@ uses
 {$REGION 'construction and destruction'}
 procedure TdmDBXConnection.AfterConstruction;
 begin
-  inherited;
+  inherited AfterConstruction;
   GetDriverNames(Protocols);
 end;
 {$ENDREGION}
@@ -122,11 +122,11 @@ begin
       conDBX.KeepConnection := not ConnectionSettings.DisconnectedMode;
       with conDBX.ConnectionData.Properties do
       begin
-        Values['HostName']  := ConnectionSettings.HostName;
-        Values['Port']      := IntToStr(ConnectionSettings.Port);
-        Values['Database']  := ConnectionSettings.Database;
-        Values['User_Name'] := ConnectionSettings.User;
-        Values['Password']  := ConnectionSettings.Password;
+        Values['HostName']          := ConnectionSettings.HostName;
+        Values['Port']              := IntToStr(ConnectionSettings.Port);
+        Values['Database']          := ConnectionSettings.Database;
+        Values['User_Name']         := ConnectionSettings.User;
+        Values['Password']          := ConnectionSettings.Password;
         Values['OS Authentication'] := 'True';
       end;
     end;
@@ -144,8 +144,6 @@ function TdmDBXConnection.CreateNativeDataSet: INativeDataSet;
 begin
   Result := TNativeDBXDataSet.Create(Self);
 end;
-
-//-----------------------------------------------------------------------------
 
 function TdmDBXConnection.Execute(const ACommandText: string): Boolean;
 begin

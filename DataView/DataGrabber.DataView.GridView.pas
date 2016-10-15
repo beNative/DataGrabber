@@ -60,7 +60,7 @@ type
     procedure SetData(const Value: IData);
     function GetSettings: IDataViewSettings;
     procedure SetSettings(const Value: IDataViewSettings);
-    function GetPopupMenu: TPopupMenu;
+      function GetPopupMenu: TPopupMenu; reintroduce;
     procedure SetPopupMenu(const Value: TPopupMenu);
 
     procedure InitializeGridColumns;
@@ -101,7 +101,7 @@ type
     );
 
   public
-    constructor Create;
+    constructor Create; reintroduce;
     procedure AfterConstruction; override;
     procedure BeforeDestruction; override;
 

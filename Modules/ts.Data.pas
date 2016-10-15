@@ -485,7 +485,7 @@ begin
   FreeAndNil(FSelection);
 //  FreeAndNil(FReport);
   FreeAndNil(FDataViews);
-  inherited;
+  inherited Destroy;
 end;
 
 { AfterConstruction is called automatically after the object’s last constructor
@@ -493,7 +493,7 @@ end;
 
 procedure TdmCustomModule.AfterConstruction;
 begin
-  inherited;
+  inherited AfterConstruction;
   if not Assigned(FConnection) then
     raise Exception.Create('Connection is not assigned!');
   FNativeDataSet := FConnection.CreateNativeDataSet;
@@ -822,8 +822,6 @@ begin
   raise E;
 end;
 
-//---|dscMaster|---------------------------------------------------------------
-
 procedure TdmCustomModule.dscMasterDataChange(Sender: TObject; Field: TField);
 begin
   if Assigned(Field) then
@@ -1032,14 +1030,12 @@ end;
 { Executes the given SQL-statement. }
 
 procedure TdmCustomModule.InternalExecute(const ACommandText : string);
-var
-  N : Integer;
 begin
   if Trim(ACommandText) <> '' then
   begin
     SourceDataSet.Active := False;
     ClientDataSet.Active := False;
-    FNativeDataSet.BeforeExecute; // TS
+    FNativeDataSet.BeforeExecute;
     if ProviderMode then
     begin
       ClientDataSet.CommandText := ACommandText;
@@ -1053,18 +1049,13 @@ begin
       end;
 
       ClientDataSet.Active := True;
-//      if ClientDataSet.PacketRecords > 0 then
-//        N := ClientDataSet.PacketRecords
-//      else
-//        N := 100;
     end
     else
     begin
       (SourceDataSet as IProviderSupportNG).PSSetCommandText(ACommandText);
       SourceDataSet.Active := True;
     end;
-    FNativeDataSet.AfterExecute; // TS
-    //AutoSizeDisplayWidths(DataSet, N - 1); // N causes more records to be fetched
+    FNativeDataSet.AfterExecute;
   end;
 end;
 

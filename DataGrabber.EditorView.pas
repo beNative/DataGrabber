@@ -42,8 +42,8 @@ type
 //    function GetOnStatusChange: TStatusChangeEvent;
 //    procedure SetOnStatusChange(const Value: TStatusChangeEvent);
 
-    procedure FSynEditorDropFiles(Sender: TObject; X, Y: Integer;
-      AFiles: TStrings);
+//    procedure FSynEditorDropFiles(Sender: TObject; X, Y: Integer;
+//      AFiles: TStrings);
 //    procedure FSynCPExecute(Kind: SynCompletionType; Sender: TObject;
 //      var CurrentInput: UnicodeString; var x, y: Integer; var CanExecute: Boolean);
 
@@ -94,12 +94,13 @@ end;
 {$REGION 'property access methods'}
 function TfrmEditorView.GetColor: TColor;
 begin
-//  Result := FSynEditor.Color;
+  Result := FSynEditor.BackgroundColor;
+
 end;
 
 procedure TfrmEditorView.SetColor(const Value: TColor);
 begin
-//  FSynEditor.Color := Value;
+  FSynEditor.BackgroundColor := Value;
 end;
 
 //function TfrmEditorView.GetOnStatusChange: TStatusChangeEvent;
@@ -129,15 +130,15 @@ end;
 {$ENDREGION}
 
 {$REGION 'event handlers'}
-procedure TfrmEditorView.FSynEditorDropFiles(Sender: TObject; X, Y: Integer;
-  AFiles: TStrings);
-var
-  S: string;
-begin
-  if AFiles.Count > 0 then
-    S := AFiles[0];
-  FSynEditor.Lines.LoadFromFile(S);
-end;
+//procedure TfrmEditorView.FSynEditorDropFiles(Sender: TObject; X, Y: Integer;
+//  AFiles: TStrings);
+//var
+//  S: string;
+//begin
+//  if AFiles.Count > 0 then
+//    S := AFiles[0];
+//  FSynEditor.Lines.LoadFromFile(S);
+//end;
 {$ENDREGION}
 
 {$REGION 'protected methods'}
@@ -260,36 +261,36 @@ end;
 procedure TfrmEditorView.FillCompletionLists(ATables, AAttributes: TStrings);
 var
   I       : Integer;
-  Items   : TStringList;
-  Inserts : TStringList;
+//  Items   : TStringList;
+//  Inserts : TStringList;
 begin
   inherited SetFocus;
 //  Items  := FSynCP.ItemList as TStringList;
 //  Inserts := FSynCP.InsertList  as TStringList;
-  Items.Clear;
-  Inserts.Clear;
+//  Items.Clear;
+//  Inserts.Clear;
 //  FSynSQL.TableNames.Clear;
   if Assigned(AAttributes) then
   begin
     for I := 0 to Pred(AAttributes.Count) do
     begin
-      if Inserts.IndexOf(AAttributes.Strings[I]) = -1 then
-      begin
-        Items.Insert(0, Format(SFieldItem, [AAttributes.Strings[I]]));
-        Inserts.Insert(0, AAttributes.Strings[I]);
-      end;
+//      if Inserts.IndexOf(AAttributes.Strings[I]) = -1 then
+//      begin
+//        Items.Insert(0, Format(SFieldItem, [AAttributes.Strings[I]]));
+//        Inserts.Insert(0, AAttributes.Strings[I]);
+//      end;
     end;
   end;
   if Assigned(ATables) then
   begin
     for I := 0 to Pred(ATables.Count) do
     begin
-      if Inserts.IndexOf(ATables.Strings[I]) = -1 then
-      begin
-        Items.Add(Format(STableItem, [ATables.Strings[I]]));
-        Inserts.Add(ATables.Strings[I]);
-        //FSynSQL.TableNames.Add(ATables.Strings[I]);
-      end;
+//      if Inserts.IndexOf(ATables.Strings[I]) = -1 then
+//      begin
+//        Items.Add(Format(STableItem, [ATables.Strings[I]]));
+//        Inserts.Add(ATables.Strings[I]);
+//        //FSynSQL.TableNames.Add(ATables.Strings[I]);
+//      end;
     end;
   end;
 end;

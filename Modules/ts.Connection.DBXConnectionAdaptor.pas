@@ -35,7 +35,6 @@ uses
   Data.DbxSybaseASE,
 
   ts.Interfaces,
-
   ts.Connection.CustomConnectionAdaptor;
 
 type
@@ -131,11 +130,11 @@ begin
       FConnection.KeepConnection := not ConnectionSettings.DisconnectedMode;
       with FConnection.ConnectionData.Properties do
       begin
-        Values['HostName']  := ConnectionSettings.HostName;
-        Values['Port']      := IntToStr(ConnectionSettings.Port);
-        Values['Database']  := ConnectionSettings.Database;
-        Values['User_Name'] := ConnectionSettings.User;
-        Values['Password']  := ConnectionSettings.Password;
+        Values['HostName']          := ConnectionSettings.HostName;
+        Values['Port']              := IntToStr(ConnectionSettings.Port);
+        Values['Database']          := ConnectionSettings.Database;
+        Values['User_Name']         := ConnectionSettings.User;
+        Values['Password']          := ConnectionSettings.Password;
         Values['OS Authentication'] := 'True';
       end;
     end;

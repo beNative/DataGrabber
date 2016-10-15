@@ -167,8 +167,10 @@ begin
     Node := AVT.GetFirstChild(AParentNode)
   else
     Node := AVT.GetFirst;
-  while Assigned(Node) do begin
-    if Node.Index = AIdx then begin
+  while Assigned(Node) do
+  begin
+    if Node.Index = Cardinal(AIdx) then
+    begin
       Result := Node;
       break;
     end;

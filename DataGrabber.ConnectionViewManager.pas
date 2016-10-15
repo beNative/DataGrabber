@@ -482,7 +482,9 @@ end;
 procedure TdmConnectionViewManager.actExecuteExecute(Sender: TObject);
 begin
   ActiveData.MaxRecords := 0;
-  Execute((ActiveConnectionView as IEditorView).Text);
+//  Execute((ActiveConnectionView as IEditorView).Text);
+
+  Execute ('select top 10 * from tblBatch');
 end;
 
 procedure TdmConnectionViewManager.actProviderModeExecute(Sender: TObject);

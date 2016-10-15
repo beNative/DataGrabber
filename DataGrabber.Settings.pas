@@ -89,7 +89,7 @@ type
     procedure AssignStandardSettings;
 
   public
-    constructor Create;
+    constructor Create; reintroduce;
 
     procedure AfterConstruction; override;
     procedure BeforeDestruction; override;

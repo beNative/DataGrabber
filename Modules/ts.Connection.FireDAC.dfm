@@ -13,15 +13,15 @@ object dmFireDACConnection: TdmFireDACConnection
   PixelsPerInch = 96
   TextHeight = 13
   object conFireDAC: TFDConnection
-    Left = 40
-    Top = 32
+    Left = 24
+    Top = 16
   end
   object FDManager: TFDManager
     FormatOptions.AssignedValues = [fvMapRules]
     FormatOptions.OwnMapRules = True
     FormatOptions.MapRules = <>
     Active = True
-    Left = 144
-    Top = 24
+    Left = 112
+    Top = 16
   end
 end

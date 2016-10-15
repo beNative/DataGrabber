@@ -35,8 +35,7 @@ uses
 type
   TFireDACConnectionAdaptor = class(TCustomConnectionAdaptor, IConnection, IMetaData)
   private
-    FConnection       : TFDConnection;
-    FConnectionString : string;
+    FConnection : TFDConnection;
 
   protected
     function GetConnectionType: string; override;
@@ -113,7 +112,6 @@ procedure TFireDACConnectionAdaptor.AssignConnectionString(
   const AValue: string);
 begin
   FConnection.ConnectionString := AValue;
-
 end;
 
 procedure TFireDACConnectionAdaptor.AssignConnectionSettings;
@@ -130,11 +128,8 @@ begin
       FConnection.Offlined := ConnectionSettings.DisconnectedMode;
       with FConnection.Params do
       begin
-        Values['Server']  := ConnectionSettings.HostName;
+        Values['Server']    := ConnectionSettings.HostName;
         Values['Database']  := ConnectionSettings.Database;
-
-        //Values['Port']      := IntToStr(ConnectionSettings.Port);
-
         Values['User_Name'] := ConnectionSettings.User;
         Values['Password']  := ConnectionSettings.Password;
         Values['OSAuthent'] := 'Yes';
@@ -147,7 +142,6 @@ begin
   finally
     Connected := B;
   end;
-
 end;
 
 function TFireDACConnectionAdaptor.CreateNativeDataSet: INativeDataSet;

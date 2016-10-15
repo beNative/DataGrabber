@@ -29,7 +29,7 @@ uses
   FireDAC.Phys.Intf, FireDAC.Phys, FireDAC.Phys.ODBCBase, FireDAC.Phys.MSSQL,
   FireDAC.Phys.PG, FireDAC.Phys.SqLite,
 
-  ts.Interfaces, ts.Connection;
+  ts.Interfaces, ts.Connection, FireDAC.VCLUI.Wait;
 
 type
   TdmFireDACConnection = class(TdmConnection, IConnection)

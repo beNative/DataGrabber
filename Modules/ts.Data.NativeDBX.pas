@@ -47,14 +47,14 @@ uses
 {$REGION 'construction and destruction'}
 procedure TNativeDBXDataSet.AfterConstruction;
 begin
-  inherited;
+  inherited AfterConstruction;
   FDataSet := TSQLDataSet.Create(nil);
   FDataSet.SQLConnection := Connection.Connection as TSQLConnection;
 end;
 
 procedure TNativeDBXDataSet.BeforeDestruction;
 begin
-  inherited;
+  inherited BeforeDestruction;
   FreeAndNil(FDataSet);
 end;
 {$ENDREGION}

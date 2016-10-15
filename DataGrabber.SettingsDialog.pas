@@ -338,7 +338,7 @@ procedure TfrmSettingsDialog.vstProfilesBeforeCellPaint(
   Column: TColumnIndex; CellPaintMode: TVTCellPaintMode; CellRect: TRect;
   var ContentRect: TRect);
 begin
-  if Node.Index < FSettings.ConnectionProfiles.Count then
+  if Node.Index < Cardinal(FSettings.ConnectionProfiles.Count) then
   begin
     TargetCanvas.Brush.Color :=
       FSettings.ConnectionProfiles[Node.Index].ProfileColor;
@@ -356,7 +356,7 @@ procedure TfrmSettingsDialog.vstProfilesGetText(Sender: TBaseVirtualTree;
   Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType;
   var CellText: string);
 begin
-  if Node.Index < FSettings.ConnectionProfiles.Count then
+  if Node.Index < Cardinal(FSettings.ConnectionProfiles.Count) then
     CellText := FSettings.ConnectionProfiles[Node.Index].DisplayName;
 end;
 
@@ -478,7 +478,7 @@ begin
   for DV in GlobalContainer.ResolveAll<IDGDataView> do
   begin
     S := DV.Name;
-    rgpGridTypes.Items.Add(S);
+    I := rgpGridTypes.Items.Add(S);
     if SameText(S, FSettings.GridType) then
       rgpGridTypes.ItemIndex := I;
   end;
