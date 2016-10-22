@@ -277,7 +277,7 @@ begin
     procedure
     begin
       ApplySettings;
-      //UpdateActions;
+      UpdateActions;
     end
   );
 end;
@@ -482,9 +482,7 @@ end;
 procedure TdmConnectionViewManager.actExecuteExecute(Sender: TObject);
 begin
   ActiveData.MaxRecords := 0;
-//  Execute((ActiveConnectionView as IEditorView).Text);
-
-  Execute ('select top 10 * from tblBatch');
+  Execute((ActiveConnectionView as IEditorView).Text);
 end;
 
 procedure TdmConnectionViewManager.actProviderModeExecute(Sender: TObject);
@@ -513,6 +511,7 @@ end;
 procedure TdmConnectionViewManager.actExecuteLimitedExecute(Sender: TObject);
 begin
   ActiveData.MaxRecords := 100;
+
   //Execute(FEditor.Text);
 end;
 
@@ -752,14 +751,11 @@ var
   C  : IConnection;
 begin
   EV := GlobalContainer.Resolve<IEditorView>;
-  //DV := ServiceLocator.GetService<IDGDataView>(Settings.GridType);
+  //DV := GlobalContainer.Resolve<<IDGDataView>(Settings.GridType);
   DV := GlobalContainer.Resolve<IDGDataView>('cxGrid');
   DV.PopupMenu := ConnectionViewPopupMenu;
   FActiveConnectionView := CV;
-
   FActiveDataView := DV;
-
-
   C := GlobalContainer.Resolve<IConnection>(Settings.ConnectionType);
   D            := TdmData.Create(Self, C);
   DV.Data      := D;

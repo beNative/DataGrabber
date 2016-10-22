@@ -46,8 +46,8 @@ type
     FEmptyColumnsVisible    : Boolean;
     FData                   : IData;
     FSettings               : IDataViewSettings;
-    function GetName: string;
 
+    function GetName: string;
 
   protected
     // property access methods
@@ -79,6 +79,7 @@ type
 
   public
     procedure AfterConstruction; override;
+
     property DataSet: TDataSet
        read GetDataSet;
 
@@ -106,7 +107,7 @@ implementation
 {$REGION 'construction and destruction'}
 procedure TfrmDataView.AfterConstruction;
 begin
-  inherited;
+  inherited AfterConstruction;
   FConstantColumnsVisible := True;
   FEmptyColumnsVisible    := True;
 end;

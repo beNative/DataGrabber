@@ -62,25 +62,20 @@ type
     splVertical   : TSplitter;
 
     procedure vstProfilesBeforeCellPaint(
-          Sender        : TBaseVirtualTree;
-          TargetCanvas  : TCanvas;
-          Node          : PVirtualNode;
-          Column        : TColumnIndex;
-          CellPaintMode : TVTCellPaintMode;
-          CellRect      : TRect;
-      var ContentRect   : TRect
+      Sender          : TBaseVirtualTree;
+      TargetCanvas    : TCanvas;
+      Node            : PVirtualNode;
+      Column          : TColumnIndex;
+      CellPaintMode   : TVTCellPaintMode;
+      CellRect        : TRect;
+      var ContentRect : TRect
     );
     procedure vstProfilesGetText(
-          Sender   : TBaseVirtualTree;
-          Node     : PVirtualNode;
-          Column   : TColumnIndex;
-          TextType : TVSTTextType;
+      Sender       : TBaseVirtualTree;
+      Node         : PVirtualNode;
+      Column       : TColumnIndex;
+      TextType     : TVSTTextType;
       var CellText : string
-    );
-    procedure tlbGridCustomDraw(
-            Sender      : TToolBar;
-      const ARect       : TRect;
-      var   DefaultDraw : Boolean
     );
     procedure vstProfilesFocusChanged(
       Sender : TBaseVirtualTree;
@@ -88,11 +83,16 @@ type
       Column : TColumnIndex
     );
     procedure vstProfilesPaintText(
-            Sender       : TBaseVirtualTree;
+      Sender             : TBaseVirtualTree;
       const TargetCanvas : TCanvas;
-            Node         : PVirtualNode;
-            Column       : TColumnIndex;
-            TextType     : TVSTTextType
+      Node               : PVirtualNode;
+      Column             : TColumnIndex;
+      TextType           : TVSTTextType
+    );
+    procedure tlbGridCustomDraw(
+      Sender          : TToolBar;
+      const ARect     : TRect;
+      var DefaultDraw : Boolean
     );
 
     procedure FormShortCut(var Msg: TWMKey; var Handled: Boolean);
