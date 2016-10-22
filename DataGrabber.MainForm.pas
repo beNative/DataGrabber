@@ -30,11 +30,12 @@ uses
 
   VirtualTrees,
 
-  ts.Interfaces, ts.Classes.ConnectionSettings, ts.Data, DataGrabber.Data,
+  ts.Interfaces, ts.Classes.ConnectionSettings, ts.Data,
 
   ts.Modules.DataInspector, ts.Modules.FieldInspector,
 
-  DataGrabber.EditorView, DataGrabber.Interfaces, DataGrabber.Settings;
+  DataGrabber.Data, DataGrabber.EditorView, DataGrabber.Interfaces,
+  DataGrabber.Settings;
 
 {
   TODO:

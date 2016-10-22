@@ -249,102 +249,6 @@
         <DCCReference Include="..\..\components\Virtual-TreeView\Source\VTAccessibility.pas"/>
         <DCCReference Include="..\..\components\Virtual-TreeView\Source\VTAccessibilityFactory.pas"/>
         <DCCReference Include="..\..\components\Virtual-TreeView\Source\VTHeaderPopup.pas"/>
-        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Consts.pas"/>
-        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Editor.ActiveLine.pas"/>
-        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Editor.Base.pas"/>
-        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Editor.Bookmarks.pas"/>
-        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Editor.Caret.MultiEdit.Colors.pas"/>
-        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Editor.Caret.MultiEdit.pas"/>
-        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Editor.Caret.NonBlinking.Colors.pas"/>
-        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Editor.Caret.NonBlinking.pas"/>
-        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Editor.Caret.Offsets.pas"/>
-        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Editor.Caret.pas"/>
-        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Editor.Caret.Styles.pas"/>
-        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Editor.CodeFolding.Colors.pas"/>
-        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Editor.CodeFolding.Hint.Colors.pas"/>
-        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Editor.CodeFolding.Hint.Form.pas"/>
-        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Editor.CodeFolding.Hint.pas"/>
-        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Editor.CodeFolding.pas"/>
-        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Editor.CodeFolding.Ranges.pas"/>
-        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Editor.CodeFolding.Regions.pas"/>
-        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Editor.CompletionProposal.Colors.pas"/>
-        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Editor.CompletionProposal.Columns.pas"/>
-        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Editor.CompletionProposal.pas"/>
-        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Editor.CompletionProposal.PopupWindow.pas"/>
-        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Editor.CompletionProposal.Trigger.pas"/>
-        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Editor.DB.pas"/>
-        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Editor.Directories.pas"/>
-        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Editor.Glyph.pas"/>
-        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Editor.InternalImage.pas"/>
-        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Editor.KeyCommands.pas"/>
-        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Editor.LeftMargin.Bookmarks.Panel.pas"/>
-        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Editor.LeftMargin.Bookmarks.pas"/>
-        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Editor.LeftMargin.Border.pas"/>
-        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Editor.LeftMargin.Colors.pas"/>
-        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Editor.LeftMargin.LineNumbers.pas"/>
-        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Editor.LeftMargin.LineState.pas"/>
-        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Editor.LeftMargin.pas"/>
-        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Editor.MatchingPair.Colors.pas"/>
-        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Editor.MatchingPair.pas"/>
-        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Editor.Minimap.Colors.pas"/>
-        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Editor.Minimap.Indicator.pas"/>
-        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Editor.Minimap.pas"/>
-        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Editor.Minimap.Shadow.pas"/>
-        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Editor.pas"/>
-        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Editor.PopupWindow.pas"/>
-        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Editor.Replace.pas"/>
-        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Editor.RightMargin.Colors.pas"/>
-        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Editor.RightMargin.pas"/>
-        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Editor.Scroll.Hint.pas"/>
-        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Editor.Scroll.pas"/>
-        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Editor.Search.Highlighter.Colors.pas"/>
-        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Editor.Search.Highlighter.pas"/>
-        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Editor.Search.Map.Colors.pas"/>
-        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Editor.Search.Map.pas"/>
-        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Editor.Search.pas"/>
-        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Editor.Selection.Colors.pas"/>
-        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Editor.Selection.pas"/>
-        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Editor.SkipRegions.pas"/>
-        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Editor.SpecialChars.EndOfLine.pas"/>
-        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Editor.SpecialChars.pas"/>
-        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Editor.SpecialChars.Selection.pas"/>
-        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Editor.SyncEdit.Colors.pas"/>
-        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Editor.SyncEdit.pas"/>
-        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Editor.Tabs.pas"/>
-        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Editor.Undo.Item.pas"/>
-        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Editor.Undo.List.pas"/>
-        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Editor.Undo.pas"/>
-        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Editor.Utils.pas"/>
-        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Editor.WordWrap.Colors.pas"/>
-        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Editor.WordWrap.pas"/>
-        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Encoding.pas"/>
-        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Export.HTML.pas"/>
-        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Highlighter.Attributes.pas"/>
-        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Highlighter.Colors.pas"/>
-        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Highlighter.Comments.pas"/>
-        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Highlighter.Import.JSON.pas"/>
-        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Highlighter.Info.pas"/>
-        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Highlighter.pas"/>
-        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Highlighter.Rules.pas"/>
-        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Highlighter.Token.pas"/>
-        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.JsonDataObjects.pas"/>
-        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.KeyboardHandler.pas"/>
-        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Language.pas"/>
-        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Lines.pas"/>
-        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.MacroRecorder.pas"/>
-        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Print.HeaderFooter.pas"/>
-        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Print.Margins.pas"/>
-        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Print.pas"/>
-        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Print.Preview.pas"/>
-        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Print.PrinterInfo.pas"/>
-        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Print.Types.pas"/>
-        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Search.pas"/>
-        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Search.RegularExpressions.pas"/>
-        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Search.Wildcard.pas"/>
-        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.StyleHooks.pas"/>
-        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.TextDrawer.pas"/>
-        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Types.pas"/>
-        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Utils.pas"/>
         <DCCReference Include="..\..\libraries\dduce\Source\Dependencies\NativeXml\NativeXml.pas"/>
         <DCCReference Include="..\..\libraries\dduce\Source\Dependencies\NativeXml\NativeXmlCodepages.pas"/>
         <DCCReference Include="..\..\libraries\dduce\Source\Dependencies\NativeXml\NativeXmlNodes.pas"/>
@@ -410,7 +314,108 @@
         <DCCReference Include="..\..\libraries\Delphi-ZeroMQ\source\Winsock2.pas"/>
         <DCCReference Include="..\..\libraries\Delphi-ZeroMQ\source\ZeroMQ.API.pas"/>
         <DCCReference Include="..\..\libraries\Delphi-ZeroMQ\source\ZeroMQ.pas"/>
+        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Consts.pas"/>
+        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Editor.ActiveLine.pas"/>
+        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Editor.Base.pas"/>
+        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Editor.Caret.MultiEdit.Colors.pas"/>
+        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Editor.Caret.MultiEdit.pas"/>
+        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Editor.Caret.NonBlinking.Colors.pas"/>
+        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Editor.Caret.NonBlinking.pas"/>
+        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Editor.Caret.Offsets.pas"/>
+        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Editor.Caret.pas"/>
+        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Editor.Caret.Styles.pas"/>
+        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Editor.CodeFolding.Colors.pas"/>
+        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Editor.CodeFolding.Hint.Colors.pas"/>
+        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Editor.CodeFolding.Hint.Form.pas"/>
+        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Editor.CodeFolding.Hint.Indicator.Colors.pas"/>
+        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Editor.CodeFolding.Hint.Indicator.pas"/>
+        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Editor.CodeFolding.Hint.pas"/>
+        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Editor.CodeFolding.pas"/>
+        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Editor.CodeFolding.Ranges.pas"/>
+        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Editor.CodeFolding.Regions.pas"/>
+        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Editor.CompletionProposal.Colors.pas"/>
+        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Editor.CompletionProposal.Columns.pas"/>
+        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Editor.CompletionProposal.pas"/>
+        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Editor.CompletionProposal.PopupWindow.pas"/>
+        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Editor.CompletionProposal.Trigger.pas"/>
+        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Editor.DB.pas"/>
+        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Editor.Directories.pas"/>
+        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Editor.Glyph.pas"/>
+        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Editor.InternalImage.pas"/>
+        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Editor.KeyCommands.pas"/>
+        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Editor.LeftMargin.Bookmarks.pas"/>
+        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Editor.LeftMargin.Border.pas"/>
+        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Editor.LeftMargin.Colors.pas"/>
+        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Editor.LeftMargin.LineNumbers.pas"/>
+        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Editor.LeftMargin.LineState.pas"/>
+        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Editor.LeftMargin.Marks.pas"/>
+        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Editor.LeftMargin.MarksPanel.pas"/>
+        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Editor.LeftMargin.pas"/>
+        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Editor.Marks.pas"/>
+        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Editor.MatchingPair.Colors.pas"/>
+        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Editor.MatchingPair.pas"/>
+        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Editor.Minimap.Colors.pas"/>
+        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Editor.Minimap.Indicator.pas"/>
+        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Editor.Minimap.pas"/>
+        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Editor.Minimap.Shadow.pas"/>
+        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Editor.pas"/>
+        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Editor.PopupWindow.pas"/>
+        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Editor.Replace.pas"/>
+        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Editor.RightMargin.Colors.pas"/>
+        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Editor.RightMargin.pas"/>
+        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Editor.Scroll.Hint.pas"/>
+        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Editor.Scroll.pas"/>
         <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Editor.Scroll.Shadow.pas"/>
+        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Editor.Search.Highlighter.Colors.pas"/>
+        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Editor.Search.Highlighter.pas"/>
+        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Editor.Search.InSelection.pas"/>
+        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Editor.Search.Map.Colors.pas"/>
+        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Editor.Search.Map.pas"/>
+        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Editor.Search.pas"/>
+        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Editor.Selection.Colors.pas"/>
+        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Editor.Selection.pas"/>
+        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Editor.SkipRegions.pas"/>
+        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Editor.SpecialChars.EndOfLine.pas"/>
+        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Editor.SpecialChars.pas"/>
+        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Editor.SpecialChars.Selection.pas"/>
+        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Editor.SyncEdit.Colors.pas"/>
+        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Editor.SyncEdit.pas"/>
+        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Editor.Tabs.pas"/>
+        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Editor.Undo.Item.pas"/>
+        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Editor.Undo.List.pas"/>
+        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Editor.Undo.pas"/>
+        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Editor.UnknownChars.pas"/>
+        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Editor.Utils.pas"/>
+        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Editor.WordWrap.Colors.pas"/>
+        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Editor.WordWrap.pas"/>
+        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Encoding.pas"/>
+        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Export.HTML.pas"/>
+        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Highlighter.Attributes.pas"/>
+        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Highlighter.Colors.pas"/>
+        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Highlighter.Comments.pas"/>
+        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Highlighter.Import.JSON.pas"/>
+        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Highlighter.Info.pas"/>
+        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Highlighter.pas"/>
+        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Highlighter.Rules.pas"/>
+        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Highlighter.Token.pas"/>
+        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.JsonDataObjects.pas"/>
+        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.KeyboardHandler.pas"/>
+        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Language.pas"/>
+        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Lines.pas"/>
+        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.MacroRecorder.pas"/>
+        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.PaintHelper.pas"/>
+        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Print.HeaderFooter.pas"/>
+        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Print.Margins.pas"/>
+        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Print.pas"/>
+        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Print.Preview.pas"/>
+        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Print.PrinterInfo.pas"/>
+        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Print.Types.pas"/>
+        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Search.pas"/>
+        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Search.RegularExpressions.pas"/>
+        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Search.Wildcard.pas"/>
+        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.StyleHooks.pas"/>
+        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Types.pas"/>
+        <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Utils.pas"/>
         <None Include="ModelSupport_DataGrabber\XMLSerializer\default.txvpck"/>
         <None Include="ModelSupport_DataGrabber\ts\Classes\SQL\Statement\default.txaPackage"/>
         <None Include="ModelSupport_DataGrabber\DataGrabber\DBXConnection\default.txaPackage"/>
@@ -584,18 +589,6 @@
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
-                <DeployFile LocalName="ModelSupport_DataGrabber\UFormSettings\default.txvpck" Configuration="Release" Class="ProjectFile">
-                    <Platform Name="Win32">
-                        <RemoteDir>.\</RemoteDir>
-                        <Overwrite>true</Overwrite>
-                    </Platform>
-                </DeployFile>
-                <DeployFile LocalName="ModelSupport_DataGrabber\DataGrabber\SQLTemplates\default.txvpck" Configuration="Release" Class="ProjectFile">
-                    <Platform Name="Win32">
-                        <RemoteDir>.\</RemoteDir>
-                        <Overwrite>true</Overwrite>
-                    </Platform>
-                </DeployFile>
                 <DeployFile LocalName="ModelSupport_DataGrabber\ts\Classes\default.txaPackage" Configuration="Debug" Class="ProjectFile">
                     <Platform Name="Win32">
                         <RemoteDir>.\</RemoteDir>
@@ -603,6 +596,18 @@
                     </Platform>
                 </DeployFile>
                 <DeployFile LocalName="ModelSupport_DataGrabber\DataGrabber\Connection\default.txvpck" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Win32">
+                        <RemoteDir>.\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="ModelSupport_DataGrabber\UFormSettings\default.txvpck" Configuration="Release" Class="ProjectFile">
+                    <Platform Name="Win32">
+                        <RemoteDir>.\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="ModelSupport_DataGrabber\DataGrabber\SQLTemplates\default.txvpck" Configuration="Release" Class="ProjectFile">
                     <Platform Name="Win32">
                         <RemoteDir>.\</RemoteDir>
                         <Overwrite>true</Overwrite>
@@ -632,13 +637,13 @@
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
-                <DeployFile LocalName="ModelSupport_DataGrabber\DataGrabber\DBXConnection\default.txvpck" Configuration="Release" Class="ProjectFile">
+                <DeployFile LocalName="ModelSupport_DataGrabber\DataGrabber\GridView\default.txaPackage" Configuration="Debug" Class="ProjectFile">
                     <Platform Name="Win32">
                         <RemoteDir>.\</RemoteDir>
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
-                <DeployFile LocalName="ModelSupport_DataGrabber\DataGrabber\GridView\default.txaPackage" Configuration="Debug" Class="ProjectFile">
+                <DeployFile LocalName="ModelSupport_DataGrabber\DataGrabber\GridView\default.txvpck" Configuration="Release" Class="ProjectFile">
                     <Platform Name="Win32">
                         <RemoteDir>.\</RemoteDir>
                         <Overwrite>true</Overwrite>
@@ -674,7 +679,7 @@
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
-                <DeployFile LocalName="ModelSupport_DataGrabber\DataGrabber\GridView\default.txvpck" Configuration="Release" Class="ProjectFile">
+                <DeployFile LocalName="ModelSupport_DataGrabber\DataGrabber\DBXConnection\default.txvpck" Configuration="Release" Class="ProjectFile">
                     <Platform Name="Win32">
                         <RemoteDir>.\</RemoteDir>
                         <Overwrite>true</Overwrite>
@@ -710,13 +715,13 @@
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
-                <DeployFile LocalName="ModelSupport_DataGrabber\DataGrabber\ConnectionProfiles\default.txaPackage" Configuration="Debug" Class="ProjectFile">
+                <DeployFile LocalName="ModelSupport_DataGrabber\DataGrabber\cxGrid\default.txvpck" Configuration="Debug" Class="ProjectFile">
                     <Platform Name="Win32">
                         <RemoteDir>.\</RemoteDir>
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
-                <DeployFile LocalName="ModelSupport_DataGrabber\DataGrabber\cxGrid\default.txvpck" Configuration="Debug" Class="ProjectFile">
+                <DeployFile LocalName="ModelSupport_DataGrabber\DataGrabber\ConnectionProfiles\default.txaPackage" Configuration="Debug" Class="ProjectFile">
                     <Platform Name="Win32">
                         <RemoteDir>.\</RemoteDir>
                         <Overwrite>true</Overwrite>
@@ -902,13 +907,13 @@
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
-                <DeployFile LocalName="ModelSupport_DataGrabber\XMLSerializer\default.txvpck" Configuration="Debug" Class="ProjectFile">
+                <DeployFile LocalName="ModelSupport_DataGrabber\DataGrabber\MainForm\default.txaPackage" Configuration="Release" Class="ProjectFile">
                     <Platform Name="Win32">
                         <RemoteDir>.\</RemoteDir>
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
-                <DeployFile LocalName="ModelSupport_DataGrabber\DataGrabber\MainForm\default.txaPackage" Configuration="Release" Class="ProjectFile">
+                <DeployFile LocalName="ModelSupport_DataGrabber\XMLSerializer\default.txvpck" Configuration="Debug" Class="ProjectFile">
                     <Platform Name="Win32">
                         <RemoteDir>.\</RemoteDir>
                         <Overwrite>true</Overwrite>
@@ -1304,7 +1309,16 @@
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
-                <DeployClass Name="ProjectiOSDeviceResourceRules"/>
+                <DeployClass Name="DependencyModule">
+                    <Platform Name="Win32">
+                        <Operation>0</Operation>
+                        <Extensions>.dll;.bpl</Extensions>
+                    </Platform>
+                    <Platform Name="OSX32">
+                        <Operation>1</Operation>
+                        <Extensions>.dylib</Extensions>
+                    </Platform>
+                </DeployClass>
                 <DeployClass Name="ProjectOSXResource">
                     <Platform Name="OSX32">
                         <RemoteDir>Contents\Resources</RemoteDir>
@@ -1618,16 +1632,7 @@
                         <Operation>1</Operation>
                     </Platform>
                 </DeployClass>
-                <DeployClass Name="DependencyModule">
-                    <Platform Name="Win32">
-                        <Operation>0</Operation>
-                        <Extensions>.dll;.bpl</Extensions>
-                    </Platform>
-                    <Platform Name="OSX32">
-                        <Operation>1</Operation>
-                        <Extensions>.dylib</Extensions>
-                    </Platform>
-                </DeployClass>
+                <DeployClass Name="ProjectiOSDeviceResourceRules"/>
                 <ProjectRoot Platform="iOSDevice64" Name="$(PROJECTNAME).app"/>
                 <ProjectRoot Platform="Win64" Name="$(PROJECTNAME)"/>
                 <ProjectRoot Platform="iOSDevice32" Name="$(PROJECTNAME).app"/>

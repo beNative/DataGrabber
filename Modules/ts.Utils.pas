@@ -101,54 +101,72 @@ function CreateUniqueID: string;
 function GetLocalUserName: string;
 function GetLocalComputerName: string;
 
-procedure RunApplication(AParams : string;
-                         AFile   : string;
-                         AWait   : Boolean = True);
+procedure RunApplication(
+  AParams : string;
+  AFile   : string;
+  AWait   : Boolean = True
+);
 
 // VCL utilities
 
 procedure ChangeOwner(AComponent, ANewOwner : TComponent);
 
-procedure EnableControls(AControlContainer : TWinControl;
-                         AEnabled          : Boolean = True);
+procedure EnableControls(
+  AControlContainer : TWinControl;
+  AEnabled          : Boolean = True
+);
 
 procedure DisableControls(AControlContainer : TWinControl);
 
-function GetTextWidth(const AText : string;
-                            AFont : TFont): Integer;
+function GetTextWidth(
+  const AText : string;
+  AFont       : TFont
+): Integer;
 
-function GetTextHeight(const AText : string;
-                             AFont : TFont): Integer;
+function GetTextHeight(
+  const AText : string;
+  AFont       : TFont
+): Integer;
 
- // Variants and TVarRec conversions
+// Variants and TVarRec conversions
 
-procedure VariantToVarRec(    AVariant     : Variant;
-                          var AVarRecArray : TVarRecArray);
-procedure ClearVarRec(var AVarRecArray : TVarRecArray);
+procedure VariantToVarRec(
+  AVariant         : Variant;
+  var AVarRecArray : TVarRecArray
+);
+procedure ClearVarRec(var AVarRecArray: TVarRecArray);
 
-function VarRecToVariant(const AVarRec : TVarRec): Variant;
-function VarRecToString(const AVarRec : TVarRec): string;
-function VarRecToOleVariant(const AVarRec : TVarRec): OleVariant;
+function VarRecToVariant(const AVarRec: TVarRec): Variant;
+function VarRecToString(const AVarRec: TVarRec): string;
+function VarRecToOleVariant(const AVarRec: TVarRec): OleVariant;
 
 function VarArrayElemCount(const AVarArray: Variant): Integer;
-function VarIsValue(const V: Variant): Boolean;
-function VarAsTypeDef(const AValue    : Variant;
-                            AVarType  : TVarType;
-                      const ADefValue : Variant) : Variant;
+function VarIsValue(const V : Variant): Boolean;
+function VarAsTypeDef(
+  const AValue    : Variant;
+  AVarType        : TVarType;
+  const ADefValue : Variant
+): Variant;
 
-procedure OleVarFromVariant(var   AOleVariant : OleVariant;
-                            const AVariant    : Variant);
+procedure OleVarFromVariant(
+  var AOleVariant : OleVariant;
+  const AVariant  : Variant
+);
 
-function GetVariantTypeName(const AVariant : Variant): string;
+function GetVariantTypeName(const AVariant: Variant): string;
 
-function VariantCompare(AVariant1, AVariant2 : Variant) : Boolean;
+function VariantCompare(AVariant1, AVariant2: Variant): Boolean;
 
-function VariantTypeForFieldType(const AFieldType : TFieldType): Integer;
-function FieldTypeForVariant(const AVariant : Variant) : TFieldType;
-function ConvertValueToFieldType(const AVariant : Variant;
-                                 const AField   : TField): Variant;
-function ValueNeedsConversion(const AVarType   : Integer;
-                              const AFieldType : TFieldType): Boolean;
+function VariantTypeForFieldType(const AFieldType: TFieldType): Integer;
+function FieldTypeForVariant(const AVariant: Variant) : TFieldType;
+function ConvertValueToFieldType(
+  const AVariant : Variant;
+  const AField   : TField
+): Variant;
+function ValueNeedsConversion(
+  const AVarType   : Integer;
+  const AFieldType : TFieldType
+): Boolean;
 
 function StringToVariant(AString : string): Variant;
 
@@ -158,20 +176,26 @@ procedure Delay(Milliseconds: Integer);
 
 // Dialog boxes
 
-procedure ShowInfo(const AInfoString : string;
-                   const AArguments  : array of const); overload;
+procedure ShowInfo(
+  const AInfoString : string;
+  const AArguments  : array of const
+); overload;
 
 procedure ShowInfo(const AInfoString : string); overload;
 
-procedure ShowError(const AErrorString : string;
-                    const AArguments   : array of const); overload;
+procedure ShowError(
+  const AErrorString : string;
+  const AArguments   : array of const
+); overload;
 
 procedure ShowError(const AErrorString : string); overload;
 
 procedure ShowWarning(const AWarningString : string); overload;
 
-procedure ShowWarning(const AWarningString : string;
-                      const AArguments     : array of const); overload;
+procedure ShowWarning(
+  const AWarningString : string;
+  const AArguments     : array of const
+); overload;
 
 // Interface utility routines
 
@@ -179,26 +203,34 @@ function GetPIMTOffset(const I : IInterface): Integer;
 
 // support was included in D2010
 
-function GetImplementingObject(const I : IInterface): TObject;
-
 // Extended RTTI tools
 
-function CallEventHandler(Instance: TObject; const EventName: string;
-  const Args: array of TValue): TValue; overload;
+function CallEventHandler(
+  Instance        : TObject;
+  const EventName : string;
+  const Args      : array of TValue
+): TValue; overload;
 
-function CallEventHandler(Instance: TObject; Event: TRttiProperty;
-  const Args: array of TValue): TValue; overload;
+function CallEventHandler(
+  Instance   : TObject;
+  Event      : TRttiProperty;
+  const Args : array of TValue
+): TValue; overload;
 
 procedure LockPaint(AControl: TWinControl);
 
 procedure UnlockPaint(AControl: TWinControl);
 
-procedure AppendLine(var   sToString : string;
-                     const sLine     : string); overload;
+procedure AppendLine(
+  var sToString : string;
+  const sLine   : string
+); overload;
 
-procedure AppendLine(var   sToString : string;
-                     const sLine     : string;
-                     const Args      : array of const); overload;
+procedure AppendLine(
+  var sToString : string;
+  const sLine   : string;
+  const Args    : array of const
+); overload;
 
 function AsPropString(AValue: TValue): string;
 
@@ -212,8 +244,10 @@ function SetToString(
         TrimChars: Integer = -1
 ): string;
 
-function TryGetUnderlyingValue(const AValue: TValue; out AInnerValue: TValue)
-  : Boolean;
+function TryGetUnderlyingValue(
+  const AValue    : TValue;
+  out AInnerValue : TValue
+): Boolean;
 
 // UI windows utils
 
@@ -224,7 +258,10 @@ procedure FixControlStylesForDrag(AParent: TControl);
 
 procedure DebugString(const AString: string); overload;
 
-procedure DebugString(const AString: string; const Args: array of const); overload;
+procedure DebugString(
+  const AString : string;
+  const Args    : array of const
+); overload;
 
 implementation
 
@@ -1543,22 +1580,6 @@ begin
     end;
 end;
 
-{ Converts an interface reference back into an object reference of the object
-  that implements the interface.
-
-  Author : Hallvard Vassbotn }
-
-function GetImplementingObject(const I : IInterface): TObject;
-var
-  Offset : Integer;
-begin
-  Offset := GetPIMTOffset(I);
-  if Offset > 0 then
-    Result := TObject(PChar(I) - Offset)
-  else
-    Result := nil;
-end;
-
 procedure RunApplication(AParams: string; AFile: string; AWait : Boolean);
   // borrowed from Project JEDI Code Library (JCL)
   procedure ResetMemory(out P; Size: Longint);
@@ -2328,4 +2349,3 @@ begin
 end;
 
 end.
-

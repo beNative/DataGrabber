@@ -126,8 +126,10 @@ type
 { Common interfaces for ts applications.
   These interfaces make the form modules and the datamodules loosely coupled. }
 
-  TAfterUpdateDataEvent = procedure (ASource     : IData;
-                                     AUpdateKind : TUpdateKind) of object;
+  TAfterUpdateDataEvent = procedure (
+    ASource     : IData;
+    AUpdateKind : TUpdateKind
+  ) of object;
 
   IDataViewSettings = interface
   ['{5820CB42-DF7E-4DB9-8BDE-F13E9F7C0B2F}']

@@ -25,6 +25,8 @@ uses
   Data.DB, Data.Win.ADODB,
   Datasnap.DBClient, Datasnap.Provider,
 
+  Spring, Spring.Collections,
+
   ts.Interfaces, ts.Data,
 
   DataGrabber.Interfaces;
@@ -32,17 +34,17 @@ uses
 type
   TdmData = class(TdmCustomModule, IData, IFieldLists, IFieldVisiblity)
   private
-    FConstantFields         : TObjectList<TField>;
-    FEmptyFields            : TObjectList<TField>;
-    FNonEmptyFields         : TObjectList<TField>;
-    FFavoriteFields         : TObjectList<TField>;
+    FConstantFields         : IList<TField>;
+    FEmptyFields            : IList<TField>;
+    FNonEmptyFields         : IList<TField>;
+    FFavoriteFields         : IList<TField>;
     FConstantFieldsVisible  : Boolean;
     FEmptyFieldsVisible     : Boolean;
     FShowFavoriteFieldsOnly : Boolean;
 
-    function GetConstantFields: TObjectList<TField>;
-    function GetEmptyFields: TObjectList<TField>;
-    function GetNonEmptyFields: TObjectList<TField>;
+    function GetConstantFields: IList<TField>;
+    function GetEmptyFields: IList<TField>;
+    function GetNonEmptyFields: IList<TField>;
     function GetConstantFieldsVisible: Boolean;
     function GetEmptyFieldsVisible: Boolean;
     function GetShowFavoriteFieldsOnly: Boolean;
@@ -61,13 +63,13 @@ type
     procedure InitField(AField: TField); override;
 
     { IFieldLists }
-    property ConstantFields: TObjectList<TField>
+    property ConstantFields: IList<TField>
       read GetConstantFields;
 
-    property EmptyFields: TObjectList<TField>
+    property EmptyFields: IList<TField>
       read GetEmptyFields;
 
-    property NonEmptyFields: TObjectList<TField>
+    property NonEmptyFields: IList<TField>
       read GetNonEmptyFields;
 
 //    property FavoriteFields: TObjectList<TField>
@@ -93,24 +95,20 @@ implementation
 procedure TdmData.AfterConstruction;
 begin
   inherited AfterConstruction;
-  FConstantFields := TObjectList<TField>.Create(False);
-  FEmptyFields    := TObjectList<TField>.Create(False);
-  FNonEmptyFields := TObjectList<TField>.Create(False);
-  FFavoriteFields := TObjectList<TField>.Create(False);
+  FConstantFields := TCollections.CreateObjectList<TField>(False);
+  FEmptyFields    := TCollections.CreateObjectList<TField>(False);
+  FNonEmptyFields := TCollections.CreateObjectList<TField>(False);
+  FFavoriteFields := TCollections.CreateObjectList<TField>(False);
 end;
 
 procedure TdmData.BeforeDestruction;
 begin
   inherited BeforeDestruction;
-  FreeAndNil(FConstantFields);
-  FreeAndNil(FEmptyFields);
-  FreeAndNil(FNonEmptyFields);
-  FreeAndNil(FFavoriteFields);
 end;
 {$ENDREGION}
 
 {$REGION 'property access methods'}
-function TdmData.GetConstantFields: TObjectList<TField>;
+function TdmData.GetConstantFields: IList<TField>;
 begin
   Result := FConstantFields;
 end;
@@ -162,12 +160,12 @@ begin
   end;
 end;
 
-function TdmData.GetEmptyFields: TObjectList<TField>;
+function TdmData.GetEmptyFields: IList<TField>;
 begin
   Result := FEmptyFields;
 end;
 
-function TdmData.GetNonEmptyFields: TObjectList<TField>;
+function TdmData.GetNonEmptyFields: IList<TField>;
 begin
   Result := FNonEmptyFields;
 end;

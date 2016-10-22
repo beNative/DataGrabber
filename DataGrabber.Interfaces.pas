@@ -23,6 +23,8 @@ uses
   Vcl.Graphics, Vcl.Controls, Vcl.Menus, Vcl.Forms, Vcl.ActnList,
   Data.DB,
 
+  Spring.Collections,
+
   DataGrabber.ConnectionProfiles, DataGrabber.FormSettings,
 
   BCEditor.Editor.Base, BCEditor.Editor,
@@ -290,17 +292,17 @@ type
   // TODO: use Spring - IList
   IFieldLists = interface
   ['{DB8D457B-101A-4994-9CBB-CAB24EE27ECF}']
-    function GetConstantFields: TObjectList<TField>;
-    function GetEmptyFields: TObjectList<TField>;
-    function GetNonEmptyFields: TObjectList<TField>;
+    function GetConstantFields: IList<TField>;
+    function GetEmptyFields: IList<TField>;
+    function GetNonEmptyFields: IList<TField>;
 
-    property ConstantFields: TObjectList<TField>
+    property ConstantFields: IList<TField>
       read GetConstantFields;
 
-    property EmptyFields: TObjectList<TField>
+    property EmptyFields: IList<TField>
       read GetEmptyFields;
 
-    property NonEmptyFields: TObjectList<TField>
+    property NonEmptyFields: IList<TField>
       read GetNonEmptyFields;
   end;
 
