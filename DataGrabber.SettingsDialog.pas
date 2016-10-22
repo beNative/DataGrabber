@@ -197,7 +197,7 @@ procedure ExecuteSettingsDialog(ASettings: IDGSettings;
 var
   Form : TfrmSettingsDialog;
 begin
-  Form := TfrmSettingsDialog.Create(Application, ASettings);
+  Form := TfrmSettingsDialog.Create(nil, ASettings);
   try
     Form.ApplySettingsMethod := AApplySettingsMethod;
     Form.ShowModal;
@@ -232,8 +232,8 @@ end;
 
 procedure TfrmSettingsDialog.BeforeDestruction;
 begin
-  piConnectionProfiles.Designer := nil;
-  FSettings := nil;
+  //piConnectionProfiles.Designer := nil;
+  //FSettings := nil;
   inherited BeforeDestruction;
 end;
 {$ENDREGION}
@@ -491,13 +491,13 @@ begin
   end;
 
   rgpGridTypes.Items.Clear;
-  for DV in GlobalContainer.ResolveAll<IDGDataView> do
-  begin
-    S := DV.Name;
-    I := rgpGridTypes.Items.Add(S);
-    if SameText(S, FSettings.GridType) then
-      rgpGridTypes.ItemIndex := I;
-  end;
+//  for DV in GlobalContainer.ResolveAll<IDGDataView> do
+//  begin
+//    S := DV.Name;
+//    I := rgpGridTypes.Items.Add(S);
+//    if SameText(S, FSettings.GridType) then
+//      rgpGridTypes.ItemIndex := I;
+//  end;
 
   vstProfiles.RootNodeCount := FSettings.ConnectionProfiles.Count;
   SetWindowSizeGrip(Handle, True);
@@ -529,15 +529,15 @@ var
   B: Boolean;
 begin
   inherited;
-  B := chkProviderMode.Checked;
-  chkFetchOnDemand.Enabled := B;
-  edtPacketRecords.Enabled := B and chkFetchOnDemand.Checked;
-  lblPacketrecords.Enabled := B and chkFetchOnDemand.Checked;
-  B := Assigned(vstProfiles.FocusedNode);
-  actMoveUp.Enabled := B and (vstProfiles.FocusedNode.Index > 0);
-  actMoveDown.Enabled := B
-    and (vstProfiles.FocusedNode.Index < vstProfiles.RootNodeCount - 1);
-  actDelete.Enabled := B;
+//  B := chkProviderMode.Checked;
+//  chkFetchOnDemand.Enabled := B;
+//  edtPacketRecords.Enabled := B and chkFetchOnDemand.Checked;
+//  lblPacketrecords.Enabled := B and chkFetchOnDemand.Checked;
+//  B := Assigned(vstProfiles.FocusedNode);
+//  actMoveUp.Enabled := B and (vstProfiles.FocusedNode.Index > 0);
+//  actMoveDown.Enabled := B
+//    and (vstProfiles.FocusedNode.Index < vstProfiles.RootNodeCount - 1);
+//  actDelete.Enabled := B;
 end;
 {$ENDREGION}
 
