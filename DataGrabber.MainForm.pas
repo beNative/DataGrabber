@@ -117,6 +117,7 @@ type
     ppmConnectionTypes            : TPopupMenu;
     ppmGridTypes                  : TPopupMenu;
     tlbMain                       : TToolBar;
+    mniFireDAC: TMenuItem;
     {$ENDREGION}
 
     {$REGION 'action handlers'}
@@ -190,6 +191,7 @@ procedure TfrmMain.AfterConstruction;
 begin
   inherited AfterConstruction;
   FManager := GlobalContainer.Resolve<IConnectionViewManager>;
+  FSettings := GlobalContainer.Resolve<IDGSettings>;
   AddConnectionView;
   tlbMain.DrawingStyle := dsNormal;
   InitializeActions;
@@ -199,7 +201,8 @@ end;
 
 procedure TfrmMain.BeforeDestruction;
 begin
-  FManager := nil;
+//  FManager := nil;
+  //FSettings  := nil;
   inherited BeforeDestruction;
 end;
 {$ENDREGION}

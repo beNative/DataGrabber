@@ -289,7 +289,6 @@ type
       read GetMergeColumnCells write SetMergeColumnCells;
   end;
 
-  // TODO: use Spring - IList
   IFieldLists = interface
   ['{DB8D457B-101A-4994-9CBB-CAB24EE27ECF}']
     function GetConstantFields: IList<TField>;

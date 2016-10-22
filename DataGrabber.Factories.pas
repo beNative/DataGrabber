@@ -37,12 +37,6 @@ function CreateInspector(
   AObject : TPersistent = nil
 ): TPropertyInspector;
 
-//function CreateXMLTree(
-//        AOwner  : TComponent;
-//        AParent : TWinControl;
-//  const AXML    : string = ''
-//): TXMLTree;
-
 implementation
 
 uses
@@ -100,18 +94,5 @@ begin
   end;
   Result := PI;
 end;
-
-//function CreateXMLTree(AOwner: TComponent; AParent: TWinControl;
-//  const AXML : string = ''): TXMLTree;
-//var
-//  XT : TXMLTree;
-//begin
-//  XT := TXMLTree.Create(AOwner);
-//  XT.Parent := AParent;
-//  XT.Align  := alClient;
-//  if AXML <> '' then
-//    XT.XML := AXML;
-//  Result := XT;
-//end;
 
 end.

@@ -36,8 +36,10 @@ uses
 
 {
    A IConnectionView instance consists of
-     - one editor (view)
-     - one or more dataviews corresponding to the user input in the editor
+     - one editorview
+     - one or more dataviews corresponding to the user input in the editor as
+       multiple datasets can be returned as a result of one statement.
+
      - a list of connectionprofiles
 
      - an active connection profile (of the available profiles in
@@ -156,6 +158,8 @@ uses
 
   Spring.Services,
 
+  DDuce.Factories,
+
   ts.Utils,
 
   DataGrabber.Utils, DataGrabber.Data;
@@ -167,26 +171,24 @@ constructor TfrmConnectionView.Create(AOwner: TComponent;
   AEditorView: IEditorView; ADataView: IDGDataView; AData: IData);
 begin
   inherited Create(AOwner);
-  FEditorView := AEditorView;
+  FEditorView     := AEditorView;
   FActiveDataView := ADataView;
   ActiveDataView.AssignParent(pnlBottom);
-  FActiveData := AData;
+  FActiveData     := AData;
 end;
 
 procedure TfrmConnectionView.AfterConstruction;
 begin
   inherited AfterConstruction;
   InitializeEditorView;
-  vstProfiles := TVirtualStringTree.Create(Self);
-  vstProfiles.Parent := pnlProfiles;
-  vstProfiles.Align := alClient;
-  vstProfiles.RootNodeCount := Manager.Settings.ConnectionProfiles.Count;
+  vstProfiles := TFactories.CreateVirtualStringTree(Self, pnlProfiles);
+  vstProfiles.RootNodeCount     := Manager.Settings.ConnectionProfiles.Count;
   vstProfiles.OnBeforeCellPaint := vstProfilesBeforeCellPaint;
   vstProfiles.OnGetText         := vstProfilesGetText;
   vstProfiles.OnFocusChanged    := vstProfilesFocusChanged;
   vstProfiles.OnPaintText       := vstProfilesPaintText;
   // TODO: select default node
-  vstProfiles.FocusedNode := vstProfiles.GetFirstVisible;
+  vstProfiles.FocusedNode       := vstProfiles.GetFirstVisible;
   InitializeControls;
   ApplySettings;
 end;

@@ -42,6 +42,7 @@ type
     actApply                       : TAction;
     actCancel                      : TAction;
     actClose                       : TAction;
+    actConnectionString            : TAction;
     actDelete                      : TAction;
     actDuplicate                   : TAction;
     actMoveDown                    : TAction;
@@ -51,6 +52,7 @@ type
     btnApply                       : TButton;
     btnCancel                      : TButton;
     btnClose                       : TButton;
+    btnConnectionString            : TButton;
     btnDelete                      : TToolButton;
     btnDuplicate                   : TToolButton;
     btnMoveDown                    : TToolButton;
@@ -87,8 +89,6 @@ type
     tsConnectionProfiles           : TTabSheet;
     tsDisplay                      : TTabSheet;
     tsXML                          : TTabSheet;
-    actConnectionString: TAction;
-    btnConnectionString: TButton;
     {$ENDREGION}
 
     procedure actApplyExecute(Sender: TObject);
@@ -100,8 +100,10 @@ type
     procedure actMoveUpExecute(Sender: TObject);
     procedure actMoveDownExecute(Sender: TObject);
     procedure actDuplicateExecute(Sender: TObject);
+    procedure actConnectionStringExecute(Sender: TObject);
 
     procedure OnColorButtonClick(Sender: TObject);
+
     procedure xtrSettingsEditing(Sender: TBaseVirtualTree; Node: PVirtualNode;
       Column: TColumnIndex; var Allowed: Boolean);
     procedure xtrSettingsPaintText(Sender: TBaseVirtualTree;
@@ -113,17 +115,34 @@ type
       Column: TColumnIndex; Shift: TShiftState);
 //    procedure xtrSettingsCheckNode(Sender: TXMLTree; Node: PVirtualNode;
 //      var NewXmlNode: IXMLDOMNode; var NewNodeType: Integer; var Add: Boolean);
-    procedure vstProfilesGetText(Sender: TBaseVirtualTree; Node: PVirtualNode;
-      Column: TColumnIndex; TextType: TVSTTextType; var CellText: string);
-    procedure vstProfilesFocusChanged(Sender: TBaseVirtualTree;
-      Node: PVirtualNode; Column: TColumnIndex);
-    procedure piConnectionProfilesGetEditorClass(Sender: TObject;
-      AInstance: TObject; APropInfo: PPropInfo;
-      var AEditorClass: TPropertyEditorClass);
-    procedure vstProfilesBeforeCellPaint(Sender: TBaseVirtualTree;
-      TargetCanvas: TCanvas; Node: PVirtualNode; Column: TColumnIndex;
-      CellPaintMode: TVTCellPaintMode; CellRect: TRect; var ContentRect: TRect);
-    procedure actConnectionStringExecute(Sender: TObject);
+
+    procedure vstProfilesGetText(
+      Sender       : TBaseVirtualTree;
+      Node         : PVirtualNode;
+      Column       : TColumnIndex;
+      TextType     : TVSTTextType;
+      var CellText : string
+    );
+    procedure vstProfilesFocusChanged(
+      Sender : TBaseVirtualTree;
+      Node   : PVirtualNode;
+      Column : TColumnIndex
+    );
+    procedure vstProfilesBeforeCellPaint(
+      Sender          : TBaseVirtualTree;
+      TargetCanvas    : TCanvas;
+      Node            : PVirtualNode;
+      Column          : TColumnIndex;
+      CellPaintMode   : TVTCellPaintMode;
+      CellRect        : TRect;
+      var ContentRect : TRect
+    );
+    procedure piConnectionProfilesGetEditorClass(
+      Sender           : TObject;
+      AInstance        : TObject;
+      APropInfo        : PPropInfo;
+      var AEditorClass : TPropertyEditorClass
+    );
 
   private
     FSettings            : IDGSettings;
@@ -138,7 +157,7 @@ type
     procedure InspectConnectionProfile(AIndex: Integer);
 
   protected
-    procedure Initialize;
+    procedure InitializeControls;
     procedure UpdateActions; override;
 
   public
@@ -148,7 +167,6 @@ type
     ); reintroduce; virtual;
     procedure BeforeDestruction; override;
     procedure AfterConstruction; override;
-
 
     property ApplySettingsMethod: TApplySettingsMethod
       read FApplySettingsMethod write FApplySettingsMethod;
@@ -167,10 +185,11 @@ uses
   ts.Utils, ts.Interfaces,
   Data.DBConnAdmin, Data.Win.ADOConEd, Data.Win.ADODB,
 
+  Spring.Container,
 
-  DataGrabber.ConnectionProfiles, DataGrabber.Utils, DataGrabber.Factories,
+  DDuce.Factories,
 
-  Spring.Container;
+  DataGrabber.ConnectionProfiles, DataGrabber.Utils, DataGrabber.Factories;
 
 {$REGION 'interfaced routines'}
 procedure ExecuteSettingsDialog(ASettings: IDGSettings;
@@ -208,7 +227,7 @@ begin
 
   piConnectionProfiles := CreateInspector(Self, pnlConnectionProfilesInspector);
   piConnectionProfiles.OnGetEditorClass := piConnectionProfilesGetEditorClass;
-  Initialize;
+  InitializeControls;
 end;
 
 procedure TfrmSettingsDialog.BeforeDestruction;
@@ -423,7 +442,7 @@ begin
   FSettings.Save;
 end;
 
-procedure TfrmSettingsDialog.Initialize;
+procedure TfrmSettingsDialog.InitializeControls;
 var
   I  : Integer;
   C  : IConnection;
@@ -459,13 +478,10 @@ begin
   piConnectionProfiles.OnGetEditorClass := piConnectionProfilesGetEditorClass;
   rgpConnectionType.Items.Clear;
 
-  vstProfiles := TVirtualStringTree.Create(Self);
-  vstProfiles.Parent := pnlConnectionProfilesList;
-  vstProfiles.Align  := alClient;
+  vstProfiles := TFactories.CreateVirtualStringTree(Self, pnlConnectionProfilesList);
   vstProfiles.OnGetText := vstProfilesGetText;
   vstProfiles.OnFocusChanged := vstProfilesFocusChanged;
   vstProfiles.OnBeforeCellPaint := vstProfilesBeforeCellPaint;
-
 
   for C in GlobalContainer.ResolveAll<IConnection> do
   begin

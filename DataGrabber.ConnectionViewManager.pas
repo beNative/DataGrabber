@@ -257,7 +257,7 @@ end;
 procedure TdmConnectionViewManager.BeforeDestruction;
 begin
   inherited;
-  FreeAndNil(FDataInspector);
+//  FreeAndNil(FDataInspector);
 
 //  FSettings.FormSettings.Assign(Self);
 //  FSettings.FormSettings.VSplitterPos := pnlConnectionProfiles.Width;

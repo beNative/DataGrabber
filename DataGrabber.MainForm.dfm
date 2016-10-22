@@ -367,6 +367,9 @@ object frmMain: TfrmMain
       AutoCheck = True
       Caption = 'UNIDAC'
     end
+    object mniFireDAC: TMenuItem
+      Caption = 'FIREDAC'
+    end
   end
   object ppmGridTypes: TPopupMenu
     Left = 128

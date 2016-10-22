@@ -89,7 +89,7 @@ type
     procedure AssignStandardSettings;
 
   public
-    constructor Create; reintroduce;
+    constructor Create(AOwner: TComponent); override;
 
     procedure AfterConstruction; override;
     procedure BeforeDestruction; override;
@@ -158,7 +158,7 @@ uses
   Vcl.Forms, Vcl.GraphUtil;
 
 {$REGION 'construction and destruction'}
-constructor TDGSettings.Create;
+constructor TDGSettings.Create(AOwner: TComponent);
 begin
   inherited Create(Application);
 end;
@@ -184,7 +184,6 @@ begin
   FreeAndNil(FFormSettings);
   FreeAndNil(FDataTypeColors);
   FreeAndNil(FConnectionSettings);
-  //FreeAndNil(FSettings);
   inherited BeforeDestruction;
 end;
 {$ENDREGION}

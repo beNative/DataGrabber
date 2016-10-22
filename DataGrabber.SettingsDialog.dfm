@@ -27,7 +27,7 @@ object frmSettingsDialog: TfrmSettingsDialog
     Top = 3
     Width = 382
     Height = 406
-    ActivePage = tsConnection
+    ActivePage = tsConnectionProfiles
     Align = alTop
     Anchors = [akLeft, akTop, akRight, akBottom]
     Images = imlMain
@@ -240,10 +240,6 @@ object frmSettingsDialog: TfrmSettingsDialog
     object tsConnectionProfiles: TTabSheet
       Caption = 'Connection Profiles'
       ImageIndex = 9
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object splVertical: TSplitter
         Left = 185
         Top = 0
@@ -306,10 +302,6 @@ object frmSettingsDialog: TfrmSettingsDialog
     object tsXML: TTabSheet
       Caption = 'XML settings'
       ImageIndex = 11
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
     end
   end
   object btnApply: TButton
