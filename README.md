@@ -5,7 +5,7 @@ Connection topologies:
 - UNIDAC (optional)
 - ADO
 - ZeosDBO (optional)
-- FireDAC (todo)
+- FireDAC
 - dbExpress
 
 External dependencies:

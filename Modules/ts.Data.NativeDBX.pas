@@ -31,7 +31,7 @@ type
   protected
     function GetDataSet: TDataSet; override;
 
-    procedure UpdateProviderMode(var AEnabled: Boolean);
+    procedure UpdateProviderMode(var AEnabled: Boolean); override;
 
   public
     procedure AfterConstruction; override;

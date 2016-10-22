@@ -95,7 +95,6 @@ end;
 function TfrmEditorView.GetColor: TColor;
 begin
   Result := FSynEditor.BackgroundColor;
-
 end;
 
 procedure TfrmEditorView.SetColor(const Value: TColor);
@@ -159,10 +158,6 @@ begin
 
   FSynEditor.CodeFolding.Visible := True;
   FSynEditor.Font.Name := 'Consolas';
-
-
-
-
 //  FSynEditor           := TSynEdit.Create(Self);
 //  FSynEditor.Font.Name := 'Consolas';
 //  FSynEditor.Parent    := Self;

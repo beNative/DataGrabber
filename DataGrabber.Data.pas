@@ -58,7 +58,6 @@ type
 
   public
     procedure AfterConstruction; override;
-    procedure BeforeDestruction; override;
 
     procedure InitField(AField: TField); override;
 
@@ -99,11 +98,6 @@ begin
   FEmptyFields    := TCollections.CreateObjectList<TField>(False);
   FNonEmptyFields := TCollections.CreateObjectList<TField>(False);
   FFavoriteFields := TCollections.CreateObjectList<TField>(False);
-end;
-
-procedure TdmData.BeforeDestruction;
-begin
-  inherited BeforeDestruction;
 end;
 {$ENDREGION}
 
