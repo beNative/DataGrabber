@@ -52,34 +52,45 @@ function GetFullName(AComponent: TComponent) : string;
 
 // string manipulation routines
 
-procedure StrToStrings(const AString    : string;
-                             AList      : TStrings;
-                             ASeparator : Char);
+procedure StrToStrings(
+  const AString : string;
+  AList         : TStrings;
+  ASeparator    : Char
+);
 
-function StringsToStr(const List: TStrings;
-                      const Sep: string;
-                      const AllowEmptyString: Boolean = True): string;
+function StringsToStr(
+  const List             : TStrings;
+  const Sep              : string;
+  const AllowEmptyString : Boolean = True
+): string;
 
-function Unformat(const ASource,
-                        APattern : string;
-                  const AArgs    : array of const): Integer;
+function Unformat(
+  const ASource, APattern : string;
+  const AArgs             : array of const
+): Integer;
 
 function Like(const ASource, ATemplate: string): Boolean;
 
 { original author: Vladimir Gaitanoff }
 { Returns a number of words delimited with AWordDelims }
-function WordCount(const AString     : string;
-                   const AWordDelims : TSysCharSet = AnsiWhiteSpace) : Integer;
+function WordCount(
+  const AString     : string;
+  const AWordDelims : TSysCharSet = AnsiWhitespace
+): Integer;
 
 { Returns a position of word number AIndex in the string AString }
-function WordPosition(const AIndex      : Integer;
-                      const AString     : string;
-                      const AWordDelims : TSysCharSet = AnsiWhiteSpace) : Integer;
+function WordPosition(
+  const AIndex      : Integer;
+  const AString     : string;
+  const AWordDelims : TSysCharSet = AnsiWhitespace
+): Integer;
 
 { Returns a word number AIndex in the string AString }
-function ExtractWord(const AIndex      : Integer;
-                     const AString     : string;
-                     const AWordDelims : TSysCharSet = AnsiWhiteSpace): string;
+function ExtractWord(
+  const AIndex      : Integer;
+  const AString     : string;
+  const AWordDelims : TSysCharSet = AnsiWhitespace
+): string;
 
 function URLEncode(const AString: string): string;
 
@@ -233,11 +244,11 @@ function AsPropString(AValue: TValue): string;
 function AsFieldString(AValue: TValue): string;
 
 function SetToString(
-        TypeInfo: PTypeInfo;
+  TypeInfo : PTypeInfo;
   const Value;
-        QuoteValues: Boolean = True;
-        Brackets: Boolean = True;
-        TrimChars: Integer = -1
+  QuoteValues : Boolean = True;
+  Brackets    : Boolean = True;
+  TrimChars   : Integer = -1
 ): string;
 
 function TryGetUnderlyingValue(

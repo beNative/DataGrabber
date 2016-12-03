@@ -293,8 +293,14 @@ begin
       AForm.BorderStyle := bsSizeToolWin;
       AForm.Visible := True;
       ShowWindow(AForm.Handle, SW_SHOWNOACTIVATE);
-      SetWindowPos(AForm.Handle, GetNextWindow(Self.Handle, GW_HWNDNEXT),
-        0, 0, 0, 0, SWP_NOACTIVATE or SWP_NOMOVE or SWP_NOSIZE);
+      SetWindowPos(
+        AForm.Handle,
+        GetNextWindow(Self.Handle, GW_HWNDNEXT),
+        0,
+        0,
+        0,
+        0,
+        SWP_NOACTIVATE or SWP_NOMOVE or SWP_NOSIZE);
     finally
       UnLockPaint(AForm);
     end;

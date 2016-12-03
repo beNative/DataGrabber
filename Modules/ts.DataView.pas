@@ -95,9 +95,9 @@ type
     property EmptyColumnsVisible: Boolean
       read GetEmptyColumnsVisible write SetEmptyColumnsVisible;
 
-    published
-      property Name: string
-        read GetName;
+  published
+    property Name: string
+      read GetName;
   end;
 
 implementation

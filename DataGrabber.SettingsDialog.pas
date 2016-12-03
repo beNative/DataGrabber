@@ -446,8 +446,8 @@ procedure TfrmSettingsDialog.InitializeControls;
 var
   I  : Integer;
   C  : IConnection;
-  DV : IDGDataView;
-  S  : string;
+//  DV : IDGDataView;
+//  S  : string;
 begin
 //  btnGridBooleanColor.SelectionColor  := FSettings.DataTypeColors[dtBoolean];
 //  btnGridDateColor.SelectionColor     := FSettings.DataTypeColors[dtDate];
@@ -525,8 +525,8 @@ begin
 end;
 
 procedure TfrmSettingsDialog.UpdateActions;
-var
-  B: Boolean;
+//var
+//  B: Boolean;
 begin
   inherited;
 //  B := chkProviderMode.Checked;

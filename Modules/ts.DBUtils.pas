@@ -51,18 +51,24 @@ function IsStringFieldType(ADataType: TFieldType): Boolean;
 
 function IsObjectFieldType(ADataType: TFieldType): Boolean;
 
-procedure AutoSizeDisplayWidths(ADataSet : TDataSet;
-                                ACount   : Integer = 100;
-                                AOffset  : Integer = 2); overload;
+procedure AutoSizeDisplayWidths(
+  ADataSet : TDataSet;
+  ACount   : Integer = 100;
+  AOffset  : Integer = 2
+); overload;
 
-procedure AutoSizeDisplayWidths(ADataSet : TDataSet;
-                                AFont    : TFont;
-                                ACount   : Integer = 100;
-                                AOffset  : Integer = 0); overload;
+procedure AutoSizeDisplayWidths(
+  ADataSet : TDataSet;
+  AFont    : TFont;
+  ACount   : Integer = 100;
+  AOffset  : Integer = 0
+); overload;
 
-function SortClientDataSet(      ADataSet    : TClientDataSet;
-                           const AFieldName  : string;
-                           var   ADescending : Boolean): Boolean;
+function SortClientDataSet(
+  ADataSet         : TClientDataSet;
+  const AFieldName : string;
+  var ADescending  : Boolean
+): Boolean;
 
 function FieldTypeForVariant(const Value: Variant): TFieldType;
 
@@ -70,66 +76,88 @@ procedure CloneDataSet(ASource: TDataSet; ADest: TClientDataSet);
 
 // assign the fieldvalue; returns True if the Value was posted.
 
-function AssignFieldValue(      AField  : TField;
-                          const AValue  : Variant;
-                                ADoPost : Boolean = True) : Boolean; overload;
+function AssignFieldValue(
+  AField       : TField;
+  const AValue : Variant;
+  ADoPost      : Boolean = True
+): Boolean; overload;
 
-function AssignFieldValue(       ADataSet   : TDataSet;
-                           const AFieldName : string;
-                           const AValue     : Variant;
-                                 ADoPost    : Boolean = True) : Boolean; overload;
+function AssignFieldValue(
+  ADataSet         : TDataSet;
+  const AFieldName : string;
+  const AValue     : Variant;
+  ADoPost          : Boolean = True
+): Boolean; overload;
 
 // clear the fieldvalue
 
-procedure ClearFieldValue(AField  : TField;
-                          ADoPost : Boolean = True); overload;
+procedure ClearFieldValue(
+  AField  : TField;
+  ADoPost : Boolean = True
+); overload;
 
-procedure ClearFieldValue(      ADataSet   : TDataSet;
-                          const AFieldName : string;
-                                ADoPost    : Boolean = True); overload;
+procedure ClearFieldValue(
+  ADataSet         : TDataSet;
+  const AFieldName : string;
+  ADoPost          : Boolean = True
+); overload;
 
 // SQLSelect ?
 
 // use KeyValues to store returned selection
 
-function QueryLookup (      AADOConnection : TADOConnection;
-                      const AQuery         : string;
-                      const AParams        : array of const): Variant; overload;
+function QueryLookup(
+  AADOConnection : TADOConnection;
+  const AQuery   : string;
+  const AParams  : array of const)
+  : Variant; overload;
 
-function QueryLookup (      AADOConnection : TADOConnection;
-                      const AQuery         : string): Variant; overload;
+function QueryLookup(
+  AADOConnection : TADOConnection;
+  const AQuery   : string
+): Variant; overload;
 
-function QueryLookup(      AADOConnection : TADOConnection;
-                     const ATable         : string;
-                     const AResultFields  : string;
-                     const AKeyValue      : Variant;
-                     const AKeyField      : string = 'ID') : Variant; overload;
+function QueryLookup(
+  AADOConnection      : TADOConnection;
+  const ATable        : string;
+  const AResultFields : string;
+  const AKeyValue     : Variant;
+  const AKeyField     : string = 'ID'
+): Variant; overload;
 
-function QueryLookup(      AADOConnection : TADOConnection;
-                     const ATable         : string;
-                     const AResultField   : string;
-                           AResultStrings : TStrings;
-                     const AKeyValue      : Variant;
-                     const AKeyField      : string = '') : Boolean; overload;
+function QueryLookup(
+  AADOConnection     : TADOConnection;
+  const ATable       : string;
+  const AResultField : string;
+  AResultStrings     : TStrings;
+  const AKeyValue    : Variant;
+  const AKeyField    : string = ''
+): Boolean; overload;
 
-function UpdateRecord(      AADOConnection : TADOConnection;
-                      const ATable         : string;
-                      const AUpdateField   : string;
-                      const AUpdateValue   : Variant;
-                      const AKeyValue      : Variant;
-                      const AKeyField      : string = 'ID') : Boolean;
+function UpdateRecord(
+  AADOConnection     : TADOConnection;
+  const ATable       : string;
+  const AUpdateField : string;
+  const AUpdateValue : Variant;
+  const AKeyValue    : Variant;
+  const AKeyField    : string = 'ID'
+): Boolean;
 
-function UpdateRecords(      AConnection  : IConnection;
-                       const ATable       : string;
-                       const AUpdateField : string;
-                       const AUpdateValue : Variant;
-                       const AKeyValues   : string;
-                       const AKeyField    : string = 'ID') : Boolean;
+function UpdateRecords(
+  AConnection        : IConnection;
+  const ATable       : string;
+  const AUpdateField : string;
+  const AUpdateValue : Variant;
+  const AKeyValues   : string;
+  const AKeyField    : string = 'ID'
+): Boolean;
 
-function InsertRecord(      AADOConnection : TADOConnection;
-                      const ATable         : string;
-                      const AInsertFields  : string;
-                      const AFieldValues   : Variant) : Boolean;
+function InsertRecord(
+  AADOConnection      : TADOConnection;
+  const ATable        : string;
+  const AInsertFields : string;
+  const AFieldValues  : Variant
+): Boolean;
 
 //function SQLDelete(      AADOConnection : TADOConnection;
 //                   const ATable         : string;
@@ -138,47 +166,60 @@ function InsertRecord(      AADOConnection : TADOConnection;
 
 //SQLCall?
 
-function ExecuteStoredProcedure(      AProcedure     : TADOStoredProc;
-                                const AParameters    : Variant;
-                                const ADefaultValue  : Variant) : Variant;
-  overload;
+function ExecuteStoredProcedure(
+  AProcedure          : TADOStoredProc;
+  const AParameters   : Variant;
+  const ADefaultValue : Variant
+): Variant; overload;
 
-function ExecuteStoredProcedure(      AProcedure     : TADOStoredProc;
-                                const AParameters    : Variant) : Variant;
-  overload;
+function ExecuteStoredProcedure(
+  AProcedure        : TADOStoredProc;
+  const AParameters : Variant
+): Variant; overload;
 
-function ExecuteStoredProcedure(      AADOConnection : TADOConnection;
-                                const AProcedure     : string;
-                                const AParameters    : Variant;
-                                const ADefaultValue  : Variant) : Variant;
-  overload;
+function ExecuteStoredProcedure(
+  AADOConnection      : TADOConnection;
+  const AProcedure    : string;
+  const AParameters   : Variant;
+  const ADefaultValue : Variant
+): Variant; overload;
 
-function ExecuteStoredProcedure(      AADOConnection : TADOConnection;
-                                const AProcedure     : string;
-                                const AParameters    : Variant) : Variant;
-  overload;
+function ExecuteStoredProcedure(
+  AADOConnection    : TADOConnection;
+  const AProcedure  : string;
+  const AParameters : Variant
+): Variant; overload;
 
-function ExecuteStoredProcedure(      AADOConnection : TADOConnection;
-                                const AProcedure     : string) : Variant;
-  overload;
+function ExecuteStoredProcedure(
+  AADOConnection   : TADOConnection;
+  const AProcedure : string
+): Variant; overload;
 
-function GetQueryRecordCount(      AADOConnection : TADOConnection;
-                             const AFromClause    : string;
-                             const AWhereClause   : string = '';
-                             const AGroupByClause : string = '') : Integer;
+function GetQueryRecordCount(
+  AADOConnection       : TADOConnection;
+  const AFromClause    : string;
+  const AWhereClause   : string = '';
+  const AGroupByClause : string = ''
+): Integer;
 
 function GetSPReturnValue(AADOCommand : TADOCommand) : Variant;
 
-procedure KeyValuesToFields(      ADataSet   : TDataSet;
-                                  AKeyValues : TtsKeyValues); overload;
+procedure KeyValuesToFields(
+  ADataSet   : TDataSet;
+  AKeyValues : TtsKeyValues
+); overload;
 
-procedure KeyValuesToFields(      ADataSet   : TDataSet;
-                                  AKeyValues : TtsKeyValues;
-                            const AFields    : array of string); overload;
+procedure KeyValuesToFields(
+  ADataSet      : TDataSet;
+  AKeyValues    : TtsKeyValues;
+  const AFields : array of string
+); overload;
 
-procedure FieldsToKeyValues(      ADataSet   : TDataSet;
-                                  AKeyValues : TtsKeyValues;
-                            const AFields    : array of string);
+procedure FieldsToKeyValues(
+  ADataSet      : TDataSet;
+  AKeyValues    : TtsKeyValues;
+  const AFields : array of string
+);
 
 function PostData(ADataSet : TDataSet) : Boolean;
 

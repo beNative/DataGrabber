@@ -51,8 +51,10 @@ type
     { IDataSelection }
     procedure PrepareSelectionDataSet;
     procedure ResetSelectionDataSet;
-    procedure Update(const AFieldName  : string;
-                     const AFieldValue : Variant);
+    procedure Update(
+      const AFieldName  : string;
+      const AFieldValue : Variant
+    );
 
     property Data: IData
       read GetData;
