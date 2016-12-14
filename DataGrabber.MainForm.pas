@@ -334,7 +334,7 @@ procedure TfrmMain.UpdateStatusBar;
 var
   S: string;
 begin
-  if Assigned(Data) and  Assigned(Data.DataSet) and Data.DataSet.Active then
+  if Assigned(Data) and Assigned(Data.DataSet) and Data.DataSet.Active then
   begin
     pnlRecordCount.Caption := Format(SRecordCount, [Data.RecordCount]);
     pnlFieldCount.Caption  := Format(SFieldCount, [Data.DataSet.FieldCount]);

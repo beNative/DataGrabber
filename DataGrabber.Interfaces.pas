@@ -46,6 +46,7 @@ const
 
 type
   TConnectionViewList = TInterfaceList;
+  IEditorView = interface;
 
   IDGDataView = interface(IDataView)
     ['{B88F97B2-35BA-42A3-A35A-8122604E482B}']
@@ -198,6 +199,10 @@ type
 
     function GetForm: TForm;
     function GetActiveConnectionProfile: TConnectionProfile;
+    function GetEditorView: IEditorView;
+
+    property EditorView: IEditorView
+      read GetEditorView;
 
     property Form: TForm
       read GetForm;

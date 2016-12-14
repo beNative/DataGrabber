@@ -390,7 +390,7 @@ procedure TfrmcxGrid.tvwMainCustomDrawCell(Sender: TcxCustomGridTableView;
 var
   VTC: TcxValueTypeClass;
 begin
-  if Settings.GridCellColoring then
+  if Assigned(Settings) and Settings.GridCellColoring then
   begin
     if AViewInfo.Text = '0' then
       ACanvas.Font.Color := clBlue;

@@ -482,7 +482,7 @@ end;
 procedure TdmConnectionViewManager.actExecuteExecute(Sender: TObject);
 begin
   ActiveData.MaxRecords := 0;
-  Execute((ActiveConnectionView as IEditorView).Text);
+  Execute(ActiveConnectionView.EditorView.Text);
 end;
 
 procedure TdmConnectionViewManager.actProviderModeExecute(Sender: TObject);
@@ -650,7 +650,7 @@ begin
   try
     //pnlStatus.Caption := SFetchingData;
     //OptimizeWidth(pnlStatus);
-    Application.ProcessMessages;
+    //Application.ProcessMessages;
     //FScriptParser.ParseText(ASQL);
     ActiveData.SQL := ASQL;
 //    if FScriptParser.StatementCount = 0 then
@@ -665,7 +665,7 @@ begin
     ActiveData.Execute;
     FStopWatch.Stop;
     //OptimizeWidth(pnlStatus);
-    Application.ProcessMessages;
+    //Application.ProcessMessages;
 //    if FDataInspector.Visible then
 //    begin
 //      FDataInspector.Data := ActiveData;
