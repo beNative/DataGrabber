@@ -23,12 +23,12 @@ uses
 
   ts.Interfaces, ts.Data.Native,
 
-  FireDAC.Comp.DataSet;
+  FireDAC.DApt, FireDAC.Comp.DataSet, FireDAC.Comp.Client;
 
 type
   TNativeFireDACDataSet = class(TNativeDataSet, INativeDataSet)
   private
-    FDataSet: TFDDataSet;
+    FDataSet: TFDQuery;
 
   protected
     function GetDataSet: TDataSet; override;
@@ -48,11 +48,13 @@ uses
 procedure TNativeFireDACDataSet.AfterConstruction;
 begin
   inherited AfterConstruction;
-  FDataSet := TFDDataSet.Create(nil);
+  FDataSet := TFDQuery.Create(nil);
+  FDataSet.Connection := Connection.Connection as TFDConnection;
 end;
 
 procedure TNativeFireDACDataSet.BeforeDestruction;
 begin
+  FDataSet.Connection.Close;
   FreeAndNil(FDataSet);
   inherited BeforeDestruction;
 end;

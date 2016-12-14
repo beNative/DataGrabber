@@ -156,7 +156,7 @@ implementation
 uses
   System.UITypes,
 
-  Spring.Services,
+  Spring, Spring.Services,
 
   DDuce.Factories,
 
@@ -171,10 +171,13 @@ constructor TfrmConnectionView.Create(AOwner: TComponent;
   AEditorView: IEditorView; ADataView: IDGDataView; AData: IData);
 begin
   inherited Create(AOwner);
+  Guard.CheckNotNull(AEditorView, 'AEditorView');
+  Guard.CheckNotNull(ADataView, 'ADataView');
+  Guard.CheckNotNull(AData, 'AData');
   FEditorView     := AEditorView;
   FActiveDataView := ADataView;
-  ActiveDataView.AssignParent(pnlBottom);
   FActiveData     := AData;
+  ActiveDataView.AssignParent(pnlBottom);
 end;
 
 procedure TfrmConnectionView.AfterConstruction;

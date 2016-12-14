@@ -30,23 +30,23 @@ uses
 
   ts.Interfaces,
   {$IFDEF ADO}
-  ts.Connection.ADOConnectionAdaptor,
+  ts.Connection.ADOConnectionAdapter,
   {$ENDIF}
 
   {$IFDEF DBX}
-  ts.Connection.DBXConnectionAdaptor,
+  ts.Connection.DBXConnectionAdapter,
   {$ENDIF}
 
   {$IFDEF ZEOSDBO}
-    ts.Connection.ZEOSConnectionAdaptor,
+    ts.Connection.ZEOSConnectionAdapter,
   {$ENDIF}
 
   {$IFDEF UNIDAC}
-    ts.Connection.UNIConnectionAdaptor,
+    ts.Connection.UNIConnectionAdapter,
   {$ENDIF}
 
   {$IFDEF FIREDAC}
-    ts.Connection.FireDACConnectionAdaptor,
+    ts.Connection.FireDACConnectionAdapter,
   {$ENDIF}
 
   DataGrabber.ConnectionViewManager, DataGrabber.Settings,
@@ -84,35 +84,35 @@ begin
                  .Implements<IConnectionView>;
 
   {$IFDEF ADO}
-  GlobalContainer.RegisterType<TADOConnectionAdaptor>
+  GlobalContainer.RegisterType<TADOConnectionAdapter>
                  .Implements<IConnection>('ADO')
                  .AsSingleton(TRefCounting.True)
                  .AsPooled(MIN_POOLSIZE, MAX_POOLSIZE);
   {$ENDIF}
 
   {$IFDEF ZEOSDBO}
-  GlobalContainer.RegisterType<TZEOSConnectionAdaptor>
+  GlobalContainer.RegisterType<TZEOSConnectionAdapter>
                  .Implements<IConnection>('ZEOS')
                  .AsSingleton(TRefCounting.True)
                  .AsPooled(MIN_POOLSIZE, MAX_POOLSIZE);
   {$ENDIF}
 
   {$IFDEF UNIDAC}
-  GlobalContainer.RegisterType<TUNIConnectionAdaptor>
+  GlobalContainer.RegisterType<TUNIConnectionAdapter>
                  .Implements<IConnection>('UNI')
                  .AsSingleton(TRefCounting.True)
                  .AsPooled(MIN_POOLSIZE, MAX_POOLSIZE);
   {$ENDIF}
 
   {$IFDEF FIREDAC}
-  GlobalContainer.RegisterType<TFireDACConnectionAdaptor>
+  GlobalContainer.RegisterType<TFireDACConnectionAdapter>
                  .Implements<IConnection>('FireDAC')
                  .AsSingleton(TRefCounting.True)
                  .AsPooled(MIN_POOLSIZE, MAX_POOLSIZE);
   {$ENDIF}
 
   {$IFDEF DBX}
-  GlobalContainer.RegisterType<TDBXConnectionAdaptor>
+  GlobalContainer.RegisterType<TDBXConnectionAdapter>
                  .Implements<IConnection>('DBX')
                  .AsSingleton(TRefCounting.True)
                  .AsPooled(MIN_POOLSIZE, MAX_POOLSIZE);

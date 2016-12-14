@@ -27,9 +27,11 @@ uses
   FireDAC.Comp.Client,
   FireDAC.UI.Intf,
   FireDAC.Phys.Intf, FireDAC.Phys, FireDAC.Phys.ODBCBase, FireDAC.Phys.MSSQL,
-  FireDAC.Phys.PG, FireDAC.Phys.SqLite,
+  FireDAC.Phys.PG, FireDAC.Phys.SqLite, FireDAC.Phys.ODBCWrapper,
+  FireDAC.DApt.Intf, FireDAC.DApt,
+  FireDAC.VCLUI.Wait,
 
-  ts.Interfaces, ts.Connection, FireDAC.VCLUI.Wait;
+  ts.Interfaces, ts.Connection;
 
 type
   TdmFireDACConnection = class(TdmConnection, IConnection)

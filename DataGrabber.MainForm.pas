@@ -117,7 +117,7 @@ type
     ppmConnectionTypes            : TPopupMenu;
     ppmGridTypes                  : TPopupMenu;
     tlbMain                       : TToolBar;
-    mniFireDAC: TMenuItem;
+    mniFireDAC                    : TMenuItem;
     {$ENDREGION}
 
     {$REGION 'action handlers'}
@@ -190,7 +190,7 @@ uses
 procedure TfrmMain.AfterConstruction;
 begin
   inherited AfterConstruction;
-  FManager := GlobalContainer.Resolve<IConnectionViewManager>;
+  FManager  := GlobalContainer.Resolve<IConnectionViewManager>;
   FSettings := GlobalContainer.Resolve<IDGSettings>;
   AddConnectionView;
   tlbMain.DrawingStyle := dsNormal;
@@ -201,8 +201,8 @@ end;
 
 procedure TfrmMain.BeforeDestruction;
 begin
-//  FManager := nil;
-  //FSettings  := nil;
+  FManager := nil;
+  FSettings  := nil;
   inherited BeforeDestruction;
 end;
 {$ENDREGION}
@@ -269,12 +269,15 @@ var
   CV  : IConnectionView;
 begin
   LockPaint(Self);
-  CV := Manager.AddConnectionView;
-  CV.Form.Parent := pnlConnectionViews;
-  CV.Form.BorderStyle := bsNone;
-  CV.Form.Align := alClient;
-  CV.Form.Visible := True;
-  UnlockPaint(Self);
+  try
+    CV := Manager.AddConnectionView;
+    CV.Form.Parent := pnlConnectionViews;
+    CV.Form.BorderStyle := bsNone;
+    CV.Form.Align := alClient;
+    CV.Form.Visible := True;
+  finally
+    UnlockPaint(Self);
+  end;
 end;
 
 procedure TfrmMain.InitializeActions;

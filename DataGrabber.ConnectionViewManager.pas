@@ -256,7 +256,6 @@ end;
 
 procedure TdmConnectionViewManager.BeforeDestruction;
 begin
-  inherited;
 //  FreeAndNil(FDataInspector);
 
 //  FSettings.FormSettings.Assign(Self);
@@ -675,7 +674,7 @@ begin
 //      FFieldInspector.Data := ActiveData;
 //    end;
   finally
-//    Screen.Cursor := crDefault;
+    Screen.Cursor := crDefault;
 //    pnlStatus.Caption := 'Ready';
 //    pnlElapsedTime.Caption := Format('%d ms', [FStopWatch.ElapsedMilliseconds]);
   end;
@@ -754,7 +753,6 @@ begin
   //DV := GlobalContainer.Resolve<<IDGDataView>(Settings.GridType);
   DV := GlobalContainer.Resolve<IDGDataView>('cxGrid');
   DV.PopupMenu := ConnectionViewPopupMenu;
-  FActiveConnectionView := CV;
   FActiveDataView := DV;
   C := GlobalContainer.Resolve<IConnection>(Settings.ConnectionType);
   D            := TdmData.Create(Self, C);
