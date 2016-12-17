@@ -52,15 +52,23 @@ type
     ppmMain        : TcxGridPopupMenu;
     tvwMain        : TcxGridDBTableView;
 
-    procedure tvwMainCustomDrawGroupSummaryCell(Sender: TObject;
-      ACanvas: TcxCanvas; ARow: TcxGridGroupRow; AColumn: TcxGridColumn;
+    procedure tvwMainCustomDrawGroupSummaryCell(
+      Sender      : TObject;
+      ACanvas     : TcxCanvas;
+      ARow        : TcxGridGroupRow;
+      AColumn     : TcxGridColumn;
       ASummaryItem: TcxDataSummaryItem;
-      AViewInfo: TcxCustomGridViewCellViewInfo; var ADone: Boolean);
-    procedure tvwMainCustomDrawCell(Sender: TcxCustomGridTableView;
-      ACanvas: TcxCanvas; AViewInfo: TcxGridTableDataCellViewInfo;
-      var ADone: Boolean);
+      AViewInfo   : TcxCustomGridViewCellViewInfo;
+      var ADone   : Boolean
+    );
+    procedure tvwMainCustomDrawCell(
+      Sender   : TcxCustomGridTableView;
+      ACanvas  : TcxCanvas;
+      AViewInfo: TcxGridTableDataCellViewInfo;
+      var ADone: Boolean
+    );
 
-  strict private
+  private
     FSettings               : IDataViewSettings;
     FMergeColumnCells       : Boolean;
     FAutoSizeCols           : Boolean;
@@ -85,31 +93,39 @@ type
     procedure SetEmptyColumnsVisible(const Value: Boolean);
     function GetSettings: IDataViewSettings;
     procedure SetSettings(const Value: IDataViewSettings);
-
-  protected
-    procedure CopySelectionToClipboard(AController: TcxGridTableController;
-      AIncludeHeader: Boolean = False);
-    function SelectionToDelimitedTable(
-      AController: TcxGridTableController;
-      ADelimiter : string = #9; // TAB
-      AIncludeHeader: Boolean = True): string; overload;
-    function SelectionToCommaText(AController: TcxGridTableController;
-      AQuoteItems: Boolean = True): string; overload;
-    function SelectionToFields(AController: TcxGridTableController;
-      AQuoteItems: Boolean = True): string; overload;
-    function SelectionToTextTable(
-      AController: TcxGridTableController;
-      AIncludeHeader: Boolean = False): string; overload;
-    function SelectionToWikiTable(
-      AController: TcxGridTableController;
-      AIncludeHeader: Boolean = False): string; overload;
-  private
     function GetData: IData;
     procedure SetData(const Value: IData);
     function GetPopupMenu: TPopupMenu; reintroduce;
     procedure SetPopupMenu(const Value: TPopupMenu);
+    function GetGridType: string;
 
   protected
+    procedure CopySelectionToClipboard(
+      AController   : TcxGridTableController;
+      AIncludeHeader: Boolean = False
+    );
+    function SelectionToDelimitedTable(
+      AController   : TcxGridTableController;
+      ADelimiter    : string = #9; // TAB
+      AIncludeHeader: Boolean = True
+    ): string; overload;
+    function SelectionToCommaText(
+      AController: TcxGridTableController;
+      AQuoteItems: Boolean = True
+    ): string; overload;
+    function SelectionToFields(
+      AController: TcxGridTableController;
+      AQuoteItems: Boolean = True
+    ): string; overload;
+    function SelectionToTextTable(
+      AController   : TcxGridTableController;
+      AIncludeHeader: Boolean = False
+    ): string; overload;
+    function SelectionToWikiTable(
+      AController   : TcxGridTableController;
+      AIncludeHeader: Boolean = False
+    ): string; overload;
+
     procedure UpdateColumnLists;
 
   public
@@ -140,7 +156,6 @@ type
     ): string; overload;
     function SelectionToCommaText(AQuoteItems: Boolean = True): string;
       overload;
-
     function SelectionToFields(AQuoteItems: Boolean = True): string; overload;
 
     property DataSet: TDataSet
@@ -172,6 +187,9 @@ type
 
     property PopupMenu: TPopupMenu
       read GetPopupMenu write SetPopupMenu;
+
+    property GridType: string
+      read GetGridType;
   end;
 
 implementation
@@ -325,6 +343,11 @@ end;
 function TfrmcxGrid.GetGridMode: Boolean;
 begin
   Result := tvwMain.DataController.DataModeController.GridMode;
+end;
+
+function TfrmcxGrid.GetGridType: string;
+begin
+  Result := 'cxGrid';
 end;
 
 procedure TfrmcxGrid.SetGridMode(const Value: Boolean);

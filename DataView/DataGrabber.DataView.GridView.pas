@@ -99,6 +99,8 @@ type
       const AFieldName  : string;
       const AFieldValue : Variant
     );
+  private
+    function GetGridType: string;
 
   public
     constructor Create; reintroduce;
@@ -146,6 +148,9 @@ type
 
     property PopupMenu: TPopupMenu
       read GetPopupMenu write SetPopupMenu;
+
+    property GridType: string
+      read GetGridType;
   end;
 
 implementation
@@ -240,6 +245,11 @@ end;
 function TfrmGridView.GetEmptyColumnsVisible: Boolean;
 begin
   Result := FEmptyColumnsVisible;
+end;
+
+function TfrmGridView.GetGridType: string;
+begin
+  Result := 'GridView';
 end;
 
 procedure TfrmGridView.SetEmptyColumnsVisible(const Value: Boolean);

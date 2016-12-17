@@ -25,7 +25,7 @@ uses
   Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, Vcl.ToolWin,
   Vcl.StdCtrls, Vcl.ComCtrls, Vcl.ActnList, Vcl.Grids, Vcl.Buttons, Vcl.ImgList,
 
-  VirtualTrees,
+  VirtualTrees, zObjInspector,
 
   DDuce.Components.PropertyInspector, DDuce.Components.XMLTree,
 
@@ -89,6 +89,7 @@ type
     tsConnectionProfiles           : TTabSheet;
     tsDisplay                      : TTabSheet;
     tsXML                          : TTabSheet;
+    dlgColor                       : TColorDialog;
     {$ENDREGION}
 
     procedure actApplyExecute(Sender: TObject);
@@ -115,6 +116,11 @@ type
       Column: TColumnIndex; Shift: TShiftState);
 //    procedure xtrSettingsCheckNode(Sender: TXMLTree; Node: PVirtualNode;
 //      var NewXmlNode: IXMLDOMNode; var NewNodeType: Integer; var Add: Boolean);
+
+    function FObjectInspectorBeforeAddItem(
+      Sender : TControl;
+      PItem  : PPropItem
+    ): Boolean;
 
     procedure vstProfilesGetText(
       Sender       : TBaseVirtualTree;
@@ -147,7 +153,10 @@ type
   private
     FSettings            : IDGSettings;
     FApplySettingsMethod : TApplySettingsMethod;
-    piConnectionProfiles : TPropertyInspector;
+    //piConnectionProfiles : TPropertyInspector;
+    //piConnectionProfiles :
+    FObjectInspector : TzObjectInspector;
+    FObjectHost      : TzObjectHost;
     vstProfiles          : TVirtualStringTree;
     //xtrSettings          : TXMLTree;
 
@@ -182,6 +191,8 @@ implementation
 {$R *.dfm}
 
 uses
+  System.Rtti,
+
   ts.Utils, ts.Interfaces,
   Data.DBConnAdmin, Data.Win.ADOConEd, Data.Win.ADODB,
 
@@ -215,6 +226,12 @@ begin
   FSettings := ASettings;
 end;
 
+function TfrmSettingsDialog.FObjectInspectorBeforeAddItem(Sender: TControl;
+  PItem: PPropItem): Boolean;
+begin
+  Result := not (PItem.Prop.PropertyType is TRttiMethodType);
+end;
+
 procedure TfrmSettingsDialog.AfterConstruction;
 begin
   inherited AfterConstruction;
@@ -225,8 +242,13 @@ begin
 //  xtrSettings.OnEditing        := xtrSettingsEditing;
 //  xtrSettings.OnPaintText      := xtrSettingsPaintText;
 
-  piConnectionProfiles := CreateInspector(Self, pnlConnectionProfilesInspector);
-  piConnectionProfiles.OnGetEditorClass := piConnectionProfilesGetEditorClass;
+//  piConnectionProfiles := CreateInspector(Self, pnlConnectionProfilesInspector);
+//  piConnectionProfiles.OnGetEditorClass := piConnectionProfilesGetEditorClass;
+
+  FObjectInspector := TFactories.CreatezObjectInspector(Self, pnlConnectionProfilesInspector);
+  FObjectInspector.SplitterPos     := FObjectInspector.Width div 2;
+  FObjectInspector.SortByCategory  := False;
+  FObjectInspector.OnBeforeAddItem := FObjectInspectorBeforeAddItem;
   InitializeControls;
 end;
 
@@ -286,7 +308,7 @@ procedure TfrmSettingsDialog.actDeleteExecute(Sender: TObject);
 begin
   vstProfiles.BeginUpdate;
   try
-    piConnectionProfiles.Clear;
+    FObjectInspector.Component := nil;
     FSettings.ConnectionProfiles.Delete(vstProfiles.FocusedNode.Index);
     SelectNode(vstProfiles, FSettings.ConnectionProfiles.Count - 1);
   finally
@@ -432,7 +454,7 @@ begin
   FSettings.GridCellColoring := chkGridCellColoringEnabled.Checked;
   FSettings.ConnectionType := rgpConnectionType.Items
     [rgpConnectionType.ItemIndex];
-//  FSettings.GridType := rgpGridTypes.Items[rgpGridTypes.ItemIndex];
+  FSettings.GridType := rgpGridTypes.Items[rgpGridTypes.ItemIndex];
   if Assigned(ApplySettingsMethod) then
     ApplySettingsMethod;
 end;
@@ -446,8 +468,8 @@ procedure TfrmSettingsDialog.InitializeControls;
 var
   I  : Integer;
   C  : IConnection;
-//  DV : IDGDataView;
-//  S  : string;
+  DV : IDGDataView;
+  S  : string;
 begin
 //  btnGridBooleanColor.SelectionColor  := FSettings.DataTypeColors[dtBoolean];
 //  btnGridDateColor.SelectionColor     := FSettings.DataTypeColors[dtDate];
@@ -472,10 +494,10 @@ begin
  // xtrSettings.OnCheckNode := xtrSettingsCheckNode;
   //xtrSettings.Xml := FSettings.XML;
 
-  piConnectionProfiles        := TPropertyInspector.Create(Self);
-  piConnectionProfiles.Parent := pnlConnectionProfilesInspector;
-  piConnectionProfiles.Align  := alClient;
-  piConnectionProfiles.OnGetEditorClass := piConnectionProfilesGetEditorClass;
+//  piConnectionProfiles        := TPropertyInspector.Create(Self);
+//  piConnectionProfiles.Parent := pnlConnectionProfilesInspector;
+//  piConnectionProfiles.Align  := alClient;
+//  piConnectionProfiles.OnGetEditorClass := piConnectionProfilesGetEditorClass;
   rgpConnectionType.Items.Clear;
 
   vstProfiles := TFactories.CreateVirtualStringTree(Self, pnlConnectionProfilesList);
@@ -490,14 +512,24 @@ begin
       rgpConnectionType.ItemIndex := I;
   end;
 
-  rgpGridTypes.Items.Clear;
+//  rgpGridTypes.Items.Clear;
 //  for DV in GlobalContainer.ResolveAll<IDGDataView> do
 //  begin
-//    S := DV.Name;
+//    S := DV.GridType;
 //    I := rgpGridTypes.Items.Add(S);
 //    if SameText(S, FSettings.GridType) then
 //      rgpGridTypes.ItemIndex := I;
 //  end;
+    I := 0;
+    S := 'GridView';
+    I := rgpGridTypes.Items.Add(S);
+    if SameText(S, FSettings.GridType) then
+      rgpGridTypes.ItemIndex := I;
+    S := 'cxGrid';
+    I := rgpGridTypes.Items.Add(S);
+    if SameText(S, FSettings.GridType) then
+      rgpGridTypes.ItemIndex := I;
+
 
   vstProfiles.RootNodeCount := FSettings.ConnectionProfiles.Count;
   SetWindowSizeGrip(Handle, True);
@@ -509,35 +541,54 @@ var
 begin
   if AIndex >= FSettings.ConnectionProfiles.Count then
     AIndex := FSettings.ConnectionProfiles.Count - 1;
-  piConnectionProfiles.BeginUpdate;
+
+  FObjectInspector.BeginUpdate;
   try
-    piConnectionProfiles.Clear;
-    piConnectionProfiles.Add(FSettings.ConnectionProfiles[AIndex]);
-    piConnectionProfiles.Designer := FSettings.ConnectionProfiles[AIndex];
-    for I := 0 to piConnectionProfiles.Items.Count - 1 do
-    begin
-      if piConnectionProfiles.Items[I].Expandable = mieYes then
-        piConnectionProfiles.Items[I].Expand;
-    end;
+    //FObjectInspector.Clear;
+    //FObjectHost.Free;
+    FObjectInspector.Component := FSettings.ConnectionProfiles[AIndex];
+//    FObjectHost := TzObjectHost.Create;
+//    FObjectInspector.Add(FSettings.ConnectionProfiles[AIndex]);
+//    FObjectInspector.Designer := FSettings.ConnectionProfiles[AIndex];
+//    for I := 0 to FObjectInspector.Items.Count - 1 do
+//    begin
+//      if FObjectInspector.Items[I].Expandable = mieYes then
+//        FObjectInspector.Items[I].Expand;
+//    end;
   finally
-    piConnectionProfiles.EndUpdate;
+    FObjectInspector.EndUpdate;
   end;
+
+
+//  piConnectionProfiles.BeginUpdate;
+//  try
+//    piConnectionProfiles.Clear;
+//    piConnectionProfiles.Add(FSettings.ConnectionProfiles[AIndex]);
+//    piConnectionProfiles.Designer := FSettings.ConnectionProfiles[AIndex];
+//    for I := 0 to piConnectionProfiles.Items.Count - 1 do
+//    begin
+//      if piConnectionProfiles.Items[I].Expandable = mieYes then
+//        piConnectionProfiles.Items[I].Expand;
+//    end;
+//  finally
+//    piConnectionProfiles.EndUpdate;
+//  end;
 end;
 
 procedure TfrmSettingsDialog.UpdateActions;
-//var
-//  B: Boolean;
+var
+  B: Boolean;
 begin
   inherited;
-//  B := chkProviderMode.Checked;
-//  chkFetchOnDemand.Enabled := B;
-//  edtPacketRecords.Enabled := B and chkFetchOnDemand.Checked;
-//  lblPacketrecords.Enabled := B and chkFetchOnDemand.Checked;
-//  B := Assigned(vstProfiles.FocusedNode);
-//  actMoveUp.Enabled := B and (vstProfiles.FocusedNode.Index > 0);
-//  actMoveDown.Enabled := B
-//    and (vstProfiles.FocusedNode.Index < vstProfiles.RootNodeCount - 1);
-//  actDelete.Enabled := B;
+  B := chkProviderMode.Checked;
+  chkFetchOnDemand.Enabled := B;
+  edtPacketRecords.Enabled := B and chkFetchOnDemand.Checked;
+  lblPacketrecords.Enabled := B and chkFetchOnDemand.Checked;
+  B := Assigned(vstProfiles.FocusedNode);
+  actMoveUp.Enabled := B and (vstProfiles.FocusedNode.Index > 0);
+  actMoveDown.Enabled := B
+    and (vstProfiles.FocusedNode.Index < vstProfiles.RootNodeCount - 1);
+  actDelete.Enabled := B;
 end;
 {$ENDREGION}
 

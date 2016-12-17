@@ -750,13 +750,14 @@ var
   C  : IConnection;
 begin
   EV := GlobalContainer.Resolve<IEditorView>;
-  //DV := GlobalContainer.Resolve<<IDGDataView>(Settings.GridType);
-  DV := GlobalContainer.Resolve<IDGDataView>('cxGrid');
+  DV := GlobalContainer.Resolve<IDGDataView>(Settings.GridType);
+  //DV := GlobalContainer.Resolve<IDGDataView>('cxGrid');
+  DV.Settings := FSettings as IDataViewSettings;
   DV.PopupMenu := ConnectionViewPopupMenu;
   FActiveDataView := DV;
   C := GlobalContainer.Resolve<IConnection>(Settings.ConnectionType);
-  D            := TdmData.Create(Self, C);
-  DV.Data      := D;
+  D           := TdmData.Create(Self, C);
+  DV.Data     := D;
   FActiveData := D;
   FActiveDataView := DV;
   CV := TfrmConnectionView.Create(Self, EV, DV, D);

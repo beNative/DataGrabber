@@ -261,7 +261,7 @@ begin
   FFavoriteFields := TStringList.Create;
   TStringList(FFavoriteFields).Sorted     := True;
   TStringList(FFavoriteFields).Duplicates := dupIgnore;
-  FProfileColor                         := clWhite;
+  FProfileColor                           := clWhite;
   // Add your property storage initializations here.
 end;
 
@@ -270,7 +270,7 @@ begin
   FreeAndNil(FVisibleItems);
   FreeAndNil(FFavoriteFields);
   FreeAndNil(FConnectionSettings);
-  inherited;
+  inherited Destroy;
 end;
 {$ENDREGION}
 

@@ -48,6 +48,7 @@ type
     FSettings               : IDataViewSettings;
 
     function GetName: string;
+    function GetGridType: string;
 
   protected
     // property access methods
@@ -95,6 +96,9 @@ type
     property EmptyColumnsVisible: Boolean
       read GetEmptyColumnsVisible write SetEmptyColumnsVisible;
 
+    property GridType: string
+      read GetGridType;
+
   published
     property Name: string
       read GetName;
@@ -127,6 +131,11 @@ end;
 function TfrmDataView.GetEmptyColumnsVisible: Boolean;
 begin
   Result := FEmptyColumnsVisible;
+end;
+
+function TfrmDataView.GetGridType: string;
+begin
+  Result := '';
 end;
 
 function TfrmDataView.GetName: string;

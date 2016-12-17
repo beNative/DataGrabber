@@ -155,11 +155,15 @@ type
 //    procedure AfterExecute;
 
     function GetName: string;
+    function GetGridType: string;
     function GetSettings: IDataViewSettings;
     procedure SetSettings(const Value: IDataViewSettings);
 
     property Name: string
       read GetName;
+
+    property GridType: string
+      read GetGridType;
   end;
 
   IData = interface
@@ -276,7 +280,6 @@ type
       read GetOnAfterUpdateData write SetOnAfterUpdateData;
   end;
 
-type
   IDataSelection = interface
   ['{0E93F473-9BED-459B-AFF6-7FCCEB921991}']
     function GetSelectionDataSet : TDataSet;
@@ -322,8 +325,6 @@ type
       read GetPrepared write SetPrepared;
   end;
   *)
-
-//-----------------------------------------------------------------------------
 
   { currently targeted at TDBGridView, should be more generic... }
   IListSettings = interface

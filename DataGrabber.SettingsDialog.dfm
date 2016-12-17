@@ -2,7 +2,7 @@ object frmSettingsDialog: TfrmSettingsDialog
   Left = 0
   Top = 0
   ClientHeight = 449
-  ClientWidth = 388
+  ClientWidth = 490
   Color = clBtnFace
   Constraints.MinHeight = 476
   Constraints.MinWidth = 396
@@ -17,7 +17,7 @@ object frmSettingsDialog: TfrmSettingsDialog
   Position = poMainFormCenter
   ShowHint = True
   DesignSize = (
-    388
+    490
     449)
   PixelsPerInch = 96
   TextHeight = 13
@@ -25,7 +25,7 @@ object frmSettingsDialog: TfrmSettingsDialog
     AlignWithMargins = True
     Left = 3
     Top = 3
-    Width = 382
+    Width = 484
     Height = 406
     ActivePage = tsConnectionProfiles
     Align = alTop
@@ -35,21 +35,19 @@ object frmSettingsDialog: TfrmSettingsDialog
     object tsConnection: TTabSheet
       Caption = 'Connection'
       ImageIndex = 10
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
+      ExplicitWidth = 446
       DesignSize = (
-        374
+        476
         377)
       object grpConnectionSettings: TGroupBox
         Left = 3
         Top = 55
-        Width = 368
+        Width = 470
         Height = 146
         Anchors = [akLeft, akTop, akRight]
         Caption = 'Connection Settings'
         TabOrder = 0
+        ExplicitWidth = 440
         object lblPacketrecords: TLabel
           Left = 152
           Top = 44
@@ -122,7 +120,7 @@ object frmSettingsDialog: TfrmSettingsDialog
       object rgpConnectionType: TRadioGroup
         Left = 3
         Top = 3
-        Width = 368
+        Width = 470
         Height = 46
         Anchors = [akLeft, akTop, akRight]
         Caption = 'Connection Method'
@@ -133,6 +131,7 @@ object frmSettingsDialog: TfrmSettingsDialog
           'DBX'
           'ZEOS')
         TabOrder = 1
+        ExplicitWidth = 440
       end
       object btnConnectionString: TButton
         Left = 3
@@ -146,16 +145,13 @@ object frmSettingsDialog: TfrmSettingsDialog
     object tsDisplay: TTabSheet
       Caption = 'Display'
       ImageIndex = 5
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
+      ExplicitWidth = 374
       DesignSize = (
-        374
+        476
         377)
       object grpCellBackgroundColoring: TGroupBox
         Left = 3
-        Top = 54
+        Top = 56
         Width = 162
         Height = 294
         Caption = 'Grid cell background coloring'
@@ -237,21 +233,19 @@ object frmSettingsDialog: TfrmSettingsDialog
       object rgpGridTypes: TRadioGroup
         Left = 3
         Top = 1
-        Width = 368
+        Width = 470
         Height = 49
         Anchors = [akLeft, akTop, akRight]
         Caption = 'Grid type'
         Columns = 4
         TabOrder = 1
+        ExplicitWidth = 368
       end
     end
     object tsConnectionProfiles: TTabSheet
       Caption = 'Connection Profiles'
       ImageIndex = 9
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
+      ExplicitWidth = 446
       object splVertical: TSplitter
         Left = 185
         Top = 0
@@ -261,11 +255,12 @@ object frmSettingsDialog: TfrmSettingsDialog
       object pnlConnectionProfilesInspector: TPanel
         Left = 192
         Top = 0
-        Width = 182
+        Width = 284
         Height = 377
         Align = alClient
         BevelOuter = bvNone
         TabOrder = 0
+        ExplicitWidth = 254
       end
       object pnlConnectionProfilesList: TPanel
         Left = 0
@@ -314,14 +309,12 @@ object frmSettingsDialog: TfrmSettingsDialog
     object tsXML: TTabSheet
       Caption = 'XML settings'
       ImageIndex = 11
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
+      TabVisible = False
+      ExplicitWidth = 446
     end
   end
   object btnApply: TButton
-    Left = 219
+    Left = 321
     Top = 416
     Width = 80
     Height = 25
@@ -332,9 +325,10 @@ object frmSettingsDialog: TfrmSettingsDialog
     ImageMargins.Right = 4
     Images = imlMain
     TabOrder = 1
+    ExplicitLeft = 219
   end
   object btnClose: TButton
-    Left = 305
+    Left = 407
     Top = 416
     Width = 80
     Height = 25
@@ -345,9 +339,10 @@ object frmSettingsDialog: TfrmSettingsDialog
     Images = imlMain
     ModalResult = 11
     TabOrder = 2
+    ExplicitLeft = 305
   end
   object btnCancel: TButton
-    Left = 47
+    Left = 149
     Top = 416
     Width = 80
     Height = 25
@@ -360,9 +355,10 @@ object frmSettingsDialog: TfrmSettingsDialog
     Images = imlMain
     ModalResult = 2
     TabOrder = 3
+    ExplicitLeft = 47
   end
   object btnSave: TButton
-    Left = 133
+    Left = 235
     Top = 416
     Width = 80
     Height = 25
@@ -373,6 +369,7 @@ object frmSettingsDialog: TfrmSettingsDialog
     Images = imlMain
     SelectedImageIndex = 0
     TabOrder = 4
+    ExplicitLeft = 133
   end
   object aclMain: TActionList
     Images = imlMain
@@ -982,5 +979,9 @@ object frmSettingsDialog: TfrmSettingsDialog
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
       000000000000}
+  end
+  object dlgColor: TColorDialog
+    Left = 386
+    Top = 348
   end
 end

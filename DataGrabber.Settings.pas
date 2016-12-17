@@ -118,7 +118,7 @@ type
       read GetFetchOnDemand write SetFetchOnDemand;
 
     property GridCellColoring: Boolean
-      read GetGridCellColoring write SetGridCellColoring;
+      read GetGridCellColoring write SetGridCellColoring default True;
 
     property ConnectionString: string
       read GetConnectionString write SetConnectionString;
@@ -176,6 +176,7 @@ begin
   FFormSettings := TFormSettings.Create;
   FConnectionProfiles := TConnectionProfiles.Create(Self);
   FFileName := SETTINGS_FILE;
+  FGridCellColoring := True;
 end;
 
 procedure TDGSettings.BeforeDestruction;
