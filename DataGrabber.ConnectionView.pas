@@ -425,15 +425,15 @@ end;
 procedure TfrmConnectionView.UpdateActions;
 begin
   inherited;
-//  if ContainsFocus(Self) then
-//  begin
-//    if Manager.ActiveConnectionView <> (Self as IConnectionView) then
-//    begin
-//      Manager.ActiveConnectionView := Self;
-//      EditorView.SetFocus;
-//    end;
-//    Manager.UpdateActions;
-//  end;
+  if ContainsFocus(Self) then
+  begin
+    if Manager.ActiveConnectionView <> (Self as IConnectionView) then
+    begin
+      Manager.ActiveConnectionView := Self;
+      EditorView.SetFocus;
+    end;
+    Manager.UpdateActions;
+  end;
 end;
 {$ENDREGION}
 

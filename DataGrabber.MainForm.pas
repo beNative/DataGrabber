@@ -194,6 +194,7 @@ begin
   FSettings := GlobalContainer.Resolve<IDGSettings>;
   AddConnectionView;
   tlbMain.DrawingStyle := dsNormal;
+  tlbMain.Images       := FManager.ActionList.Images;
   InitializeActions;
   pnlStatus.Caption := SReady;
   SetWindowSizeGrip(pnlStatusBar.Handle, True);

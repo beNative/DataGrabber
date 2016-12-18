@@ -245,6 +245,7 @@ type
 
     property ConnectionViewPopupMenu: TPopupMenu
       read GetConnectionViewPopupMenu;
+
   end;
 
   IEditorView = interface

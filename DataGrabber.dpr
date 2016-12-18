@@ -237,7 +237,8 @@ uses
   BCEditor.Search.Wildcard in '..\..\components\TBCEditor\Source\BCEditor.Search.Wildcard.pas',
   BCEditor.StyleHooks in '..\..\components\TBCEditor\Source\BCEditor.StyleHooks.pas',
   BCEditor.Types in '..\..\components\TBCEditor\Source\BCEditor.Types.pas',
-  BCEditor.Utils in '..\..\components\TBCEditor\Source\BCEditor.Utils.pas';
+  BCEditor.Utils in '..\..\components\TBCEditor\Source\BCEditor.Utils.pas',
+  uCustomImageDrawHook in 'uCustomImageDrawHook.pas';
 
 {$R *.res}
 

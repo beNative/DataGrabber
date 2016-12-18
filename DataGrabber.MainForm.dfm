@@ -349,7 +349,7 @@ object frmMain: TfrmMain
     end
   end
   object ppmConnectionTypes: TPopupMenu
-    Left = 16
+    Left = 40
     Top = 88
     object mniADO: TMenuItem
       AutoCheck = True
@@ -372,7 +372,7 @@ object frmMain: TfrmMain
     end
   end
   object ppmGridTypes: TPopupMenu
-    Left = 128
+    Left = 152
     Top = 88
     object mnicxGrid: TMenuItem
       AutoCheck = True

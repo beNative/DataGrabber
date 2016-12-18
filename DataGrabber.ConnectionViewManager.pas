@@ -216,7 +216,6 @@ type
 
     property ConnectionViewPopupMenu: TPopupMenu
       read GetConnectionViewPopupMenu;
-
   end;
 
 implementation
@@ -249,9 +248,15 @@ begin
 //  FDataInspector.HideEmptyFields := True;
 
   // disable actions that are not fully implemented yet
-//  actSyncEditorWithRepository.Visible := False;
-//  actToggleRepositoryTree.Visible     := False;
-//  actCreateModel.Visible              := False;
+  actSyncEditorWithRepository.Visible := False;
+  actToggleRepositoryTree.Visible     := False;
+  actCreateModel.Visible              := False;
+  actPreview.Visible                  := False;
+  actPrint.Visible                    := False;
+  actDesigner.Visible                 := False;
+  actFavoriteFieldsOnly.Visible       := False;
+  actRtti.Visible                     := False;
+  actToggleFullScreen.Visible         := False;
 end;
 
 procedure TdmConnectionViewManager.BeforeDestruction;

@@ -19,6 +19,7 @@ object dmConnectionViewManager: TdmConnectionViewManager
       Category = 'Grid'
       AutoCheck = True
       Caption = 'Hide empty'
+      ImageIndex = 28
       ShortCut = 16453
       OnExecute = actHideEmptyColumnsExecute
     end
@@ -35,12 +36,14 @@ object dmConnectionViewManager: TdmConnectionViewManager
     object actExecuteLimited: TAction
       Category = 'Data'
       Caption = 'Execute Limited'
+      ImageIndex = 13
       ShortCut = 16500
       OnExecute = actExecuteLimitedExecute
     end
     object actHideSelectedColumns: TAction
       Category = 'Grid'
       Caption = 'Hide selected'
+      ImageIndex = 28
       ShortCut = 16456
       OnExecute = actHideSelectedColumnsExecute
     end
@@ -48,6 +51,7 @@ object dmConnectionViewManager: TdmConnectionViewManager
       Category = 'Grid'
       AutoCheck = True
       Caption = 'Hide constant'
+      ImageIndex = 24
       ShortCut = 16459
       OnExecute = actHideConstantColumnsExecute
     end
@@ -83,11 +87,13 @@ object dmConnectionViewManager: TdmConnectionViewManager
     object actFormatSQL: TAction
       Category = 'Editor'
       Caption = 'Format SQL'
+      ImageIndex = 14
       ShortCut = 119
     end
     object actToggleFullScreen: TAction
       AutoCheck = True
       Caption = 'Toggle full screen'
+      ImageIndex = 15
       ShortCut = 122
     end
     object actCopy: TAction
@@ -116,6 +122,7 @@ object dmConnectionViewManager: TdmConnectionViewManager
       Category = 'Grid'
       AutoCheck = True
       Caption = 'Merge cells'
+      ImageIndex = 23
       ShortCut = 49229
       OnExecute = actMergeCellsExecute
     end
@@ -127,16 +134,19 @@ object dmConnectionViewManager: TdmConnectionViewManager
     object actStartTransaction: TAction
       Category = 'Data'
       Caption = 'Start'
+      ImageIndex = 5
       OnExecute = actStartTransactionExecute
     end
     object actCommitTransaction: TAction
       Category = 'Data'
       Caption = 'Commit'
+      ImageIndex = 6
       OnExecute = actCommitTransactionExecute
     end
     object actRollbackTransaction: TAction
       Category = 'Data'
       Caption = 'Rollback'
+      ImageIndex = 4
       OnExecute = actRollbackTransactionExecute
     end
     object actProviderMode: TAction
@@ -201,6 +211,7 @@ object dmConnectionViewManager: TdmConnectionViewManager
     end
     object actSettings: TAction
       Caption = 'Settings'
+      ImageIndex = 20
       OnExecute = actSettingsExecute
     end
     object actVirtualDBGrid: TAction
@@ -293,6 +304,7 @@ object dmConnectionViewManager: TdmConnectionViewManager
     end
   end
   object ppmConnectionView: TPopupMenu
+    Images = imlMain
     Left = 32
     Top = 16
     object mniGroupBySelection: TMenuItem
@@ -372,6 +384,7 @@ object dmConnectionViewManager: TdmConnectionViewManager
     end
   end
   object ppmEditorView: TPopupMenu
+    Images = imlMain
     Left = 128
     Top = 16
     object mniFormatSQL1: TMenuItem
