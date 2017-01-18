@@ -69,6 +69,7 @@ object dmConnectionViewManager: TdmConnectionViewManager
       Category = 'Grid'
       AutoCheck = True
       Caption = 'Merge column cells'
+      ImageIndex = 23
       ShortCut = 16461
       OnExecute = actMergeAllColumnCellsExecute
     end
@@ -211,7 +212,7 @@ object dmConnectionViewManager: TdmConnectionViewManager
     end
     object actSettings: TAction
       Caption = 'Settings'
-      ImageIndex = 20
+      ImageIndex = 2
       OnExecute = actSettingsExecute
     end
     object actVirtualDBGrid: TAction

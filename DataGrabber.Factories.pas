@@ -1,5 +1,5 @@
 {
-  Copyright (C) 2013-2016 Tim Sinaeve tim.sinaeve@gmail.com
+  Copyright (C) 2013-2017 Tim Sinaeve tim.sinaeve@gmail.com
 
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
@@ -53,24 +53,25 @@ procedure AddToolbarButtons(AToolBar: TToolbar; AManager: IConnectionViewManager
 
 begin
   AddButton('actSettings');
-  AddButton('actExecute');
-  AddButton('actCreateModel');
-  AddButton('actProviderMode');
-  AddButton('actToggleFullScreen');
-  AddButton('actRTTI');
-  AddButton('actSyncEditorWithRepository');
-  AddButton('actToggleRepositoryTree');
-
-  AddButton('actHideEmptyColumns');
+  //AddButton('actFavoriteFieldsOnly');
   AddButton('actShowAllColumns');
+  AddButton('actMergeAllColumnCells');
+  AddButton('actAutoSizeCols');
   AddButton('actHideSelectedColumns');
   AddButton('actHideConstantColumns');
-  AddButton('actMergeAllColumnCells');
-  AddButton('actFavoriteFieldsOnly');
-  AddButton('actAutoSizeCols');
-  AddButton('actPreview');
-  AddButton('actDesigner');
-  AddButton('actPrint');
+  AddButton('actHideEmptyColumns');
+  AddButton('actExecute');
+//  AddButton('actCreateModel');
+//  AddButton('actProviderMode');
+//  AddButton('actToggleFullScreen');
+//  AddButton('actRTTI');
+//  AddButton('actSyncEditorWithRepository');
+//  AddButton('actToggleRepositoryTree');
+
+
+//  AddButton('actPreview');
+//  AddButton('actDesigner');
+//  AddButton('actPrint');
 
   //AddButton('actAddConnectionView');
 end;
