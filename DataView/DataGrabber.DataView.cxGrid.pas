@@ -32,6 +32,8 @@ uses
   cxLookAndFeels, cxLookAndFeelPainters, cxGridCardView, cxGridBandedTableView,
   cxGridDBCardView, cxGridDBBandedTableView, cxNavigator,
 
+  Spring.Collections,
+
   ts.Interfaces,
 
   DataGrabber.Interfaces;
@@ -72,8 +74,8 @@ type
     FSettings               : IDataViewSettings;
     FMergeColumnCells       : Boolean;
     FAutoSizeCols           : Boolean;
-    FEmptyCols              : TObjectList<TcxGridDBColumn>;
-    FConstCols              : TObjectList<TcxGridDBColumn>;
+    FEmptyCols              : IList<TcxGridDBColumn>;
+    FConstCols              : IList<TcxGridDBColumn>;
     FEmptyColumnsVisible    : Boolean;
     FConstantColumnsVisible : Boolean;
     FData                   : IData;
@@ -253,9 +255,9 @@ end;
 
 procedure TfrmcxGrid.AfterConstruction;
 begin
-  inherited;
-  FEmptyCols := TObjectList<TcxGridDBColumn>.Create(False);
-  FConstCols := TObjectList<TcxGridDBColumn>.Create(False);
+  inherited AfterConstruction;
+  FEmptyCols := TCollections.CreateObjectList<TcxGridDBColumn>(False);
+  FConstCols := TCollections.CreateObjectList<TcxGridDBColumn>(False);
   FConstantColumnsVisible := True;
   FEmptyColumnsVisible    := True;
   FAutoSizeCols := True;
@@ -264,11 +266,9 @@ end;
 
 procedure TfrmcxGrid.BeforeDestruction;
 begin
-  inherited;
+  inherited BeforeDestruction;
   if Assigned(FData) then
     FData.UnRegisterDataView(Self);
-  FreeAndNil(FEmptyCols);
-  FreeAndNil(FConstCols);
 end;
 {$ENDREGION}
 
