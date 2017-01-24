@@ -153,8 +153,6 @@ type
   private
     FSettings            : IDGSettings;
     FApplySettingsMethod : TApplySettingsMethod;
-    //piConnectionProfiles : TPropertyInspector;
-    //piConnectionProfiles :
     FObjectInspector : TzObjectInspector;
     FObjectHost      : TzObjectHost;
     vstProfiles          : TVirtualStringTree;
@@ -241,22 +239,11 @@ begin
 //  xtrSettings.OnColumnDblClick := xtrSettingsColumnDblClick;
 //  xtrSettings.OnEditing        := xtrSettingsEditing;
 //  xtrSettings.OnPaintText      := xtrSettingsPaintText;
-
-//  piConnectionProfiles := CreateInspector(Self, pnlConnectionProfilesInspector);
-//  piConnectionProfiles.OnGetEditorClass := piConnectionProfilesGetEditorClass;
-
   FObjectInspector := TFactories.CreatezObjectInspector(Self, pnlConnectionProfilesInspector);
   FObjectInspector.SplitterPos     := FObjectInspector.Width div 2;
   FObjectInspector.SortByCategory  := False;
   FObjectInspector.OnBeforeAddItem := FObjectInspectorBeforeAddItem;
   InitializeControls;
-end;
-
-procedure TfrmSettingsDialog.BeforeDestruction;
-begin
-  //piConnectionProfiles.Designer := nil;
-  //FSettings := nil;
-  inherited BeforeDestruction;
 end;
 {$ENDREGION}
 

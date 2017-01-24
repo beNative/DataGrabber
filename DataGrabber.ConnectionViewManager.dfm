@@ -215,12 +215,6 @@ object dmConnectionViewManager: TdmConnectionViewManager
       ImageIndex = 2
       OnExecute = actSettingsExecute
     end
-    object actVirtualDBGrid: TAction
-      Category = 'Grid'
-      AutoCheck = True
-      Caption = 'VirtualDBGrid'
-      GroupIndex = 1
-    end
     object actInspectDataSet: TAction
       Category = 'Inspect'
       Caption = 'Inspect dataset'

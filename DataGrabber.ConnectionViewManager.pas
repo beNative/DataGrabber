@@ -72,7 +72,6 @@ type
     actZEOS                       : TAction;
     actDBX                        : TAction;
     actSettings                   : TAction;
-    actVirtualDBGrid              : TAction;
     actInspectDataSet             : TAction;
     actInspectConnection          : TAction;
     actInspectGrid                : TAction;
@@ -143,7 +142,6 @@ type
     procedure actcxGridExecute(Sender: TObject);
     procedure actGridViewExecute(Sender: TObject);
     procedure actKGridExecute(Sender: TObject);
-    procedure actVirtualDBGridExecute(Sender: TObject);
     procedure actSelectionAsFieldsExecute(Sender: TObject);
     procedure actFavoriteFieldsOnlyExecute(Sender: TObject);
     procedure actSelectionAsWhereInExecute(Sender: TObject);
@@ -427,12 +425,6 @@ begin
     not (ActiveDataView as IMergable).MergeColumnCells;
 end;
 
-procedure TdmConnectionViewManager.actVirtualDBGridExecute(Sender: TObject);
-begin
-  FSettings.GridType := 'VirtualDBGrid';
-  ApplySettings;
-end;
-
 procedure TdmConnectionViewManager.actZEOSExecute(Sender: TObject);
 begin
   FSettings.ConnectionType := 'ZEOS';
@@ -455,7 +447,6 @@ begin
   FSettings.GridType := 'cxGrid';
   ApplySettings;
 end;
-
 {$ENDREGION}
 
 // data
@@ -498,12 +489,12 @@ end;
 procedure TdmConnectionViewManager.actRollbackTransactionExecute(
   Sender: TObject);
 begin
-//
+  ShowMessage('Not supported yet.');
 end;
 
 procedure TdmConnectionViewManager.actStartTransactionExecute(Sender: TObject);
 begin
-//
+  ShowMessage('Not supported yet.');
 end;
 
 procedure TdmConnectionViewManager.actUNIExecute(Sender: TObject);
@@ -515,8 +506,7 @@ end;
 procedure TdmConnectionViewManager.actExecuteLimitedExecute(Sender: TObject);
 begin
   ActiveData.MaxRecords := 100;
-
-  //Execute(FEditor.Text);
+  Execute(ActiveConnectionView.EditorView.Text);
 end;
 
 procedure TdmConnectionViewManager.actPrintExecute(Sender: TObject);
@@ -756,7 +746,6 @@ var
 begin
   EV := GlobalContainer.Resolve<IEditorView>;
   DV := GlobalContainer.Resolve<IDGDataView>(Settings.GridType);
-  //DV := GlobalContainer.Resolve<IDGDataView>('cxGrid');
   DV.Settings := FSettings as IDataViewSettings;
   DV.PopupMenu := ConnectionViewPopupMenu;
   FActiveDataView := DV;

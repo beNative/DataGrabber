@@ -67,9 +67,9 @@ type
     procedure InitializeGridColumn(AGridColumn: TDBGridColumn);
 
     // shortcut methods
-    function IsLookupField(const AFieldName : string) : Boolean;
-    function IsCheckBoxField(const AFieldName : string) : Boolean;
-    function IsCellReadOnly(const ACell : TGridCell) : Boolean;
+    function IsLookupField(const AFieldName: string) : Boolean;
+    function IsCheckBoxField(const AFieldName: string) : Boolean;
+    function IsCellReadOnly(const ACell: TGridCell) : Boolean;
 
     procedure grdKeyPress(Sender: TObject; var Key: Char);
     procedure grdChanging(Sender: TObject; var Cell: TGridCell;
@@ -235,8 +235,6 @@ begin
     FData.UnRegisterDataView(Self);
   FConstCols := nil;
   FEmptyCols := nil;
-  FreeAndNil(FConstCols);
-  FreeAndNil(FEmptyCols);
   inherited BeforeDestruction;
 end;
 {$ENDREGION}

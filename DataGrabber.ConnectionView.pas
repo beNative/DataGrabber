@@ -160,8 +160,6 @@ uses
 
   DDuce.Factories,
 
-  ts.Utils,
-
   DataGrabber.Utils, DataGrabber.Data;
 
 {$R *.dfm}

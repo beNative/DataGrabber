@@ -53,6 +53,7 @@ type
   public
     procedure AfterConstruction; override;
     constructor Create; reintroduce; virtual;
+
     procedure CopyToClipboard;
     procedure FillCompletionLists(ATables, AAttributes : TStrings);
 
@@ -158,8 +159,6 @@ begin
 
   FSynEditor.CodeFolding.Visible := True;
   FSynEditor.Font.Name := 'Consolas';
-//  FSynEditor           := TSynEdit.Create(Self);
-//  FSynEditor.Font.Name := 'Consolas';
 //  FSynEditor.Parent    := Self;
 //  FSynEditor.Align     := alClient;
 //

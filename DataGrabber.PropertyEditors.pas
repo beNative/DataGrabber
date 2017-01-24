@@ -16,6 +16,10 @@
 
 unit DataGrabber.PropertyEditors;
 
+{
+   TODO: rewrite for new property grid
+}
+
 interface
 
 uses

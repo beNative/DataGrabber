@@ -35,7 +35,10 @@ object frmSettingsDialog: TfrmSettingsDialog
     object tsConnection: TTabSheet
       Caption = 'Connection'
       ImageIndex = 10
+      ExplicitLeft = 0
+      ExplicitTop = 0
       ExplicitWidth = 446
+      ExplicitHeight = 0
       DesignSize = (
         476
         377)
@@ -145,7 +148,10 @@ object frmSettingsDialog: TfrmSettingsDialog
     object tsDisplay: TTabSheet
       Caption = 'Display'
       ImageIndex = 5
+      ExplicitLeft = 0
+      ExplicitTop = 0
       ExplicitWidth = 374
+      ExplicitHeight = 0
       DesignSize = (
         476
         377)
@@ -245,7 +251,6 @@ object frmSettingsDialog: TfrmSettingsDialog
     object tsConnectionProfiles: TTabSheet
       Caption = 'Connection Profiles'
       ImageIndex = 9
-      ExplicitWidth = 446
       object splVertical: TSplitter
         Left = 185
         Top = 0
@@ -260,7 +265,6 @@ object frmSettingsDialog: TfrmSettingsDialog
         Align = alClient
         BevelOuter = bvNone
         TabOrder = 0
-        ExplicitWidth = 254
       end
       object pnlConnectionProfilesList: TPanel
         Left = 0
@@ -310,7 +314,10 @@ object frmSettingsDialog: TfrmSettingsDialog
       Caption = 'XML settings'
       ImageIndex = 11
       TabVisible = False
+      ExplicitLeft = 0
+      ExplicitTop = 0
       ExplicitWidth = 446
+      ExplicitHeight = 0
     end
   end
   object btnApply: TButton
@@ -325,7 +332,6 @@ object frmSettingsDialog: TfrmSettingsDialog
     ImageMargins.Right = 4
     Images = imlMain
     TabOrder = 1
-    ExplicitLeft = 219
   end
   object btnClose: TButton
     Left = 407
@@ -339,7 +345,6 @@ object frmSettingsDialog: TfrmSettingsDialog
     Images = imlMain
     ModalResult = 11
     TabOrder = 2
-    ExplicitLeft = 305
   end
   object btnCancel: TButton
     Left = 149
@@ -355,7 +360,6 @@ object frmSettingsDialog: TfrmSettingsDialog
     Images = imlMain
     ModalResult = 2
     TabOrder = 3
-    ExplicitLeft = 47
   end
   object btnSave: TButton
     Left = 235
@@ -369,7 +373,6 @@ object frmSettingsDialog: TfrmSettingsDialog
     Images = imlMain
     SelectedImageIndex = 0
     TabOrder = 4
-    ExplicitLeft = 133
   end
   object aclMain: TActionList
     Images = imlMain
