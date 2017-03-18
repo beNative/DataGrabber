@@ -57,3 +57,7 @@ __history/
 *.stat
 /_DataGrabber
 /unused
+/ModelSupport_DataGrabber/BCEditor/Editor/CodeFolding/*.txaPackage
+/ModelSupport_DataGrabber/BCEditor/Consts/*.txaPackage
+*.txvpck
+*.txaPackage

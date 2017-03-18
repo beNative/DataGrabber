@@ -172,7 +172,6 @@ type
       AOwner    : TComponent;
       ASettings : IDGSettings
     ); reintroduce; virtual;
-    procedure BeforeDestruction; override;
     procedure AfterConstruction; override;
 
     property ApplySettingsMethod: TApplySettingsMethod

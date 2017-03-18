@@ -133,9 +133,6 @@ uses
   zRecList in '..\..\libraries\dduce\Source\Dependencies\zControls\zRecList.pas',
   zStringsDialog in '..\..\libraries\dduce\Source\Dependencies\zControls\zStringsDialog.pas' {StringsDialog},
   zUtils in '..\..\libraries\dduce\Source\Dependencies\zControls\zUtils.pas',
-  Winsock2 in '..\..\libraries\Delphi-ZeroMQ\source\Winsock2.pas',
-  ZeroMQ.API in '..\..\libraries\Delphi-ZeroMQ\source\ZeroMQ.API.pas',
-  ZeroMQ in '..\..\libraries\Delphi-ZeroMQ\source\ZeroMQ.pas',
   BCEditor.Consts in '..\..\components\TBCEditor\Source\BCEditor.Consts.pas',
   BCEditor.Editor.ActiveLine in '..\..\components\TBCEditor\Source\BCEditor.Editor.ActiveLine.pas',
   BCEditor.Editor.Base in '..\..\components\TBCEditor\Source\BCEditor.Editor.Base.pas',
@@ -238,13 +235,14 @@ uses
   BCEditor.StyleHooks in '..\..\components\TBCEditor\Source\BCEditor.StyleHooks.pas',
   BCEditor.Types in '..\..\components\TBCEditor\Source\BCEditor.Types.pas',
   BCEditor.Utils in '..\..\components\TBCEditor\Source\BCEditor.Utils.pas',
-  uCustomImageDrawHook in 'uCustomImageDrawHook.pas';
+  uCustomImageDrawHook in 'uCustomImageDrawHook.pas',
+  ZeroMQ.API in '..\..\libraries\Delphi-ZeroMQ\ZeroMQ.API.pas',
+  ZeroMQ in '..\..\libraries\Delphi-ZeroMQ\ZeroMQ.pas';
 
 {$R *.res}
 
 begin
   ReportMemoryLeaksOnShutdown := True;
-
   Application.Initialize;
   Application.Title := 'DataGrabber';
   RegisterServices;
