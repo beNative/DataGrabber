@@ -138,7 +138,7 @@
         <DCCReference Include="Modules\ts.Classes.ConnectionSettings.pas"/>
         <DCCReference Include="DataGrabber.Settings.pas"/>
         <DCCReference Include="DataGrabber.SQLTemplates.pas"/>
-        <DCCReference Include="DataGrabber.SettingsDialog.pas">
+        <DCCReference Include="DataGrabber.Settings.Dialog.pas">
             <Form>frmSettingsDialog</Form>
         </DCCReference>
         <DCCReference Include="Modules\ts.Classes.ModuleManager.pas"/>
@@ -261,9 +261,7 @@
         <DCCReference Include="..\..\libraries\dduce\Source\Modules\Logger\DDuce.Logger.Base.pas"/>
         <DCCReference Include="..\..\libraries\dduce\Source\Modules\Logger\DDuce.Logger.Channels.Base.pas"/>
         <DCCReference Include="..\..\libraries\dduce\Source\Modules\Logger\DDuce.Logger.Channels.LogFile.pas"/>
-        <DCCReference Include="..\..\libraries\dduce\Source\Modules\Logger\DDuce.Logger.Channels.pas"/>
         <DCCReference Include="..\..\libraries\dduce\Source\Modules\Logger\DDuce.Logger.Channels.WinIPC.pas"/>
-        <DCCReference Include="..\..\libraries\dduce\Source\Modules\Logger\DDuce.Logger.Channels.WinODS.pas"/>
         <DCCReference Include="..\..\libraries\dduce\Source\Modules\Logger\DDuce.Logger.Channels.ZeroMQ.pas"/>
         <DCCReference Include="..\..\libraries\dduce\Source\Modules\Logger\DDuce.Logger.Factories.pas"/>
         <DCCReference Include="..\..\libraries\dduce\Source\Modules\Logger\DDuce.Logger.Interfaces.pas"/>
@@ -566,6 +564,7 @@
         <None Include="ModelSupport_DataGrabber\DSharp\Core\default.txvpck"/>
         <None Include="ModelSupport_DataGrabber\DataGrabber\ConnectionView\default.txaPackage"/>
         <None Include="ModelSupport_DataGrabber\DataGrabber\ConnectionViewManager\default.txaPackage"/>
+        <None Include="Chinook example queries.txt"/>
         <BuildConfiguration Include="Debug">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>
@@ -702,25 +701,7 @@
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
-                <DeployFile LocalName="ModelSupport_DataGrabber\VTAccessibilityFactory\default.txvpck" Configuration="Debug" Class="ProjectFile">
-                    <Platform Name="Win32">
-                        <RemoteDir>.\</RemoteDir>
-                        <Overwrite>true</Overwrite>
-                    </Platform>
-                </DeployFile>
                 <DeployFile LocalName="ModelSupport_DataGrabber\DataGrabber\ButtonSettings\default.txaPackage" Configuration="Debug" Class="ProjectFile">
-                    <Platform Name="Win32">
-                        <RemoteDir>.\</RemoteDir>
-                        <Overwrite>true</Overwrite>
-                    </Platform>
-                </DeployFile>
-                <DeployFile LocalName="ModelSupport_DataGrabber\NativeXmlObjectStorage\default.txvpck" Configuration="Debug" Class="ProjectFile">
-                    <Platform Name="Win32">
-                        <RemoteDir>.\</RemoteDir>
-                        <Overwrite>true</Overwrite>
-                    </Platform>
-                </DeployFile>
-                <DeployFile LocalName="ModelSupport_DataGrabber\DataGrabber\ConnectionViewManager\default.txvpck" Configuration="Debug" Class="ProjectFile">
                     <Platform Name="Win32">
                         <RemoteDir>.\</RemoteDir>
                         <Overwrite>true</Overwrite>
@@ -733,6 +714,24 @@
                     </Platform>
                 </DeployFile>
                 <DeployFile LocalName="ModelSupport_DataGrabber\DataGrabber\SQLTemplates\default.txvpck" Configuration="Release" Class="ProjectFile">
+                    <Platform Name="Win32">
+                        <RemoteDir>.\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="ModelSupport_DataGrabber\DataGrabber\ConnectionViewManager\default.txvpck" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Win32">
+                        <RemoteDir>.\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="ModelSupport_DataGrabber\VTAccessibilityFactory\default.txvpck" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Win32">
+                        <RemoteDir>.\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="ModelSupport_DataGrabber\NativeXmlObjectStorage\default.txvpck" Configuration="Debug" Class="ProjectFile">
                     <Platform Name="Win32">
                         <RemoteDir>.\</RemoteDir>
                         <Overwrite>true</Overwrite>
@@ -762,12 +761,6 @@
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
-                <DeployFile LocalName="ModelSupport_DataGrabber\DataGrabber\GridView\default.txaPackage" Configuration="Debug" Class="ProjectFile">
-                    <Platform Name="Win32">
-                        <RemoteDir>.\</RemoteDir>
-                        <Overwrite>true</Overwrite>
-                    </Platform>
-                </DeployFile>
                 <DeployFile LocalName="ModelSupport_DataGrabber\DataGrabber\GridView\default.txvpck" Configuration="Release" Class="ProjectFile">
                     <Platform Name="Win32">
                         <RemoteDir>.\</RemoteDir>
@@ -775,6 +768,12 @@
                     </Platform>
                 </DeployFile>
                 <DeployFile LocalName="ModelSupport_DataGrabber\DataGrabber\DBXConnection\default.txvpck" Configuration="Release" Class="ProjectFile">
+                    <Platform Name="Win32">
+                        <RemoteDir>.\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="ModelSupport_DataGrabber\DataGrabber\GridView\default.txaPackage" Configuration="Debug" Class="ProjectFile">
                     <Platform Name="Win32">
                         <RemoteDir>.\</RemoteDir>
                         <Overwrite>true</Overwrite>
@@ -1542,6 +1541,12 @@
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
+                <DeployFile LocalName="Chinook example queries.txt" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Win32">
+                        <RemoteDir>.\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
                 <DeployFile LocalName="ModelSupport_DataGrabber\VirtualTrees\Utils\default.txvpck" Configuration="Debug" Class="ProjectFile">
                     <Platform Name="Win32">
                         <RemoteDir>.\</RemoteDir>
@@ -1950,16 +1955,7 @@
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
-                <DeployClass Name="DependencyModule">
-                    <Platform Name="Win32">
-                        <Operation>0</Operation>
-                        <Extensions>.dll;.bpl</Extensions>
-                    </Platform>
-                    <Platform Name="OSX32">
-                        <Operation>1</Operation>
-                        <Extensions>.dylib</Extensions>
-                    </Platform>
-                </DeployClass>
+                <DeployClass Name="ProjectiOSDeviceResourceRules"/>
                 <DeployClass Name="ProjectOSXResource">
                     <Platform Name="OSX32">
                         <RemoteDir>Contents\Resources</RemoteDir>
@@ -2273,7 +2269,16 @@
                         <Operation>1</Operation>
                     </Platform>
                 </DeployClass>
-                <DeployClass Name="ProjectiOSDeviceResourceRules"/>
+                <DeployClass Name="DependencyModule">
+                    <Platform Name="Win32">
+                        <Operation>0</Operation>
+                        <Extensions>.dll;.bpl</Extensions>
+                    </Platform>
+                    <Platform Name="OSX32">
+                        <Operation>1</Operation>
+                        <Extensions>.dylib</Extensions>
+                    </Platform>
+                </DeployClass>
                 <ProjectRoot Platform="iOSDevice64" Name="$(PROJECTNAME).app"/>
                 <ProjectRoot Platform="Win64" Name="$(PROJECTNAME)"/>
                 <ProjectRoot Platform="iOSDevice32" Name="$(PROJECTNAME).app"/>

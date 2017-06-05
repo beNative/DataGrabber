@@ -178,9 +178,9 @@ uses
 
   ts.Utils,
 
-  DDuce.ObjectInspector,
+  DDuce.ObjectInspector, DDuce.Logger, DDuce.Logger.Factories,
 
-  DataGrabber.Utils, DataGrabber.Resources, DataGrabber.SettingsDialog,
+  DataGrabber.Utils, DataGrabber.Resources, DataGrabber.Settings.Dialog,
   DataGrabber.ModelData,
 
   DataGrabber.ConnectionProfiles, DataGrabber.Factories,
@@ -190,7 +190,10 @@ uses
 procedure TfrmMain.AfterConstruction;
 begin
   inherited AfterConstruction;
+  Logger.Channels.Add(TLoggerFactories.CreateWinIPCChannel);
+  Logger.Clear;
   FManager  := GlobalContainer.Resolve<IConnectionViewManager>;
+
   FSettings := GlobalContainer.Resolve<IDGSettings>;
   AddConnectionView;
   tlbMain.DrawingStyle := dsNormal;

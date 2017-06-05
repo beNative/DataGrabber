@@ -32,7 +32,7 @@ uses
 type
   TfrmEditorView = class(TForm, IEditorView)
   private
-    FSynEditor : TBCEditor;
+    FEditor : TBCEditor;
 
     function GetText: string;
     procedure SetText(const Value: string);
@@ -95,12 +95,12 @@ end;
 {$REGION 'property access methods'}
 function TfrmEditorView.GetColor: TColor;
 begin
-  Result := FSynEditor.BackgroundColor;
+  Result := FEditor.BackgroundColor;
 end;
 
 procedure TfrmEditorView.SetColor(const Value: TColor);
 begin
-  FSynEditor.BackgroundColor := Value;
+  FEditor.BackgroundColor := Value;
 end;
 
 //function TfrmEditorView.GetOnStatusChange: TStatusChangeEvent;
@@ -115,17 +115,17 @@ end;
 
 function TfrmEditorView.GetEditorFocused: Boolean;
 begin
-  Result := FSynEditor.Focused;
+  Result := FEditor.Focused;
 end;
 
 function TfrmEditorView.GetText: string;
 begin
-  Result := FSynEditor.Text;
+  Result := FEditor.Text;
 end;
 
 procedure TfrmEditorView.SetText(const Value: string);
 begin
-  FSynEditor.Text := Value;
+  FEditor.Text := Value;
 end;
 {$ENDREGION}
 
@@ -144,12 +144,12 @@ end;
 {$REGION 'protected methods'}
 procedure TfrmEditorView.CreateEditor;
 begin
-  FSynEditor := TBCEditor.Create(Self);
-  FSynEditor.Parent := Self;
-  FSynEditor.Align := alClient;
-  FSynEditor.AlignWithMargins := True;
-  FSynEditor.Directories.Colors := '';
-  FSynEditor.Directories.Highlighters := '';
+  FEditor := TBCEditor.Create(Self);
+  FEditor.Parent := Self;
+  FEditor.Align := alClient;
+  FEditor.AlignWithMargins := True;
+  FEditor.Directories.Colors := '';
+  FEditor.Directories.Highlighters := '';
 //  if AFileName <> '' then
 //    FSynEditor.LoadFromFile(AFileName);
 //  if AHighlighter <> '' then
@@ -157,8 +157,8 @@ begin
 //  if AColorMap <> '' then
 //    FSynEditor.Highlighter.Colors.LoadFromFile(AColorMap + '.json');
 
-  FSynEditor.CodeFolding.Visible := True;
-  FSynEditor.Font.Name := 'Consolas';
+  FEditor.CodeFolding.Visible := True;
+  FEditor.Font.Name := 'Consolas';
 //  FSynEditor.Parent    := Self;
 //  FSynEditor.Align     := alClient;
 //
@@ -243,13 +243,13 @@ end;
 {$REGION 'public methods'}
 procedure TfrmEditorView.SetFocus;
 begin
-  if FSynEditor.CanFocus then
-    FSynEditor.SetFocus;
+  if FEditor.CanFocus then
+    FEditor.SetFocus;
 end;
 
 procedure TfrmEditorView.CopyToClipboard;
 begin
-  FSynEditor.CopyToClipboard;
+  FEditor.CopyToClipboard;
 end;
 
 procedure TfrmEditorView.FillCompletionLists(ATables, AAttributes: TStrings);

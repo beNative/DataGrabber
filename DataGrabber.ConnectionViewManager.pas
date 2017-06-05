@@ -169,7 +169,7 @@ type
     FActiveDataView       : IDGDataView;
     FActiveData           : IData;
     FStopWatch            : TStopwatch;
-    FDataInspector        : TfrmDataInspector;
+//    FDataInspector        : TfrmDataInspector;
     FFieldInspector       : TfrmFieldInspector;
 
     function GetSettings: IDGSettings;
@@ -225,7 +225,7 @@ uses
 
   DDuce.ObjectInspector,
 
-  DataGrabber.SettingsDialog, DataGrabber.ConnectionView,
+  DataGrabber.Settings.Dialog, DataGrabber.ConnectionView,
 
   Spring.Container;
 

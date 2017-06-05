@@ -14,7 +14,7 @@
   limitations under the License.
 }
 
-unit DataGrabber.SettingsDialog;
+unit DataGrabber.Settings.Dialog;
 
 interface
 
@@ -47,7 +47,6 @@ type
     actDuplicate                   : TAction;
     actMoveDown                    : TAction;
     actMoveUp                      : TAction;
-    actSave                        : TAction;
     btnAdd                         : TToolButton;
     btnApply                       : TButton;
     btnCancel                      : TButton;
@@ -57,13 +56,13 @@ type
     btnDuplicate                   : TToolButton;
     btnMoveDown                    : TToolButton;
     btnMoveUp                      : TToolButton;
-    btnSave                        : TButton;
     chkAllowMultipleInstances      : TCheckBox;
     chkFetchOnDemand               : TCheckBox;
     chkGridCellColoringEnabled     : TCheckBox;
     chkProviderMode                : TCheckBox;
     chkSeperateThreads             : TCheckBox;
     chkUseIDInUpdatableQueries     : TCheckBox;
+    dlgColor                       : TColorDialog;
     edtPacketRecords               : TEdit;
     grpCellBackgroundColoring      : TGroupBox;
     grpConnectionSettings          : TGroupBox;
@@ -89,22 +88,21 @@ type
     tsConnectionProfiles           : TTabSheet;
     tsDisplay                      : TTabSheet;
     tsXML                          : TTabSheet;
-    dlgColor                       : TColorDialog;
     {$ENDREGION}
 
+    {$REGION 'action handlers'}
     procedure actApplyExecute(Sender: TObject);
     procedure actCloseExecute(Sender: TObject);
     procedure actCancelExecute(Sender: TObject);
-    procedure actSaveExecute(Sender: TObject);
     procedure actAddExecute(Sender: TObject);
     procedure actDeleteExecute(Sender: TObject);
     procedure actMoveUpExecute(Sender: TObject);
     procedure actMoveDownExecute(Sender: TObject);
     procedure actDuplicateExecute(Sender: TObject);
     procedure actConnectionStringExecute(Sender: TObject);
+    {$ENDREGION}
 
-    procedure OnColorButtonClick(Sender: TObject);
-
+    {$REGION 'event handlers'}
     procedure xtrSettingsEditing(Sender: TBaseVirtualTree; Node: PVirtualNode;
       Column: TColumnIndex; var Allowed: Boolean);
     procedure xtrSettingsPaintText(Sender: TBaseVirtualTree;
@@ -114,27 +112,25 @@ type
       Column: TColumnIndex; Shift: TShiftState);
     procedure xtrSettingsColumnDblClick(Sender: TBaseVirtualTree;
       Column: TColumnIndex; Shift: TShiftState);
-//    procedure xtrSettingsCheckNode(Sender: TXMLTree; Node: PVirtualNode;
-//      var NewXmlNode: IXMLDOMNode; var NewNodeType: Integer; var Add: Boolean);
 
     function FObjectInspectorBeforeAddItem(
       Sender : TControl;
       PItem  : PPropItem
     ): Boolean;
 
-    procedure vstProfilesGetText(
+    procedure FVSTProfilesGetText(
       Sender       : TBaseVirtualTree;
       Node         : PVirtualNode;
       Column       : TColumnIndex;
       TextType     : TVSTTextType;
       var CellText : string
     );
-    procedure vstProfilesFocusChanged(
+    procedure FVSTProfilesFocusChanged(
       Sender : TBaseVirtualTree;
       Node   : PVirtualNode;
       Column : TColumnIndex
     );
-    procedure vstProfilesBeforeCellPaint(
+    procedure FVSTProfilesBeforeCellPaint(
       Sender          : TBaseVirtualTree;
       TargetCanvas    : TCanvas;
       Node            : PVirtualNode;
@@ -149,21 +145,19 @@ type
       APropInfo        : PPropInfo;
       var AEditorClass : TPropertyEditorClass
     );
+    {$ENDREGION}
 
   private
     FSettings            : IDGSettings;
     FApplySettingsMethod : TApplySettingsMethod;
-    FObjectInspector : TzObjectInspector;
-    FObjectHost      : TzObjectHost;
-    vstProfiles          : TVirtualStringTree;
-    //xtrSettings          : TXMLTree;
-
-    procedure Apply;
-    procedure Save;
-
-    procedure InspectConnectionProfile(AIndex: Integer);
+    FObjectInspector     : TzObjectInspector;
+    FVSTProfiles         : TVirtualStringTree;
+    FSettingsTree        : TXMLTree;
 
   protected
+    procedure Apply;
+    procedure Save;
+    procedure InspectConnectionProfile(AIndex: Integer);
     procedure InitializeControls;
     procedure UpdateActions; override;
 
@@ -189,13 +183,13 @@ implementation
 
 uses
   System.Rtti,
-
-  ts.Utils, ts.Interfaces,
   Data.DBConnAdmin, Data.Win.ADOConEd, Data.Win.ADODB,
 
   Spring.Container,
 
   DDuce.Factories,
+
+  ts.Utils, ts.Interfaces,
 
   DataGrabber.ConnectionProfiles, DataGrabber.Utils, DataGrabber.Factories;
 
@@ -223,22 +217,11 @@ begin
   FSettings := ASettings;
 end;
 
-function TfrmSettingsDialog.FObjectInspectorBeforeAddItem(Sender: TControl;
-  PItem: PPropItem): Boolean;
-begin
-  Result := not (PItem.Prop.PropertyType is TRttiMethodType);
-end;
-
 procedure TfrmSettingsDialog.AfterConstruction;
 begin
   inherited AfterConstruction;
-  //xtrSettings := CreateXMLTree(Self, tsXML);
-  //xtrSettings.OnCheckNode      := xtrSettingsCheckNode;
-//  xtrSettings.OnColumnClick    := xtrSettingsColumnClick;
-//  xtrSettings.OnColumnDblClick := xtrSettingsColumnDblClick;
-//  xtrSettings.OnEditing        := xtrSettingsEditing;
-//  xtrSettings.OnPaintText      := xtrSettingsPaintText;
-  FObjectInspector := TFactories.CreatezObjectInspector(Self, pnlConnectionProfilesInspector);
+  FObjectInspector :=
+    TFactories.CreatezObjectInspector(Self, pnlConnectionProfilesInspector);
   FObjectInspector.SplitterPos     := FObjectInspector.Width div 2;
   FObjectInspector.SortByCategory  := False;
   FObjectInspector.OnBeforeAddItem := FObjectInspectorBeforeAddItem;
@@ -257,8 +240,8 @@ begin
   CP.ProviderMode   := FSettings.ProviderMode;
   CP.PacketRecords  := FSettings.PacketRecords;
   CP.ConnectionSettings.Assign(FSettings.ConnectionSettings);
-  vstProfiles.RootNodeCount := FSettings.ConnectionProfiles.Count;
-  SelectNode(vstProfiles, vstProfiles.RootNodeCount - 1);
+  FVSTProfiles.RootNodeCount := FSettings.ConnectionProfiles.Count;
+  SelectNode(FVSTProfiles, FVSTProfiles.RootNodeCount - 1);
 end;
 
 procedure TfrmSettingsDialog.actApplyExecute(Sender: TObject);
@@ -287,67 +270,62 @@ begin
   finally
     AC.Free;
   end;
-  //GetConnectionAdmin.
 end;
 
 procedure TfrmSettingsDialog.actDeleteExecute(Sender: TObject);
 begin
-  vstProfiles.BeginUpdate;
+  FVSTProfiles.BeginUpdate;
   try
     FObjectInspector.Component := nil;
-    FSettings.ConnectionProfiles.Delete(vstProfiles.FocusedNode.Index);
-    SelectNode(vstProfiles, FSettings.ConnectionProfiles.Count - 1);
+    FSettings.ConnectionProfiles.Delete(FVSTProfiles.FocusedNode.Index);
+    SelectNode(FVSTProfiles, FSettings.ConnectionProfiles.Count - 1);
   finally
-    vstProfiles.EndUpdate;
+    FVSTProfiles.EndUpdate;
   end;
-  vstProfiles.RootNodeCount := FSettings.ConnectionProfiles.Count;
-  vstProfiles.Refresh;
+  FVSTProfiles.RootNodeCount := FSettings.ConnectionProfiles.Count;
+  FVSTProfiles.Refresh;
 end;
 
 procedure TfrmSettingsDialog.actDuplicateExecute(Sender: TObject);
 var
   N: Integer;
 begin
-  N := vstProfiles.FocusedNode.Index;
+  N := FVSTProfiles.FocusedNode.Index;
   with FSettings.ConnectionProfiles.Add do
   begin
     Assign(FSettings.ConnectionProfiles[N]);
     N := Index;
   end;
-  vstProfiles.RootNodeCount := FSettings.ConnectionProfiles.Count;
-  SelectNode(vstProfiles, N);
+  FVSTProfiles.RootNodeCount := FSettings.ConnectionProfiles.Count;
+  SelectNode(FVSTProfiles, N);
 end;
 
 procedure TfrmSettingsDialog.actMoveDownExecute(Sender: TObject);
 var
   N: Integer;
 begin
-  N := vstProfiles.FocusedNode.Index;
+  N := FVSTProfiles.FocusedNode.Index;
   FSettings.ConnectionProfiles[N].Index := N + 1;
-  SelectNode(vstProfiles, N + 1);
-  vstProfiles.Refresh;
+  SelectNode(FVSTProfiles, N + 1);
+  FVSTProfiles.Refresh;
 end;
 
 procedure TfrmSettingsDialog.actMoveUpExecute(Sender: TObject);
 var
   N: Integer;
 begin
-  N := vstProfiles.FocusedNode.Index;
+  N := FVSTProfiles.FocusedNode.Index;
   FSettings.ConnectionProfiles[N].Index := N - 1;
-  SelectNode(vstProfiles, N - 1);
-  vstProfiles.Refresh;
-end;
-
-procedure TfrmSettingsDialog.actSaveExecute(Sender: TObject);
-begin
-  Save;
+  SelectNode(FVSTProfiles, N - 1);
+  FVSTProfiles.Refresh;
 end;
 {$ENDREGION}
 
 {$REGION 'event handlers'}
-procedure TfrmSettingsDialog.OnColorButtonClick(Sender: TObject);
+function TfrmSettingsDialog.FObjectInspectorBeforeAddItem(Sender: TControl;
+  PItem: PPropItem): Boolean;
 begin
-  //(Sender as TColorPickerButton).DroppedDown := True;
+  Result := not (PItem.Prop.PropertyType is TRttiMethodType);
 end;
 
 procedure TfrmSettingsDialog.piConnectionProfilesGetEditorClass(Sender: TObject;
@@ -360,7 +338,7 @@ begin
     AEditorClass := TConnectionTypePropertyEditor;
 end;
 
-procedure TfrmSettingsDialog.vstProfilesBeforeCellPaint(
+procedure TfrmSettingsDialog.FVSTProfilesBeforeCellPaint(
   Sender: TBaseVirtualTree; TargetCanvas: TCanvas; Node: PVirtualNode;
   Column: TColumnIndex; CellPaintMode: TVTCellPaintMode; CellRect: TRect;
   var ContentRect: TRect);
@@ -373,53 +351,18 @@ begin
   end;
 end;
 
-procedure TfrmSettingsDialog.vstProfilesFocusChanged(Sender: TBaseVirtualTree;
+procedure TfrmSettingsDialog.FVSTProfilesFocusChanged(Sender: TBaseVirtualTree;
   Node: PVirtualNode; Column: TColumnIndex);
 begin
   InspectConnectionProfile(Node.Index);
 end;
 
-procedure TfrmSettingsDialog.vstProfilesGetText(Sender: TBaseVirtualTree;
+procedure TfrmSettingsDialog.FVSTProfilesGetText(Sender: TBaseVirtualTree;
   Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType;
   var CellText: string);
 begin
   if Node.Index < Cardinal(FSettings.ConnectionProfiles.Count) then
     CellText := FSettings.ConnectionProfiles[Node.Index].DisplayName;
-end;
-
-//procedure TfrmSettingsDialog.xtrSettingsCheckNode(Sender: TXMLTree;
-//  ANode: PVirtualNode; var ANewXmlNode: TXmlNode; var ANewNodeType: TNodeType;
-//  var AAdd: Boolean);
-//begin
-//  AAdd := True;
-//end;
-
-procedure TfrmSettingsDialog.xtrSettingsColumnClick(Sender: TBaseVirtualTree;
-  Column: TColumnIndex; Shift: TShiftState);
-begin
-  //Sender.EditNode(Sender.GetFirstSelected, Column);
-end;
-
-procedure TfrmSettingsDialog.xtrSettingsColumnDblClick(Sender: TBaseVirtualTree;
-  Column: TColumnIndex; Shift: TShiftState);
-begin
-//  Sender.EditNode(Sender.GetFirstSelected, Column);
-end;
-
-procedure TfrmSettingsDialog.xtrSettingsEditing(Sender: TBaseVirtualTree;
-  Node: PVirtualNode; Column: TColumnIndex; var Allowed: Boolean);
-begin
-  Allowed := True;
-end;
-
-procedure TfrmSettingsDialog.xtrSettingsPaintText(Sender: TBaseVirtualTree;
-  const TargetCanvas: TCanvas; Node: PVirtualNode; Column: TColumnIndex;
-  TextType: TVSTTextType);
-begin
-  if (Node = Sender.FocusedNode) and (Column = Sender.FocusedColumn) then
-  begin
-    TargetCanvas.Font.Color := clWhite;
-  end;
 end;
 {$ENDREGION}
 
@@ -434,15 +377,16 @@ begin
 //  FSettings.DataTypeColors[dtString] := btnGridStringColor.SelectionColor;
 //  FSettings.DataTypeColors[dtNULL] := btnGridNULLColor.SelectionColor;
 //  FSettings.DataTypeColors[dtTime] := btnGridTimeColor.SelectionColor;
-  FSettings.ProviderMode := chkProviderMode.Checked;
-  FSettings.PacketRecords := StrToIntDef(edtPacketRecords.Text, -1);
-  FSettings.FetchOnDemand := chkFetchOnDemand.Checked;
+  FSettings.ProviderMode     := chkProviderMode.Checked;
+  FSettings.PacketRecords    := StrToIntDef(edtPacketRecords.Text, -1);
+  FSettings.FetchOnDemand    := chkFetchOnDemand.Checked;
   FSettings.GridCellColoring := chkGridCellColoringEnabled.Checked;
-  FSettings.ConnectionType := rgpConnectionType.Items
+  FSettings.ConnectionType   := rgpConnectionType.Items
     [rgpConnectionType.ItemIndex];
   FSettings.GridType := rgpGridTypes.Items[rgpGridTypes.ItemIndex];
   if Assigned(ApplySettingsMethod) then
     ApplySettingsMethod;
+  Save;
 end;
 
 procedure TfrmSettingsDialog.Save;
@@ -454,7 +398,7 @@ procedure TfrmSettingsDialog.InitializeControls;
 var
   I  : Integer;
   C  : IConnection;
-  DV : IDGDataView;
+  //DV : IDGDataView;
   S  : string;
 begin
 //  btnGridBooleanColor.SelectionColor  := FSettings.DataTypeColors[dtBoolean];
@@ -468,28 +412,12 @@ begin
 
   chkProviderMode.Checked            := FSettings.ProviderMode;
   chkGridCellColoringEnabled.Checked := FSettings.GridCellColoring;
-
-//  xtrSettings                  := TXMLTree.Create(Self);
-//  xtrSettings.Parent           := tsXML;
-//  xtrSettings.Align            := alClient;
-//  xtrSettings.OnEditing        := xtrSettingsEditing;
-//  xtrSettings.OnPaintText      := xtrSettingsPaintText;
-//  xtrSettings.OnColumnClick    := xtrSettingsColumnClick;
-//  xtrSettings.OnColumnDblClick := xtrSettingsColumnDblClick;
-
- // xtrSettings.OnCheckNode := xtrSettingsCheckNode;
-  //xtrSettings.Xml := FSettings.XML;
-
-//  piConnectionProfiles        := TPropertyInspector.Create(Self);
-//  piConnectionProfiles.Parent := pnlConnectionProfilesInspector;
-//  piConnectionProfiles.Align  := alClient;
-//  piConnectionProfiles.OnGetEditorClass := piConnectionProfilesGetEditorClass;
   rgpConnectionType.Items.Clear;
 
-  vstProfiles := TFactories.CreateVirtualStringTree(Self, pnlConnectionProfilesList);
-  vstProfiles.OnGetText := vstProfilesGetText;
-  vstProfiles.OnFocusChanged := vstProfilesFocusChanged;
-  vstProfiles.OnBeforeCellPaint := vstProfilesBeforeCellPaint;
+  FVSTProfiles := TFactories.CreateVirtualStringTree(Self, pnlConnectionProfilesList);
+  FVSTProfiles.OnGetText         := FVSTProfilesGetText;
+  FVSTProfiles.OnFocusChanged    := FVSTProfilesFocusChanged;
+  FVSTProfiles.OnBeforeCellPaint := FVSTProfilesBeforeCellPaint;
 
   for C in GlobalContainer.ResolveAll<IConnection> do
   begin
@@ -506,19 +434,16 @@ begin
 //    if SameText(S, FSettings.GridType) then
 //      rgpGridTypes.ItemIndex := I;
 //  end;
-    I := 0;
-    S := 'GridView';
-    I := rgpGridTypes.Items.Add(S);
-    if SameText(S, FSettings.GridType) then
-      rgpGridTypes.ItemIndex := I;
-    S := 'cxGrid';
-    I := rgpGridTypes.Items.Add(S);
-    if SameText(S, FSettings.GridType) then
-      rgpGridTypes.ItemIndex := I;
+  S := 'GridView';
+  I := rgpGridTypes.Items.Add(S);
+  if SameText(S, FSettings.GridType) then
+    rgpGridTypes.ItemIndex := I;
+  S := 'cxGrid';
+  I := rgpGridTypes.Items.Add(S);
+  if SameText(S, FSettings.GridType) then
+    rgpGridTypes.ItemIndex := I;
 
-
-  vstProfiles.RootNodeCount := FSettings.ConnectionProfiles.Count;
-  SetWindowSizeGrip(Handle, True);
+  FVSTProfiles.RootNodeCount := FSettings.ConnectionProfiles.Count;
 end;
 
 procedure TfrmSettingsDialog.InspectConnectionProfile(AIndex: Integer);
@@ -530,50 +455,26 @@ begin
 
   FObjectInspector.BeginUpdate;
   try
-    //FObjectInspector.Clear;
-    //FObjectHost.Free;
     FObjectInspector.Component := FSettings.ConnectionProfiles[AIndex];
-//    FObjectHost := TzObjectHost.Create;
-//    FObjectInspector.Add(FSettings.ConnectionProfiles[AIndex]);
-//    FObjectInspector.Designer := FSettings.ConnectionProfiles[AIndex];
-//    for I := 0 to FObjectInspector.Items.Count - 1 do
-//    begin
-//      if FObjectInspector.Items[I].Expandable = mieYes then
-//        FObjectInspector.Items[I].Expand;
-//    end;
+    FObjectInspector.ExpandAll;
   finally
     FObjectInspector.EndUpdate;
   end;
-
-
-//  piConnectionProfiles.BeginUpdate;
-//  try
-//    piConnectionProfiles.Clear;
-//    piConnectionProfiles.Add(FSettings.ConnectionProfiles[AIndex]);
-//    piConnectionProfiles.Designer := FSettings.ConnectionProfiles[AIndex];
-//    for I := 0 to piConnectionProfiles.Items.Count - 1 do
-//    begin
-//      if piConnectionProfiles.Items[I].Expandable = mieYes then
-//        piConnectionProfiles.Items[I].Expand;
-//    end;
-//  finally
-//    piConnectionProfiles.EndUpdate;
-//  end;
 end;
 
 procedure TfrmSettingsDialog.UpdateActions;
 var
   B: Boolean;
 begin
-  inherited;
+  inherited UpdateActions;
   B := chkProviderMode.Checked;
   chkFetchOnDemand.Enabled := B;
   edtPacketRecords.Enabled := B and chkFetchOnDemand.Checked;
   lblPacketrecords.Enabled := B and chkFetchOnDemand.Checked;
-  B := Assigned(vstProfiles.FocusedNode);
-  actMoveUp.Enabled := B and (vstProfiles.FocusedNode.Index > 0);
+  B := Assigned(FVSTProfiles.FocusedNode);
+  actMoveUp.Enabled := B and (FVSTProfiles.FocusedNode.Index > 0);
   actMoveDown.Enabled := B
-    and (vstProfiles.FocusedNode.Index < vstProfiles.RootNodeCount - 1);
+    and (FVSTProfiles.FocusedNode.Index < FVSTProfiles.RootNodeCount - 1);
   actDelete.Enabled := B;
 end;
 {$ENDREGION}

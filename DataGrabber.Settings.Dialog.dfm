@@ -1,8 +1,9 @@
 object frmSettingsDialog: TfrmSettingsDialog
   Left = 0
   Top = 0
-  ClientHeight = 449
-  ClientWidth = 490
+  Caption = 'Settings'
+  ClientHeight = 437
+  ClientWidth = 684
   Color = clBtnFace
   Constraints.MinHeight = 476
   Constraints.MinWidth = 396
@@ -17,144 +18,97 @@ object frmSettingsDialog: TfrmSettingsDialog
   Position = poMainFormCenter
   ShowHint = True
   DesignSize = (
-    490
-    449)
+    684
+    437)
   PixelsPerInch = 96
   TextHeight = 13
   object pgcMain: TPageControl
     AlignWithMargins = True
     Left = 3
     Top = 3
-    Width = 484
-    Height = 406
+    Width = 678
+    Height = 394
     ActivePage = tsConnectionProfiles
     Align = alTop
     Anchors = [akLeft, akTop, akRight, akBottom]
     Images = imlMain
     TabOrder = 0
-    object tsConnection: TTabSheet
-      Caption = 'Connection'
-      ImageIndex = 10
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 446
-      ExplicitHeight = 0
-      DesignSize = (
-        476
-        377)
-      object grpConnectionSettings: TGroupBox
-        Left = 3
-        Top = 55
-        Width = 470
-        Height = 146
-        Anchors = [akLeft, akTop, akRight]
-        Caption = 'Connection Settings'
+    object tsConnectionProfiles: TTabSheet
+      Caption = 'Connection &profiles'
+      ImageIndex = 9
+      ExplicitWidth = 476
+      ExplicitHeight = 377
+      object splVertical: TSplitter
+        Left = 185
+        Top = 0
+        Width = 7
+        Height = 365
+        ExplicitHeight = 377
+      end
+      object pnlConnectionProfilesInspector: TPanel
+        Left = 192
+        Top = 0
+        Width = 478
+        Height = 365
+        Align = alClient
+        BevelOuter = bvNone
         TabOrder = 0
-        ExplicitWidth = 440
-        object lblPacketrecords: TLabel
-          Left = 152
-          Top = 44
-          Width = 75
-          Height = 13
-          Caption = 'Packet records:'
-          FocusControl = edtPacketRecords
-        end
-        object chkProviderMode: TCheckBox
-          Left = 16
-          Top = 24
-          Width = 116
-          Height = 17
-          Caption = 'Provider mode'
-          Checked = True
-          DoubleBuffered = False
-          ParentDoubleBuffered = False
-          State = cbChecked
-          TabOrder = 0
-        end
-        object edtPacketRecords: TEdit
-          Left = 239
-          Top = 41
-          Width = 58
-          Height = 21
-          Alignment = taCenter
-          TabOrder = 1
-          Text = '100'
-        end
-        object chkSeperateThreads: TCheckBox
-          Left = 16
-          Top = 69
-          Width = 169
-          Height = 17
-          Caption = 'Execute in seperate threads'
-          Enabled = False
-          TabOrder = 2
-        end
-        object chkAllowMultipleInstances: TCheckBox
-          Left = 16
-          Top = 92
-          Width = 169
-          Height = 17
-          Caption = 'Allow multiple instances'
-          Enabled = False
-          TabOrder = 3
-        end
-        object chkUseIDInUpdatableQueries: TCheckBox
-          Left = 16
-          Top = 115
-          Width = 232
-          Height = 17
-          Caption = 'Use ID as primary key in updatable queries.'
-          Enabled = False
-          TabOrder = 4
-        end
-        object chkFetchOnDemand: TCheckBox
-          Left = 37
-          Top = 43
-          Width = 100
-          Height = 17
-          Caption = 'Fetch on demand'
-          Checked = True
-          DoubleBuffered = False
-          ParentDoubleBuffered = False
-          State = cbChecked
-          TabOrder = 5
-        end
+        ExplicitWidth = 284
+        ExplicitHeight = 377
       end
-      object rgpConnectionType: TRadioGroup
-        Left = 3
-        Top = 3
-        Width = 470
-        Height = 46
-        Anchors = [akLeft, akTop, akRight]
-        Caption = 'Connection Method'
-        Columns = 4
-        ItemIndex = 0
-        Items.Strings = (
-          'ADO'
-          'DBX'
-          'ZEOS')
+      object pnlConnectionProfilesList: TPanel
+        Left = 0
+        Top = 0
+        Width = 185
+        Height = 365
+        Align = alLeft
+        BevelOuter = bvNone
         TabOrder = 1
-        ExplicitWidth = 440
-      end
-      object btnConnectionString: TButton
-        Left = 3
-        Top = 207
-        Width = 153
-        Height = 25
-        Action = actConnectionString
-        TabOrder = 2
+        ExplicitHeight = 377
+        object tlbConnectionProfiles: TToolBar
+          Left = 0
+          Top = 0
+          Width = 185
+          Height = 22
+          Caption = 'tlbConnectionProfiles'
+          Images = imlMain
+          TabOrder = 0
+          object btnAdd: TToolButton
+            Left = 0
+            Top = 0
+            Action = actAdd
+          end
+          object btnDelete: TToolButton
+            Left = 23
+            Top = 0
+            Action = actDelete
+          end
+          object btnMoveUp: TToolButton
+            Left = 46
+            Top = 0
+            Action = actMoveUp
+          end
+          object btnMoveDown: TToolButton
+            Left = 69
+            Top = 0
+            Action = actMoveDown
+          end
+          object btnDuplicate: TToolButton
+            Left = 92
+            Top = 0
+            Action = actDuplicate
+          end
+        end
       end
     end
     object tsDisplay: TTabSheet
-      Caption = 'Display'
+      Caption = '&Display'
       ImageIndex = 5
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 374
-      ExplicitHeight = 0
+      ExplicitWidth = 476
+      ExplicitHeight = 377
       DesignSize = (
-        476
-        377)
+        670
+        365)
       object grpCellBackgroundColoring: TGroupBox
         Left = 3
         Top = 56
@@ -239,96 +193,136 @@ object frmSettingsDialog: TfrmSettingsDialog
       object rgpGridTypes: TRadioGroup
         Left = 3
         Top = 1
-        Width = 470
+        Width = 664
         Height = 49
         Anchors = [akLeft, akTop, akRight]
         Caption = 'Grid type'
         Columns = 4
         TabOrder = 1
-        ExplicitWidth = 368
       end
     end
-    object tsConnectionProfiles: TTabSheet
-      Caption = 'Connection Profiles'
-      ImageIndex = 9
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
-      object splVertical: TSplitter
-        Left = 185
-        Top = 0
-        Width = 7
-        Height = 377
-      end
-      object pnlConnectionProfilesInspector: TPanel
-        Left = 192
-        Top = 0
-        Width = 284
-        Height = 377
-        Align = alClient
-        BevelOuter = bvNone
+    object tsConnection: TTabSheet
+      Caption = 'Co&nnection'
+      ImageIndex = 10
+      ExplicitWidth = 476
+      ExplicitHeight = 377
+      DesignSize = (
+        670
+        365)
+      object grpConnectionSettings: TGroupBox
+        Left = 3
+        Top = 55
+        Width = 664
+        Height = 146
+        Anchors = [akLeft, akTop, akRight]
+        Caption = 'Connection Settings'
         TabOrder = 0
-      end
-      object pnlConnectionProfilesList: TPanel
-        Left = 0
-        Top = 0
-        Width = 185
-        Height = 377
-        Align = alLeft
-        BevelOuter = bvNone
-        TabOrder = 1
-        object tlbConnectionProfiles: TToolBar
-          Left = 0
-          Top = 0
-          Width = 185
-          Height = 22
-          Caption = 'tlbConnectionProfiles'
-          Images = imlMain
-          TabOrder = 0
-          object btnAdd: TToolButton
-            Left = 0
-            Top = 0
-            Action = actAdd
-          end
-          object btnDelete: TToolButton
-            Left = 23
-            Top = 0
-            Action = actDelete
-          end
-          object btnMoveUp: TToolButton
-            Left = 46
-            Top = 0
-            Action = actMoveUp
-          end
-          object btnMoveDown: TToolButton
-            Left = 69
-            Top = 0
-            Action = actMoveDown
-          end
-          object btnDuplicate: TToolButton
-            Left = 92
-            Top = 0
-            Action = actDuplicate
-          end
+        ExplicitWidth = 470
+        object lblPacketrecords: TLabel
+          Left = 152
+          Top = 44
+          Width = 75
+          Height = 13
+          Caption = 'Packet records:'
+          FocusControl = edtPacketRecords
         end
+        object chkProviderMode: TCheckBox
+          Left = 16
+          Top = 24
+          Width = 116
+          Height = 17
+          Caption = 'Provider mode'
+          Checked = True
+          DoubleBuffered = False
+          ParentDoubleBuffered = False
+          State = cbChecked
+          TabOrder = 0
+        end
+        object edtPacketRecords: TEdit
+          Left = 239
+          Top = 41
+          Width = 58
+          Height = 21
+          Alignment = taCenter
+          TabOrder = 1
+          Text = '100'
+        end
+        object chkSeperateThreads: TCheckBox
+          Left = 16
+          Top = 69
+          Width = 169
+          Height = 17
+          Caption = 'Execute in seperate threads'
+          Enabled = False
+          TabOrder = 2
+        end
+        object chkAllowMultipleInstances: TCheckBox
+          Left = 16
+          Top = 92
+          Width = 169
+          Height = 17
+          Caption = 'Allow multiple instances'
+          Enabled = False
+          TabOrder = 3
+        end
+        object chkUseIDInUpdatableQueries: TCheckBox
+          Left = 16
+          Top = 115
+          Width = 232
+          Height = 17
+          Caption = 'Use ID as primary key in updatable queries.'
+          Enabled = False
+          TabOrder = 4
+        end
+        object chkFetchOnDemand: TCheckBox
+          Left = 37
+          Top = 43
+          Width = 100
+          Height = 17
+          Caption = 'Fetch on demand'
+          Checked = True
+          DoubleBuffered = False
+          ParentDoubleBuffered = False
+          State = cbChecked
+          TabOrder = 5
+        end
+      end
+      object rgpConnectionType: TRadioGroup
+        Left = 3
+        Top = 3
+        Width = 664
+        Height = 46
+        Anchors = [akLeft, akTop, akRight]
+        Caption = 'Connection Method'
+        Columns = 4
+        ItemIndex = 0
+        Items.Strings = (
+          'ADO'
+          'DBX'
+          'ZEOS')
+        TabOrder = 1
+        ExplicitWidth = 470
+      end
+      object btnConnectionString: TButton
+        Left = 3
+        Top = 207
+        Width = 153
+        Height = 25
+        Action = actConnectionString
+        TabOrder = 2
       end
     end
     object tsXML: TTabSheet
       Caption = 'XML settings'
       ImageIndex = 11
       TabVisible = False
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 446
-      ExplicitHeight = 0
     end
   end
   object btnApply: TButton
-    Left = 321
-    Top = 416
-    Width = 80
-    Height = 25
+    Left = 304
+    Top = 403
+    Width = 120
+    Height = 26
     Action = actApply
     Anchors = [akRight, akBottom]
     Default = True
@@ -338,10 +332,10 @@ object frmSettingsDialog: TfrmSettingsDialog
     TabOrder = 1
   end
   object btnClose: TButton
-    Left = 407
-    Top = 416
-    Width = 80
-    Height = 25
+    Left = 556
+    Top = 403
+    Width = 120
+    Height = 26
     Action = actClose
     Anchors = [akRight, akBottom]
     ImageMargins.Left = 4
@@ -351,10 +345,10 @@ object frmSettingsDialog: TfrmSettingsDialog
     TabOrder = 2
   end
   object btnCancel: TButton
-    Left = 149
-    Top = 416
-    Width = 80
-    Height = 25
+    Left = 430
+    Top = 403
+    Width = 120
+    Height = 26
     Action = actCancel
     Anchors = [akRight, akBottom]
     DisabledImageIndex = 1
@@ -365,43 +359,24 @@ object frmSettingsDialog: TfrmSettingsDialog
     ModalResult = 2
     TabOrder = 3
   end
-  object btnSave: TButton
-    Left = 235
-    Top = 416
-    Width = 80
-    Height = 25
-    Action = actSave
-    Anchors = [akRight, akBottom]
-    ImageMargins.Left = 4
-    ImageMargins.Right = 4
-    Images = imlMain
-    SelectedImageIndex = 0
-    TabOrder = 4
-  end
   object aclMain: TActionList
     Images = imlMain
-    Left = 336
-    Top = 352
+    Left = 576
+    Top = 48
     object actApply: TAction
-      Caption = 'Apply'
+      Caption = '&Apply'
       Hint = 'Apply settings immediately'
       ImageIndex = 2
       OnExecute = actApplyExecute
     end
     object actClose: TAction
-      Caption = 'Close'
+      Caption = 'Clos&e'
       Hint = 'Close dialog'
       ImageIndex = 12
       OnExecute = actCloseExecute
     end
-    object actSave: TAction
-      Caption = 'Save'
-      Hint = 'Save settings to file'
-      ImageIndex = 0
-      OnExecute = actSaveExecute
-    end
     object actCancel: TAction
-      Caption = 'Cancel'
+      Caption = '&Cancel'
       Hint = 'Cancel all changes.'
       ImageIndex = 1
       OnExecute = actCancelExecute
@@ -442,15 +417,15 @@ object frmSettingsDialog: TfrmSettingsDialog
       OnExecute = actDuplicateExecute
     end
     object actConnectionString: TAction
-      Caption = 'actConnectionString'
+      Caption = 'Connectionstring'
       OnExecute = actConnectionStringExecute
     end
   end
   object imlMain: TImageList
     ColorDepth = cd32Bit
     DrawingStyle = dsTransparent
-    Left = 296
-    Top = 352
+    Left = 520
+    Top = 48
     Bitmap = {
       494C01010E001100040010001000FFFFFFFF2110FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000004000000001002000000000000040
@@ -988,7 +963,7 @@ object frmSettingsDialog: TfrmSettingsDialog
       000000000000}
   end
   object dlgColor: TColorDialog
-    Left = 386
-    Top = 348
+    Left = 634
+    Top = 44
   end
 end
