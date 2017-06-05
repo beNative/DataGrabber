@@ -27,7 +27,7 @@ uses
 
   VirtualTrees, zObjInspector,
 
-  DDuce.Components.PropertyInspector, DDuce.Components.XMLTree,
+  DDuce.Components.PropertyInspector,
 
   DataGrabber.Interfaces, DataGrabber.Settings, DataGrabber.PropertyEditors;
 
@@ -103,16 +103,6 @@ type
     {$ENDREGION}
 
     {$REGION 'event handlers'}
-    procedure xtrSettingsEditing(Sender: TBaseVirtualTree; Node: PVirtualNode;
-      Column: TColumnIndex; var Allowed: Boolean);
-    procedure xtrSettingsPaintText(Sender: TBaseVirtualTree;
-      const TargetCanvas: TCanvas; Node: PVirtualNode; Column: TColumnIndex;
-      TextType: TVSTTextType);
-    procedure xtrSettingsColumnClick(Sender: TBaseVirtualTree;
-      Column: TColumnIndex; Shift: TShiftState);
-    procedure xtrSettingsColumnDblClick(Sender: TBaseVirtualTree;
-      Column: TColumnIndex; Shift: TShiftState);
-
     function FObjectInspectorBeforeAddItem(
       Sender : TControl;
       PItem  : PPropItem
@@ -152,7 +142,6 @@ type
     FApplySettingsMethod : TApplySettingsMethod;
     FObjectInspector     : TzObjectInspector;
     FVSTProfiles         : TVirtualStringTree;
-    FSettingsTree        : TXMLTree;
 
   protected
     procedure Apply;
@@ -447,8 +436,6 @@ begin
 end;
 
 procedure TfrmSettingsDialog.InspectConnectionProfile(AIndex: Integer);
-var
-  I: Integer;
 begin
   if AIndex >= FSettings.ConnectionProfiles.Count then
     AIndex := FSettings.ConnectionProfiles.Count - 1;
