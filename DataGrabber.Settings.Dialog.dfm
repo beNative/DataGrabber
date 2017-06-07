@@ -36,8 +36,6 @@ object frmSettingsDialog: TfrmSettingsDialog
     object tsConnectionProfiles: TTabSheet
       Caption = 'Connection &profiles'
       ImageIndex = 9
-      ExplicitWidth = 476
-      ExplicitHeight = 377
       object splVertical: TSplitter
         Left = 185
         Top = 0
@@ -53,8 +51,6 @@ object frmSettingsDialog: TfrmSettingsDialog
         Align = alClient
         BevelOuter = bvNone
         TabOrder = 0
-        ExplicitWidth = 284
-        ExplicitHeight = 377
       end
       object pnlConnectionProfilesList: TPanel
         Left = 0
@@ -64,7 +60,6 @@ object frmSettingsDialog: TfrmSettingsDialog
         Align = alLeft
         BevelOuter = bvNone
         TabOrder = 1
-        ExplicitHeight = 377
         object tlbConnectionProfiles: TToolBar
           Left = 0
           Top = 0
@@ -104,8 +99,6 @@ object frmSettingsDialog: TfrmSettingsDialog
     object tsDisplay: TTabSheet
       Caption = '&Display'
       ImageIndex = 5
-      ExplicitWidth = 476
-      ExplicitHeight = 377
       DesignSize = (
         670
         365)
@@ -204,8 +197,6 @@ object frmSettingsDialog: TfrmSettingsDialog
     object tsConnection: TTabSheet
       Caption = 'Co&nnection'
       ImageIndex = 10
-      ExplicitWidth = 476
-      ExplicitHeight = 377
       DesignSize = (
         670
         365)
@@ -217,7 +208,6 @@ object frmSettingsDialog: TfrmSettingsDialog
         Anchors = [akLeft, akTop, akRight]
         Caption = 'Connection Settings'
         TabOrder = 0
-        ExplicitWidth = 470
         object lblPacketrecords: TLabel
           Left = 152
           Top = 44
@@ -301,7 +291,6 @@ object frmSettingsDialog: TfrmSettingsDialog
           'DBX'
           'ZEOS')
         TabOrder = 1
-        ExplicitWidth = 470
       end
       object btnConnectionString: TButton
         Left = 3

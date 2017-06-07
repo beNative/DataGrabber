@@ -193,7 +193,6 @@ begin
   Logger.Channels.Add(TLoggerFactories.CreateWinIPCChannel);
   Logger.Clear;
   FManager  := GlobalContainer.Resolve<IConnectionViewManager>;
-
   FSettings := GlobalContainer.Resolve<IDGSettings>;
   AddConnectionView;
   tlbMain.DrawingStyle := dsNormal;

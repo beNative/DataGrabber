@@ -585,7 +585,7 @@ procedure TdmConnectionViewManager.ApplySettings;
 //  S  : string;
 //  CP : TConnectionProfile;
 begin
-//  ActiveConnectionView.ApplySettings;
+  ActiveConnectionView.ApplySettings;
 //  vstProfiles.RootNodeCount := FSettings.ConnectionProfiles.Count;
 //  if Assigned(vstProfiles.FocusedNode) then
 //  begin
@@ -749,7 +749,9 @@ begin
   DV.Settings := FSettings as IDataViewSettings;
   DV.PopupMenu := ConnectionViewPopupMenu;
   FActiveDataView := DV;
-  C := GlobalContainer.Resolve<IConnection>(Settings.ConnectionType);
+  //C := GlobalContainer.Resolve<IConnection>(Settings.ConnectionType);
+  C := GlobalContainer.Resolve<IConnection>('FireDAC');
+
   D           := TdmData.Create(Self, C);
   DV.Data     := D;
   FActiveData := D;

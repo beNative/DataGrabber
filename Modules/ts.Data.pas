@@ -442,7 +442,9 @@ uses
 
   ts.Modules.Memo,
 
-  ts.Utils, ts.DBUtils;
+  ts.Utils, ts.DBUtils,
+
+  DDuce.Logger;
 
 const
   CR             = #13#10;
@@ -1338,6 +1340,7 @@ begin
     try
       DataSet.Active := False;
       S := GenerateSQL;
+      Logger.Send(SQL, S);
       InternalExecute(S);
       UpdateDisplayValues;
       AssignRecordCount;

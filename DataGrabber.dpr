@@ -235,7 +235,8 @@ uses
   BCEditor.Utils in '..\..\components\TBCEditor\Source\BCEditor.Utils.pas',
   uCustomImageDrawHook in 'uCustomImageDrawHook.pas',
   ZeroMQ.API in '..\..\libraries\Delphi-ZeroMQ\ZeroMQ.API.pas',
-  ZeroMQ in '..\..\libraries\Delphi-ZeroMQ\ZeroMQ.pas';
+  ZeroMQ in '..\..\libraries\Delphi-ZeroMQ\ZeroMQ.pas',
+  DataGrabber.ConnectionProfileValueManager in 'DataGrabber.ConnectionProfileValueManager.pas';
 
 {$R *.res}
 

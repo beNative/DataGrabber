@@ -25,11 +25,11 @@ uses
   Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, Vcl.ToolWin,
   Vcl.StdCtrls, Vcl.ComCtrls, Vcl.ActnList, Vcl.Grids, Vcl.Buttons, Vcl.ImgList,
 
-  VirtualTrees, zObjInspector,
+  VirtualTrees,
 
-  DDuce.Components.PropertyInspector,
+  zObjInspector,
 
-  DataGrabber.Interfaces, DataGrabber.Settings, DataGrabber.PropertyEditors;
+  DataGrabber.Interfaces, DataGrabber.Settings;
 
 type
   TApplySettingsMethod = reference to procedure;
@@ -129,12 +129,12 @@ type
       CellRect        : TRect;
       var ContentRect : TRect
     );
-    procedure piConnectionProfilesGetEditorClass(
-      Sender           : TObject;
-      AInstance        : TObject;
-      APropInfo        : PPropInfo;
-      var AEditorClass : TPropertyEditorClass
-    );
+//    procedure piConnectionProfilesGetEditorClass(
+//      Sender           : TObject;
+//      AInstance        : TObject;
+//      APropInfo        : PPropInfo;
+//      var AEditorClass : TPropertyEditorClass
+//    );
     {$ENDREGION}
 
   private
@@ -179,6 +179,8 @@ uses
   DDuce.Factories,
 
   ts.Utils, ts.Interfaces,
+
+  DataGrabber.ConnectionProfileValueManager,
 
   DataGrabber.ConnectionProfiles, DataGrabber.Utils, DataGrabber.Factories;
 
@@ -317,16 +319,6 @@ begin
   Result := not (PItem.Prop.PropertyType is TRttiMethodType);
 end;
 
-procedure TfrmSettingsDialog.piConnectionProfilesGetEditorClass(Sender: TObject;
-  AInstance: TObject; APropInfo: PPropInfo;
-  var AEditorClass: TPropertyEditorClass);
-begin
-  if APropInfo.Name = 'Protocol' then
-    AEditorClass := TProtocolPropertyEditor
-  else if APropInfo.Name = 'ConnectionType' then
-    AEditorClass := TConnectionTypePropertyEditor;
-end;
-
 procedure TfrmSettingsDialog.FVSTProfilesBeforeCellPaint(
   Sender: TBaseVirtualTree; TargetCanvas: TCanvas; Node: PVirtualNode;
   Column: TColumnIndex; CellPaintMode: TVTCellPaintMode; CellRect: TRect;
@@ -370,9 +362,9 @@ begin
   FSettings.PacketRecords    := StrToIntDef(edtPacketRecords.Text, -1);
   FSettings.FetchOnDemand    := chkFetchOnDemand.Checked;
   FSettings.GridCellColoring := chkGridCellColoringEnabled.Checked;
-  FSettings.ConnectionType   := rgpConnectionType.Items
-    [rgpConnectionType.ItemIndex];
-  FSettings.GridType := rgpGridTypes.Items[rgpGridTypes.ItemIndex];
+//  FSettings.ConnectionType   := rgpConnectionType.Items
+//    [rgpConnectionType.ItemIndex];
+//  FSettings.GridType := rgpGridTypes.Items[rgpGridTypes.ItemIndex];
   if Assigned(ApplySettingsMethod) then
     ApplySettingsMethod;
   Save;

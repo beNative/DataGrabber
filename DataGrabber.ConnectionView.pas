@@ -63,7 +63,7 @@ type
     splHorizontal : TSplitter;
     splVertical   : TSplitter;
 
-    procedure vstProfilesBeforeCellPaint(
+    procedure FVSTProfilesBeforeCellPaint(
       Sender          : TBaseVirtualTree;
       TargetCanvas    : TCanvas;
       Node            : PVirtualNode;
@@ -72,19 +72,19 @@ type
       CellRect        : TRect;
       var ContentRect : TRect
     );
-    procedure vstProfilesGetText(
+    procedure FVSTProfilesGetText(
       Sender       : TBaseVirtualTree;
       Node         : PVirtualNode;
       Column       : TColumnIndex;
       TextType     : TVSTTextType;
       var CellText : string
     );
-    procedure vstProfilesFocusChanged(
+    procedure FVSTProfilesFocusChanged(
       Sender : TBaseVirtualTree;
       Node   : PVirtualNode;
       Column : TColumnIndex
     );
-    procedure vstProfilesPaintText(
+    procedure FVSTProfilesPaintText(
       Sender             : TBaseVirtualTree;
       const TargetCanvas : TCanvas;
       Node               : PVirtualNode;
@@ -104,7 +104,7 @@ type
     FEditorView     : IEditorView;
     FActiveDataView : IDGDataView;
     FActiveData     : IData;
-    vstProfiles     : TVirtualStringTree;
+    FVSTProfiles    : TVirtualStringTree;
 
     function GetManager: IConnectionViewManager;
     function GetForm: TForm;
@@ -182,14 +182,14 @@ procedure TfrmConnectionView.AfterConstruction;
 begin
   inherited AfterConstruction;
   InitializeEditorView;
-  vstProfiles := TFactories.CreateVirtualStringTree(Self, pnlProfiles);
-  vstProfiles.RootNodeCount     := Manager.Settings.ConnectionProfiles.Count;
-  vstProfiles.OnBeforeCellPaint := vstProfilesBeforeCellPaint;
-  vstProfiles.OnGetText         := vstProfilesGetText;
-  vstProfiles.OnFocusChanged    := vstProfilesFocusChanged;
-  vstProfiles.OnPaintText       := vstProfilesPaintText;
+  FVSTProfiles := TFactories.CreateVirtualStringTree(Self, pnlProfiles);
+  FVSTProfiles.RootNodeCount     := Manager.Settings.ConnectionProfiles.Count;
+  FVSTProfiles.OnBeforeCellPaint := FVSTProfilesBeforeCellPaint;
+  FVSTProfiles.OnGetText         := FVSTProfilesGetText;
+  FVSTProfiles.OnFocusChanged    := FVSTProfilesFocusChanged;
+  FVSTProfiles.OnPaintText       := FVSTProfilesPaintText;
   // TODO: select default node
-  vstProfiles.FocusedNode       := vstProfiles.GetFirstVisible;
+  FVSTProfiles.FocusedNode       := FVSTProfiles.GetFirstVisible;
   InitializeControls;
   ApplySettings;
 end;
@@ -209,7 +209,7 @@ end;
 {$ENDREGION}
 
 {$REGION 'event handlers'}
-procedure TfrmConnectionView.vstProfilesBeforeCellPaint(
+procedure TfrmConnectionView.FVSTProfilesBeforeCellPaint(
   Sender: TBaseVirtualTree; TargetCanvas: TCanvas; Node: PVirtualNode;
   Column: TColumnIndex; CellPaintMode: TVTCellPaintMode; CellRect: TRect;
   var ContentRect: TRect);
@@ -238,21 +238,21 @@ begin
   EditorView.SetFocus;
 end;
 
-procedure TfrmConnectionView.vstProfilesFocusChanged(Sender: TBaseVirtualTree;
+procedure TfrmConnectionView.FVSTProfilesFocusChanged(Sender: TBaseVirtualTree;
   Node: PVirtualNode; Column: TColumnIndex);
 begin
   if ContainsFocus(Self) then
     ApplySettings;
 end;
 
-procedure TfrmConnectionView.vstProfilesGetText(Sender: TBaseVirtualTree;
+procedure TfrmConnectionView.FVSTProfilesGetText(Sender: TBaseVirtualTree;
   Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType;
   var CellText: string);
 begin
   CellText := Manager.Settings.ConnectionProfiles[Node.Index].DisplayName;
 end;
 
-procedure TfrmConnectionView.vstProfilesPaintText(Sender: TBaseVirtualTree;
+procedure TfrmConnectionView.FVSTProfilesPaintText(Sender: TBaseVirtualTree;
   const TargetCanvas: TCanvas; Node: PVirtualNode; Column: TColumnIndex;
   TextType: TVSTTextType);
 begin
@@ -272,8 +272,8 @@ end;
 {$REGION 'property access methods'}
 function TfrmConnectionView.GetActiveConnectionProfile: TConnectionProfile;
 begin
-  if Assigned(vstProfiles.FocusedNode) then
-    Exit(Manager.Settings.ConnectionProfiles.Items[vstProfiles.FocusedNode.Index])
+  if Assigned(FVSTProfiles.FocusedNode) then
+    Exit(Manager.Settings.ConnectionProfiles.Items[FVSTProfiles.FocusedNode.Index])
   else
     Exit(nil);
 end;
@@ -368,22 +368,22 @@ procedure TfrmConnectionView.ApplySettings;
 var
   CP: TConnectionProfile;
 begin
-  if Assigned(vstProfiles.FocusedNode) then
+  if Assigned(FVSTProfiles.FocusedNode) then
   begin
-    CP := Manager.Settings.ConnectionProfiles.Items[vstProfiles.FocusedNode.Index];
+    CP := Manager.Settings.ConnectionProfiles.Items[FVSTProfiles.FocusedNode.Index];
     EditorView.Color := CP.ProfileColor;
     Application.Title := CP.Name;
     Caption := CP.Name;
     if CP.ConnectionType <> '' then
     begin
-      //CreateData(CP.ConnectionType);
+      //eateData(CP.ConnectionType);
       FActiveData.Connection.ConnectionSettings.Assign(CP.ConnectionSettings);
       FActiveData.PacketRecords := CP.PacketRecords;
       FActiveData.ProviderMode  := CP.ProviderMode;
       FActiveData.FetchOnDemand := CP.FetchOnDemand;
     end;
   end;
-//  CreateView(Manager.Settings.GridType);
+  //eateView(Manager.Settings.GridType);
 
 //  S := FSettings.ConnectionType;
 //  if S = 'ADO' then
