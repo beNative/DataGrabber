@@ -45,28 +45,39 @@ type
   public
     constructor Create(AOwner: TComponent); override;
 
-    function BuildSQLSelect(const ATable  : string): string; overload;
+    function BuildSQLSelect(const ATable: string): string; overload;
 
-    function BuildSQLSelect(const ATable  : string;
-                                  AFields : TStrings): string; overload;
+    function BuildSQLSelect(
+      const ATable : string;
+      AFields      : TStrings
+    ): string; overload;
 
-    function BuildSQLSelect(const ATable  : string;
-                                  AFields : TStrings;
-                                  AValues : Variant): string; overload;
+    function BuildSQLSelect(
+      const ATable : string;
+      AFields      : TStrings;
+      AValues      : Variant
+    ): string; overload;
 
-    function BuildSQLSelect(const ATable   : string;
-                            const ADataSet : TDataSet): string; overload;
+    function BuildSQLSelect(
+      const ATable   : string;
+      const ADataSet : TDataSet
+    ): string; overload;
 
-    function BuildSQLInsert(const ATable  : string;
-                                  AFields : TStrings): string;
+    function BuildSQLInsert(
+      const ATable : string;
+      AFields      : TStrings
+    ): string;
 
     function BuildSQLDelete(const ATable: string) : string;
 
-    function BuildSQLUpdate(const ATable  : string;
-                                  AFields : TStrings): string;
+    function BuildSQLUpdate(
+      const ATable : string;
+      AFields      : TStrings
+    ): string;
 
-    function BuildSQLCall(const AProcedure  : string;
-                                AParameters : TStrings): string;
+    function BuildSQLCall(
+      const AProcedure : string;
+      AParameters      : TStrings): string;
 
   published
     property SelectTemplate: string

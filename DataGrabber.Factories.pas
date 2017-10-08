@@ -22,7 +22,6 @@ uses
   System.Classes, Vcl.ComCtrls, Vcl.Controls,
 
   DDuce.Components.PropertyInspector,
-  //DDuce.Components.XMLTree,
 
   DataGrabber.Interfaces;
 

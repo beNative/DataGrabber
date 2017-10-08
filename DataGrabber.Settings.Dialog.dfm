@@ -305,6 +305,10 @@ object frmSettingsDialog: TfrmSettingsDialog
       Caption = 'XML settings'
       ImageIndex = 11
       TabVisible = False
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
     end
   end
   object btnApply: TButton

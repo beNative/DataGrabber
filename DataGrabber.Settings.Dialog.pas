@@ -378,7 +378,7 @@ end;
 procedure TfrmSettingsDialog.InitializeControls;
 var
   I  : Integer;
-  C  : IConnection;
+  //C  : IConnection;
   //DV : IDGDataView;
   S  : string;
 begin
@@ -399,13 +399,16 @@ begin
   FVSTProfiles.OnGetText         := FVSTProfilesGetText;
   FVSTProfiles.OnFocusChanged    := FVSTProfilesFocusChanged;
   FVSTProfiles.OnBeforeCellPaint := FVSTProfilesBeforeCellPaint;
+  FVSTProfiles.Header.Options    := FVSTProfiles.Header.Options - [hoVisible];
+  FVSTProfiles.TreeOptions.PaintOptions :=
+    FVSTProfiles.TreeOptions.PaintOptions - [toHideSelection];
 
-  for C in GlobalContainer.ResolveAll<IConnection> do
-  begin
-    I := rgpConnectionType.Items.Add(C.ConnectionType);
-    if SameText(C.ConnectionType, FSettings.ConnectionType) then
-      rgpConnectionType.ItemIndex := I;
-  end;
+//  for C in GlobalContainer.ResolveAll<IConnection> do
+//  begin
+//    I := rgpConnectionType.Items.Add(C.ConnectionType);
+//    if SameText(C.ConnectionType, FSettings.ConnectionType) then
+//      rgpConnectionType.ItemIndex := I;
+//  end;
 
 //  rgpGridTypes.Items.Clear;
 //  for DV in GlobalContainer.ResolveAll<IDGDataView> do

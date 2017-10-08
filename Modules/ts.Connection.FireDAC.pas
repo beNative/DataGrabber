@@ -72,8 +72,6 @@ implementation
 uses
   ts.Data.NativeFireDAC;
 
-{%CLASSGROUP 'Vcl.Controls.TControl'}
-
 {$R *.dfm}
 
 {$REGION 'property access methods'}

@@ -188,6 +188,9 @@ begin
   FVSTProfiles.OnGetText         := FVSTProfilesGetText;
   FVSTProfiles.OnFocusChanged    := FVSTProfilesFocusChanged;
   FVSTProfiles.OnPaintText       := FVSTProfilesPaintText;
+  FVSTProfiles.Header.Options := FVSTProfiles.Header.Options - [hoVisible];
+  FVSTProfiles.TreeOptions.PaintOptions :=
+    FVSTProfiles.TreeOptions.PaintOptions - [toHideSelection];
   // TODO: select default node
   FVSTProfiles.FocusedNode       := FVSTProfiles.GetFirstVisible;
   InitializeControls;

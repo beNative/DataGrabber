@@ -29,12 +29,6 @@
         <CfgParent>Base</CfgParent>
         <Base>true</Base>
     </PropertyGroup>
-    <PropertyGroup Condition="('$(Platform)'=='Win32' and '$(Cfg_1)'=='true') or '$(Cfg_1_Win32)'!=''">
-        <Cfg_1_Win32>true</Cfg_1_Win32>
-        <CfgParent>Cfg_1</CfgParent>
-        <Cfg_1>true</Cfg_1>
-        <Base>true</Base>
-    </PropertyGroup>
     <PropertyGroup Condition="'$(Config)'=='Debug' or '$(Cfg_2)'!=''">
         <Cfg_2>true</Cfg_2>
         <CfgParent>Base</CfgParent>
@@ -50,12 +44,12 @@
         <SanitizedProjectName>DataGrabber</SanitizedProjectName>
         <VerInfo_AutoGenVersion>true</VerInfo_AutoGenVersion>
         <VerInfo_PreRelease>true</VerInfo_PreRelease>
-        <VerInfo_Build>24</VerInfo_Build>
+        <VerInfo_Build>25</VerInfo_Build>
         <DCC_Namespace>Vcl;Vcl.Imaging;Vcl.Touch;Vcl.Samples;Vcl.Shell;System;Xml;Data;Datasnap;Web;Soap;Winapi;Data.Win;ts.Connection;$(DCC_Namespace)</DCC_Namespace>
         <VerInfo_MajorVer>2</VerInfo_MajorVer>
         <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
         <VerInfo_Debug>true</VerInfo_Debug>
-        <VerInfo_Keys>CompanyName=;FileDescription=DataGrabber;FileVersion=2.0.0.24;InternalName=;LegalCopyright=(c) 2011 Tim Sinaeve;LegalTrademarks=;OriginalFilename=DataGrabber.exe;ProductName=DataGrabber;ProductVersion=2.0.0.0;Last Compile=2011-11-21 18:09</VerInfo_Keys>
+        <VerInfo_Keys>FileDescription=DataGrabber;FileVersion=2.0.0.25;LegalCopyright=(c) 2011 Tim Sinaeve;OriginalFilename=DataGrabber.exe;ProductName=DataGrabber;ProductVersion=2.0.0.0;Last Compile=2011-11-21 18:09</VerInfo_Keys>
         <VerInfo_Locale>1033</VerInfo_Locale>
         <DCC_UsePackage>vcl;CodeSiteExpressVcl;rtl;vclx;vclimg;dbrtl;adortl;vcldb;vclactnband;vcldbx;bdertl;DataSnapIndy10ServerTransport;DataSnapClient;dbexpress;xmlrtl;DbxClientDriver;DbxCommonDriver;dbxcds;vclie;inet;IndyProtocols;inetdbbde;inetdbxpress;DataSnapProviderClient;dsnap;inetdb;IndySystem;IndyCore;DataSnapServer;dsnapcon;DBXInterBaseDriver;DBXMySQLDriver;DBXFirebirdDriver;DBXSybaseASEDriver;DBXSybaseASADriver;DBXOracleDriver;DBXMSSQLDriver;DBXInformixDriver;DBXDb2Driver;vclib;ibxpress;webdsnap;vclribbon;soaprtl;VclSmp;vcltouch;websnap;AzureCloud;TeeUI;TeeDB;Tee;intrawebdb_110_150;Intraweb_110_150;VirtualTreesR;JclDeveloperTools;Jcl;JclVcl;JclContainers;SynEdit_RXE;dxCoreD15;cxLibraryD15;cxEditorsD15;cxExtEditorsD15;dxBarD15;dxBarDBNavD15;dxBarExtDBItemsD15;dxBarExtItemsD15;dxRibbonD15;cxBarEditItemD15;dxdbtrD15;dxtrmdD15;dxmdsD15;dxDockingD15;dxFlowChartD15;cxPageControlD15;dxLayoutControlD15;dxNavBarD15;dxorgcD15;dxdborD15;cxGridD15;cxPivotGridD15;cxPivotGridChartD15;cxPivotGridOLAPD15;cxTreeListD15;cxTreeListdxBarPopupMenuD15;cxSchedulerD15;cxSchedulerGridD15;dxComnD15;dxsbD15;dcldxSkinsCoreD15;dxSkinsCoreD15;dxSkinscxPCPainterD15;dxSkinscxScheduler3PainterD15;dxSkinsdxDLPainterD15;dxSkinsdxBarPainterD15;dxSkinsdxNavBar2PainterD15;dxSpellCheckerD15;cxSpreadSheetD15;cxVerticalGridD15;dxPSCoreD15;dxPSLnksD15;dxPScxCommonD15;dxPScxExtCommonD15;dxPScxGrid6LnkD15;dxPScxPivotGrid2LnkD15;dxPScxScheduler3LnkD15;dxPScxSSLnkD15;dxPScxTL5LnkD15;dxPScxVGridLnkD15;dxPSTeeChartD15;dxPSDBTeeChartD15;dxPSdxOCLnkD15;dxPSdxDBOCLnkD15;dxPSdxDBTVLnkD15;dxPSdxFCLnkD15;dxPSdxLC2LnkD15;dxPScxPCProdD15;dxPsPrVwAdvD15;dxPSPrVwRibbonD15;dxSkinsdxRibbonPainterD15;ExtLib_D15;JvCore;JvSystem;JvStdCtrls;JvAppFrm;JvBands;JvDB;JvDlgs;JvBDE;JvControls;JvCmp;JvCrypt;JvCustom;JvDocking;JvDotNetCtrls;JvGlobus;JvHMI;JvJans;JvManagedThreads;JvMM;JvNet;JvPageComps;JvPascalInterpreter;JvPluginSystem;JvPrintPreview;JvRuntimeDesign;JvTimeFramework;JvWizards;JvXPCtrls;KControls_DXER;dac140;unidac140;odbcprovider140;ZComponent;ZDbc;ZPlain;ZCore;ZParseSql;$(DCC_UsePackage)</DCC_UsePackage>
         <DCC_DebugInfoInExe>true</DCC_DebugInfoInExe>
@@ -73,7 +67,6 @@
         <DCC_Namespace>System.Win;Datasnap.Win;Web.Win;Soap.Win;Xml.Win;Bde;$(DCC_Namespace)</DCC_Namespace>
         <VerInfo_Locale>1033</VerInfo_Locale>
         <Manifest_File>$(BDS)\bin\default_app.manifest</Manifest_File>
-        <VerInfo_Keys>CompanyName=;FileDescription=;FileVersion=1.0.0.0;InternalName=;LegalCopyright=;LegalTrademarks=;OriginalFilename=;ProductName=;ProductVersion=1.0.0.0;Comments=;Last Compile=2011-11-21 18:09</VerInfo_Keys>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base_Win64)'!=''">
         <DCC_UsePackage>dxCoreRS22;cxLibraryRS22;dxGDIPlusRS22;dxThemeRS22;cxBarEditItemRS22;dxBarRS22;dxComnRS22;cxEditorsRS22;cxDataRS22;cxGridRS22;cxPageControlRS22;cxExportRS22;dxServerModeRS22;cxPivotGridRS22;dxmdsRS22;cxPivotGridChartRS22;cxPivotGridOLAPRS22;cxSchedulerRS22;cxSchedulerGridRS22;dxRibbonRS22;cxSchedulerRibbonStyleEventEditorRS22;cxSchedulerTreeBrowserRS22;cxTreeListRS22;cxTreeListdxBarPopupMenuRS22;cxVerticalGridRS22;dxADOServerModeRS22;dxBarDBNavRS22;dxBarExtDBItemsRS22;dxBarExtItemsRS22;dxorgcRS22;dxdborRS22;dxdbtrRS22;dxDockingRS22;dxFireDACServerModeRS22;dxFlowChartRS22;dxLayoutControlRS22;dxMapControlRS22;dxNavBarRS22;dxPSCoreRS22;dxPScxCommonRS22;dxPSLnksRS22;dxPScxExtCommonRS22;dxPScxGridLnkRS22;dxPSdxLCLnkRS22;dxPScxPivotGridLnkRS22;dxPScxSchedulerLnkRS22;dxPScxTLLnkRS22;dxPScxVGridLnkRS22;dxPSDBTeeChartRS22;dxPSTeeChartRS22;dxPSdxDBOCLnkRS22;dxPSdxOCLnkRS22;dxPSdxDBTVLnkRS22;dxPSdxFCLnkRS22;dxPSdxSpreadSheetLnkRS22;dxSpreadSheetRS22;dxPsPrVwAdvRS22;dxPSPrVwRibbonRS22;dxSpellCheckerRS22;dxTabbedMDIRS22;dxTileControlRS22;dxtrmdRS22;dxWizardControlRS22;$(DCC_UsePackage)</DCC_UsePackage>
@@ -89,10 +82,9 @@
         <DCC_SymbolReferenceInfo>0</DCC_SymbolReferenceInfo>
         <DCC_DebugInformation>0</DCC_DebugInformation>
     </PropertyGroup>
-    <PropertyGroup Condition="'$(Cfg_1_Win32)'!=''">
-        <VerInfo_Keys>CompanyName=;FileDescription=;FileVersion=1.0.0.0;InternalName=;LegalCopyright=;LegalTrademarks=;OriginalFilename=;ProductName=;ProductVersion=1.0.0.0;Comments=;Last Compile=2011-11-21 18:09</VerInfo_Keys>
-    </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_2)'!=''">
+        <VerInfo_Build>25</VerInfo_Build>
+        <VerInfo_Keys>FileDescription=DataGrabber;FileVersion=2.0.0.25;LegalCopyright=(c) 2011 Tim Sinaeve;OriginalFilename=DataGrabber.exe;ProductName=DataGrabber;ProductVersion=2.0.0.0;Last Compile=2011-11-21 18:09</VerInfo_Keys>
         <ILINK_FullDebugInfo>true</ILINK_FullDebugInfo>
         <BCC_SourceDebuggingOn>true</BCC_SourceDebuggingOn>
         <BCC_DebugLineNumbers>true</BCC_DebugLineNumbers>
@@ -108,9 +100,6 @@
         <DCC_IntegerOverflowCheck>true</DCC_IntegerOverflowCheck>
         <DCC_Optimize>false</DCC_Optimize>
         <DCC_GenerateStackFrames>true</DCC_GenerateStackFrames>
-        <VerInfo_MajorVer>1</VerInfo_MajorVer>
-        <VerInfo_Build>0</VerInfo_Build>
-        <VerInfo_Keys>CompanyName=;FileDescription=;FileVersion=1.0.0.0;InternalName=;LegalCopyright=;LegalTrademarks=;OriginalFilename=;ProductName=;ProductVersion=1.0.0.0;Comments=;Last Compile=2011-11-21 18:09</VerInfo_Keys>
     </PropertyGroup>
     <ItemGroup>
         <DelphiCompile Include="$(MainSource)">
@@ -291,26 +280,6 @@
         </DCCReference>
         <DCCReference Include="..\..\libraries\dduce\Source\Modules\DDuce.Factories.pas"/>
         <DCCReference Include="..\..\libraries\dduce\Source\Modules\DDuce.FormSettings.pas"/>
-        <DCCReference Include="..\..\libraries\dduce\Source\Dependencies\zControls\zBase.pas"/>
-        <DCCReference Include="..\..\libraries\dduce\Source\Dependencies\zControls\zCanvasStack.pas"/>
-        <DCCReference Include="..\..\libraries\dduce\Source\Dependencies\zControls\zCollectionEditor.pas">
-            <Form>zCollectionEditorDialog</Form>
-            <FormType>dfm</FormType>
-        </DCCReference>
-        <DCCReference Include="..\..\libraries\dduce\Source\Dependencies\zControls\zControlsReg.pas"/>
-        <DCCReference Include="..\..\libraries\dduce\Source\Dependencies\zControls\zGraphicDialog.pas">
-            <Form>GraphicDialog</Form>
-            <FormType>dfm</FormType>
-        </DCCReference>
-        <DCCReference Include="..\..\libraries\dduce\Source\Dependencies\zControls\zObjInspDialogs.pas"/>
-        <DCCReference Include="..\..\libraries\dduce\Source\Dependencies\zControls\zObjInspector.pas"/>
-        <DCCReference Include="..\..\libraries\dduce\Source\Dependencies\zControls\zObjInspList.pas"/>
-        <DCCReference Include="..\..\libraries\dduce\Source\Dependencies\zControls\zRecList.pas"/>
-        <DCCReference Include="..\..\libraries\dduce\Source\Dependencies\zControls\zStringsDialog.pas">
-            <Form>StringsDialog</Form>
-            <FormType>dfm</FormType>
-        </DCCReference>
-        <DCCReference Include="..\..\libraries\dduce\Source\Dependencies\zControls\zUtils.pas"/>
         <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Consts.pas"/>
         <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Editor.ActiveLine.pas"/>
         <DCCReference Include="..\..\components\TBCEditor\Source\BCEditor.Editor.Base.pas"/>
@@ -417,6 +386,30 @@
         <DCCReference Include="..\..\libraries\Delphi-ZeroMQ\ZeroMQ.API.pas"/>
         <DCCReference Include="..\..\libraries\Delphi-ZeroMQ\ZeroMQ.pas"/>
         <DCCReference Include="DataGrabber.ConnectionProfileValueManager.pas"/>
+        <DCCReference Include="..\..\components\zcontrols\Source\zBase.pas"/>
+        <DCCReference Include="..\..\components\zcontrols\Source\zCanvasStack.pas"/>
+        <DCCReference Include="..\..\components\zcontrols\Source\zCollectionEditor.pas">
+            <Form>zCollectionEditorDialog</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="..\..\components\zcontrols\Source\zControlsReg.pas"/>
+        <DCCReference Include="..\..\components\zcontrols\Source\zGraphicDialog.pas">
+            <Form>GraphicDialog</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="..\..\components\zcontrols\Source\zObjInspDialogs.pas"/>
+        <DCCReference Include="..\..\components\zcontrols\Source\zObjInspector.pas"/>
+        <DCCReference Include="..\..\components\zcontrols\Source\zObjInspList.pas"/>
+        <DCCReference Include="..\..\components\zcontrols\Source\zRecList.pas"/>
+        <DCCReference Include="..\..\components\zcontrols\Source\zStringsDialog.pas">
+            <Form>StringsDialog</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="..\..\components\zcontrols\Source\zUtils.pas"/>
+        <DCCReference Include="..\..\components\zcontrols\Source\FloatConv\FloatConv.Double.pas"/>
+        <DCCReference Include="..\..\components\zcontrols\Source\FloatConv\FloatConv.Extended.pas"/>
+        <DCCReference Include="..\..\components\zcontrols\Source\FloatConv\FloatConv.pas"/>
+        <DCCReference Include="..\..\components\zcontrols\Source\FloatConv\FloatConv.Single.pas"/>
         <None Include="ModelSupport_DataGrabber\XMLSerializer\default.txvpck"/>
         <None Include="ModelSupport_DataGrabber\ts\Classes\SQL\Statement\default.txaPackage"/>
         <None Include="ModelSupport_DataGrabber\DataGrabber\DBXConnection\default.txaPackage"/>
@@ -762,6 +755,12 @@
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
+                <DeployFile LocalName="ModelSupport_DataGrabber\DataGrabber\GridView\default.txvpck" Configuration="Release" Class="ProjectFile">
+                    <Platform Name="Win32">
+                        <RemoteDir>.\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
                 <DeployFile LocalName="ModelSupport_DataGrabber\DataGrabber\DBXConnection\default.txvpck" Configuration="Release" Class="ProjectFile">
                     <Platform Name="Win32">
                         <RemoteDir>.\</RemoteDir>
@@ -769,12 +768,6 @@
                     </Platform>
                 </DeployFile>
                 <DeployFile LocalName="ModelSupport_DataGrabber\DataGrabber\GridView\default.txaPackage" Configuration="Debug" Class="ProjectFile">
-                    <Platform Name="Win32">
-                        <RemoteDir>.\</RemoteDir>
-                        <Overwrite>true</Overwrite>
-                    </Platform>
-                </DeployFile>
-                <DeployFile LocalName="ModelSupport_DataGrabber\DataGrabber\GridView\default.txvpck" Configuration="Release" Class="ProjectFile">
                     <Platform Name="Win32">
                         <RemoteDir>.\</RemoteDir>
                         <Overwrite>true</Overwrite>
