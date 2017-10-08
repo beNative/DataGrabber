@@ -46,6 +46,7 @@ type
     procedure SetVisibleItems(const Value: string);
     function GetFavoriteFields: string;
     procedure SetFavoriteFields(const Value: string);
+    procedure SetConnectionType(const Value: string);
 
   protected
     procedure SetDisplayName(const Value: string); override;
@@ -94,7 +95,7 @@ type
       read FPacketRecords write FPacketRecords;
 
     property ConnectionType: string
-      read FConnectionType write FConnectionType;
+      read FConnectionType write SetConnectionType;
   end;
 
   TConnectionProfileClass = class of TConnectionProfile;
@@ -283,6 +284,15 @@ end;
 procedure TConnectionProfile.SetCollection(const Value: TConnectionProfiles);
 begin
   inherited Collection := Value;
+end;
+
+procedure TConnectionProfile.SetConnectionType(const Value: string);
+begin
+  if Value <> ConnectionType then
+  begin
+    FConnectionType := Value;
+    ConnectionSettings.Protocol := '';
+  end;
 end;
 
 // By default, DisplayName is the name of the TCollectionItem descendant class

@@ -28,7 +28,7 @@ object frmSettingsDialog: TfrmSettingsDialog
     Top = 3
     Width = 678
     Height = 394
-    ActivePage = tsConnectionProfiles
+    ActivePage = tsConnection
     Align = alTop
     Anchors = [akLeft, akTop, akRight, akBottom]
     Images = imlMain
@@ -305,10 +305,6 @@ object frmSettingsDialog: TfrmSettingsDialog
       Caption = 'XML settings'
       ImageIndex = 11
       TabVisible = False
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
     end
   end
   object btnApply: TButton
