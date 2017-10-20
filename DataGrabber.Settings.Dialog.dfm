@@ -28,7 +28,7 @@ object frmSettingsDialog: TfrmSettingsDialog
     Top = 3
     Width = 678
     Height = 394
-    ActivePage = tsConnection
+    ActivePage = tsConnectionProfiles
     Align = alTop
     Anchors = [akLeft, akTop, akRight, akBottom]
     Images = imlMain
@@ -350,8 +350,8 @@ object frmSettingsDialog: TfrmSettingsDialog
   end
   object aclMain: TActionList
     Images = imlMain
-    Left = 576
-    Top = 48
+    Left = 488
+    Top = 160
     object actApply: TAction
       Caption = '&Apply'
       Hint = 'Apply settings immediately'
@@ -413,8 +413,8 @@ object frmSettingsDialog: TfrmSettingsDialog
   object imlMain: TImageList
     ColorDepth = cd32Bit
     DrawingStyle = dsTransparent
-    Left = 520
-    Top = 48
+    Left = 400
+    Top = 160
     Bitmap = {
       494C01010E001100040010001000FFFFFFFF2110FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000004000000001002000000000000040
@@ -952,7 +952,7 @@ object frmSettingsDialog: TfrmSettingsDialog
       000000000000}
   end
   object dlgColor: TColorDialog
-    Left = 634
-    Top = 44
+    Left = 578
+    Top = 164
   end
 end

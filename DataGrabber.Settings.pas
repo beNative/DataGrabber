@@ -23,16 +23,15 @@ uses
   Vcl.Graphics,
   Data.DB,
 
+  REST.JSON,
+
   ts.Classes.ConnectionSettings, ts.Interfaces,
 
   DataGrabber.Interfaces, DataGrabber.SQLTemplates, DataGrabber.FormSettings,
-  DataGrabber.ConnectionProfiles,
-
-  NativeXML, NativeXmlObjectStorage;
+  DataGrabber.ConnectionProfiles;
 
 const
-  SETTINGS_FILE = 'Settings.XML';
-  ROOTNAME      = 'DataGrabber';
+  SETTINGS_FILE = 'Settings.json';
 
 type
   TDGSettings = class(TComponent, IDGSettings, IDataViewSettings)
@@ -54,7 +53,6 @@ type
     FRepositoryVisible        : Boolean;
     FDataInspectorVisible     : Boolean;
 
-    function GetXML: string;
     function GetGridCellColoring: Boolean;
     procedure SetGridCellColoring(const Value: Boolean);
     function GetFieldTypeColor(Index: TFieldType): TColor;
@@ -102,9 +100,6 @@ type
 
     property DataTypeColors[Index: TDataType]: TColor
       read GetDataTypeColor write SetDataTypeColor;
-
-    property XML: string
-      read GetXML;
 
   published
     { Only supported in combination with a ClientDataSet/Provider }
@@ -155,7 +150,9 @@ implementation
 
 uses
   System.SysUtils,
-  Vcl.Forms, Vcl.GraphUtil;
+  Vcl.Forms, Vcl.GraphUtil, Vcl.Dialogs,
+
+  JsonDataObjects;
 
 {$REGION 'construction and destruction'}
 constructor TDGSettings.Create(AOwner: TComponent);
@@ -244,19 +241,6 @@ end;
 procedure TDGSettings.SetGridType(const Value: string);
 begin
   FGridType := Value;
-end;
-
-function TDGSettings.GetXML: string;
-var
-  Doc: TNativeXml;
-begin
-  Doc := TNativeXml.Create(nil);
-  try
-    Doc.LoadFromFile(FFileName);
-    Result := string(Doc.WriteToString);
-  finally
-    FreeAndNil(Doc);
-  end;
 end;
 
 function TDGSettings.GetConnectionProfiles: TConnectionProfiles;
@@ -389,48 +373,54 @@ end;
 {$REGION 'public methods'}
 procedure TDGSettings.Load;
 var
-  Reader: TsdXmlObjectReader;
-  Doc   : TNativeXml;
+  JO  : TJsonObject;
+  I   : Integer;
+  CP  : TConnectionProfile;
 begin
-  Doc := TNativeXml.Create(nil);
-  try
-    if FileExists(FFileName) then
-    begin
-      Doc.LoadFromFile(FFileName);
-      Reader := TsdXmlObjectReader.Create;
-      try
-        Reader.ReadComponent(Doc.Root, Self, nil);
-      finally
-        FreeAndNil(Reader);
+  if FileExists('settings.json') then
+  begin
+    JO := TJsonObject.Create;
+    try
+      JO.LoadFromFile('settings.json');
+      JO.ToSimpleObject(Self);
+      JO['FormSettings'].ObjectValue.ToSimpleObject(FFormSettings);
+      for I := 0 to JO['ConnectionProfiles'].ArrayValue.Count - 1 do
+      begin
+        CP := FConnectionProfiles.Add;
+        JO['ConnectionProfiles'].ArrayValue[I].ObjectValue.ToSimpleObject(CP);
+        JO['ConnectionProfiles']
+          .ArrayValue[I].O['ConnectionSettings']
+          .ObjectValue.ToSimpleObject(CP.ConnectionSettings);
       end;
+    finally
+      JO.Free;
     end;
-  finally
-    FreeAndNil(Doc);
   end;
-  if ConnectionType = '' then
-    ConnectionType := 'ADO';
-
-  if GridType = '' then
-    GridType := 'GridView';
 end;
 
 procedure TDGSettings.Save;
 var
-  Writer: TsdXmlObjectWriter;
-  Doc   : TNativeXml;
+  JO : TJsonObject;
+  I  : Integer;
 begin
-  Doc := TNativeXml.Create(nil);
+  JO := TJsonObject.Create;
   try
-    Writer := TsdXmlObjectWriter.Create;
-    try
-      Doc.XmlFormat := xfReadable;
-      Writer.WriteComponent(Doc.Root, Self);
-      Doc.SaveToFile(FFileName);
-    finally
-      FreeAndNil(Writer);
+    JO.FromSimpleObject(Self);
+    JO['FormSettings'].ObjectValue.FromSimpleObject(FormSettings);
+    for I := 0 to ConnectionProfiles.Count - 1 do
+    begin
+      JO['ConnectionProfiles'].ArrayValue
+        .AddObject
+        .FromSimpleObject(ConnectionProfiles[I]);
+      JO['ConnectionProfiles'].ArrayValue
+        .Values[I]
+        .O['ConnectionSettings']
+        .ObjectValue
+        .FromSimpleObject(ConnectionProfiles[I].ConnectionSettings);
     end;
+    JO.SaveToFile('settings.json', False);
   finally
-    FreeAndNil(Doc);
+    JO.Free;
   end;
 end;
 {$ENDREGION}

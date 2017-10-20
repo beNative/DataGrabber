@@ -131,7 +131,6 @@ type
     procedure SetRepositoryVisible(const Value: Boolean);
     function GetGridType: string;
     procedure SetGridType(const Value: string);
-    function GetXML: string;
 
     property ConnectionProfiles: TConnectionProfiles
       read GetConnectionProfiles write SetConnectionProfiles;
@@ -180,9 +179,6 @@ type
 
     property DataTypeColors[Index: TDataType]: TColor
       read GetDataTypeColor write SetDataTypeColor;
-
-    property XML: string
-      read GetXML;
 
     procedure Load;
     procedure Save;

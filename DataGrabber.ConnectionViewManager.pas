@@ -749,8 +749,8 @@ begin
   DV.Settings := FSettings as IDataViewSettings;
   DV.PopupMenu := ConnectionViewPopupMenu;
   FActiveDataView := DV;
-  //C := GlobalContainer.Resolve<IConnection>(Settings.ConnectionType);
-  C := GlobalContainer.Resolve<IConnection>('FireDAC');
+  C := GlobalContainer.Resolve<IConnection>(Settings.ConnectionType);
+  //C := GlobalContainer.Resolve<IConnection>('FireDAC');
 
   D           := TdmData.Create(Self, C);
   DV.Data     := D;

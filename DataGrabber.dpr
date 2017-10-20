@@ -240,7 +240,9 @@ uses
   FloatConv.Double in '..\..\components\zcontrols\Source\FloatConv\FloatConv.Double.pas',
   FloatConv.Extended in '..\..\components\zcontrols\Source\FloatConv\FloatConv.Extended.pas',
   FloatConv in '..\..\components\zcontrols\Source\FloatConv\FloatConv.pas',
-  FloatConv.Single in '..\..\components\zcontrols\Source\FloatConv\FloatConv.Single.pas';
+  FloatConv.Single in '..\..\components\zcontrols\Source\FloatConv\FloatConv.Single.pas',
+  JsonDataObjects in '..\..\libraries\JsonDataObjects\Source\JsonDataObjects.pas',
+  JSONSerialize in 'JSONSerialize.pas';
 
 {$R *.res}
 

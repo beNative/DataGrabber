@@ -386,7 +386,7 @@ begin
       FActiveData.FetchOnDemand := CP.FetchOnDemand;
     end;
   end;
-  //eateView(Manager.Settings.GridType);
+//  CreateView(Manager.Settings.GridType);
 
 //  S := FSettings.ConnectionType;
 //  if S = 'ADO' then
