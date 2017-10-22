@@ -23,8 +23,6 @@ uses
   Vcl.Graphics,
   Data.DB,
 
-  REST.JSON,
-
   ts.Classes.ConnectionSettings, ts.Interfaces,
 
   DataGrabber.Interfaces, DataGrabber.SQLTemplates, DataGrabber.FormSettings,

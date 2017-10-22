@@ -60,7 +60,7 @@ type
     procedure SetData(const Value: IData);
     function GetSettings: IDataViewSettings;
     procedure SetSettings(const Value: IDataViewSettings);
-      function GetPopupMenu: TPopupMenu; reintroduce;
+    function GetPopupMenu: TPopupMenu; reintroduce;
     procedure SetPopupMenu(const Value: TPopupMenu);
 
     procedure InitializeGridColumns;
@@ -71,37 +71,75 @@ type
     function IsCheckBoxField(const AFieldName: string) : Boolean;
     function IsCellReadOnly(const ACell: TGridCell) : Boolean;
 
-    procedure grdKeyPress(Sender: TObject; var Key: Char);
-    procedure grdChanging(Sender: TObject; var Cell: TGridCell;
-      var Selected: Boolean);
-    procedure grdRowMultiSelect(Sender: TObject; Row: Integer;
-      var Select: Boolean);
-    procedure grdClearMultiSelect(Sender: TObject);
-    procedure grdCheckClick(Sender: TObject; Cell: TGridCell);
-    procedure grdGetCheckState(Sender: TObject; Cell: TGridCell;
-      var CheckState: TCheckBoxState);
-    procedure grdEditCanModify(Sender: TObject; Cell: TGridCell;
-      var CanModify: Boolean);
-    procedure grdCellAcceptCursor(Sender: TObject; Cell: TGridCell;
-      var Accept: Boolean);
-    procedure grdGetCellReadOnly(Sender: TObject; Cell: TGridCell;
-      var CellReadOnly: Boolean);
-    procedure grdGetCellText(Sender: TObject; Cell: TGridCell;
-      var Value: string);
-    procedure grdGetCellColors(Sender: TObject; Cell: TGridCell;
-      Canvas: TCanvas);
-    procedure grdMouseWheelUp(Sender: TObject; Shift: TShiftState;
-      MousePos: TPoint; var Handled: Boolean);
-    procedure grdMouseWheelDown(Sender: TObject; Shift: TShiftState;
-      MousePos: TPoint; var Handled: Boolean);
+    procedure grdKeyPress(
+      Sender  : TObject;
+      var Key : Char
+    );
+    procedure grdChanging(
+      Sender       : TObject;
+      var Cell     : TGridCell;
+      var Selected : Boolean
+    );
+    procedure grdRowMultiSelect(
+      Sender     : TObject;
+      Row        : Integer;
+      var Select : Boolean
+    );
+    procedure grdClearMultiSelect(Sender : TObject);
+    procedure grdCheckClick(
+      Sender : TObject;
+      Cell   : TGridCell
+    );
+    procedure grdGetCheckState(
+      Sender         : TObject;
+      Cell           : TGridCell;
+      var CheckState : TCheckBoxState
+    );
+    procedure grdEditCanModify(
+      Sender        : TObject;
+      Cell          : TGridCell;
+      var CanModify : Boolean
+    );
+    procedure grdCellAcceptCursor(
+      Sender     : TObject;
+      Cell       : TGridCell;
+      var Accept : Boolean
+    );
+    procedure grdGetCellReadOnly(
+      Sender           : TObject;
+      Cell             : TGridCell;
+      var CellReadOnly : Boolean
+    );
+    procedure grdGetCellText(
+      Sender    : TObject;
+      Cell      : TGridCell;
+      var Value : string
+    );
+    procedure grdGetCellColors(
+      Sender : TObject;
+      Cell   : TGridCell;
+      Canvas : TCanvas
+    );
+    procedure grdMouseWheelUp(
+      Sender      : TObject;
+      Shift       : TShiftState;
+      MousePos    : TPoint;
+      var Handled : Boolean
+    );
+    procedure grdMouseWheelDown(
+      Sender      : TObject;
+      Shift       : TShiftState;
+      MousePos    : TPoint;
+      var Handled : Boolean
+    );
+
+  private
+    function GetGridType: string;
 
     procedure UpdateMultiSelection(
       const AFieldName  : string;
       const AFieldValue : Variant
     );
-  private
-    function GetGridType: string;
-
   public
     constructor Create; reintroduce;
     procedure AfterConstruction; override;
@@ -351,8 +389,8 @@ end;
 procedure TfrmGridView.grdCellAcceptCursor(Sender: TObject; Cell: TGridCell;
   var Accept: Boolean);
 begin
-  Accept := Accept and (not FGrid.Columns[Cell.Col].ReadOnly) and
-    (not IsCellReadOnly(Cell));
+//  Accept := Accept and (not FGrid.Columns[Cell.Col].ReadOnly) and
+//    (not IsCellReadOnly(Cell));
 end;
 
 procedure TfrmGridView.grdChanging(Sender: TObject; var Cell: TGridCell;
@@ -620,7 +658,7 @@ end;
 
 procedure TfrmGridView.Inspect;
 begin
-  InspectComponent(FGridSort);
+  InspectComponent(FGrid);
 end;
 
 function TfrmGridView.SelectionToCommaText(AQuoteItems: Boolean): string;

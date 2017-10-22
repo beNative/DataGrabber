@@ -19,7 +19,7 @@ unit DataGrabber.MainForm;
 interface
 
 uses
-  Winapi.Windows, Winapi.Messages,
+  Winapi.Windows, Winapi.Messages, Winapi.GDIPOBJ,
   System.SysUtils, System.Variants, System.Classes, System.Actions,
   System.Diagnostics,
   Vcl.Menus, Vcl.ActnList, Vcl.Controls, Vcl.Forms, Vcl.ToolWin, Vcl.ExtCtrls,
@@ -30,33 +30,35 @@ uses
 
   VirtualTrees,
 
+  ChromeTabs, ChromeTabsClasses, ChromeTabsTypes,
+
   ts.Interfaces, ts.Classes.ConnectionSettings, ts.Data,
 
   ts.Modules.DataInspector, ts.Modules.FieldInspector,
 
   DataGrabber.Data, DataGrabber.EditorView, DataGrabber.Interfaces,
-  DataGrabber.Settings;
+  DataGrabber.Settings, System.ImageList, Vcl.ImgList;
 
 {
   TODO:
-    - replace dx docking with TChromeTab
-    - registration mechanism for dataviews + use Spring.Services
     - autosize form (to data)
     - testing !!!
     - query tree (using gaSQLParser)
     - multiple statements => multiple resultsets
     - log executed statements to a local database
     - Use bindings in settings
-    -  Select <selected fields?> Where in
-    -  Presenter for vertical grid
-    -  Multiselect in vertical grid? => selection delimited quoted text fieldnames
-    -  Datainspector -> group by table?
-    -  Store executed sql’s
-    -  Multiple sessions
-    -  Smart grouping (detect common field prefixes/suffixes (vb. Date, ...Id,)
-    -  Working set of tables (cache meta info and links and make them
-       customizable as a profile setting)
-    -  Statement builder
+    - Select <selected fields?> Where in
+    - Presenter for vertical grid
+    - Multiselect in vertical grid? => selection delimited quoted text fieldnames
+    - Datainspector -> group by table?
+    - Store executed sql’s
+    - Multiple sessions
+    - Smart grouping (detect common field prefixes/suffixes (vb. Date, ...Id,)
+    - Working set of tables (cache meta info and links and make them
+      customizable as a profile setting)
+    - Statement builder
+    - Smart joining
+    - Profile color for tab backgrounds
 }
 
 type
@@ -97,7 +99,6 @@ type
     mniSettings                   : TMenuItem;
     mniShowAllColumns             : TMenuItem;
     mniUNI                        : TMenuItem;
-    mniVirtualDBGrid              : TMenuItem;
     mniZEOS                       : TMenuItem;
     N1                            : TMenuItem;
     pnlConnectionStatus           : TPanel;
@@ -118,6 +119,9 @@ type
     ppmGridTypes                  : TPopupMenu;
     tlbMain                       : TToolBar;
     mniFireDAC                    : TMenuItem;
+    ctMain: TChromeTabs;
+    imlSpinner: TImageList;
+    actInspectChromeTab: TAction;
     {$ENDREGION}
 
     {$REGION 'action handlers'}
@@ -128,6 +132,17 @@ type
     procedure tlbMainCustomDraw(Sender: TToolBar; const ARect: TRect;
       var DefaultDraw: Boolean);
     procedure FormShortCut(var Msg: TWMKey; var Handled: Boolean);
+    procedure ctMainActiveTabChanged(Sender: TObject; ATab: TChromeTab);
+    procedure ctMainButtonAddClick(Sender: TObject; var Handled: Boolean);
+    procedure ctMainButtonCloseTabClick(Sender: TObject; ATab: TChromeTab;
+      var Close: Boolean);
+    procedure ctMainNeedDragImageControl(Sender: TObject; ATab: TChromeTab;
+      var DragControl: TWinControl);
+    procedure ctMainBeforeDrawItem(Sender: TObject; TargetCanvas: TGPGraphics;
+      ItemRect: TRect; ItemType: TChromeTabItemType; TabIndex: Integer;
+      var Handled: Boolean);
+    procedure mniInspectFieldsClick(Sender: TObject);
+    procedure actInspectChromeTabExecute(Sender: TObject);
     {$ENDREGION}
 
   private
@@ -195,7 +210,7 @@ begin
   FManager  := GlobalContainer.Resolve<IConnectionViewManager>;
   FSettings := GlobalContainer.Resolve<IDGSettings>;
   AddConnectionView;
-  tlbMain.DrawingStyle := dsNormal;
+  //tlbMain.DrawingStyle := dsNormal;
   tlbMain.Images       := FManager.ActionList.Images;
   InitializeActions;
   pnlStatus.Caption := SReady;
@@ -215,6 +230,14 @@ procedure TfrmMain.actAddConnectionViewExecute(Sender: TObject);
 begin
   AddConnectionView;
 end;
+
+procedure TfrmMain.actInspectChromeTabExecute(Sender: TObject);
+begin
+  if Assigned(ctMain.ActiveTab) then
+  begin
+    InspectComponent(ctMain);
+  end;
+end;
 {$ENDREGION}
 
 {$REGION 'event handlers'}
@@ -230,6 +253,72 @@ procedure TfrmMain.FormShortCut(var Msg: TWMKey; var Handled: Boolean);
 begin
   Handled := Manager.ActionList.IsShortCut(Msg);
 end;
+
+{$REGION 'ctMain'}
+procedure TfrmMain.ctMainActiveTabChanged(Sender: TObject; ATab: TChromeTab);
+var
+  CV : IConnectionView;
+begin
+  if Assigned(ATab.Data) then
+  begin
+    CV := IConnectionView(ATab.Data);
+    CV.Form.Show;
+    CV.Form.SetFocus;
+    Manager.ActiveConnectionView := CV;
+    ATab.Caption := Format('%s-%s', [
+      CV.Form.Caption,
+      CV.ActiveConnectionProfile.Name
+    ]);
+  end;
+end;
+
+procedure TfrmMain.ctMainBeforeDrawItem(Sender: TObject;
+  TargetCanvas: TGPGraphics; ItemRect: TRect; ItemType: TChromeTabItemType;
+  TabIndex: Integer; var Handled: Boolean);
+var
+  CV : IConnectionView;
+begin
+
+  if (ItemType = itTab)  then
+  begin
+    CV := IConnectionView(ctMain.Tabs[TabIndex].Data);
+    if Assigned(CV) then
+    begin
+
+    //ctMain.LookAndFeel.Tabs.NotActive.Style.StartColor := CV.ActiveConnectionProfile.ProfileColor;
+    //ctMain.LookAndFeel.Tabs.NotActive.Style.StopColor  := CV.ActiveConnectionProfile.ProfileColor;
+
+//  if FBrush = nil then
+//    FBrush := TGPLinearGradientBrush.Create(MakePoint(0, ClientRect.Top),
+//                                            MakePoint(0, ClientRect.Bottom),
+//                                            MakeGDIPColor(StartColor, StartAlpha),
+//                                            MakeGDIPColor(StopColor, StopAlpha));
+
+        end;
+
+    //TargetCanvas.Brush.Color := CV.ActiveConnectionProfile.Color;
+  end;
+end;
+
+procedure TfrmMain.ctMainButtonAddClick(Sender: TObject; var Handled: Boolean);
+begin
+  AddConnectionView;
+  Handled := True;
+end;
+
+procedure TfrmMain.ctMainButtonCloseTabClick(Sender: TObject; ATab: TChromeTab;
+  var Close: Boolean);
+begin
+//
+end;
+
+procedure TfrmMain.ctMainNeedDragImageControl(Sender: TObject; ATab: TChromeTab;
+  var DragControl: TWinControl);
+begin
+  DragControl := pnlConnectionViews;
+end;
+
+{$ENDREGION}
 {$ENDREGION}
 
 {$REGION 'property access methods'}
@@ -269,7 +358,8 @@ end;
 
 function TfrmMain.AddConnectionView: IConnectionView;
 var
-  CV  : IConnectionView;
+  CV : IConnectionView;
+  LTab : TChromeTab;
 begin
   LockPaint(Self);
   try
@@ -278,6 +368,8 @@ begin
     CV.Form.BorderStyle := bsNone;
     CV.Form.Align := alClient;
     CV.Form.Visible := True;
+    LTab := ctMain.Tabs.Add;
+    LTab.Data := Pointer(CV);
   finally
     UnlockPaint(Self);
   end;
@@ -287,6 +379,11 @@ procedure TfrmMain.InitializeActions;
 begin
   AddToolbarButtons(tlbMain, Manager);
 end;
+procedure TfrmMain.mniInspectFieldsClick(Sender: TObject);
+begin
+
+end;
+
 {$ENDREGION}
 
 {$REGION 'protected methods'}
@@ -331,6 +428,12 @@ begin
   if Assigned(Manager.ActiveConnectionView) then
   begin
     V := Manager.ActiveConnectionView;
+    if Assigned(ctMain.ActiveTab) then
+    begin
+      ctMain.ActiveTab.Caption := Format('%s', [
+        V.Form.Caption
+      ]);
+    end;
   end;
 end;
 {$ENDREGION}
@@ -405,3 +508,8 @@ end;
 {$ENDREGION}
 
 end.
+
+
+
+
+

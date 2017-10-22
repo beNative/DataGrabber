@@ -29,7 +29,12 @@ uses
 
   zObjInspector,
 
-  DataGrabber.Interfaces, DataGrabber.Settings;
+  DataGrabber.Interfaces,
+
+  DDuce.Editor.Factories, DDuce.Editor.Interfaces,
+
+  DataGrabber.Settings, DataGrabber.ConnectionProfiles, kcontrols, kbuttons,
+  kedits;
 
 type
   TApplySettingsMethod = reference to procedure;
@@ -51,43 +56,67 @@ type
     btnApply                       : TButton;
     btnCancel                      : TButton;
     btnClose                       : TButton;
-    btnConnectionString            : TButton;
     btnDelete                      : TToolButton;
     btnDuplicate                   : TToolButton;
     btnMoveDown                    : TToolButton;
     btnMoveUp                      : TToolButton;
-    chkAllowMultipleInstances      : TCheckBox;
-    chkFetchOnDemand               : TCheckBox;
     chkGridCellColoringEnabled     : TCheckBox;
-    chkProviderMode                : TCheckBox;
-    chkSeperateThreads             : TCheckBox;
-    chkUseIDInUpdatableQueries     : TCheckBox;
     dlgColor                       : TColorDialog;
-    edtPacketRecords               : TEdit;
     grpCellBackgroundColoring      : TGroupBox;
-    grpConnectionSettings          : TGroupBox;
     imlMain                        : TImageList;
-    lbl1                           : TLabel;
-    lblDates                       : TLabel;
-    lblDateTimes                   : TLabel;
-    lblFloats                      : TLabel;
-    lblIntegers                    : TLabel;
-    lblMemo                        : TLabel;
-    lblNULL                        : TLabel;
-    lblPacketrecords               : TLabel;
-    lblString                      : TLabel;
-    lblTimes                       : TLabel;
     pgcMain                        : TPageControl;
-    pnlConnectionProfilesInspector : TPanel;
+    pnlConnectionProfileDetail     : TPanel;
     pnlConnectionProfilesList      : TPanel;
-    rgpConnectionType              : TRadioGroup;
     rgpGridTypes                   : TRadioGroup;
     splVertical                    : TSplitter;
     tlbConnectionProfiles          : TToolBar;
-    tsConnection                   : TTabSheet;
     tsConnectionProfiles           : TTabSheet;
     tsDisplay                      : TTabSheet;
     tsXML                          : TTabSheet;
+    tsSettings                     : TTabSheet;
+    pgcConnectionProfile           : TPageControl;
+    tsBasic                        : TTabSheet;
+    tsAdvanced                     : TTabSheet;
+    rgpConnectionType              : TRadioGroup;
+    grpClientSettings              : TGroupBox;
+    lblPacketrecords               : TLabel;
+    chkProviderMode                : TCheckBox;
+    edtPacketRecords               : TEdit;
+    chkSeperateThreads             : TCheckBox;
+    chkAllowMultipleInstances      : TCheckBox;
+    chkUseIDInUpdatableQueries     : TCheckBox;
+    chkFetchOnDemand               : TCheckBox;
+    grpConnectionSettings          : TGroupBox;
+    lblProtocols                   : TLabel;
+    cbxProtocols                   : TComboBox;
+    btnConnectionString            : TButton;
+    grpProfileSettings             : TGroupBox;
+    btnProfileColor                : TKColorButton;
+    edtProfileName                 : TLabeledEdit;
+    lblProfileColor                : TLabel;
+    edtDatabase                    : TButtonedEdit;
+    lblDatabase                    : TLabel;
+    lblCatalog                     : TLabel;
+    edtCatalog                     : TButtonedEdit;
+    pnlGridTypeColoring: TGridPanel;
+    lblIntegers: TLabel;
+    btnIntegerColor: TKColorButton;
+    lblFloats: TLabel;
+    btnFloatColor: TKColorButton;
+    lblString: TLabel;
+    btnStringColor: TKColorButton;
+    lblMemo: TLabel;
+    btnMemoColor: TKColorButton;
+    lblDates: TLabel;
+    btnDateColor: TKColorButton;
+    lblTimes: TLabel;
+    btnTimeColor: TKColorButton;
+    lblDateTimes: TLabel;
+    btnDateTimeColor: TKColorButton;
+    lblNULL: TLabel;
+    btnNullColor: TKColorButton;
+    lbl1: TLabel;
+    btnBooleanColor: TKColorButton;
     {$ENDREGION}
 
     {$REGION 'action handlers'}
@@ -120,6 +149,15 @@ type
       Node   : PVirtualNode;
       Column : TColumnIndex
     );
+    procedure FVSTProfilesFocusChanging(
+      Sender           : TBaseVirtualTree;
+      OldNode, NewNode : PVirtualNode;
+      OldColumn,
+      NewColumn : TColumnIndex;
+      var Allowed : Boolean
+    );
+
+
     procedure FVSTProfilesBeforeCellPaint(
       Sender          : TBaseVirtualTree;
       TargetCanvas    : TCanvas;
@@ -129,6 +167,16 @@ type
       CellRect        : TRect;
       var ContentRect : TRect
     );
+    procedure tsSettingsEnter(Sender: TObject);
+    procedure rgpConnectionTypeClick(Sender: TObject);
+    procedure edtDatabaseRightButtonClick(Sender: TObject);
+    procedure edtProfileNameChange(Sender: TObject);
+    procedure btnProfileColorClick(Sender: TObject);
+    procedure cbxProtocolsChange(Sender: TObject);
+    procedure edtDatabaseChange(Sender: TObject);
+    procedure edtCatalogChange(Sender: TObject);
+    procedure chkProviderModeClick(Sender: TObject);
+    procedure chkFetchOnDemandClick(Sender: TObject);
 //    procedure piConnectionProfilesGetEditorClass(
 //      Sender           : TObject;
 //      AInstance        : TObject;
@@ -138,17 +186,28 @@ type
     {$ENDREGION}
 
   private
+    FEditorSettings   : IEditorSettings;
+    FEditor           : IEditorView;
+    FManager          : IEditorManager;
     FSettings            : IDGSettings;
     FApplySettingsMethod : TApplySettingsMethod;
     FObjectInspector     : TzObjectInspector;
     FVSTProfiles         : TVirtualStringTree;
+    FModified            : Boolean;
 
   protected
     procedure Apply;
     procedure Save;
-    procedure InspectConnectionProfile(AIndex: Integer);
+    procedure InspectConnectionProfile(AConnectionProfile: TConnectionProfile);
     procedure InitializeControls;
     procedure UpdateActions; override;
+    procedure Changed;
+
+    procedure InitializeConnectionProfileControls;
+    procedure UpdateConnectionProfileControls(AConnectionProfile: TConnectionProfile);
+    procedure SaveConnectionProfileChanges(AConnectionProfile: TConnectionProfile);
+
+    procedure UpdateProtocols(AConnectionType: string);
 
   public
     constructor Create(
@@ -182,7 +241,7 @@ uses
 
   DataGrabber.ConnectionProfileValueManager,
 
-  DataGrabber.ConnectionProfiles, DataGrabber.Utils, DataGrabber.Factories;
+  DataGrabber.Utils, DataGrabber.Factories;
 
 {$REGION 'interfaced routines'}
 procedure ExecuteSettingsDialog(ASettings: IDGSettings;
@@ -201,6 +260,21 @@ end;
 {$ENDREGION}
 
 {$REGION 'construction and destruction'}
+procedure TfrmSettingsDialog.Changed;
+begin
+  FModified := True;
+end;
+
+procedure TfrmSettingsDialog.chkFetchOnDemandClick(Sender: TObject);
+begin
+  Changed;
+end;
+
+procedure TfrmSettingsDialog.chkProviderModeClick(Sender: TObject);
+begin
+  Changed;
+end;
+
 constructor TfrmSettingsDialog.Create(AOwner: TComponent;
   ASettings: IDGSettings);
 begin
@@ -212,10 +286,15 @@ procedure TfrmSettingsDialog.AfterConstruction;
 begin
   inherited AfterConstruction;
   FObjectInspector :=
-    TFactories.CreatezObjectInspector(Self, pnlConnectionProfilesInspector);
+    TFactories.CreatezObjectInspector(Self, tsAdvanced);
   FObjectInspector.SplitterPos     := FObjectInspector.Width div 2;
   FObjectInspector.SortByCategory  := False;
   FObjectInspector.OnBeforeAddItem := FObjectInspectorBeforeAddItem;
+  FEditorSettings    := TEditorFactories.CreateSettings(Self);
+  FManager     := TEditorFactories.CreateManager(Self, FEditorSettings);
+  FEditor      := TEditorFactories.CreateView(tsSettings, FManager);
+  FEditor.HighlighterName := 'JSON';
+  FEditor.Load('settings.json');
   InitializeControls;
 end;
 {$ENDREGION}
@@ -334,8 +413,27 @@ end;
 
 procedure TfrmSettingsDialog.FVSTProfilesFocusChanged(Sender: TBaseVirtualTree;
   Node: PVirtualNode; Column: TColumnIndex);
+var
+  CP : TConnectionProfile;
 begin
-  InspectConnectionProfile(Node.Index);
+  if Node.Index >= FSettings.ConnectionProfiles.Count then
+    Node.Index := FSettings.ConnectionProfiles.Count - 1;
+  CP := FSettings.ConnectionProfiles[Node.Index];
+  InspectConnectionProfile(CP);
+  UpdateConnectionProfileControls(CP);
+end;
+
+procedure TfrmSettingsDialog.FVSTProfilesFocusChanging(Sender: TBaseVirtualTree;
+  OldNode, NewNode: PVirtualNode; OldColumn, NewColumn: TColumnIndex;
+  var Allowed: Boolean);
+var
+  CP : TConnectionProfile;
+begin
+  if FModified and Assigned(OldNode) then
+  begin
+    CP := FSettings.ConnectionProfiles[OldNode.Index];
+    SaveConnectionProfileChanges(CP);
+  end;
 end;
 
 procedure TfrmSettingsDialog.FVSTProfilesGetText(Sender: TBaseVirtualTree;
@@ -345,6 +443,26 @@ begin
   if Node.Index < Cardinal(FSettings.ConnectionProfiles.Count) then
     CellText := FSettings.ConnectionProfiles[Node.Index].DisplayName;
 end;
+
+procedure TfrmSettingsDialog.edtCatalogChange(Sender: TObject);
+begin
+  Changed;
+end;
+
+procedure TfrmSettingsDialog.edtDatabaseChange(Sender: TObject);
+begin
+  Changed;
+end;
+
+procedure TfrmSettingsDialog.edtDatabaseRightButtonClick(Sender: TObject);
+begin
+//
+end;
+procedure TfrmSettingsDialog.edtProfileNameChange(Sender: TObject);
+begin
+  Changed;
+end;
+
 {$ENDREGION}
 
 {$REGION 'protected methods'}
@@ -364,15 +482,53 @@ begin
   FSettings.GridCellColoring := chkGridCellColoringEnabled.Checked;
 //  FSettings.ConnectionType   := rgpConnectionType.Items
 //    [rgpConnectionType.ItemIndex];
-//  FSettings.GridType := rgpGridTypes.Items[rgpGridTypes.ItemIndex];
+  FSettings.GridType := rgpGridTypes.Items[rgpGridTypes.ItemIndex];
   if Assigned(ApplySettingsMethod) then
     ApplySettingsMethod;
   Save;
+  FEditor.Load('settings.json');
+end;
+
+procedure TfrmSettingsDialog.btnProfileColorClick(Sender: TObject);
+begin
+  Changed;
+end;
+
+procedure TfrmSettingsDialog.cbxProtocolsChange(Sender: TObject);
+begin
+  Changed;
 end;
 
 procedure TfrmSettingsDialog.Save;
 begin
   FSettings.Save;
+end;
+
+procedure TfrmSettingsDialog.SaveConnectionProfileChanges(
+  AConnectionProfile: TConnectionProfile);
+begin
+  AConnectionProfile.Name         := edtProfileName.Text;
+  AConnectionProfile.ProfileColor := btnProfileColor.DlgColor;
+  //rgpConnectionType.ItemIndex := rgpConnectionType.Items.IndexOf(AConnectionProfile.ConnectionType);
+  AConnectionProfile.ProviderMode                := chkProviderMode.Checked;
+  AConnectionProfile.PacketRecords := StrToIntDef(edtPacketRecords.Text, 0);
+  AConnectionProfile.ConnectionSettings.Protocol := cbxProtocols.Text;
+  AConnectionProfile.ConnectionSettings.Database := edtDatabase.Text;
+  AConnectionProfile.ConnectionSettings.Catalog  := edtCatalog.Text;
+  FModified := False;
+end;
+
+procedure TfrmSettingsDialog.tsSettingsEnter(Sender: TObject);
+begin
+  FEditor.Load('settings.json');
+end;
+
+procedure TfrmSettingsDialog.InitializeConnectionProfileControls;
+var
+  C : IConnection;
+begin
+  for C in GlobalContainer.ResolveAll<IConnection> do
+    rgpConnectionType.Items.Add(C.ConnectionType);
 end;
 
 procedure TfrmSettingsDialog.InitializeControls;
@@ -395,8 +551,11 @@ begin
   chkGridCellColoringEnabled.Checked := FSettings.GridCellColoring;
   rgpConnectionType.Items.Clear;
 
+  InitializeConnectionProfileControls;
+
   FVSTProfiles := TFactories.CreateVirtualStringTree(Self, pnlConnectionProfilesList);
   FVSTProfiles.OnGetText         := FVSTProfilesGetText;
+  FVSTProfiles.OnFocusChanging   := FVSTProfilesFocusChanging;
   FVSTProfiles.OnFocusChanged    := FVSTProfilesFocusChanged;
   FVSTProfiles.OnBeforeCellPaint := FVSTProfilesBeforeCellPaint;
   FVSTProfiles.Header.Options    := FVSTProfiles.Header.Options - [hoVisible];
@@ -426,21 +585,31 @@ begin
   I := rgpGridTypes.Items.Add(S);
   if SameText(S, FSettings.GridType) then
     rgpGridTypes.ItemIndex := I;
+  S := 'KGrid';
+  I := rgpGridTypes.Items.Add(S);
+  if SameText(S, FSettings.GridType) then
+    rgpGridTypes.ItemIndex := I;
 
   FVSTProfiles.RootNodeCount := FSettings.ConnectionProfiles.Count;
 end;
 
-procedure TfrmSettingsDialog.InspectConnectionProfile(AIndex: Integer);
+procedure TfrmSettingsDialog.InspectConnectionProfile(AConnectionProfile: TConnectionProfile);
 begin
-  if AIndex >= FSettings.ConnectionProfiles.Count then
-    AIndex := FSettings.ConnectionProfiles.Count - 1;
-
   FObjectInspector.BeginUpdate;
   try
-    FObjectInspector.Component := FSettings.ConnectionProfiles[AIndex];
+    FObjectInspector.Component := AConnectionProfile;
     FObjectInspector.ExpandAll;
   finally
     FObjectInspector.EndUpdate;
+  end;
+end;
+
+procedure TfrmSettingsDialog.rgpConnectionTypeClick(Sender: TObject);
+begin
+  if rgpConnectionType.ItemIndex >= 0 then
+  begin
+    Changed;
+    UpdateProtocols(rgpConnectionType.Items[rgpConnectionType.ItemIndex]);
   end;
 end;
 
@@ -459,6 +628,35 @@ begin
     and (FVSTProfiles.FocusedNode.Index < FVSTProfiles.RootNodeCount - 1);
   actDelete.Enabled := B;
 end;
+
+procedure TfrmSettingsDialog.UpdateConnectionProfileControls(
+  AConnectionProfile: TConnectionProfile);
+begin
+  edtProfileName.Text      := AConnectionProfile.Name;
+  btnProfileColor.DlgColor := AConnectionProfile.ProfileColor;
+  rgpConnectionType.ItemIndex :=
+    rgpConnectionType.Items.IndexOf(AConnectionProfile.ConnectionType);
+  chkProviderMode.Checked := AConnectionProfile.ProviderMode;
+  edtPacketRecords.Text := AConnectionProfile.PacketRecords.ToString;
+
+  UpdateProtocols(AConnectionProfile.ConnectionType);
+  cbxProtocols.Text := AConnectionProfile.ConnectionSettings.Protocol;
+  edtDatabase.Text := AConnectionProfile.ConnectionSettings.Database;
+  edtCatalog.Text  := AConnectionProfile.ConnectionSettings.Catalog;
+
+end;
+
+procedure TfrmSettingsDialog.UpdateProtocols(AConnectionType: string);
+var
+  S: IConnection;
+begin
+  if AConnectionType <> '' then
+  begin
+    S := GlobalContainer.Resolve<IConnection>(AConnectionType);
+    cbxProtocols.Items.Assign(S.Protocols);
+  end;
+end;
+
 {$ENDREGION}
 
 end.

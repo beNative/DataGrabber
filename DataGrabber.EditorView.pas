@@ -148,14 +148,13 @@ begin
   FEditor.Parent := Self;
   FEditor.Align := alClient;
   FEditor.AlignWithMargins := True;
-  FEditor.Directories.Colors := '';
-  FEditor.Directories.Highlighters := '';
+  FEditor.Directories.Colors := 'Colors';
+  FEditor.Directories.Highlighters := 'Highlighters';
 //  if AFileName <> '' then
 //    FSynEditor.LoadFromFile(AFileName);
 //  if AHighlighter <> '' then
-//    FSynEditor.Highlighter.LoadFromFile(AHighlighter + '.json');
-//  if AColorMap <> '' then
-//    FSynEditor.Highlighter.Colors.LoadFromFile(AColorMap + '.json');
+   FEditor.Highlighter.LoadFromFile('SQL - Standard' + '.json');
+   FEditor.Highlighter.Colors.LoadFromFile('tsColors' + '.json');
 
   FEditor.CodeFolding.Visible := True;
   FEditor.Font.Name := 'Consolas';

@@ -261,10 +261,10 @@ procedure TdmConnectionViewManager.BeforeDestruction;
 begin
 //  FreeAndNil(FDataInspector);
 
-//  FSettings.FormSettings.Assign(Self);
-//  FSettings.FormSettings.VSplitterPos := pnlConnectionProfiles.Width;
-//  FSettings.FormSettings.HSplitterPos := pnlTop.Height;
-//  FSettings.Save;
+  //FSettings.FormSettings.Assign(Self);
+  //FSettings.FormSettings.VSplitterPos := pnlConnectionProfiles.Width;
+  //FSettings.FormSettings.HSplitterPos := pnlTop.Height;
+  //FSettings.Save;
 
   FreeAndNil(FConnectionViewList);
   inherited BeforeDestruction;
@@ -750,8 +750,6 @@ begin
   DV.PopupMenu := ConnectionViewPopupMenu;
   FActiveDataView := DV;
   C := GlobalContainer.Resolve<IConnection>(Settings.ConnectionType);
-  //C := GlobalContainer.Resolve<IConnection>('FireDAC');
-
   D           := TdmData.Create(Self, C);
   DV.Data     := D;
   FActiveData := D;

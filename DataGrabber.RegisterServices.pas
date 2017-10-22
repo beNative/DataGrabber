@@ -57,7 +57,7 @@ uses
   {$ENDIF}
   DataGrabber.DataView.GridView,
   {$IFDEF KGRID}
-  DataGrabber.KGrid,
+  DataGrabber.DataView.KGrid,
   {$ENDIF}
   DataGrabber.ConnectionView,
 
@@ -125,6 +125,9 @@ begin
 
   GlobalContainer.RegisterType<TfrmGridView>
                  .Implements<IDGDataView>('GridView');
+
+  GlobalContainer.RegisterType<TfrmKGrid>
+                 .Implements<IDGDataView>('KGrid');
 
   GlobalContainer.RegisterType<TfrmEditorView>
                  .Implements<IEditorView>;

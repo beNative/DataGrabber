@@ -74,63 +74,6 @@ object frmConnectionView: TfrmConnectionView
       Align = alClient
       BevelOuter = bvNone
       TabOrder = 0
-      object pcGrid: TcxPageControl
-        Left = 0
-        Top = 0
-        Width = 829
-        Height = 355
-        Align = alClient
-        TabOrder = 0
-        Properties.CustomButtons.Buttons = <>
-        ClientRectBottom = 351
-        ClientRectLeft = 4
-        ClientRectRight = 825
-        ClientRectTop = 4
-      end
-      object dxdckst1: TdxDockSite
-        Left = 480
-        Top = 48
-        Width = 300
-        Height = 200
-        DockingType = 5
-        OriginalWidth = 300
-        OriginalHeight = 200
-      end
-      object dsGrids: TdxDockSite
-        Left = 0
-        Top = 0
-        Width = 829
-        Height = 355
-        Align = alClient
-        DockingType = 5
-        OriginalWidth = 829
-        OriginalHeight = 355
-        object ldsGrid: TdxLayoutDockSite
-          Left = 0
-          Top = 0
-          Width = 829
-          Height = 355
-          DockingType = 0
-          OriginalWidth = 300
-          OriginalHeight = 200
-        end
-        object pnlGrid1: TdxDockPanel
-          Left = 0
-          Top = 0
-          Width = 829
-          Height = 355
-          AllowFloating = False
-          AutoHide = False
-          Caption = 'pnlGrid1'
-          CustomCaptionButtons.Buttons = <>
-          ShowCaption = False
-          TabsProperties.CloseButtonMode = cbmActiveTab
-          TabsProperties.CustomButtons.Buttons = <>
-          DockingType = 0
-          OriginalWidth = 185
-          OriginalHeight = 140
-        end
-      end
     end
   end
 end

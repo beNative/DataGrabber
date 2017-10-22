@@ -117,7 +117,7 @@ uses
   DSharp.Windows.CustomPresenter in '..\..\libraries\dduce\Source\Dependencies\DSharp\DSharp.Windows.CustomPresenter.pas',
   DSharp.Windows.CustomPresenter.Types in '..\..\libraries\dduce\Source\Dependencies\DSharp\DSharp.Windows.CustomPresenter.Types.pas',
   DSharp.Windows.TreeViewPresenter in '..\..\libraries\dduce\Source\Dependencies\DSharp\DSharp.Windows.TreeViewPresenter.pas',
-  DDuce.ObjectInspector in '..\..\libraries\dduce\Source\Modules\ObjectInspector\DDuce.ObjectInspector.pas' {frmComponentInspector},
+  DDuce.ObjectInspector.zObjectInspector in '..\..\libraries\dduce\Source\Modules\ObjectInspector\DDuce.ObjectInspector.zObjectInspector.pas' {frmComponentInspectorzObjectInspector},
   DDuce.Factories in '..\..\libraries\dduce\Source\Modules\DDuce.Factories.pas',
   DDuce.FormSettings in '..\..\libraries\dduce\Source\Modules\DDuce.FormSettings.pas',
   BCEditor.Consts in '..\..\components\TBCEditor\Source\BCEditor.Consts.pas',
@@ -242,7 +242,9 @@ uses
   FloatConv in '..\..\components\zcontrols\Source\FloatConv\FloatConv.pas',
   FloatConv.Single in '..\..\components\zcontrols\Source\FloatConv\FloatConv.Single.pas',
   JsonDataObjects in '..\..\libraries\JsonDataObjects\Source\JsonDataObjects.pas',
-  JSONSerialize in 'JSONSerialize.pas';
+  DataGrabber.DataView.KGrid in 'DataView\DataGrabber.DataView.KGrid.pas',
+  DDuce.Editor.Factories in '..\..\libraries\dduce\Source\Modules\Editor\DDuce.Editor.Factories.pas',
+  DDuce.ObjectInspector in '..\..\libraries\dduce\Source\Modules\ObjectInspector\DDuce.ObjectInspector.pas' {frmComponentInspector};
 
 {$R *.res}
 

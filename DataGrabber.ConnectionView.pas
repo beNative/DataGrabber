@@ -26,10 +26,6 @@ uses
 
   VirtualTrees,
 
-  cxGraphics, cxControls, cxLookAndFeels, cxLookAndFeelPainters,
-  cxPCdxBarPopupMenu, cxPC, dxDockControl, dxDockPanel, dxBarBuiltInMenu,
-  dxSkinsCore,
-
   ts.Interfaces,
 
   DataGrabber.Interfaces, DataGrabber.ConnectionProfiles;
@@ -50,14 +46,9 @@ uses
 
 type
   TfrmConnectionView = class(TForm, IConnectionView)
-    dsGrids       : TdxDockSite;
-    dxdckst1      : TdxDockSite;
-    ldsGrid       : TdxLayoutDockSite;
-    pcGrid        : TcxPageControl;
     pnlBottom     : TPanel;
     pnlEditor     : TPanel;
     pnlGrid       : TPanel;
-    pnlGrid1      : TdxDockPanel;
     pnlProfiles   : TPanel;
     pnlTop        : TPanel;
     splHorizontal : TSplitter;
@@ -212,6 +203,7 @@ end;
 {$ENDREGION}
 
 {$REGION 'event handlers'}
+{$REGION 'FVSTProfiles'}
 procedure TfrmConnectionView.FVSTProfilesBeforeCellPaint(
   Sender: TBaseVirtualTree; TargetCanvas: TCanvas; Node: PVirtualNode;
   Column: TColumnIndex; CellPaintMode: TVTCellPaintMode; CellRect: TRect;
@@ -226,19 +218,6 @@ begin
   begin
     TargetCanvas.DrawFocusRect(CellRect);
   end;
-end;
-
-{ Needed to allow the shortcuts of the manager's actions to be executed. }
-
-procedure TfrmConnectionView.FormShortCut(var Msg: TWMKey;
-  var Handled: Boolean);
-begin
-  Handled := True;
-end;
-
-procedure TfrmConnectionView.FormShow(Sender: TObject);
-begin
-  EditorView.SetFocus;
 end;
 
 procedure TfrmConnectionView.FVSTProfilesFocusChanged(Sender: TBaseVirtualTree;
@@ -263,6 +242,20 @@ begin
   begin
     TargetCanvas.Font.Style := TargetCanvas.Font.Style + [fsBold];
   end;
+end;
+{$ENDREGION}
+
+{ Needed to allow the shortcuts of the manager's actions to be executed. }
+
+procedure TfrmConnectionView.FormShortCut(var Msg: TWMKey;
+  var Handled: Boolean);
+begin
+  Handled := True;
+end;
+
+procedure TfrmConnectionView.FormShow(Sender: TObject);
+begin
+  EditorView.SetFocus;
 end;
 
 procedure TfrmConnectionView.tlbGridCustomDraw(Sender: TToolBar;
@@ -311,58 +304,6 @@ end;
 procedure TfrmConnectionView.InitializeControls;
 begin
   //tlbGrid.DrawingStyle := TTBDrawingStyle.dsNormal;
-
-//    actADO                        : TAction;
-//    actAutoSizeCols               : TAction;
-//    actCommitTransaction          : TAction;
-//    actCopy                       : TAction;
-//    actCreateModel                : TAction;
-//    actcxGrid                     : TAction;
-//    actDataInspector              : TAction;
-//    actDBX                        : TAction;
-//    actDebug                      : TAction;
-//    actDesigner                   : TAction;
-//    actExecute                    : TAction;
-//    actExecuteLimited             : TAction;
-//    actFavoriteFieldsOnly         : TAction;
-//    actFormatSQL                  : TAction;
-//    actGridMode                   : TAction;
-//    actGridView                   : TAction;
-//    actGroupBySelection           : TAction;
-//    actHideConstantColumns        : TAction;
-//    actHideEmptyColumns           : TAction;
-//    actHideSelectedColumns        : TAction;
-//    actInspect                    : TAction;
-//    actInspectConnection          : TAction;
-//    actInspectDataSet             : TAction;
-//    actInspectFields              : TAction;
-//    actInspectGrid                : TAction;
-//    actKGrid                      : TAction;
-//    actMergeAllColumnCells        : TAction;
-//    actMergeCells                 : TAction;
-//    actPreview                    : TAction;
-//    actPrint                      : TAction;
-//    actProviderMode               : TAction;
-//    actRollbackTransaction        : TAction;
-//    actRtti                       : TAction;
-//    actSelectionAsCommaText       : TAction;
-//    actSelectionAsFields          : TAction;
-//    actSelectionAsQuotedCommaText : TAction;
-//    actSelectionAsQuotedFields    : TAction;
-//    actSelectionAsText            : TAction;
-//    actSelectionAsTextTable       : TAction;
-//    actSelectionAsWhereIn         : TAction;
-//    actSelectionAsWiki            : TAction;
-//    actSettings                   : TAction;
-//    actShowAllColumns             : TAction;
-//    actStartTransaction           : TAction;
-//    actSyncEditorWithRepository   : TAction;
-//    actToggleFullScreen           : TAction;
-//    actToggleRepositoryTree       : TAction;
-//    actToggleStayOnTop            : TAction;
-//    actUNI                        : TAction;
-//    actVirtualDBGrid              : TAction;
-//    actZEOS                       : TAction;
 end;
 {$ENDREGION}
 
@@ -425,7 +366,7 @@ end;
 
 procedure TfrmConnectionView.UpdateActions;
 begin
-  inherited;
+  inherited UpdateActions;
   if ContainsFocus(Self) then
   begin
     if Manager.ActiveConnectionView <> (Self as IConnectionView) then

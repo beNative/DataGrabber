@@ -43,7 +43,7 @@ object frmSettingsDialog: TfrmSettingsDialog
         Height = 365
         ExplicitHeight = 377
       end
-      object pnlConnectionProfilesInspector: TPanel
+      object pnlConnectionProfileDetail: TPanel
         Left = 192
         Top = 0
         Width = 478
@@ -51,6 +51,253 @@ object frmSettingsDialog: TfrmSettingsDialog
         Align = alClient
         BevelOuter = bvNone
         TabOrder = 0
+        ExplicitLeft = 191
+        ExplicitTop = 4
+        object pgcConnectionProfile: TPageControl
+          Left = 0
+          Top = 0
+          Width = 478
+          Height = 365
+          ActivePage = tsBasic
+          Align = alClient
+          TabOrder = 0
+          object tsBasic: TTabSheet
+            Caption = 'Basic'
+            ExplicitLeft = 6
+            ExplicitTop = 16
+            DesignSize = (
+              470
+              337)
+            object rgpConnectionType: TRadioGroup
+              Left = 2
+              Top = 46
+              Width = 464
+              Height = 39
+              Anchors = [akLeft, akTop, akRight]
+              Caption = 'Connection type'
+              Columns = 4
+              ItemIndex = 0
+              Items.Strings = (
+                'ADO'
+                'DBX'
+                'ZEOS')
+              TabOrder = 0
+              OnClick = rgpConnectionTypeClick
+            end
+            object grpClientSettings: TGroupBox
+              Left = 3
+              Top = 188
+              Width = 464
+              Height = 146
+              Anchors = [akLeft, akTop, akRight]
+              Caption = 'Client settings'
+              TabOrder = 1
+              object lblPacketrecords: TLabel
+                Left = 152
+                Top = 44
+                Width = 75
+                Height = 13
+                Caption = 'Packet records:'
+                FocusControl = edtPacketRecords
+              end
+              object chkProviderMode: TCheckBox
+                Left = 16
+                Top = 24
+                Width = 116
+                Height = 17
+                Caption = 'Provider mode'
+                Checked = True
+                DoubleBuffered = False
+                ParentDoubleBuffered = False
+                State = cbChecked
+                TabOrder = 0
+                OnClick = chkProviderModeClick
+              end
+              object edtPacketRecords: TEdit
+                Left = 239
+                Top = 41
+                Width = 58
+                Height = 21
+                Alignment = taCenter
+                TabOrder = 1
+                Text = '100'
+              end
+              object chkSeperateThreads: TCheckBox
+                Left = 16
+                Top = 69
+                Width = 169
+                Height = 17
+                Caption = 'Execute in seperate threads'
+                Enabled = False
+                TabOrder = 2
+              end
+              object chkAllowMultipleInstances: TCheckBox
+                Left = 16
+                Top = 92
+                Width = 169
+                Height = 17
+                Caption = 'Allow multiple instances'
+                Enabled = False
+                TabOrder = 3
+              end
+              object chkUseIDInUpdatableQueries: TCheckBox
+                Left = 16
+                Top = 115
+                Width = 232
+                Height = 17
+                Caption = 'Use ID as primary key in updatable queries.'
+                Enabled = False
+                TabOrder = 4
+              end
+              object chkFetchOnDemand: TCheckBox
+                Left = 37
+                Top = 43
+                Width = 100
+                Height = 17
+                Caption = 'Fetch on demand'
+                Checked = True
+                DoubleBuffered = False
+                ParentDoubleBuffered = False
+                State = cbChecked
+                TabOrder = 5
+                OnClick = chkFetchOnDemandClick
+              end
+            end
+            object grpConnectionSettings: TGroupBox
+              Left = 3
+              Top = 90
+              Width = 465
+              Height = 94
+              Anchors = [akLeft, akTop, akRight]
+              Caption = 'Connection settings'
+              TabOrder = 2
+              DesignSize = (
+                465
+                94)
+              object lblProtocols: TLabel
+                Left = 10
+                Top = 19
+                Width = 39
+                Height = 13
+                Caption = 'Protocol'
+                FocusControl = cbxProtocols
+              end
+              object lblDatabase: TLabel
+                Left = 10
+                Top = 45
+                Width = 50
+                Height = 13
+                Caption = 'Database:'
+                FocusControl = edtDatabase
+              end
+              object lblCatalog: TLabel
+                Left = 10
+                Top = 71
+                Width = 41
+                Height = 13
+                Caption = 'Catalog:'
+                FocusControl = edtCatalog
+              end
+              object cbxProtocols: TComboBox
+                Left = 66
+                Top = 16
+                Width = 145
+                Height = 21
+                DropDownCount = 30
+                TabOrder = 0
+                OnChange = cbxProtocolsChange
+              end
+              object btnConnectionString: TButton
+                Left = 215
+                Top = 14
+                Width = 136
+                Height = 23
+                Action = actConnectionString
+                TabOrder = 1
+              end
+              object edtDatabase: TButtonedEdit
+                Left = 66
+                Top = 42
+                Width = 396
+                Height = 21
+                Anchors = [akLeft, akTop, akRight]
+                Images = imlMain
+                RightButton.ImageIndex = 10
+                RightButton.Visible = True
+                TabOrder = 2
+                OnChange = edtDatabaseChange
+                OnRightButtonClick = edtDatabaseRightButtonClick
+              end
+              object edtCatalog: TButtonedEdit
+                Left = 66
+                Top = 68
+                Width = 396
+                Height = 21
+                Anchors = [akLeft, akTop, akRight]
+                Images = imlMain
+                RightButton.ImageIndex = 10
+                RightButton.Visible = True
+                TabOrder = 3
+                OnChange = edtCatalogChange
+                OnRightButtonClick = edtDatabaseRightButtonClick
+              end
+            end
+            object grpProfileSettings: TGroupBox
+              Left = 3
+              Top = 3
+              Width = 464
+              Height = 36
+              Anchors = [akLeft, akTop, akRight]
+              TabOrder = 3
+              object lblProfileColor: TLabel
+                Left = 220
+                Top = 10
+                Width = 60
+                Height = 13
+                Caption = 'Profile color:'
+                FocusControl = btnProfileColor
+              end
+              object btnProfileColor: TKColorButton
+                Left = 286
+                Top = 5
+                Width = 104
+                Height = 25
+                FocusRect = False
+                Font.Charset = DEFAULT_CHARSET
+                Font.Color = clBtnText
+                Font.Height = -11
+                Font.Name = 'Tahoma'
+                Font.Style = []
+                ParentFont = False
+                TabOrder = 0
+                OnClick = btnProfileColorClick
+                ColorDlgOptions = [cdAnyColor]
+              end
+              object edtProfileName: TLabeledEdit
+                Left = 76
+                Top = 7
+                Width = 137
+                Height = 21
+                EditLabel.Width = 63
+                EditLabel.Height = 13
+                EditLabel.Caption = 'Profile name:'
+                Font.Charset = DEFAULT_CHARSET
+                Font.Color = clWindowText
+                Font.Height = -11
+                Font.Name = 'Tahoma'
+                Font.Style = [fsBold]
+                LabelPosition = lpLeft
+                ParentFont = False
+                TabOrder = 1
+                OnChange = edtProfileNameChange
+              end
+            end
+          end
+          object tsAdvanced: TTabSheet
+            Caption = 'Advanced'
+            ImageIndex = 1
+          end
+        end
       end
       object pnlConnectionProfilesList: TPanel
         Left = 0
@@ -97,8 +344,10 @@ object frmSettingsDialog: TfrmSettingsDialog
       end
     end
     object tsDisplay: TTabSheet
-      Caption = '&Display'
+      Caption = '&Resultgrid display settings'
       ImageIndex = 5
+      ExplicitLeft = 3
+      ExplicitTop = 29
       DesignSize = (
         670
         365)
@@ -109,69 +358,6 @@ object frmSettingsDialog: TfrmSettingsDialog
         Height = 294
         Caption = 'Grid cell background coloring'
         TabOrder = 0
-        object lblIntegers: TLabel
-          Left = 16
-          Top = 52
-          Width = 36
-          Height = 13
-          Caption = 'Integer'
-        end
-        object lblFloats: TLabel
-          Left = 16
-          Top = 78
-          Width = 24
-          Height = 13
-          Caption = 'Float'
-        end
-        object lblString: TLabel
-          Left = 16
-          Top = 104
-          Width = 28
-          Height = 13
-          Caption = 'String'
-        end
-        object lblDates: TLabel
-          Left = 16
-          Top = 157
-          Width = 23
-          Height = 13
-          Caption = 'Date'
-        end
-        object lblTimes: TLabel
-          Left = 16
-          Top = 183
-          Width = 22
-          Height = 13
-          Caption = 'Time'
-        end
-        object lblDateTimes: TLabel
-          Left = 16
-          Top = 209
-          Width = 45
-          Height = 13
-          Caption = 'DateTime'
-        end
-        object lblNULL: TLabel
-          Left = 16
-          Top = 235
-          Width = 24
-          Height = 13
-          Caption = 'NULL'
-        end
-        object lbl1: TLabel
-          Left = 16
-          Top = 262
-          Width = 38
-          Height = 13
-          Caption = 'Boolean'
-        end
-        object lblMemo: TLabel
-          Left = 16
-          Top = 130
-          Width = 28
-          Height = 13
-          Caption = 'Memo'
-        end
         object chkGridCellColoringEnabled: TCheckBox
           Left = 19
           Top = 23
@@ -181,6 +367,414 @@ object frmSettingsDialog: TfrmSettingsDialog
           Checked = True
           State = cbChecked
           TabOrder = 0
+        end
+        object pnlGridTypeColoring: TGridPanel
+          Left = 17
+          Top = 38
+          Width = 145
+          Height = 256
+          ColumnCollection = <
+            item
+              SizeStyle = ssAbsolute
+              Value = 60.000000000000000000
+            end
+            item
+              SizeStyle = ssAbsolute
+              Value = 80.000000000000000000
+            end>
+          ControlCollection = <
+            item
+              Column = 0
+              Control = lblIntegers
+              Row = 0
+            end
+            item
+              Column = 1
+              Control = btnIntegerColor
+              Row = 0
+            end
+            item
+              Column = 0
+              Control = lblFloats
+              Row = 1
+            end
+            item
+              Column = 1
+              Control = btnFloatColor
+              Row = 1
+            end
+            item
+              Column = 0
+              Control = lblString
+              Row = 2
+            end
+            item
+              Column = 1
+              Control = btnStringColor
+              Row = 2
+            end
+            item
+              Column = 0
+              Control = lblMemo
+              Row = 3
+            end
+            item
+              Column = 1
+              Control = btnMemoColor
+              Row = 3
+            end
+            item
+              Column = 0
+              Control = lblDates
+              Row = 4
+            end
+            item
+              Column = 1
+              Control = btnDateColor
+              Row = 4
+            end
+            item
+              Column = 0
+              Control = lblTimes
+              Row = 5
+            end
+            item
+              Column = 1
+              Control = btnTimeColor
+              Row = 5
+            end
+            item
+              Column = 0
+              Control = lblDateTimes
+              Row = 6
+            end
+            item
+              Column = 1
+              Control = btnDateTimeColor
+              Row = 6
+            end
+            item
+              Column = 0
+              Control = lblNULL
+              Row = 7
+            end
+            item
+              Column = 1
+              Control = btnNullColor
+              Row = 7
+            end
+            item
+              Column = 0
+              Control = lbl1
+              Row = 8
+            end
+            item
+              Column = 1
+              Control = btnBooleanColor
+              Row = 8
+            end>
+          RowCollection = <
+            item
+              SizeStyle = ssAbsolute
+              Value = 28.000000000000000000
+            end
+            item
+              SizeStyle = ssAbsolute
+              Value = 28.000000000000000000
+            end
+            item
+              SizeStyle = ssAbsolute
+              Value = 28.000000000000000000
+            end
+            item
+              SizeStyle = ssAbsolute
+              Value = 28.000000000000000000
+            end
+            item
+              SizeStyle = ssAbsolute
+              Value = 28.000000000000000000
+            end
+            item
+              SizeStyle = ssAbsolute
+              Value = 28.000000000000000000
+            end
+            item
+              SizeStyle = ssAbsolute
+              Value = 28.000000000000000000
+            end
+            item
+              SizeStyle = ssAbsolute
+              Value = 28.000000000000000000
+            end
+            item
+              SizeStyle = ssAbsolute
+              Value = 28.000000000000000000
+            end>
+          ShowCaption = False
+          TabOrder = 1
+          DesignSize = (
+            145
+            256)
+          object lblIntegers: TLabel
+            Left = 1
+            Top = 1
+            Width = 60
+            Height = 28
+            Align = alClient
+            Caption = 'Integer'
+            Layout = tlCenter
+            ExplicitWidth = 36
+            ExplicitHeight = 13
+          end
+          object btnIntegerColor: TKColorButton
+            AlignWithMargins = True
+            Left = 64
+            Top = 4
+            Width = 74
+            Height = 22
+            Anchors = []
+            FocusRect = False
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clBtnText
+            Font.Height = -11
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            ParentFont = False
+            TabOrder = 0
+            ColorDlgOptions = []
+          end
+          object lblFloats: TLabel
+            AlignWithMargins = True
+            Left = 4
+            Top = 32
+            Width = 54
+            Height = 25
+            Align = alClient
+            Caption = 'Float'
+            Layout = tlCenter
+            ExplicitWidth = 24
+            ExplicitHeight = 13
+          end
+          object btnFloatColor: TKColorButton
+            AlignWithMargins = True
+            Left = 64
+            Top = 32
+            Width = 74
+            Height = 22
+            Anchors = []
+            FocusRect = False
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clBtnText
+            Font.Height = -11
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            ParentFont = False
+            TabOrder = 1
+            ColorDlgOptions = []
+          end
+          object lblString: TLabel
+            AlignWithMargins = True
+            Left = 4
+            Top = 60
+            Width = 54
+            Height = 25
+            Align = alClient
+            Caption = 'String'
+            Layout = tlCenter
+            ExplicitWidth = 28
+            ExplicitHeight = 13
+          end
+          object btnStringColor: TKColorButton
+            AlignWithMargins = True
+            Left = 64
+            Top = 60
+            Width = 74
+            Height = 22
+            Anchors = []
+            FocusRect = False
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clBtnText
+            Font.Height = -11
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            ParentFont = False
+            TabOrder = 2
+            ColorDlgOptions = []
+          end
+          object lblMemo: TLabel
+            AlignWithMargins = True
+            Left = 4
+            Top = 88
+            Width = 54
+            Height = 25
+            Align = alClient
+            Caption = 'Memo'
+            Layout = tlCenter
+            ExplicitWidth = 28
+            ExplicitHeight = 13
+          end
+          object btnMemoColor: TKColorButton
+            AlignWithMargins = True
+            Left = 64
+            Top = 88
+            Width = 74
+            Height = 22
+            Anchors = []
+            FocusRect = False
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clBtnText
+            Font.Height = -11
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            ParentFont = False
+            TabOrder = 3
+            ColorDlgOptions = []
+          end
+          object lblDates: TLabel
+            AlignWithMargins = True
+            Left = 4
+            Top = 116
+            Width = 54
+            Height = 25
+            Align = alClient
+            Caption = 'Date'
+            Layout = tlCenter
+            ExplicitWidth = 23
+            ExplicitHeight = 13
+          end
+          object btnDateColor: TKColorButton
+            AlignWithMargins = True
+            Left = 64
+            Top = 116
+            Width = 74
+            Height = 22
+            Anchors = []
+            FocusRect = False
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clBtnText
+            Font.Height = -11
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            ParentFont = False
+            TabOrder = 4
+            ColorDlgOptions = []
+          end
+          object lblTimes: TLabel
+            AlignWithMargins = True
+            Left = 4
+            Top = 144
+            Width = 54
+            Height = 25
+            Align = alClient
+            Caption = 'Time'
+            Layout = tlCenter
+            ExplicitWidth = 22
+            ExplicitHeight = 13
+          end
+          object btnTimeColor: TKColorButton
+            AlignWithMargins = True
+            Left = 64
+            Top = 144
+            Width = 74
+            Height = 22
+            Anchors = []
+            FocusRect = False
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clBtnText
+            Font.Height = -11
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            ParentFont = False
+            TabOrder = 5
+            ColorDlgOptions = []
+          end
+          object lblDateTimes: TLabel
+            AlignWithMargins = True
+            Left = 4
+            Top = 172
+            Width = 54
+            Height = 25
+            Align = alClient
+            Caption = 'DateTime'
+            Layout = tlCenter
+            ExplicitWidth = 45
+            ExplicitHeight = 13
+          end
+          object btnDateTimeColor: TKColorButton
+            AlignWithMargins = True
+            Left = 64
+            Top = 172
+            Width = 74
+            Height = 22
+            Anchors = []
+            FocusRect = False
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clBtnText
+            Font.Height = -11
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            ParentFont = False
+            TabOrder = 6
+            ColorDlgOptions = []
+          end
+          object lblNULL: TLabel
+            AlignWithMargins = True
+            Left = 4
+            Top = 200
+            Width = 54
+            Height = 25
+            Align = alClient
+            Caption = 'NULL'
+            Layout = tlCenter
+            ExplicitWidth = 24
+            ExplicitHeight = 13
+          end
+          object btnNullColor: TKColorButton
+            AlignWithMargins = True
+            Left = 64
+            Top = 200
+            Width = 74
+            Height = 22
+            Anchors = []
+            FocusRect = False
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clBtnText
+            Font.Height = -11
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            ParentFont = False
+            TabOrder = 7
+            ColorDlgOptions = []
+          end
+          object lbl1: TLabel
+            AlignWithMargins = True
+            Left = 4
+            Top = 228
+            Width = 54
+            Height = 25
+            Align = alClient
+            Caption = 'Boolean'
+            Layout = tlCenter
+            ExplicitWidth = 38
+            ExplicitHeight = 13
+          end
+          object btnBooleanColor: TKColorButton
+            AlignWithMargins = True
+            Left = 64
+            Top = 228
+            Width = 74
+            Height = 22
+            Anchors = []
+            FocusRect = False
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clBtnText
+            Font.Height = -11
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            ParentFont = False
+            TabOrder = 8
+            ColorDlgOptions = []
+          end
         end
       end
       object rgpGridTypes: TRadioGroup
@@ -194,117 +788,15 @@ object frmSettingsDialog: TfrmSettingsDialog
         TabOrder = 1
       end
     end
-    object tsConnection: TTabSheet
-      Caption = 'Co&nnection'
-      ImageIndex = 10
-      DesignSize = (
-        670
-        365)
-      object grpConnectionSettings: TGroupBox
-        Left = 3
-        Top = 55
-        Width = 664
-        Height = 146
-        Anchors = [akLeft, akTop, akRight]
-        Caption = 'Connection Settings'
-        TabOrder = 0
-        object lblPacketrecords: TLabel
-          Left = 152
-          Top = 44
-          Width = 75
-          Height = 13
-          Caption = 'Packet records:'
-          FocusControl = edtPacketRecords
-        end
-        object chkProviderMode: TCheckBox
-          Left = 16
-          Top = 24
-          Width = 116
-          Height = 17
-          Caption = 'Provider mode'
-          Checked = True
-          DoubleBuffered = False
-          ParentDoubleBuffered = False
-          State = cbChecked
-          TabOrder = 0
-        end
-        object edtPacketRecords: TEdit
-          Left = 239
-          Top = 41
-          Width = 58
-          Height = 21
-          Alignment = taCenter
-          TabOrder = 1
-          Text = '100'
-        end
-        object chkSeperateThreads: TCheckBox
-          Left = 16
-          Top = 69
-          Width = 169
-          Height = 17
-          Caption = 'Execute in seperate threads'
-          Enabled = False
-          TabOrder = 2
-        end
-        object chkAllowMultipleInstances: TCheckBox
-          Left = 16
-          Top = 92
-          Width = 169
-          Height = 17
-          Caption = 'Allow multiple instances'
-          Enabled = False
-          TabOrder = 3
-        end
-        object chkUseIDInUpdatableQueries: TCheckBox
-          Left = 16
-          Top = 115
-          Width = 232
-          Height = 17
-          Caption = 'Use ID as primary key in updatable queries.'
-          Enabled = False
-          TabOrder = 4
-        end
-        object chkFetchOnDemand: TCheckBox
-          Left = 37
-          Top = 43
-          Width = 100
-          Height = 17
-          Caption = 'Fetch on demand'
-          Checked = True
-          DoubleBuffered = False
-          ParentDoubleBuffered = False
-          State = cbChecked
-          TabOrder = 5
-        end
-      end
-      object rgpConnectionType: TRadioGroup
-        Left = 3
-        Top = 3
-        Width = 664
-        Height = 46
-        Anchors = [akLeft, akTop, akRight]
-        Caption = 'Connection Method'
-        Columns = 4
-        ItemIndex = 0
-        Items.Strings = (
-          'ADO'
-          'DBX'
-          'ZEOS')
-        TabOrder = 1
-      end
-      object btnConnectionString: TButton
-        Left = 3
-        Top = 207
-        Width = 153
-        Height = 25
-        Action = actConnectionString
-        TabOrder = 2
-      end
-    end
     object tsXML: TTabSheet
       Caption = 'XML settings'
       ImageIndex = 11
       TabVisible = False
+    end
+    object tsSettings: TTabSheet
+      Caption = 'Settings'
+      ImageIndex = -1
+      OnEnter = tsSettingsEnter
     end
   end
   object btnApply: TButton
@@ -351,7 +843,7 @@ object frmSettingsDialog: TfrmSettingsDialog
   object aclMain: TActionList
     Images = imlMain
     Left = 488
-    Top = 160
+    Top = 336
     object actApply: TAction
       Caption = '&Apply'
       Hint = 'Apply settings immediately'
@@ -413,8 +905,8 @@ object frmSettingsDialog: TfrmSettingsDialog
   object imlMain: TImageList
     ColorDepth = cd32Bit
     DrawingStyle = dsTransparent
-    Left = 400
-    Top = 160
+    Left = 440
+    Top = 336
     Bitmap = {
       494C01010E001100040010001000FFFFFFFF2110FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000004000000001002000000000000040
@@ -952,7 +1444,7 @@ object frmSettingsDialog: TfrmSettingsDialog
       000000000000}
   end
   object dlgColor: TColorDialog
-    Left = 578
-    Top = 164
+    Left = 546
+    Top = 332
   end
 end

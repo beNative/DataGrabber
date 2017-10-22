@@ -195,7 +195,6 @@ begin
   AVT.Selected[ANode] := True;
   AVT.ScrollIntoView(ANode, False);
 end;
-{$ENDREGION}
 
 function ContainsFocus(AControl: TWinControl): Boolean;
 var
@@ -211,5 +210,6 @@ begin
     Result := AControl.ContainsControl(C);
   end;
 end;
+{$ENDREGION}
 
 end.
