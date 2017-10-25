@@ -51,8 +51,6 @@ object frmSettingsDialog: TfrmSettingsDialog
         Align = alClient
         BevelOuter = bvNone
         TabOrder = 0
-        ExplicitLeft = 191
-        ExplicitTop = 4
         object pgcConnectionProfile: TPageControl
           Left = 0
           Top = 0
@@ -63,14 +61,12 @@ object frmSettingsDialog: TfrmSettingsDialog
           TabOrder = 0
           object tsBasic: TTabSheet
             Caption = 'Basic'
-            ExplicitLeft = 6
-            ExplicitTop = 16
             DesignSize = (
               470
               337)
             object rgpConnectionType: TRadioGroup
               Left = 2
-              Top = 46
+              Top = 45
               Width = 464
               Height = 39
               Anchors = [akLeft, akTop, akRight]
@@ -79,8 +75,8 @@ object frmSettingsDialog: TfrmSettingsDialog
               ItemIndex = 0
               Items.Strings = (
                 'ADO'
-                'DBX'
-                'ZEOS')
+                'FireDAC'
+                'dbExpress')
               TabOrder = 0
               OnClick = rgpConnectionTypeClick
             end
@@ -210,7 +206,7 @@ object frmSettingsDialog: TfrmSettingsDialog
               object btnConnectionString: TButton
                 Left = 215
                 Top = 14
-                Width = 136
+                Width = 106
                 Height = 23
                 Action = actConnectionString
                 TabOrder = 1
@@ -346,8 +342,6 @@ object frmSettingsDialog: TfrmSettingsDialog
     object tsDisplay: TTabSheet
       Caption = '&Resultgrid display settings'
       ImageIndex = 5
-      ExplicitLeft = 3
-      ExplicitTop = 29
       DesignSize = (
         670
         365)
@@ -355,7 +349,7 @@ object frmSettingsDialog: TfrmSettingsDialog
         Left = 3
         Top = 56
         Width = 162
-        Height = 294
+        Height = 302
         Caption = 'Grid cell background coloring'
         TabOrder = 0
         object chkGridCellColoringEnabled: TCheckBox
@@ -369,10 +363,11 @@ object frmSettingsDialog: TfrmSettingsDialog
           TabOrder = 0
         end
         object pnlGridTypeColoring: TGridPanel
-          Left = 17
+          Left = 12
           Top = 38
           Width = 145
-          Height = 256
+          Height = 257
+          BevelOuter = bvNone
           ColumnCollection = <
             item
               SizeStyle = ssAbsolute
@@ -465,7 +460,7 @@ object frmSettingsDialog: TfrmSettingsDialog
             end
             item
               Column = 0
-              Control = lbl1
+              Control = lblBoolean
               Row = 8
             end
             item
@@ -514,10 +509,10 @@ object frmSettingsDialog: TfrmSettingsDialog
           TabOrder = 1
           DesignSize = (
             145
-            256)
+            257)
           object lblIntegers: TLabel
-            Left = 1
-            Top = 1
+            Left = 0
+            Top = 0
             Width = 60
             Height = 28
             Align = alClient
@@ -528,8 +523,8 @@ object frmSettingsDialog: TfrmSettingsDialog
           end
           object btnIntegerColor: TKColorButton
             AlignWithMargins = True
-            Left = 64
-            Top = 4
+            Left = 63
+            Top = 3
             Width = 74
             Height = 22
             Anchors = []
@@ -542,11 +537,13 @@ object frmSettingsDialog: TfrmSettingsDialog
             ParentFont = False
             TabOrder = 0
             ColorDlgOptions = []
+            ExplicitLeft = 64
+            ExplicitTop = 4
           end
           object lblFloats: TLabel
             AlignWithMargins = True
-            Left = 4
-            Top = 32
+            Left = 3
+            Top = 31
             Width = 54
             Height = 25
             Align = alClient
@@ -557,8 +554,8 @@ object frmSettingsDialog: TfrmSettingsDialog
           end
           object btnFloatColor: TKColorButton
             AlignWithMargins = True
-            Left = 64
-            Top = 32
+            Left = 63
+            Top = 31
             Width = 74
             Height = 22
             Anchors = []
@@ -571,11 +568,13 @@ object frmSettingsDialog: TfrmSettingsDialog
             ParentFont = False
             TabOrder = 1
             ColorDlgOptions = []
+            ExplicitLeft = 64
+            ExplicitTop = 32
           end
           object lblString: TLabel
             AlignWithMargins = True
-            Left = 4
-            Top = 60
+            Left = 3
+            Top = 59
             Width = 54
             Height = 25
             Align = alClient
@@ -586,8 +585,8 @@ object frmSettingsDialog: TfrmSettingsDialog
           end
           object btnStringColor: TKColorButton
             AlignWithMargins = True
-            Left = 64
-            Top = 60
+            Left = 63
+            Top = 59
             Width = 74
             Height = 22
             Anchors = []
@@ -600,11 +599,13 @@ object frmSettingsDialog: TfrmSettingsDialog
             ParentFont = False
             TabOrder = 2
             ColorDlgOptions = []
+            ExplicitLeft = 64
+            ExplicitTop = 60
           end
           object lblMemo: TLabel
             AlignWithMargins = True
-            Left = 4
-            Top = 88
+            Left = 3
+            Top = 87
             Width = 54
             Height = 25
             Align = alClient
@@ -615,8 +616,8 @@ object frmSettingsDialog: TfrmSettingsDialog
           end
           object btnMemoColor: TKColorButton
             AlignWithMargins = True
-            Left = 64
-            Top = 88
+            Left = 63
+            Top = 87
             Width = 74
             Height = 22
             Anchors = []
@@ -629,11 +630,13 @@ object frmSettingsDialog: TfrmSettingsDialog
             ParentFont = False
             TabOrder = 3
             ColorDlgOptions = []
+            ExplicitLeft = 64
+            ExplicitTop = 88
           end
           object lblDates: TLabel
             AlignWithMargins = True
-            Left = 4
-            Top = 116
+            Left = 3
+            Top = 115
             Width = 54
             Height = 25
             Align = alClient
@@ -644,8 +647,8 @@ object frmSettingsDialog: TfrmSettingsDialog
           end
           object btnDateColor: TKColorButton
             AlignWithMargins = True
-            Left = 64
-            Top = 116
+            Left = 63
+            Top = 115
             Width = 74
             Height = 22
             Anchors = []
@@ -658,11 +661,13 @@ object frmSettingsDialog: TfrmSettingsDialog
             ParentFont = False
             TabOrder = 4
             ColorDlgOptions = []
+            ExplicitLeft = 64
+            ExplicitTop = 116
           end
           object lblTimes: TLabel
             AlignWithMargins = True
-            Left = 4
-            Top = 144
+            Left = 3
+            Top = 143
             Width = 54
             Height = 25
             Align = alClient
@@ -673,8 +678,8 @@ object frmSettingsDialog: TfrmSettingsDialog
           end
           object btnTimeColor: TKColorButton
             AlignWithMargins = True
-            Left = 64
-            Top = 144
+            Left = 63
+            Top = 143
             Width = 74
             Height = 22
             Anchors = []
@@ -687,11 +692,13 @@ object frmSettingsDialog: TfrmSettingsDialog
             ParentFont = False
             TabOrder = 5
             ColorDlgOptions = []
+            ExplicitLeft = 64
+            ExplicitTop = 144
           end
           object lblDateTimes: TLabel
             AlignWithMargins = True
-            Left = 4
-            Top = 172
+            Left = 3
+            Top = 171
             Width = 54
             Height = 25
             Align = alClient
@@ -702,8 +709,8 @@ object frmSettingsDialog: TfrmSettingsDialog
           end
           object btnDateTimeColor: TKColorButton
             AlignWithMargins = True
-            Left = 64
-            Top = 172
+            Left = 63
+            Top = 171
             Width = 74
             Height = 22
             Anchors = []
@@ -716,11 +723,13 @@ object frmSettingsDialog: TfrmSettingsDialog
             ParentFont = False
             TabOrder = 6
             ColorDlgOptions = []
+            ExplicitLeft = 64
+            ExplicitTop = 172
           end
           object lblNULL: TLabel
             AlignWithMargins = True
-            Left = 4
-            Top = 200
+            Left = 3
+            Top = 199
             Width = 54
             Height = 25
             Align = alClient
@@ -731,8 +740,8 @@ object frmSettingsDialog: TfrmSettingsDialog
           end
           object btnNullColor: TKColorButton
             AlignWithMargins = True
-            Left = 64
-            Top = 200
+            Left = 63
+            Top = 199
             Width = 74
             Height = 22
             Anchors = []
@@ -745,11 +754,13 @@ object frmSettingsDialog: TfrmSettingsDialog
             ParentFont = False
             TabOrder = 7
             ColorDlgOptions = []
+            ExplicitLeft = 64
+            ExplicitTop = 200
           end
-          object lbl1: TLabel
+          object lblBoolean: TLabel
             AlignWithMargins = True
-            Left = 4
-            Top = 228
+            Left = 3
+            Top = 227
             Width = 54
             Height = 25
             Align = alClient
@@ -760,8 +771,8 @@ object frmSettingsDialog: TfrmSettingsDialog
           end
           object btnBooleanColor: TKColorButton
             AlignWithMargins = True
-            Left = 64
-            Top = 228
+            Left = 63
+            Top = 227
             Width = 74
             Height = 22
             Anchors = []
@@ -774,6 +785,8 @@ object frmSettingsDialog: TfrmSettingsDialog
             ParentFont = False
             TabOrder = 8
             ColorDlgOptions = []
+            ExplicitLeft = 64
+            ExplicitTop = 228
           end
         end
       end
@@ -788,11 +801,6 @@ object frmSettingsDialog: TfrmSettingsDialog
         TabOrder = 1
       end
     end
-    object tsXML: TTabSheet
-      Caption = 'XML settings'
-      ImageIndex = 11
-      TabVisible = False
-    end
     object tsSettings: TTabSheet
       Caption = 'Settings'
       ImageIndex = -1
@@ -800,9 +808,9 @@ object frmSettingsDialog: TfrmSettingsDialog
     end
   end
   object btnApply: TButton
-    Left = 304
+    Left = 214
     Top = 403
-    Width = 120
+    Width = 150
     Height = 26
     Action = actApply
     Anchors = [akRight, akBottom]
@@ -813,9 +821,9 @@ object frmSettingsDialog: TfrmSettingsDialog
     TabOrder = 1
   end
   object btnClose: TButton
-    Left = 556
+    Left = 526
     Top = 403
-    Width = 120
+    Width = 150
     Height = 26
     Action = actClose
     Anchors = [akRight, akBottom]
@@ -826,9 +834,9 @@ object frmSettingsDialog: TfrmSettingsDialog
     TabOrder = 2
   end
   object btnCancel: TButton
-    Left = 430
+    Left = 370
     Top = 403
-    Width = 120
+    Width = 150
     Height = 26
     Action = actCancel
     Anchors = [akRight, akBottom]

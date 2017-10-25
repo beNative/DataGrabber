@@ -102,6 +102,7 @@ type
 
   IDGSettings = interface
   ['{C6E48393-6FBA-451B-A565-921F11E433F0}']
+    {$REGION 'property access methods'}
     function GetGridCellColoring: Boolean;
     procedure SetGridCellColoring(const Value: Boolean);
     function GetFieldTypeColor(Index: TFieldType): TColor;
@@ -131,6 +132,12 @@ type
     procedure SetRepositoryVisible(const Value: Boolean);
     function GetGridType: string;
     procedure SetGridType(const Value: string);
+    function GetFileName: string;
+    procedure SetFileName(const Value: string);
+    {$ENDREGION}
+
+    property FileName: string
+      read GetFileName write SetFileName;
 
     property ConnectionProfiles: TConnectionProfiles
       read GetConnectionProfiles write SetConnectionProfiles;
@@ -209,6 +216,7 @@ type
 
   IConnectionViewManager = interface
   ['{E71C1D68-F201-4A95-9802-1D5B77445FEC}']
+    {$REGION 'property access methods'}
     function GetActiveConnectionView: IConnectionView;
     procedure SetActiveConnectionView(const Value: IConnectionView);
     function GetSettings: IDGSettings;
@@ -217,6 +225,7 @@ type
     function GetActionList: TActionList;
     function GetItem(AName: string): TCustomAction;
     function GetConnectionViewPopupMenu: TPopupMenu;
+    {$ENDREGION}
 
     function AddConnectionView: IConnectionView;
     procedure UpdateActions;

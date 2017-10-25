@@ -51,6 +51,7 @@ type
     FRepositoryVisible        : Boolean;
     FDataInspectorVisible     : Boolean;
 
+    {$REGION 'property access methods'}
     function GetGridCellColoring: Boolean;
     procedure SetGridCellColoring(const Value: Boolean);
     function GetFieldTypeColor(Index: TFieldType): TColor;
@@ -80,6 +81,9 @@ type
     procedure SetRepositoryVisible(const Value: Boolean);
     function GetGridType: string;
     procedure SetGridType(const Value: string);
+    function GetFileName: string;
+    procedure SetFileName(const Value: string);
+    {$ENDREGION}
 
   protected
     procedure AssignStandardSettings;
@@ -98,6 +102,9 @@ type
 
     property DataTypeColors[Index: TDataType]: TColor
       read GetDataTypeColor write SetDataTypeColor;
+
+    property FileName: string
+      read GetFileName write SetFileName;
 
   published
     { Only supported in combination with a ClientDataSet/Provider }
@@ -349,6 +356,19 @@ end;
 procedure TDGSettings.SetFetchOnDemand(const Value: Boolean);
 begin
   FFetchOnDemand := Value;
+end;
+
+function TDGSettings.GetFileName: string;
+begin
+  Result := FFileName;
+end;
+
+procedure TDGSettings.SetFileName(const Value: string);
+begin
+  if Value <> FileName then
+  begin
+    FFileName := Value;
+  end;
 end;
 
 function TDGSettings.GetFormSettings: TFormSettings;

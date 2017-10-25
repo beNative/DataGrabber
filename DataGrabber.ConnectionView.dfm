@@ -5,11 +5,7 @@ object frmConnectionView: TfrmConnectionView
   ClientWidth = 829
   Color = clBtnFace
   DoubleBuffered = True
-  Font.Charset = DEFAULT_CHARSET
-  Font.Color = clWindowText
-  Font.Height = -11
-  Font.Name = 'Tahoma'
-  Font.Style = []
+  ParentFont = True
   OldCreateOrder = False
   OnShortCut = FormShortCut
   OnShow = FormShow

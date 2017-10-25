@@ -21,9 +21,9 @@ interface
 uses
   Winapi.Windows, Winapi.Messages, Winapi.GDIPOBJ,
   System.SysUtils, System.Variants, System.Classes, System.Actions,
-  System.Diagnostics,
+  System.Threading, System.Diagnostics, System.ImageList,
   Vcl.Menus, Vcl.ActnList, Vcl.Controls, Vcl.Forms, Vcl.ToolWin, Vcl.ExtCtrls,
-  Vcl.Graphics, Vcl.Dialogs, Vcl.StdCtrls, Vcl.Grids, Vcl.ComCtrls,
+  Vcl.Graphics, Vcl.Dialogs, Vcl.StdCtrls, Vcl.Grids, Vcl.ComCtrls, Vcl.ImgList,
   Data.DB, Data.Win.ADODB,
 
   DDuce.Components.PropertyInspector,
@@ -37,7 +37,7 @@ uses
   ts.Modules.DataInspector, ts.Modules.FieldInspector,
 
   DataGrabber.Data, DataGrabber.EditorView, DataGrabber.Interfaces,
-  DataGrabber.Settings, System.ImageList, Vcl.ImgList;
+  DataGrabber.Settings;
 
 {
   TODO:
@@ -141,13 +141,13 @@ type
     procedure ctMainBeforeDrawItem(Sender: TObject; TargetCanvas: TGPGraphics;
       ItemRect: TRect; ItemType: TChromeTabItemType; TabIndex: Integer;
       var Handled: Boolean);
-    procedure mniInspectFieldsClick(Sender: TObject);
     procedure actInspectChromeTabExecute(Sender: TObject);
     {$ENDREGION}
 
   private
-    FManager  : IConnectionViewManager;
-    FSettings : IDGSettings;
+    FManager     : IConnectionViewManager;
+    FSettings    : IDGSettings;
+    FConnections : IFuture<Boolean>;
 
   protected
     function GetData: IData;
@@ -187,6 +187,7 @@ implementation
 {$R *.dfm}
 
 uses
+  Winapi.ActiveX,
   Vcl.Clipbrd,
 
   Spring.Container,
@@ -210,17 +211,33 @@ begin
   FManager  := GlobalContainer.Resolve<IConnectionViewManager>;
   FSettings := GlobalContainer.Resolve<IDGSettings>;
   AddConnectionView;
-  //tlbMain.DrawingStyle := dsNormal;
-  tlbMain.Images       := FManager.ActionList.Images;
+  tlbMain.Images := FManager.ActionList.Images;
   InitializeActions;
   pnlStatus.Caption := SReady;
   SetWindowSizeGrip(pnlStatusBar.Handle, True);
+
+  // prepare registered connections in seperate thread. This reduces load time
+  // when the settings dialog is first invoked.
+  FConnections := TTask.Future<Boolean>(function: Boolean
+    var
+      C : IConnection;
+    begin
+      Result := True;
+      CoInitialize(nil);
+      try
+        for C in GlobalContainer.ResolveAll<IConnection> do
+          Result := Result and Assigned(C);
+      finally
+        CoUninitialize;
+      end;
+    end
+  );
 end;
 
 procedure TfrmMain.BeforeDestruction;
 begin
-  FManager := nil;
-  FSettings  := nil;
+  FManager  := nil;
+  FSettings := nil;
   inherited BeforeDestruction;
 end;
 {$ENDREGION}
@@ -379,11 +396,6 @@ procedure TfrmMain.InitializeActions;
 begin
   AddToolbarButtons(tlbMain, Manager);
 end;
-procedure TfrmMain.mniInspectFieldsClick(Sender: TObject);
-begin
-
-end;
-
 {$ENDREGION}
 
 {$REGION 'protected methods'}

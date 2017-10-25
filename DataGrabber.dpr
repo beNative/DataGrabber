@@ -255,5 +255,6 @@ begin
   RegisterServices;
   //Application.CreateForm(TdmRepositoryData, dmRepositoryData);
   Application.CreateForm(TfrmMain, frmMain);
+  frmMain.Font.Name := 'Segoe UI';
   Application.Run;
 end.

@@ -107,12 +107,9 @@ type
   protected
     procedure Copy;
     procedure InitializeEditorView;
-
     procedure UpdateActions; override;
 
     procedure ApplySettings;
-
-    procedure InitializeControls;
 
   public
     procedure AfterConstruction; override;
@@ -300,13 +297,6 @@ begin
 end;
 {$ENDREGION}
 
-{$REGION 'private methods'}
-procedure TfrmConnectionView.InitializeControls;
-begin
-  //tlbGrid.DrawingStyle := TTBDrawingStyle.dsNormal;
-end;
-{$ENDREGION}
-
 {$REGION 'protected methods'}
 procedure TfrmConnectionView.ApplySettings;
 var
@@ -314,46 +304,22 @@ var
 begin
   if Assigned(FVSTProfiles.FocusedNode) then
   begin
-    CP := Manager.Settings.ConnectionProfiles.Items[FVSTProfiles.FocusedNode.Index];
-    EditorView.Color := CP.ProfileColor;
+    FVSTProfiles.RootNodeCount := Manager.Settings.ConnectionProfiles.Count;
+    FVSTProfiles.Refresh;
+
+    CP := Manager.Settings.ConnectionProfiles.Items[
+      FVSTProfiles.FocusedNode.Index
+    ];
     Application.Title := CP.Name;
     Caption := CP.Name;
     if CP.ConnectionType <> '' then
     begin
-      //eateData(CP.ConnectionType);
       FActiveData.Connection.ConnectionSettings.Assign(CP.ConnectionSettings);
       FActiveData.PacketRecords := CP.PacketRecords;
       FActiveData.ProviderMode  := CP.ProviderMode;
       FActiveData.FetchOnDemand := CP.FetchOnDemand;
     end;
   end;
-//  CreateView(Manager.Settings.GridType);
-
-//  S := FSettings.ConnectionType;
-//  if S = 'ADO' then
-//    actADO.Checked := True
-//  else if S = 'DBX' then
-//    actDBX.Checked := True
-//  else if S = 'ZEOS' then
-//    actZEOS.Checked := True
-//  else if S = 'UNI' then
-//    actUNI.Checked := True;
-//
-//  S := FSettings.GridType;
-//  if S = 'cxGrid' then
-//    actcxGrid.Checked := True
-//  else if S = 'GridView' then
-//    actGridView.Checked := True
-//  else if S = 'KGrid' then
-//    actKGrid.Checked := True
-//  else if S = 'VirtualDBGrid' then
-//    actVirtualDBGrid.Checked := True;
-//
-//  if FSettings.RepositoryVisible then
-//    ShowToolWindow(FTree);
-//
-//  if FSettings.DataInspectorVisible then
-//    ShowToolWindow(FDataInspector);
 end;
 
 procedure TfrmConnectionView.Copy;

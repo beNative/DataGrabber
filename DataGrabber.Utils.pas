@@ -31,7 +31,7 @@ function GetTextWidth(const AText: string): Integer;
 
 function GetMaxTextWidth(AStrings: TStrings): Integer;
 
-function Explode(Separator, Text: string): TStringList;
+function Explode(ASeparator, AText: string): TStringList;
 
 function FindNode(
   AVT         : TVirtualStringTree;
@@ -135,25 +135,27 @@ begin
   );
 end;
 
-function Explode(Separator, Text: String): TStringList;
+function Explode(ASeparator, AText: string): TStringList;
 var
-  i: Integer;
-  Item: String;
+  I    : Integer;
+  Item : string;
 begin
   // Explode a string by separator into a TStringList
   Result := TStringList.Create;
-  while true do begin
-    i := Pos(Separator, Text);
-    if i = 0 then begin
+  while True do
+  begin
+    I := Pos(ASeparator, AText);
+    if I = 0 then
+    begin
       // Last or only segment: Add to list if it's the last. Add also if it's not empty and list is empty.
       // Do not add if list is empty and text is also empty.
-      if (Result.Count > 0) or (Text <> '') then
-        Result.Add(Text);
-      break;
+      if (Result.Count > 0) or (AText <> '') then
+        Result.Add(AText);
+      Break;
     end;
-    Item := Trim(Copy(Text, 1, i-1));
+    Item := Trim(Copy(AText, 1, I - 1));
     Result.Add(Item);
-    Delete(Text, 1, i-1+Length(Separator));
+    Delete(AText, 1, I - 1 + Length(ASeparator));
   end;
 end;
 

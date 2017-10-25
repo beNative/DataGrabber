@@ -10,7 +10,7 @@ object frmMain: TfrmMain
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
   Font.Height = -11
-  Font.Name = 'Calibri'
+  Font.Name = 'Tahoma'
   Font.Style = []
   KeyPreview = True
   OldCreateOrder = False
@@ -585,11 +585,10 @@ object frmMain: TfrmMain
       Font.Name = 'Segoe UI'
       Font.Style = []
       TabOrder = 0
-      ExplicitTop = 8
     end
   end
   object aclMain: TActionList
-    Left = 288
+    Left = 152
     Top = 176
     object actAddConnectionView: TAction
       Caption = 'Add connectionview'
@@ -680,7 +679,6 @@ object frmMain: TfrmMain
     end
     object mniInspectFields: TMenuItem
       Caption = 'Inspect fields'
-      OnClick = mniInspectFieldsClick
     end
     object mniInspectGrid: TMenuItem
       Caption = 'Inspect grid'
