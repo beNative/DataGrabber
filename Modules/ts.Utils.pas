@@ -275,7 +275,7 @@ implementation
 uses
   Winapi.ShellAPI, Winapi.ActiveX, Winapi.Messages,
   System.Math, System.Variants, System.StrUtils, System.Character,
-  Vcl.StdCtrls, Vcl.Forms, Vcl.GraphUtil;
+  Vcl.Forms, Vcl.GraphUtil;
 
 resourcestring
   SNoCorrespondingFieldType = 'No corresponding fieldtype found for Variant ' +

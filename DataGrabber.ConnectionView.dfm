@@ -32,7 +32,6 @@ object frmConnectionView: TfrmConnectionView
       Top = 0
       Width = 8
       Height = 249
-      ExplicitLeft = 204
     end
     object pnlProfiles: TPanel
       Left = 0

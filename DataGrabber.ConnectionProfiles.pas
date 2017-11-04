@@ -40,6 +40,7 @@ type
     FPacketRecords      : Integer;
     FProviderMode       : Boolean;
 
+  protected
     procedure SetCollection(const Value: TConnectionProfiles); reintroduce;
     function GetCollection: TConnectionProfiles;
     function GetVisibleItems: string;
@@ -47,8 +48,6 @@ type
     function GetFavoriteFields: string;
     procedure SetFavoriteFields(const Value: string);
     procedure SetConnectionType(const Value: string);
-
-  protected
     procedure SetDisplayName(const Value: string); override;
     function GetDisplayName: string; override;
 
@@ -104,12 +103,11 @@ type
     the Object Treeview of the Delphi IDE at designtime. }
 
   TConnectionProfiles = class(TOwnedCollection)
-  private
+  protected
     function GetItem(Index: Integer): TConnectionProfile;
     procedure SetItem(Index: Integer; const Value: TConnectionProfile);
-
-  protected
     procedure SetItemName(Item: TCollectionItem); override;
+
     procedure Update(AItem: TCollectionItem); override;
     procedure Notify(Item: TCollectionItem; Action: TCollectionNotification);
       override;

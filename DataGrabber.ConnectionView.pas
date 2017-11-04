@@ -21,7 +21,7 @@ interface
 uses
   Winapi.Windows, Winapi.Messages,
   System.SysUtils, System.Variants, System.Classes,
-  Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ComCtrls, Vcl.ToolWin,
+  Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ComCtrls,
   Vcl.ActnList, Vcl.ExtCtrls,
 
   VirtualTrees,
@@ -144,11 +144,11 @@ implementation
 uses
   System.UITypes,
 
-  Spring, Spring.Services,
+  Spring,
 
   DDuce.Factories,
 
-  DataGrabber.Utils, DataGrabber.Data;
+  DataGrabber.Utils;
 
 {$R *.dfm}
 
@@ -179,9 +179,10 @@ begin
   FVSTProfiles.Header.Options := FVSTProfiles.Header.Options - [hoVisible];
   FVSTProfiles.TreeOptions.PaintOptions :=
     FVSTProfiles.TreeOptions.PaintOptions - [toHideSelection];
+  FVSTProfiles.Colors.FocusedSelectionColor := clBtnHighlight;
+  FVSTProfiles.Margins.Right := 0;
   // TODO: select default node
   FVSTProfiles.FocusedNode       := FVSTProfiles.GetFirstVisible;
-  InitializeControls;
   ApplySettings;
 end;
 
@@ -213,7 +214,8 @@ begin
   TargetCanvas.FillRect(CellRect);
   if Sender.FocusedNode = Node then
   begin
-    TargetCanvas.DrawFocusRect(CellRect);
+    TargetCanvas.Pen.Color := clBlue;
+    TargetCanvas.Rectangle(CellRect);
   end;
 end;
 
@@ -237,7 +239,7 @@ procedure TfrmConnectionView.FVSTProfilesPaintText(Sender: TBaseVirtualTree;
 begin
   if Sender.FocusedNode = Node then
   begin
-    TargetCanvas.Font.Style := TargetCanvas.Font.Style + [fsBold];
+    //TargetCanvas.Font.Style := TargetCanvas.Font.Style + [fsBold];
   end;
 end;
 {$ENDREGION}

@@ -76,7 +76,7 @@ uses
   System.SysUtils, System.Variants,
   Vcl.Forms, Vcl.Controls,
 
-  DDuce.Forms.ComponentInspector;
+  DDuce.ObjectInspector;
 
 
 {$REGION 'construction and destruction'}

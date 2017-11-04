@@ -21,7 +21,7 @@ interface
 uses
   Winapi.Windows, Winapi.Messages,
   System.SysUtils, System.Variants, System.Classes,
-  Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, Vcl.Grids,
+  Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls,
   Data.DB,
 
   DDuce.Components.PropertyInspector,
@@ -42,9 +42,9 @@ type
       Node: PVirtualNode; Column: TColumnIndex);
 
   private
-    FData     : IData;
-    piField   : TPropertyInspector;
-    vstFields : TVirtualStringTree;
+    FData      : IData;
+    FPIField   : TPropertyInspector;
+    FVSTFields : TVirtualStringTree;
 
     function GetData: IData;
     function GetDataSet: TDataSet;
@@ -67,6 +67,8 @@ implementation
 {$R *.dfm}
 
 uses
+  DDuce.Factories, DDuce.Components.Factories,
+
   System.Math;
 
 {$REGION 'construction and destruction'}
@@ -74,15 +76,19 @@ constructor TfrmFieldInspector.Create(AOwner: TComponent; AData: IData);
 begin
   inherited Create(AOwner);
   Data := AData;
-  piField := TPropertyInspector.Create(Self);
-  piField.Parent := pnlRight;
-  piField.Align := alClient;
+  FPIField := TDDuceComponents.CreatePropertyInspector(Self, Self);
+  FPIField.Margins.Left := 0;
 
-  vstFields := TVirtualStringTree.Create(Self);
-  vstFields.Parent := pnlLeft;
-  vstFields.Align := alClient;
-  vstFields.OnGetText := vstFieldsGetText;
-  vstFields.OnFocusChanged := vstFieldsFocusChanged;
+  FVSTFields := TFactories.CreateVirtualStringTree(Self, pnlLeft);
+  FVSTFields.OnGetText := vstFieldsGetText;
+  FVSTFields.OnFocusChanged := vstFieldsFocusChanged;
+  with FVSTFields.Header.Columns.Add do
+    Width := 100;
+
+  with FVSTFields.Header.Columns.Add do
+    Width := 100;
+
+  FVSTFields.Margins.Right := 0;
 end;
 {$ENDREGION}
 
@@ -114,8 +120,8 @@ end;
 procedure TfrmFieldInspector.vstFieldsFocusChanged(Sender: TBaseVirtualTree;
   Node: PVirtualNode; Column: TColumnIndex);
 begin
-  piField.Clear;
-  piField.Add(DataSet.Fields[Node.Index]);
+  FPIField.Clear;
+  FPIField.Add(DataSet.Fields[Node.Index]);
 end;
 
 procedure TfrmFieldInspector.vstFieldsGetText(Sender: TBaseVirtualTree;
@@ -132,7 +138,7 @@ end;
 {$REGION 'public methods'}
 procedure TfrmFieldInspector.UpdateView;
 begin
-  vstFields.RootNodeCount := IfThen(Assigned(FData), DataSet.FieldCount, 0);
+  FVSTFields.RootNodeCount := IfThen(Assigned(FData), DataSet.FieldCount, 0);
 end;
 {$ENDREGION}
 

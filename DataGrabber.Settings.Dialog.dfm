@@ -41,6 +41,8 @@ object frmSettingsDialog: TfrmSettingsDialog
         Top = 0
         Width = 7
         Height = 365
+        Color = clBtnHighlight
+        ParentColor = False
         ExplicitHeight = 377
       end
       object pnlConnectionProfileDetail: TPanel
@@ -292,6 +294,10 @@ object frmSettingsDialog: TfrmSettingsDialog
           object tsAdvanced: TTabSheet
             Caption = 'Advanced'
             ImageIndex = 1
+            ExplicitLeft = 0
+            ExplicitTop = 0
+            ExplicitWidth = 0
+            ExplicitHeight = 0
           end
         end
       end
@@ -342,6 +348,10 @@ object frmSettingsDialog: TfrmSettingsDialog
     object tsDisplay: TTabSheet
       Caption = '&Resultgrid display settings'
       ImageIndex = 5
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       DesignSize = (
         670
         365)
@@ -537,8 +547,6 @@ object frmSettingsDialog: TfrmSettingsDialog
             ParentFont = False
             TabOrder = 0
             ColorDlgOptions = []
-            ExplicitLeft = 64
-            ExplicitTop = 4
           end
           object lblFloats: TLabel
             AlignWithMargins = True
@@ -568,8 +576,6 @@ object frmSettingsDialog: TfrmSettingsDialog
             ParentFont = False
             TabOrder = 1
             ColorDlgOptions = []
-            ExplicitLeft = 64
-            ExplicitTop = 32
           end
           object lblString: TLabel
             AlignWithMargins = True
@@ -599,8 +605,6 @@ object frmSettingsDialog: TfrmSettingsDialog
             ParentFont = False
             TabOrder = 2
             ColorDlgOptions = []
-            ExplicitLeft = 64
-            ExplicitTop = 60
           end
           object lblMemo: TLabel
             AlignWithMargins = True
@@ -630,8 +634,6 @@ object frmSettingsDialog: TfrmSettingsDialog
             ParentFont = False
             TabOrder = 3
             ColorDlgOptions = []
-            ExplicitLeft = 64
-            ExplicitTop = 88
           end
           object lblDates: TLabel
             AlignWithMargins = True
@@ -661,8 +663,6 @@ object frmSettingsDialog: TfrmSettingsDialog
             ParentFont = False
             TabOrder = 4
             ColorDlgOptions = []
-            ExplicitLeft = 64
-            ExplicitTop = 116
           end
           object lblTimes: TLabel
             AlignWithMargins = True
@@ -692,8 +692,6 @@ object frmSettingsDialog: TfrmSettingsDialog
             ParentFont = False
             TabOrder = 5
             ColorDlgOptions = []
-            ExplicitLeft = 64
-            ExplicitTop = 144
           end
           object lblDateTimes: TLabel
             AlignWithMargins = True
@@ -723,8 +721,6 @@ object frmSettingsDialog: TfrmSettingsDialog
             ParentFont = False
             TabOrder = 6
             ColorDlgOptions = []
-            ExplicitLeft = 64
-            ExplicitTop = 172
           end
           object lblNULL: TLabel
             AlignWithMargins = True
@@ -754,8 +750,6 @@ object frmSettingsDialog: TfrmSettingsDialog
             ParentFont = False
             TabOrder = 7
             ColorDlgOptions = []
-            ExplicitLeft = 64
-            ExplicitTop = 200
           end
           object lblBoolean: TLabel
             AlignWithMargins = True
@@ -785,8 +779,6 @@ object frmSettingsDialog: TfrmSettingsDialog
             ParentFont = False
             TabOrder = 8
             ColorDlgOptions = []
-            ExplicitLeft = 64
-            ExplicitTop = 228
           end
         end
       end
@@ -802,9 +794,13 @@ object frmSettingsDialog: TfrmSettingsDialog
       end
     end
     object tsSettings: TTabSheet
-      Caption = 'Settings'
-      ImageIndex = -1
+      Caption = 'Settings file'
+      ImageIndex = 11
       OnEnter = tsSettingsEnter
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
     end
   end
   object btnApply: TButton
@@ -850,8 +846,8 @@ object frmSettingsDialog: TfrmSettingsDialog
   end
   object aclMain: TActionList
     Images = imlMain
-    Left = 488
-    Top = 336
+    Left = 600
+    Top = 296
     object actApply: TAction
       Caption = '&Apply'
       Hint = 'Apply settings immediately'
@@ -913,8 +909,8 @@ object frmSettingsDialog: TfrmSettingsDialog
   object imlMain: TImageList
     ColorDepth = cd32Bit
     DrawingStyle = dsTransparent
-    Left = 440
-    Top = 336
+    Left = 560
+    Top = 248
     Bitmap = {
       494C01010E001100040010001000FFFFFFFF2110FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000004000000001002000000000000040
@@ -1452,7 +1448,7 @@ object frmSettingsDialog: TfrmSettingsDialog
       000000000000}
   end
   object dlgColor: TColorDialog
-    Left = 546
-    Top = 332
+    Left = 602
+    Top = 244
   end
 end

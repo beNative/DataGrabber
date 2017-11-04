@@ -150,12 +150,6 @@ object dmConnectionViewManager: TdmConnectionViewManager
       ImageIndex = 4
       OnExecute = actRollbackTransactionExecute
     end
-    object actProviderMode: TAction
-      Category = 'Data'
-      AutoCheck = True
-      Caption = 'ProviderMode'
-      OnExecute = actProviderModeExecute
-    end
     object actInspect: TAction
       Category = 'Inspect'
       Caption = 'actInspect'
@@ -189,27 +183,6 @@ object dmConnectionViewManager: TdmConnectionViewManager
       GroupIndex = 1
       OnExecute = actKGridExecute
     end
-    object actADO: TAction
-      Category = 'Data'
-      AutoCheck = True
-      Caption = 'ADO'
-      GroupIndex = 2
-      OnExecute = actADOExecute
-    end
-    object actZEOS: TAction
-      Category = 'Data'
-      AutoCheck = True
-      Caption = 'ZEOS'
-      GroupIndex = 2
-      OnExecute = actZEOSExecute
-    end
-    object actDBX: TAction
-      Category = 'Data'
-      AutoCheck = True
-      Caption = 'DBX'
-      GroupIndex = 2
-      OnExecute = actDBXExecute
-    end
     object actSettings: TAction
       Caption = 'Settings'
       ImageIndex = 2
@@ -229,13 +202,6 @@ object dmConnectionViewManager: TdmConnectionViewManager
       Category = 'Inspect'
       Caption = 'Inspect grid'
       OnExecute = actInspectGridExecute
-    end
-    object actUNI: TAction
-      Category = 'Data'
-      AutoCheck = True
-      Caption = 'UNIDAC'
-      GroupIndex = 2
-      OnExecute = actUNIExecute
     end
     object actInspectFields: TAction
       Category = 'Inspect'

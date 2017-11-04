@@ -21,12 +21,10 @@ interface
 uses
   Winapi.Windows, Winapi.Messages, Winapi.GDIPOBJ,
   System.SysUtils, System.Variants, System.Classes, System.Actions,
-  System.Threading, System.Diagnostics, System.ImageList,
+  System.Threading, System.ImageList,
   Vcl.Menus, Vcl.ActnList, Vcl.Controls, Vcl.Forms, Vcl.ToolWin, Vcl.ExtCtrls,
-  Vcl.Graphics, Vcl.Dialogs, Vcl.StdCtrls, Vcl.Grids, Vcl.ComCtrls, Vcl.ImgList,
+  Vcl.Graphics, Vcl.Dialogs, Vcl.ComCtrls, Vcl.ImgList,
   Data.DB, Data.Win.ADODB,
-
-  DDuce.Components.PropertyInspector,
 
   VirtualTrees,
 
@@ -34,10 +32,7 @@ uses
 
   ts.Interfaces, ts.Classes.ConnectionSettings, ts.Data,
 
-  ts.Modules.DataInspector, ts.Modules.FieldInspector,
-
-  DataGrabber.Data, DataGrabber.EditorView, DataGrabber.Interfaces,
-  DataGrabber.Settings;
+  DataGrabber.Interfaces, DataGrabber.Settings;
 
 {
   TODO:
@@ -69,12 +64,16 @@ type
     {$REGION 'designer controls'}
     aclMain                       : TActionList;
     actAddConnectionView          : TAction;
+    actInspectChromeTab           : TAction;
+    ctMain                        : TChromeTabs;
+    imlSpinner                    : TImageList;
     mniADO                        : TMenuItem;
     mniCopy                       : TMenuItem;
     mniCopyTextTable              : TMenuItem;
     mniCopyWikiTable              : TMenuItem;
     mnicxGrid                     : TMenuItem;
     mniDBX                        : TMenuItem;
+    mniFireDAC                    : TMenuItem;
     mniFormatSQL                  : TMenuItem;
     mniGridView                   : TMenuItem;
     mniGroupBySelection           : TMenuItem;
@@ -118,10 +117,6 @@ type
     ppmConnectionTypes            : TPopupMenu;
     ppmGridTypes                  : TPopupMenu;
     tlbMain                       : TToolBar;
-    mniFireDAC                    : TMenuItem;
-    ctMain: TChromeTabs;
-    imlSpinner: TImageList;
-    actInspectChromeTab: TAction;
     {$ENDREGION}
 
     {$REGION 'action handlers'}
@@ -129,19 +124,42 @@ type
     {$ENDREGION}
 
     {$REGION 'event handlers'}
-    procedure tlbMainCustomDraw(Sender: TToolBar; const ARect: TRect;
-      var DefaultDraw: Boolean);
-    procedure FormShortCut(var Msg: TWMKey; var Handled: Boolean);
-    procedure ctMainActiveTabChanged(Sender: TObject; ATab: TChromeTab);
-    procedure ctMainButtonAddClick(Sender: TObject; var Handled: Boolean);
-    procedure ctMainButtonCloseTabClick(Sender: TObject; ATab: TChromeTab;
-      var Close: Boolean);
-    procedure ctMainNeedDragImageControl(Sender: TObject; ATab: TChromeTab;
-      var DragControl: TWinControl);
-    procedure ctMainBeforeDrawItem(Sender: TObject; TargetCanvas: TGPGraphics;
-      ItemRect: TRect; ItemType: TChromeTabItemType; TabIndex: Integer;
-      var Handled: Boolean);
-    procedure actInspectChromeTabExecute(Sender: TObject);
+    procedure tlbMainCustomDraw(
+      Sender          : TToolBar;
+      const ARect     : TRect;
+      var DefaultDraw : Boolean
+    );
+    procedure FormShortCut(
+      var Msg     : TWMKey;
+      var Handled : Boolean
+    );
+    procedure ctMainActiveTabChanged(
+      Sender : TObject;
+      ATab   : TChromeTab
+    );
+    procedure ctMainButtonAddClick(
+      Sender      : TObject;
+      var Handled : Boolean
+    );
+    procedure ctMainButtonCloseTabClick(
+      Sender    : TObject;
+      ATab      : TChromeTab;
+      var Close : Boolean
+    );
+    procedure ctMainNeedDragImageControl(
+      Sender          : TObject;
+      ATab            : TChromeTab;
+      var DragControl : TWinControl
+    );
+    procedure ctMainBeforeDrawItem(
+      Sender       : TObject;
+      TargetCanvas : TGPGraphics;
+      ItemRect     : TRect;
+      ItemType     : TChromeTabItemType;
+      TabIndex     : Integer;
+      var Handled  : Boolean
+    );
+    procedure actInspectChromeTabExecute(Sender : TObject);
     {$ENDREGION}
 
   private
@@ -196,11 +214,10 @@ uses
 
   DDuce.ObjectInspector, DDuce.Logger, DDuce.Logger.Factories,
 
-  DataGrabber.Utils, DataGrabber.Resources, DataGrabber.Settings.Dialog,
-  DataGrabber.ModelData,
+  DataGrabber.Resources,
 
-  DataGrabber.ConnectionProfiles, DataGrabber.Factories,
-  DataGrabber.RegisterServices;
+
+  DataGrabber.ConnectionProfiles, DataGrabber.Factories;
 
 {$REGION 'construction and destruction'}
 procedure TfrmMain.AfterConstruction;
@@ -215,6 +232,8 @@ begin
   InitializeActions;
   pnlStatus.Caption := SReady;
   SetWindowSizeGrip(pnlStatusBar.Handle, True);
+
+  FManager.ActiveConnectionView.EditorView.Text := EXAMPLE_QUERY;
 
   // prepare registered connections in seperate thread. This reduces load time
   // when the settings dialog is first invoked.
@@ -334,7 +353,6 @@ procedure TfrmMain.ctMainNeedDragImageControl(Sender: TObject; ATab: TChromeTab;
 begin
   DragControl := pnlConnectionViews;
 end;
-
 {$ENDREGION}
 {$ENDREGION}
 
@@ -484,21 +502,21 @@ begin
     pnlElapsedTime.Caption         := '';
     pnlConstantFieldsCount.Caption := '';
     pnlEmptyFieldsCount.Caption    := '';
-    if Assigned(Settings) and Settings.ProviderMode then
-    begin
-      pnlProviderMode.Caption := SProviderMode;
-    end
-    else
-    begin
-      pnlProviderMode.Caption := SNativeMode;
-    end;
+//    if Assigned(Settings) and Settings.ProviderMode then
+//    begin
+//      pnlProviderMode.Caption := SProviderMode;
+//    end
+//    else
+//    begin
+//      pnlProviderMode.Caption := SNativeMode;
+//    end;
   end;
 
-  if Assigned(Settings) then
-  begin
-    pnlConnectionType.Caption := Settings.ConnectionType;
-    pnlGridType.Caption := Settings.GridType;
-  end;
+//  if Assigned(Settings) then
+//  begin
+//    pnlConnectionType.Caption := Settings.ConnectionType;
+//    pnlGridType.Caption := Settings.GridType;
+//  end;
   if Assigned(Data) and Assigned(Data.Connection) and Data.Connection.Connected then
     pnlConnectionStatus.Caption := SConnected
   else
@@ -520,8 +538,3 @@ end;
 {$ENDREGION}
 
 end.
-
-
-
-
-

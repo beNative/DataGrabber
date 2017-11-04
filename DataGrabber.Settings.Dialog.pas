@@ -19,11 +19,11 @@ unit DataGrabber.Settings.Dialog;
 interface
 
 uses
-  Winapi.Windows, Winapi.Messages, Winapi.MSXMLIntf,
+  Winapi.Windows, Winapi.Messages,
   System.ImageList, System.Actions, System.SysUtils, System.Variants,
-  System.Classes, System.TypInfo, System.Threading,
+  System.Classes, System.TypInfo,
   Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, Vcl.ToolWin,
-  Vcl.StdCtrls, Vcl.ComCtrls, Vcl.ActnList, Vcl.Grids, Vcl.Buttons, Vcl.ImgList,
+  Vcl.StdCtrls, Vcl.ComCtrls, Vcl.ActnList, Vcl.Buttons, Vcl.ImgList,
 
   VirtualTrees,
 
@@ -227,18 +227,18 @@ implementation
 {$R *.dfm}
 
 uses
-  System.Rtti, Winapi.ActiveX,
+  System.Rtti,
   Data.DBConnAdmin, Data.Win.ADOConEd, Data.Win.ADODB,
 
   Spring.Container,
 
   DDuce.Factories,
 
-  ts.Utils, ts.Interfaces,
+  ts.Interfaces,
 
   DataGrabber.ConnectionProfileValueManager,
 
-  DataGrabber.Utils, DataGrabber.Factories;
+  DataGrabber.Utils;
 
 {$REGION 'interfaced routines'}
 procedure ExecuteSettingsDialog(ASettings: IDGSettings;
@@ -289,9 +289,9 @@ var
 begin
   CP := FSettings.ConnectionProfiles.Add;
   // copy default settings
-  CP.ConnectionType := FSettings.ConnectionType;
-  CP.ProviderMode   := FSettings.ProviderMode;
-  CP.PacketRecords  := FSettings.PacketRecords;
+//  CP.ConnectionType := FSettings.DefaultConnectionProfile ConnectionType;
+//  CP.ProviderMode   := FSettings.ProviderMode;
+//  CP.PacketRecords  := FSettings.PacketRecords;
   CP.ConnectionSettings.Assign(FSettings.ConnectionSettings);
   FVSTProfiles.RootNodeCount := FSettings.ConnectionProfiles.Count;
   SelectNode(FVSTProfiles, FVSTProfiles.RootNodeCount - 1);
@@ -317,7 +317,6 @@ procedure TfrmSettingsDialog.actConnectionStringExecute(Sender: TObject);
 var
   AC : TADOConnection;
 begin
-
   AC := TADOConnection.Create(Self);
   try
     EditConnectionString(AC);
@@ -387,6 +386,11 @@ begin
     TargetCanvas.Brush.Color :=
       FSettings.ConnectionProfiles[Node.Index].ProfileColor;
     TargetCanvas.FillRect(CellRect);
+    if Sender.FocusedNode = Node then
+    begin
+      TargetCanvas.Pen.Color := clBlue;
+      TargetCanvas.Rectangle(CellRect);
+    end;
   end;
 end;
 
@@ -518,6 +522,8 @@ var
 begin
   CP := FSettings.ConnectionProfiles[FVSTProfiles.FocusedNode.Index];
   SaveConnectionProfileChanges(CP);
+
+  FSettings.GridCellColoring           := chkGridCellColoringEnabled.Checked;
   FSettings.DataTypeColors[dtBoolean]  := btnBooleanColor.DlgColor;
   FSettings.DataTypeColors[dtDate]     := btnDateColor.DlgColor;
   FSettings.DataTypeColors[dtDateTime] := btnDateTimeColor.DlgColor;
@@ -526,12 +532,9 @@ begin
   FSettings.DataTypeColors[dtString]   := btnStringColor.DlgColor;
   FSettings.DataTypeColors[dtNULL]     := btnNULLColor.DlgColor;
   FSettings.DataTypeColors[dtTime]     := btnTimeColor.DlgColor;
-  FSettings.ProviderMode     := chkProviderMode.Checked;
-  FSettings.PacketRecords    := StrToIntDef(edtPacketRecords.Text, -1);
-  FSettings.FetchOnDemand    := chkFetchOnDemand.Checked;
-  FSettings.GridCellColoring := chkGridCellColoringEnabled.Checked;
-  FSettings.ConnectionType   := rgpConnectionType.Items[rgpConnectionType.ItemIndex];
-  FSettings.GridType         := rgpGridTypes.Items[rgpGridTypes.ItemIndex];
+
+  FSettings.GridType := rgpGridTypes.Items[rgpGridTypes.ItemIndex];
+
   if Assigned(ApplySettingsMethod) then
     ApplySettingsMethod;
   Save;
@@ -561,7 +564,6 @@ begin
   btnNULLColor.DlgColor     := FSettings.DataTypeColors[dtNULL];
   btnTimeColor.DlgColor     := FSettings.DataTypeColors[dtTime];
 
-  chkProviderMode.Checked            := FSettings.ProviderMode;
   chkGridCellColoringEnabled.Checked := FSettings.GridCellColoring;
   rgpConnectionType.Items.Clear;
 
@@ -578,6 +580,7 @@ begin
   FVSTProfiles.Header.Options    := FVSTProfiles.Header.Options - [hoVisible];
   FVSTProfiles.TreeOptions.PaintOptions :=
     FVSTProfiles.TreeOptions.PaintOptions - [toHideSelection];
+  FVSTProfiles.Colors.FocusedSelectionColor := clBtnHighlight;
 
   S := 'GridView';
   I := rgpGridTypes.Items.Add(S);

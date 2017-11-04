@@ -53,7 +53,7 @@ procedure SelectNode(
 implementation
 
 uses
-  System.Math, System.StrUtils, System.Character, System.SysUtils,
+  System.Math, System.Character, System.SysUtils,
   Vcl.Forms,
 
   ts.Utils;

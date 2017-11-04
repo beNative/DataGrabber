@@ -62,20 +62,15 @@ type
     actStartTransaction           : TAction;
     actCommitTransaction          : TAction;
     actRollbackTransaction        : TAction;
-    actProviderMode               : TAction;
     actInspect                    : TAction;
     actDataInspector              : TAction;
     actcxGrid                     : TAction;
     actGridView                   : TAction;
     actKGrid                      : TAction;
-    actADO                        : TAction;
-    actZEOS                       : TAction;
-    actDBX                        : TAction;
     actSettings                   : TAction;
     actInspectDataSet             : TAction;
     actInspectConnection          : TAction;
     actInspectGrid                : TAction;
-    actUNI                        : TAction;
     actInspectFields              : TAction;
     actToggleRepositoryTree       : TAction;
     actSyncEditorWithRepository   : TAction;
@@ -119,6 +114,7 @@ type
     imlMain                       : TImageList;
     {$ENDREGION}
 
+    {$REGION 'action handlers'}
     procedure actExecuteExecute(Sender: TObject);
     procedure actExecuteLimitedExecute(Sender: TObject);
     procedure actStartTransactionExecute(Sender: TObject);
@@ -153,14 +149,11 @@ type
     procedure actInspectConnectionExecute(Sender: TObject);
     procedure actInspectGridExecute(Sender: TObject);
     procedure actInspectFieldsExecute(Sender: TObject);
-    procedure actUNIExecute(Sender: TObject);
-    procedure actDBXExecute(Sender: TObject);
-    procedure actZEOSExecute(Sender: TObject);
-    procedure actADOExecute(Sender: TObject);
     procedure actPreviewExecute(Sender: TObject);
     procedure actDesignerExecute(Sender: TObject);
     procedure actPrintExecute(Sender: TObject);
     procedure actSettingsExecute(Sender: TObject);
+    {$ENDREGION}
 
   private
     FSettings             : IDGSettings;
@@ -169,9 +162,10 @@ type
     FActiveDataView       : IDGDataView;
     FActiveData           : IData;
     FStopWatch            : TStopwatch;
-//    FDataInspector        : TfrmDataInspector;
+    FDataInspector        : TfrmDataInspector;
     FFieldInspector       : TfrmFieldInspector;
 
+    {$REGION 'property access methods'}
     function GetSettings: IDGSettings;
     function GetActiveConnectionView: IConnectionView;
     procedure SetActiveConnectionView(const Value: IConnectionView);
@@ -180,6 +174,7 @@ type
     function GetActionList: TActionList;
     function GetItem(AName: string): TCustomAction;
     function GetConnectionViewPopupMenu: TPopupMenu;
+    {$ENDREGION}
 
   protected
     procedure Execute(const ASQL: string);
@@ -241,9 +236,9 @@ begin
   inherited AfterConstruction;
   FSettings.Load;
   FConnectionViewList := TConnectionViewList.Create;
-//  FDataInspector := TfrmDataInspector.Create(Self);
-//  FFieldInspector := TfrmFieldInspector.Create(Self);
-//  FDataInspector.HideEmptyFields := True;
+  FDataInspector      := TfrmDataInspector.Create(Self);
+  FFieldInspector     := TfrmFieldInspector.Create(Self);
+  FDataInspector.HideEmptyFields := True;
 
   // disable actions that are not fully implemented yet
   actSyncEditorWithRepository.Visible := False;
@@ -259,7 +254,7 @@ end;
 
 procedure TdmConnectionViewManager.BeforeDestruction;
 begin
-//  FreeAndNil(FDataInspector);
+  FreeAndNil(FDataInspector);
 
   //FSettings.FormSettings.Assign(Self);
   //FSettings.FormSettings.VSplitterPos := pnlConnectionProfiles.Width;
@@ -399,6 +394,7 @@ end;
 
 procedure TdmConnectionViewManager.actInspectFieldsExecute(Sender: TObject);
 begin
+  FFieldInspector.Data := ActiveData;
   FFieldInspector.Show;
 end;
 
@@ -425,18 +421,6 @@ begin
     not (ActiveDataView as IMergable).MergeColumnCells;
 end;
 
-procedure TdmConnectionViewManager.actZEOSExecute(Sender: TObject);
-begin
-  FSettings.ConnectionType := 'ZEOS';
-  ApplySettings;
-end;
-
-procedure TdmConnectionViewManager.actADOExecute(Sender: TObject);
-begin
-  FSettings.ConnectionType := 'ADO';
-  ApplySettings;
-end;
-
 procedure TdmConnectionViewManager.actAutoSizeColsExecute(Sender: TObject);
 begin
   ActiveDataView.AutoSizeColumns;
@@ -461,12 +445,6 @@ begin
 //    HideToolWindow(FDataInspector);
 end;
 
-procedure TdmConnectionViewManager.actDBXExecute(Sender: TObject);
-begin
-  FSettings.ConnectionType := 'DBX';
-  ApplySettings;
-end;
-
 procedure TdmConnectionViewManager.actCommitTransactionExecute(Sender: TObject);
 begin
   ShowMessage('Not supported yet.');
@@ -482,8 +460,8 @@ end;
 
 procedure TdmConnectionViewManager.actProviderModeExecute(Sender: TObject);
 begin
-  FSettings.ProviderMode  := actProviderMode.Checked;
-  ActiveData.ProviderMode := FSettings.ProviderMode;
+//  FSettings.ProviderMode  := actProviderMode.Checked;
+//  ActiveData.ProviderMode := FSettings.ProviderMode;
 end;
 
 procedure TdmConnectionViewManager.actRollbackTransactionExecute(
@@ -497,12 +475,6 @@ begin
   ShowMessage('Not supported yet.');
 end;
 
-procedure TdmConnectionViewManager.actUNIExecute(Sender: TObject);
-begin
-  FSettings.ConnectionType := 'UNI';
-  ApplySettings;
-end;
-
 procedure TdmConnectionViewManager.actExecuteLimitedExecute(Sender: TObject);
 begin
   ActiveData.MaxRecords := 100;
@@ -511,19 +483,19 @@ end;
 
 procedure TdmConnectionViewManager.actPrintExecute(Sender: TObject);
 begin
-//  (ActiveData as IDataReport).PrintReport;
+  (ActiveData as IDataReport).PrintReport;
 end;
 
 procedure TdmConnectionViewManager.actDesignerExecute(Sender: TObject);
 begin
-//  (ActiveData as IDataReport).EditProperties;
-//  (ActiveData as IDataReport).DesignReport;
+  (ActiveData as IDataReport).DesignReport;
+  (ActiveData as IDataReport).EditProperties;
 end;
 
 procedure TdmConnectionViewManager.actPreviewExecute(Sender: TObject);
 begin
-//  (ActiveData as IDataReport).ReportTitle := 'DataGrabber';
-//  (ActiveData as IDataReport).PreviewReport;
+  (ActiveData as IDataReport).ReportTitle := 'DataGrabber';
+  (ActiveData as IDataReport).PreviewReport;
 end;
 {$ENDREGION}
 {$ENDREGION}
@@ -581,60 +553,8 @@ end;
 
 {$REGION 'protected methods'}
 procedure TdmConnectionViewManager.ApplySettings;
-//var
-//  S  : string;
-//  CP : TConnectionProfile;
 begin
   ActiveConnectionView.ApplySettings;
-//  vstProfiles.RootNodeCount := FSettings.ConnectionProfiles.Count;
-//  if Assigned(vstProfiles.FocusedNode) then
-//  begin
-//    CP := FSettings.ConnectionProfiles.Items[vstProfiles.FocusedNode.Index];
-//    FSettings.DefaultConnectionProfile := CP.Name;
-//    FSettings.ConnectionSettings.Assign(CP.ConnectionSettings);
-//    if CP.ConnectionType <> '' then
-//      FSettings.ConnectionType := CP.ConnectionType;
-//    FSettings.ProviderMode := CP.ProviderMode;
-//    FSettings.PacketRecords := CP.PacketRecords;
-//    FEditor.Color := CP.ProfileColor;
-//    Application.Title := CP.Name;
-//  end
-//  else
-//    FSettings.DefaultConnectionProfile := '';
-////
-//  CreateData(FSettings.ConnectionType);
-//  FData.Connection.ConnectionSettings.Assign(FSettings.ConnectionSettings);
-//  FData.PacketRecords := FSettings.PacketRecords;
-//  FData.ProviderMode  := FSettings.ProviderMode;
-//  FData.FetchOnDemand := FSettings.FetchOnDemand;
-////
-//  CreateView(FSettings.GridType);
-////
-//  S := FSettings.ConnectionType;
-//  if S = 'ADO' then
-//    actADO.Checked := True
-//  else if S = 'DBX' then
-//    actDBX.Checked := True
-//  else if S = 'ZEOS' then
-//    actZEOS.Checked := True
-//  else if S = 'UNI' then
-//    actUNI.Checked := True;
-//
-//  S := FSettings.GridType;
-//  if S = 'cxGrid' then
-//    actcxGrid.Checked := True
-//  else if S = 'GridView' then
-//    actGridView.Checked := True
-//  else if S = 'KGrid' then
-//    actKGrid.Checked := True
-//  else if S = 'VirtualDBGrid' then
-//    actVirtualDBGrid.Checked := True;
-//
-//  if FSettings.RepositoryVisible then
-//    ShowToolWindow(FTree);
-//
-//  if FSettings.DataInspectorVisible then
-//    ShowToolWindow(FDataInspector);
 end;
 
 procedure TdmConnectionViewManager.Execute(const ASQL: string);
@@ -664,10 +584,10 @@ begin
 //    begin
 //      FDataInspector.Data := ActiveData;
 //    end;
-//    if FFieldInspector.Visible then
-//    begin
-//      FFieldInspector.Data := ActiveData;
-//    end;
+    if FFieldInspector.Visible then
+    begin
+      FFieldInspector.Data := ActiveData;
+    end;
   finally
     Screen.Cursor := crDefault;
 //    pnlStatus.Caption := 'Ready';
@@ -698,14 +618,14 @@ begin
     actGroupBySelection.Enabled    := B and Supports(ActiveDataView, IGroupable);
     actMergeAllColumnCells.Visible := actMergeCells.Visible;
     actMergeAllColumnCells.Enabled := actMergeCells.Enabled;
-//    actFavoriteFieldsOnly.Visible  := B;
-//    actHideEmptyColumns.Visible    := B;
-//    actHideConstantColumns.Visible := B;
-//    actHideSelectedColumns.Visible := B;
-//    actShowAllColumns.Visible      := B;
-//    actPreview.Visible             := B;
-//    actPrint.Visible               := B;
-//    actDesigner.Visible            := B;
+    actFavoriteFieldsOnly.Visible  := B;
+    actHideEmptyColumns.Visible    := B;
+    actHideConstantColumns.Visible := B;
+    actHideSelectedColumns.Visible := B;
+    actShowAllColumns.Visible      := B;
+    actPreview.Visible             := B;
+    actPrint.Visible               := B;
+    actDesigner.Visible            := B;
     actFavoriteFieldsOnly.Enabled  := B;
     actHideEmptyColumns.Enabled    := B;
     actHideConstantColumns.Enabled := B;
@@ -749,7 +669,7 @@ begin
   DV.Settings := FSettings as IDataViewSettings;
   DV.PopupMenu := ConnectionViewPopupMenu;
   FActiveDataView := DV;
-  C := GlobalContainer.Resolve<IConnection>(Settings.ConnectionType);
+  C := GlobalContainer.Resolve<IConnection>('FireDAC');
   D           := TdmData.Create(Self, C);
   DV.Data     := D;
   FActiveData := D;

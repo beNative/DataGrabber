@@ -21,21 +21,14 @@ interface
 uses
   System.Classes,
   Vcl.Graphics, Vcl.Forms,
-  Data.DB, Data.Win.ADODB, Data.SqlExpr,
+  Data.DB, Data.Win.ADODB,
   Datasnap.DBClient,
-
-  // ZEOS
-  //ZConnection,
-
-  // UNIDAC
-  //Uni,
 
   DDuce.Components.DBGridView,
 
+  ts.Classes.ListReport,
   ts.Classes.SQL.CompoundCondition, ts.Classes.SQL.Params,
-  ts.Classes.ConnectionSettings,
-  //ts.Classes.ListReport,
-  ts.Classes.KeyValues,
+  ts.Classes.ConnectionSettings, ts.Classes.KeyValues,
 
   ts.Modules.List.Columns;
 
@@ -58,6 +51,7 @@ type
   // Interface to be supported by the connection adaptors.
   IConnection = interface
   ['{37E7E015-A3AA-4193-9936-98BEB9D4C9A0}']
+    {$REGION 'property access methods'}
     function GetConnected: Boolean;
     procedure SetConnected(const Value: Boolean);
     function GetConnectionString: string;
@@ -66,6 +60,8 @@ type
     function GetProtocols: TStrings;
     function GetConnectionSettings: TConnectionSettings;
     function GetConnection: TComponent;
+    {$ENDREGION}
+
     function CreateNativeDataSet: INativeDataSet;
     function Execute(const ACommandText: string): Boolean;
 
@@ -90,14 +86,16 @@ type
 
   ILogging = interface
   ['{4AB29FDF-0CFE-48FC-B7FB-9829DC58335B}']
+    {$REGION 'property access methods'}
     function GetLog: TStrings;
     function GetLoggingEnabled: Boolean;
     procedure SetLoggingEnabled(const Value: Boolean);
+    {$ENDREGION}
 
-    property Log : TStrings
+    property Log: TStrings
       read GetLog;
 
-    property LoggingEnabled : Boolean
+    property LoggingEnabled: Boolean
       read GetLoggingEnabled write SetLoggingEnabled;
   end;
 
@@ -133,14 +131,17 @@ type
 
   IDataViewSettings = interface
   ['{5820CB42-DF7E-4DB9-8BDE-F13E9F7C0B2F}']
+    {$REGION 'property access methods'}
     function GetDataTypeColor(Index: TDataType): TColor;
     function GetFieldTypeColor(Index: TFieldType): TColor;
     procedure SetDataTypeColor(Index: TDataType; const Value: TColor);
     function GetGridCellColoring: Boolean;
     procedure SetGridCellColoring(const Value: Boolean);
+    {$ENDREGION}
 
     property DataTypeColors[Index: TDataType]: TColor
       read GetDataTypeColor write SetDataTypeColor;
+
     property FieldTypeColors[Index: TFieldType]: TColor
       read GetFieldTypeColor;
 
@@ -150,14 +151,14 @@ type
 
   IDataView = interface
   ['{66617CAF-874A-4637-878B-93B8B73C5129}']
-    procedure UpdateView;
-//    procedure BeforeExecute;
-//    procedure AfterExecute;
-
+    {$REGION 'property access methods'}
     function GetName: string;
     function GetGridType: string;
     function GetSettings: IDataViewSettings;
     procedure SetSettings(const Value: IDataViewSettings);
+    {$ENDREGION}
+
+    procedure UpdateView;
 
     property Name: string
       read GetName;
@@ -168,6 +169,7 @@ type
 
   IData = interface
   ['{3DFA4682-620B-406F-BE20-F9C04719965B}']
+    {$REGION 'property access methods'}
     function GetDataSet : TDataSet;
     function GetRecordCount : Integer;
     function GetExecuted: Boolean;
@@ -188,9 +190,9 @@ type
     procedure SetProviderMode(const Value: Boolean);
     function GetFetchOnDemand: Boolean;
     procedure SetFetchOnDemand(const Value: Boolean);
+    {$ENDREGION}
 
     procedure Execute;
-
     procedure RefreshRecord(ADataSet: TCustomClientDataSet);
 
     procedure RegisterDataView(ADataView: IDataView);
@@ -259,12 +261,14 @@ type
 
   IUpdatable = interface
   ['{8343E0B7-9AB1-4F84-85EE-705D83AAD110}']
+    {$REGION 'property access methods'}
     function GetKeyName: string;
     procedure SetKeyName(const Value: string);
     function GetTableName : string;
     procedure SetTableName(const Value: string);
     procedure SetOnAfterUpdateData(const Value : TAfterUpdateDataEvent);
     function GetOnafterUpdateData : TAfterUpdateDataEvent;
+    {$ENDREGION}
 
     procedure BeginUpdate;
     procedure EndUpdate;
@@ -282,15 +286,19 @@ type
 
   IDataSelection = interface
   ['{0E93F473-9BED-459B-AFF6-7FCCEB921991}']
+    {$REGION 'property access methods'}
     function GetSelectionDataSet : TDataSet;
     function GetSelectedRecords: TtsKeyValues;
     function GetMaxSelectionCount: Integer;
     procedure SetMaxSelectionCount(const Value: Integer);
+    {$ENDREGION}
 
     procedure ResetSelectionDataSet;
     procedure PrepareSelectionDataSet;
-    procedure Update(const AFieldName  : string;
-                     const AFieldValue : Variant);
+    procedure Update(
+      const AFieldName  : string;
+      const AFieldValue : Variant
+    );
 
     property SelectionDataSet : TDataSet
       read GetSelectionDataSet;
@@ -301,22 +309,26 @@ type
     property MaxSelectionCount : Integer
       read GetMaxSelectionCount write SetMaxSelectionCount;
   end;
-(*
+
 type
   IDataReport = interface
   ['{E59E2ED1-FCAB-4AD4-BD4C-8FC0A3DC25B6}']
-    procedure PrintReport;
-    procedure PreviewReport;
-    procedure DesignReport;
-    procedure LayoutReport;
-    procedure ExportReport(      AExportFilter : TExportFilter;
-                           const AFileName     : string = '');
-    procedure EditProperties;
-
+    {$REGION 'property access methods'}
     function GetReportTitle: string;
     procedure SetReportTitle(const Value: string);
     function GetPrepared: Boolean;
     procedure SetPrepared(const Value: Boolean);
+    {$ENDREGION}
+
+    procedure PrintReport;
+    procedure PreviewReport;
+    procedure DesignReport;
+    procedure LayoutReport;
+    procedure ExportReport(
+      AExportFilter   : TExportFilter;
+      const AFileName : string = ''
+    );
+    procedure EditProperties;
 
     property ReportTitle : string
       read GetReportTitle write SetReportTitle;
@@ -324,11 +336,11 @@ type
     property Prepared : Boolean
       read GetPrepared write SetPrepared;
   end;
-  *)
 
   { currently targeted at TDBGridView, should be more generic... }
   IListSettings = interface
   ['{46C83D0D-135A-48E2-AA6C-72E79EDB21B9}']
+    {$REGION 'property access methods'}
     function GetModified: Boolean;
     procedure SetModified(const Value: Boolean);
     function GetColumns : TtsListColumns;
@@ -340,6 +352,7 @@ type
     procedure SetFileName(const Value: string);
     function GetGridFontSize: Integer;
     procedure SetGridFontSize(const Value: Integer);
+    {$ENDREGION}
 
     procedure AssignToGridView(AGridView : TDBGridView);
     procedure AssignFromGridView(AGridView : TDBGridView);
@@ -372,7 +385,6 @@ type
       read GetGridFontSize write SetGridFontSize;
   end;
 
-type
   IDataExport = interface
   ['{1B5E7994-8F6E-4BA7-BC10-AAC289BCE750}']
     procedure ExportExcel;
@@ -387,13 +399,18 @@ type
 
   IMetaData = interface
   ['{A5921438-2613-47DF-832E-0DF33A8DC567}']
-    procedure GetSchemaNames(AList : TStrings);
-    procedure GetTableNames(AList: TStrings; const ASchemaName: string = '');
-    procedure GetFieldNames(AList: TStrings; const ATableName: string;
-      const ASchemaName: string = '');
+    procedure GetSchemaNames(AList: TStrings);
+    procedure GetTableNames(
+      AList             : TStrings;
+      const ASchemaName : string = ''
+    );
+    procedure GetFieldNames(
+      AList             : TStrings;
+      const ATableName  : string;
+      const ASchemaName : string = ''
+    );
   end;
 
 implementation
 
 end.
-

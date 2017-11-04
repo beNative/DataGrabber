@@ -83,13 +83,6 @@ uses
   VTAccessibility in '..\..\components\Virtual-TreeView\Source\VTAccessibility.pas',
   VTAccessibilityFactory in '..\..\components\Virtual-TreeView\Source\VTAccessibilityFactory.pas',
   VTHeaderPopup in '..\..\components\Virtual-TreeView\Source\VTHeaderPopup.pas',
-  NativeXml in '..\..\libraries\dduce\Source\Dependencies\NativeXml\NativeXml.pas',
-  NativeXmlCodepages in '..\..\libraries\dduce\Source\Dependencies\NativeXml\NativeXmlCodepages.pas',
-  NativeXmlNodes in '..\..\libraries\dduce\Source\Dependencies\NativeXml\NativeXmlNodes.pas',
-  sdDebug in '..\..\libraries\dduce\Source\Dependencies\NativeXml\sdDebug.pas',
-  sdStreams in '..\..\libraries\dduce\Source\Dependencies\NativeXml\sdStreams.pas',
-  sdStringTable in '..\..\libraries\dduce\Source\Dependencies\NativeXml\sdStringTable.pas',
-  NativeXmlObjectStorage in '..\..\libraries\dduce\Source\Dependencies\NativeXml\NativeXmlObjectStorage.pas',
   DDuce.Logger.Base in '..\..\libraries\dduce\Source\Modules\Logger\DDuce.Logger.Base.pas',
   DDuce.Logger.Channels.Base in '..\..\libraries\dduce\Source\Modules\Logger\DDuce.Logger.Channels.Base.pas',
   DDuce.Logger.Channels.LogFile in '..\..\libraries\dduce\Source\Modules\Logger\DDuce.Logger.Channels.LogFile.pas',
@@ -244,7 +237,10 @@ uses
   JsonDataObjects in '..\..\libraries\JsonDataObjects\Source\JsonDataObjects.pas',
   DataGrabber.DataView.KGrid in 'DataView\DataGrabber.DataView.KGrid.pas',
   DDuce.Editor.Factories in '..\..\libraries\dduce\Source\Modules\Editor\DDuce.Editor.Factories.pas',
-  DDuce.ObjectInspector in '..\..\libraries\dduce\Source\Modules\ObjectInspector\DDuce.ObjectInspector.pas' {frmComponentInspector};
+  DDuce.ObjectInspector in '..\..\libraries\dduce\Source\Modules\ObjectInspector\DDuce.ObjectInspector.pas' {frmComponentInspector},
+  ts.Data.Report in 'Modules\ts.Data.Report.pas',
+  ts.Classes.ListReport.Columns in 'Modules\ts.Classes.ListReport.Columns.pas',
+  ts.Classes.ListReport in 'Modules\ts.Classes.ListReport.pas';
 
 {$R *.res}
 

@@ -16,11 +16,8 @@ object frmFieldInspector: TfrmFieldInspector
   object splVertical: TSplitter
     Left = 185
     Top = 0
-    Width = 7
+    Width = 8
     Height = 575
-    ExplicitLeft = 161
-    ExplicitTop = 8
-    ExplicitHeight = 165
   end
   object pnlLeft: TPanel
     Left = 0
@@ -32,9 +29,9 @@ object frmFieldInspector: TfrmFieldInspector
     TabOrder = 0
   end
   object pnlRight: TPanel
-    Left = 192
+    Left = 193
     Top = 0
-    Width = 419
+    Width = 418
     Height = 575
     Align = alClient
     BevelOuter = bvNone

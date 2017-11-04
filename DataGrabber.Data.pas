@@ -71,9 +71,6 @@ type
     property NonEmptyFields: IList<TField>
       read GetNonEmptyFields;
 
-//    property FavoriteFields: TObjectList<TField>
-//      read GetFavoriteFields;
-
     { IFieldVisibility }
     property ConstantFieldsVisible: Boolean
       read GetConstantFieldsVisible write SetConstantFieldsVisible;

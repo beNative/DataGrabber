@@ -25,7 +25,7 @@ uses
   Vcl.ActnList,
   Data.DB,
 
-  cxStyles, cxCustomData, cxGraphics, cxFilter, cxData, cxDataStorage, cxEdit,
+  cxStyles, cxCustomData, cxGraphics, cxDataStorage, cxEdit,
   cxDBData, cxGridLevel, cxClasses, cxControls, cxGridCustomView, cxGrid,
   cxGridCustomTableView, cxGridTableView, cxGridDBTableView, cxInplaceContainer,
   cxVGrid, cxOI, cxGridExportLink, cxGridCustomPopupMenu, cxGridPopupMenu,
@@ -36,7 +36,7 @@ uses
 
   ts.Interfaces,
 
-  DataGrabber.Interfaces;
+  DataGrabber.Interfaces, cxFilter, cxData;
 
 {
   TODO: DataShaper
@@ -55,13 +55,13 @@ type
     tvwMain        : TcxGridDBTableView;
 
     procedure tvwMainCustomDrawGroupSummaryCell(
-      Sender      : TObject;
-      ACanvas     : TcxCanvas;
-      ARow        : TcxGridGroupRow;
-      AColumn     : TcxGridColumn;
-      ASummaryItem: TcxDataSummaryItem;
-      AViewInfo   : TcxCustomGridViewCellViewInfo;
-      var ADone   : Boolean
+      Sender       : TObject;
+      ACanvas      : TcxCanvas;
+      ARow         : TcxGridGroupRow;
+      AColumn      : TcxGridColumn;
+      ASummaryItem : TcxDataSummaryItem;
+      AViewInfo    : TcxCustomGridViewCellViewInfo;
+      var ADone    : Boolean
     );
     procedure tvwMainCustomDrawCell(
       Sender   : TcxCustomGridTableView;

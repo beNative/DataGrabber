@@ -141,8 +141,7 @@ uses
   ts.Classes.SQL.CompoundCondition, ts.Classes.SQL.Params,
   ts.Classes.KeyValues, ts.Classes.ModuleManager,
 
-  ts.Data.Selection, ts.Data.Native,
-//                     ts.Data.Report,
+  ts.Data.Selection, ts.Data.Report,
   ts.Interfaces;
 
 const
@@ -160,8 +159,8 @@ type
   TdmCustomModule = class (TDataModule, IConnection,
                                         IData,
                                         IUpdatable,
-                                        IDataSelection)
-//                                        IDataReport)
+                                        IDataSelection,
+                                        IDataReport)
     cdsMaster : TClientDataSet;
     dspMaster : TDataSetProvider;
     dscMaster : TDataSource;
@@ -207,7 +206,7 @@ type
     FSQL               : string;
     FPacketRecords     : Integer;
     FSelection         : TDataSelection;
-//    FReport            : TDataReport;
+    FReport            : TDataReport;
     FNativeDataSet     : INativeDataSet;
 
     // private property access methods
@@ -427,8 +426,8 @@ type
     property Selection: TDataSelection
       read FSelection implements IDataSelection;
 
-//    property Report: TDataReport
-//      read FReport implements IDataReport;
+    property Report: TDataReport
+      read FReport implements IDataReport;
   end;
 
 implementation
@@ -440,7 +439,7 @@ uses
   Vcl.Forms, Vcl.Controls, Vcl.Dialogs,
   Data.DBCommon,
 
-  ts.Modules.Memo,
+
 
   ts.Utils, ts.DBUtils,
 
@@ -485,7 +484,7 @@ begin
   FreeAndNil(FDisplayValues);
   FreeAndNil(FDisplayLabels);
   FreeAndNil(FSelection);
-//  FreeAndNil(FReport);
+  FreeAndNil(FReport);
   FreeAndNil(FDataViews);
   inherited Destroy;
 end;
@@ -500,7 +499,7 @@ begin
     raise Exception.Create('Connection is not assigned!');
   FNativeDataSet := FConnection.CreateNativeDataSet;
   FDataViews  := TInterfaceList.Create;
-//  FReport     := TDataReport.Create(Self);
+  FReport     := TDataReport.Create(Self);
   FSelection  := TDataSelection.Create(Self);
   FRecordCount                := 0;
   FMaxRecords                 := 0;

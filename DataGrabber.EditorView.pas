@@ -23,7 +23,7 @@ interface
 uses
   Winapi.Windows, Winapi.Messages,
   System.SysUtils, System.Variants, System.Classes,
-  Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls,
+  Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs,
 
   BCEditor.Editor.Base, BCEditor.Editor,
 
@@ -39,13 +39,6 @@ type
     function GetColor: TColor;
     procedure SetColor(const Value: TColor);
     function GetEditorFocused: Boolean;
-//    function GetOnStatusChange: TStatusChangeEvent;
-//    procedure SetOnStatusChange(const Value: TStatusChangeEvent);
-
-//    procedure FSynEditorDropFiles(Sender: TObject; X, Y: Integer;
-//      AFiles: TStrings);
-//    procedure FSynCPExecute(Kind: SynCompletionType; Sender: TObject;
-//      var CurrentInput: UnicodeString; var x, y: Integer; var CanExecute: Boolean);
 
   protected
     procedure CreateEditor;
@@ -67,17 +60,11 @@ type
 
     property Text: string
       read GetText write SetText;
-
-//    property OnStatusChange: TStatusChangeEvent
-//      read GetOnStatusChange write SetOnStatusChange;
   end;
 
 implementation
 
 {$R *.dfm}
-
-uses
-  DataGrabber.Resources;
 
 {$REGION 'construction and destruction'}
 constructor TfrmEditorView.Create;
@@ -147,7 +134,8 @@ begin
   FEditor := TBCEditor.Create(Self);
   FEditor.Parent := Self;
   FEditor.Align := alClient;
-  FEditor.AlignWithMargins := True;
+  FEditor.AlignWithMargins := False;
+  FEditor.BorderStyle := bsNone;
   FEditor.Directories.Colors := 'Colors';
   FEditor.Directories.Highlighters := 'Highlighters';
 //  if AFileName <> '' then

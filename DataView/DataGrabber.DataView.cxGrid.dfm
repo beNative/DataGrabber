@@ -20,6 +20,8 @@ object frmcxGrid: TfrmcxGrid
     Width = 589
     Height = 358
     Align = alClient
+    BevelInner = bvNone
+    BevelOuter = bvNone
     Font.Charset = ANSI_CHARSET
     Font.Color = clWindowText
     Font.Height = -11
@@ -30,7 +32,7 @@ object frmcxGrid: TfrmcxGrid
     LevelTabs.Slants.Positions = []
     LevelTabs.Style = 5
     LookAndFeel.Kind = lfStandard
-    LookAndFeel.NativeStyle = False
+    LookAndFeel.NativeStyle = True
     object tvwMain: TcxGridDBTableView
       Navigator.Buttons.CustomButtons = <>
       Navigator.Visible = True
@@ -89,7 +91,7 @@ object frmcxGrid: TfrmcxGrid
     Grid = grdMain
     PopupMenus = <>
     AlwaysFireOnPopup = True
-    Left = 240
-    Top = 56
+    Left = 160
+    Top = 48
   end
 end

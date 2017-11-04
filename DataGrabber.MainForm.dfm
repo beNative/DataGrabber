@@ -31,8 +31,8 @@ object frmMain: TfrmMain
     ButtonWidth = 70
     Color = clBtnFace
     Customizable = True
+    DoubleBuffered = False
     DrawingStyle = dsGradient
-    EdgeBorders = [ebBottom]
     EdgeInner = esNone
     EdgeOuter = esNone
     Font.Charset = DEFAULT_CHARSET
@@ -44,14 +44,14 @@ object frmMain: TfrmMain
     GradientStartColor = clBtnFace
     List = True
     GradientDirection = gdHorizontal
-    GradientDrawingOptions = [gdoGradient]
     ParentColor = False
+    ParentDoubleBuffered = False
     ParentFont = False
     ParentShowHint = False
     ShowCaptions = True
     ShowHint = True
     TabOrder = 0
-    Transparent = False
+    Transparent = True
     OnCustomDraw = tlbMainCustomDraw
   end
   object pnlStatusBar: TPanel
@@ -589,7 +589,7 @@ object frmMain: TfrmMain
   end
   object aclMain: TActionList
     Left = 152
-    Top = 176
+    Top = 160
     object actAddConnectionView: TAction
       Caption = 'Add connectionview'
       ShortCut = 16462
@@ -602,8 +602,8 @@ object frmMain: TfrmMain
     end
   end
   object ppm: TPopupMenu
-    Left = 72
-    Top = 176
+    Left = 40
+    Top = 160
     object mniGroupBySelection: TMenuItem
       Caption = 'Group by selected columns'
       ShortCut = 16455

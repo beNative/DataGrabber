@@ -36,15 +36,10 @@ type
   private
     FSQLTemplates             : TSQLTemplates;
     FFormSettings             : TFormSettings;
-    FProviderMode             : Boolean;
     FDataTypeColors           : TDictionary<TDataType, TColor>;
     FGridCellColoring         : Boolean;
-    FConnectionString         : string;
     FConnectionProfiles       : TConnectionProfiles;
-    FPacketRecords            : Integer;
     FFileName                 : string;
-    FFetchOnDemand            : Boolean;
-    FConnectionType           : string;
     FGridType                 : string;
     FDefaultConnectionProfile : string;
     FConnectionSettings       : TConnectionSettings;
@@ -59,18 +54,8 @@ type
     procedure SetDataTypeColor(Index: TDataType; const Value: TColor);
     function GetConnectionProfiles: TConnectionProfiles;
     procedure SetConnectionProfiles(const Value: TConnectionProfiles);
-    function GetConnectionString: string;
-    function GetConnectionType: string;
-    function GetFetchOnDemand: Boolean;
     function GetFormSettings: TFormSettings;
-    function GetPacketRecords: Integer;
-    function GetProviderMode: Boolean;
-    procedure SetConnectionString(const Value: string);
-    procedure SetConnectionType(const Value: string);
-    procedure SetFetchOnDemand(const Value: Boolean);
     procedure SetFormSettings(const Value: TFormSettings);
-    procedure SetPacketRecords(const Value: Integer);
-    procedure SetProviderMode(const Value: Boolean);
     function GetConnectionSettings: TConnectionSettings;
     function GetDataInspectorVisible: Boolean;
     function GetDefaultConnectionProfile: string;
@@ -107,21 +92,8 @@ type
       read GetFileName write SetFileName;
 
   published
-    { Only supported in combination with a ClientDataSet/Provider }
-    property ProviderMode: Boolean
-      read GetProviderMode write SetProviderMode;
-
-    property PacketRecords: Integer
-      read GetPacketRecords write SetPacketRecords;
-
-    property FetchOnDemand: Boolean
-      read GetFetchOnDemand write SetFetchOnDemand;
-
     property GridCellColoring: Boolean
       read GetGridCellColoring write SetGridCellColoring default True;
-
-    property ConnectionString: string
-      read GetConnectionString write SetConnectionString;
 
     property SQLTemplates: TSQLTemplates
       read FSQLTemplates write FSQLTemplates;
@@ -131,9 +103,6 @@ type
 
     property ConnectionProfiles: TConnectionProfiles
       read GetConnectionProfiles write SetConnectionProfiles;
-
-    property ConnectionType: string
-      read GetConnectionType write SetConnectionType;
 
     property GridType: string
       read GetGridType write SetGridType;
@@ -258,26 +227,6 @@ begin
   FConnectionProfiles := Value;
 end;
 
-function TDGSettings.GetPacketRecords: Integer;
-begin
-  Result := FPacketRecords;
-end;
-
-procedure TDGSettings.SetPacketRecords(const Value: Integer);
-begin
-  FPacketRecords := Value;
-end;
-
-function TDGSettings.GetProviderMode: Boolean;
-begin
-  Result := FProviderMode;
-end;
-
-procedure TDGSettings.SetProviderMode(const Value: Boolean);
-begin
-  FProviderMode := Value;
-end;
-
 function TDGSettings.GetRepositoryVisible: Boolean;
 begin
   Result := FRepositoryVisible;
@@ -296,26 +245,6 @@ end;
 procedure TDGSettings.SetConnectionSettings(const Value: TConnectionSettings);
 begin
   FConnectionSettings := Value;
-end;
-
-function TDGSettings.GetConnectionString: string;
-begin
-  Result := FConnectionString;
-end;
-
-procedure TDGSettings.SetConnectionString(const Value: string);
-begin
-  FConnectionString := Value;
-end;
-
-function TDGSettings.GetConnectionType: string;
-begin
-  Result := FConnectionType;
-end;
-
-procedure TDGSettings.SetConnectionType(const Value: string);
-begin
-  FConnectionType := Value;
 end;
 
 function TDGSettings.GetDataTypeColor(Index: TDataType): TColor;
@@ -346,16 +275,6 @@ end;
 procedure TDGSettings.SetDataInspectorVisible(const Value: Boolean);
 begin
   FDataInspectorVisible := Value;
-end;
-
-function TDGSettings.GetFetchOnDemand: Boolean;
-begin
-  Result := FFetchOnDemand;
-end;
-
-procedure TDGSettings.SetFetchOnDemand(const Value: Boolean);
-begin
-  FFetchOnDemand := Value;
 end;
 
 function TDGSettings.GetFileName: string;

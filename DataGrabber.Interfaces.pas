@@ -19,7 +19,7 @@ unit DataGrabber.Interfaces;
 interface
 
 uses
-  System.Classes, System.Generics.Collections,
+  System.Classes,
   Vcl.Graphics, Vcl.Controls, Vcl.Menus, Vcl.Forms, Vcl.ActnList,
   Data.DB,
 
@@ -27,7 +27,7 @@ uses
 
   DataGrabber.ConnectionProfiles, DataGrabber.FormSettings,
 
-  BCEditor.Editor.Base, BCEditor.Editor,
+  BCEditor.Editor.Base,
 
   ts.Classes.ConnectionSettings, ts.Interfaces;
 
@@ -50,6 +50,7 @@ type
 
   IDGDataView = interface(IDataView)
     ['{B88F97B2-35BA-42A3-A35A-8122604E482B}']
+    {$REGION 'property access methods'}
     function GetData: IData;
     procedure SetData(const Value: IData);
     function GetRecordCount: Integer;
@@ -61,6 +62,7 @@ type
     procedure SetSettings(const Value: IDataViewSettings);
     function GetPopupMenu: TPopupMenu;
     procedure SetPopupMenu(const Value: TPopupMenu);
+    {$ENDREGION}
 
     function SelectionToCommaText(AQuoteItems: Boolean = True): string;
     function SelectionToDelimitedTable(
@@ -110,18 +112,8 @@ type
     procedure SetDataTypeColor(Index: TDataType; const Value: TColor);
     function GetConnectionProfiles: TConnectionProfiles;
     procedure SetConnectionProfiles(const Value: TConnectionProfiles);
-    function GetConnectionString: string;
-    function GetConnectionType: string;
-    function GetFetchOnDemand: Boolean;
     function GetFormSettings: TFormSettings;
-    function GetPacketRecords: Integer;
-    function GetProviderMode: Boolean;
-    procedure SetConnectionString(const Value: string);
-    procedure SetConnectionType(const Value: string);
-    procedure SetFetchOnDemand(const Value: Boolean);
     procedure SetFormSettings(const Value: TFormSettings);
-    procedure SetPacketRecords(const Value: Integer);
-    procedure SetProviderMode(const Value: Boolean);
     function GetConnectionSettings: TConnectionSettings;
     function GetDataInspectorVisible: Boolean;
     function GetDefaultConnectionProfile: string;
@@ -136,35 +128,20 @@ type
     procedure SetFileName(const Value: string);
     {$ENDREGION}
 
+    procedure Load;
+    procedure Save;
+
     property FileName: string
       read GetFileName write SetFileName;
 
     property ConnectionProfiles: TConnectionProfiles
       read GetConnectionProfiles write SetConnectionProfiles;
 
-    property ProviderMode: Boolean
-      read GetProviderMode write SetProviderMode;
-
-    property PacketRecords: Integer
-      read GetPacketRecords write SetPacketRecords;
-
-    property FetchOnDemand: Boolean
-      read GetFetchOnDemand write SetFetchOnDemand;
-
     property GridCellColoring: Boolean
       read GetGridCellColoring write SetGridCellColoring;
 
-    property ConnectionString: string
-      read GetConnectionString write SetConnectionString;
-
-//    property SQLTemplates: TSQLTemplates
-//      read FSQLTemplates write FSQLTemplates;
-
     property FormSettings: TFormSettings
       read GetFormSettings write SetFormSettings;
-
-    property ConnectionType: string
-      read GetConnectionType write SetConnectionType;
 
     property GridType: string
       read GetGridType write SetGridType;
@@ -186,9 +163,6 @@ type
 
     property DataTypeColors[Index: TDataType]: TColor
       read GetDataTypeColor write SetDataTypeColor;
-
-    procedure Load;
-    procedure Save;
   end;
 
   IConnectionViews = interface
@@ -255,13 +229,13 @@ type
 
   IEditorView = interface
   ['{E5E24E2A-AAFB-46EB-8E0F-E9BAC2E114FB}']
+    {$REGION 'property access methods'}
     function GetText: string;
     procedure SetText(const Value: string);
     function GetColor: TColor;
     procedure SetColor(const Value: TColor);
     function GetEditorFocused: Boolean;
-//    function GetOnStatusChange: TStatusChangeEvent;
-//    procedure SetOnStatusChange(const Value: TStatusChangeEvent);
+    {$ENDREGION}
 
     procedure FillCompletionLists(ATables, AAttributes : TStrings);
     procedure CopyToClipboard;
@@ -275,9 +249,6 @@ type
 
     property Text: string
       read GetText write SetText;
-
-//    property OnStatusChange: TStatusChangeEvent
-//      read GetOnStatusChange write SetOnStatusChange;
   end;
 
   ISelection = interface
@@ -292,9 +263,11 @@ type
 
   IMergable = interface
   ['{713C0738-96A5-4A98-B5E4-71A1C96B0D88}']
+    {$REGION 'property access methods'}
     function GetMergeColumnCells: Boolean;
     procedure SetMergeColumnCells(const Value: Boolean);
     procedure MergeAllColumnCells(AActive: Boolean);
+    {$ENDREGION}
 
     property MergeColumnCells: Boolean
       read GetMergeColumnCells write SetMergeColumnCells;
@@ -302,9 +275,11 @@ type
 
   IFieldLists = interface
   ['{DB8D457B-101A-4994-9CBB-CAB24EE27ECF}']
+    {$REGION 'property access methods'}
     function GetConstantFields: IList<TField>;
     function GetEmptyFields: IList<TField>;
     function GetNonEmptyFields: IList<TField>;
+    {$ENDREGION}
 
     property ConstantFields: IList<TField>
       read GetConstantFields;
@@ -318,12 +293,14 @@ type
 
   IFieldVisiblity = interface
   ['{E7D8A634-78EE-442F-8098-155D0C0763B3}']
+    {$REGION 'property access methods'}
     function GetConstantFieldsVisible: Boolean;
     function GetEmptyFieldsVisible: Boolean;
     function GetShowFavoriteFieldsOnly: Boolean;
     procedure SetConstantFieldsVisible(const Value: Boolean);
     procedure SetEmptyFieldsVisible(const Value: Boolean);
     procedure SetShowFavoriteFieldsOnly(const Value: Boolean);
+    {$ENDREGION}
 
     property ConstantFieldsVisible: Boolean
       read GetConstantFieldsVisible write SetConstantFieldsVisible;

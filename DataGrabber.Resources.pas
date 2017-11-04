@@ -19,9 +19,29 @@ unit DataGrabber.Resources;
 interface
 
 const
-  STableItem     = '\color{clBlue}table\column{}\color{clBlack}%s';
-  SFieldItem     = '\color{clRed}field\column{}\color{clBlack}%s';
-  SProcedureItem = '\color{clPurple}procedure\column{}\color{clBlack}%s';
+//  STableItem     = '\color{clBlue}table\column{}\color{clBlack}%s';
+//  SFieldItem     = '\color{clRed}field\column{}\color{clBlack}%s';
+//  SProcedureItem = '\color{clPurple}procedure\column{}\color{clBlack}%s';
+
+  EXAMPLE_QUERY =
+    'select'                                  + #13#10 +
+    '  *'                                     + #13#10 +
+    'from'                                    + #13#10 +
+    '  InvoiceLine il'                        + #13#10 +
+    '  inner join Invoice i'                  + #13#10 +
+    '    on (i.InvoiceId = il.InvoiceId)'     + #13#10 +
+    '  inner join Customer c'                 + #13#10 +
+    '    on (c.CustomerId = i.CustomerId)'    + #13#10 +
+    '  inner join Employee e'                 + #13#10 +
+    '    on (e.EmployeeId = c.SupportRepId)'  + #13#10 +
+    '  inner join Track t'                    + #13#10 +
+    '    on (il.TrackId = t.TrackId)'         + #13#10 +
+    '  inner join Album al'                   + #13#10 +
+    '    on (al.AlbumId = t.AlbumId)'         + #13#10 +
+    '  inner join MediaType mt'               + #13#10 +
+    '    on (mt.MediaTypeId = t.MediaTypeId)' + #13#10 +
+    '  inner join Genre g'                    + #13#10 +
+    '    on (g.GenreId = t.GenreId)';
 
 resourcestring
   SFetchingData       = 'Fetching data...';
@@ -37,6 +57,7 @@ resourcestring
   SNativeMode         = 'Native mode';
   SConnected          = 'Connected';
   SDisconnected       = 'Disconnected';
+
 
 implementation
 

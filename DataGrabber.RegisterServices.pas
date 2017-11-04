@@ -38,15 +38,15 @@ uses
   {$ENDIF}
 
   {$IFDEF ZEOSDBO}
-    ts.Connection.ZEOSConnectionAdapter,
+  ts.Connection.ZEOSConnectionAdapter,
   {$ENDIF}
 
   {$IFDEF UNIDAC}
-    ts.Connection.UNIConnectionAdapter,
+  ts.Connection.UNIConnectionAdapter,
   {$ENDIF}
 
   {$IFDEF FIREDAC}
-    ts.Connection.FireDACConnectionAdapter,
+  ts.Connection.FireDACConnectionAdapter,
   {$ENDIF}
 
   DataGrabber.ConnectionViewManager, DataGrabber.Settings,
@@ -61,7 +61,7 @@ uses
   {$ENDIF}
   DataGrabber.ConnectionView,
 
-  Spring, Spring.Container.Common, Spring.Container, Spring.Services;
+  Spring, Spring.Container.Common, Spring.Container;
 
 type
   TRefCounting = Spring.Container.Common.TRefCounting;
@@ -123,11 +123,13 @@ begin
                  .Implements<IDGDataView>('cxGrid');
   {$ENDIF}
 
-  GlobalContainer.RegisterType<TfrmGridView>
-                 .Implements<IDGDataView>('GridView');
-
+  {$IFDEF KGRID}
   GlobalContainer.RegisterType<TfrmKGrid>
                  .Implements<IDGDataView>('KGrid');
+  {$ENDIF}
+
+  GlobalContainer.RegisterType<TfrmGridView>
+                 .Implements<IDGDataView>('GridView');
 
   GlobalContainer.RegisterType<TfrmEditorView>
                  .Implements<IEditorView>;

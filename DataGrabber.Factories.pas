@@ -68,9 +68,9 @@ begin
 //  AddButton('actToggleRepositoryTree');
 
 
-//  AddButton('actPreview');
-//  AddButton('actDesigner');
-//  AddButton('actPrint');
+  AddButton('actPreview');
+  AddButton('actDesigner');
+  AddButton('actPrint');
 
   //AddButton('actAddConnectionView');
 end;
