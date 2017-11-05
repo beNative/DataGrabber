@@ -25,30 +25,30 @@ uses
   System.Classes, System.Rtti, System.Types,
   Vcl.Graphics,
 
-  zObjInspector,
+  zObjInspector, zObjInspTypes, zValueManager,
 
   DataGrabber.ConnectionProfiles;
 
 type
   TConnectionProfileValueManager = class(TzCustomValueManager)
   private
-    class function GetConnectionProfile(
+    function GetConnectionProfile(
       const PItem: PPropItem
-    ): TConnectionProfile; static;
+    ): TConnectionProfile;
 
-  protected
-    class procedure SetValue(
+  public
+    procedure SetValue(
       const PItem : PPropItem;
       var Value   : TValue
     ); override;
 
-    class function HasButton(const PItem: PPropItem): Boolean; override;
-    class function HasList(const PItem: PPropItem): Boolean; override;
-    class function HasDialog(const PItem: PPropItem): Boolean; override;
+    function HasButton(const PItem: PPropItem): Boolean; override;
+    function HasList(const PItem: PPropItem): Boolean; override;
+    function HasDialog(const PItem: PPropItem): Boolean; override;
 
-    class function GetDialog(const PItem: PPropItem): TComponentClass; override;
+    function GetDialog(const PItem: PPropItem): TComponentClass; override;
 
-    class procedure GetListItems(
+    procedure GetListItems(
       const PItem : PPropItem;
       Items       : TStrings
     ); override;
@@ -67,7 +67,7 @@ uses
   DDuce.Logger;
 
 {$REGION 'private methods'}
-class function TConnectionProfileValueManager.GetConnectionProfile(
+function TConnectionProfileValueManager.GetConnectionProfile(
   const PItem: PPropItem): TConnectionProfile;
 begin
   if Assigned(PItem.Parent) then
@@ -78,7 +78,7 @@ end;
 {$ENDREGION}
 
 {$REGION 'protected methods'}
-class function TConnectionProfileValueManager.HasButton(
+function TConnectionProfileValueManager.HasButton(
   const PItem: PPropItem): Boolean;
 var
   CP : TConnectionProfile;
@@ -90,7 +90,7 @@ begin
   Result := inherited HasButton(PItem);
 end;
 
-class function TConnectionProfileValueManager.HasDialog(
+function TConnectionProfileValueManager.HasDialog(
   const PItem: PPropItem): Boolean;
 begin
   if PItem.Name = 'ConnectionString' then
@@ -99,7 +99,7 @@ begin
     Result := inherited HasDialog(PItem);
 end;
 
-class function TConnectionProfileValueManager.HasList(
+function TConnectionProfileValueManager.HasList(
   const PItem: PPropItem): Boolean;
 begin
   if MatchStr(PItem.Name, ['ConnectionType', 'Protocol']) then
@@ -110,20 +110,20 @@ begin
   end;
 end;
 
-class procedure TConnectionProfileValueManager.SetValue(const PItem: PPropItem;
+procedure TConnectionProfileValueManager.SetValue(const PItem: PPropItem;
   var Value: TValue);
 begin
 
   inherited SetValue(PItem, Value);
 end;
 
-class function TConnectionProfileValueManager.GetDialog(
+function TConnectionProfileValueManager.GetDialog(
   const PItem: PPropItem): TComponentClass;
 begin
   Result := inherited GetDialog(PItem);
 end;
 
-class procedure TConnectionProfileValueManager.GetListItems(
+procedure TConnectionProfileValueManager.GetListItems(
   const PItem: PPropItem; Items: TStrings);
 var
   C  : IConnection;
@@ -150,9 +150,5 @@ begin
   end;
 end;
 {$ENDREGION}
-
-initialization
-  { Overrides the one assigned in zObjectInspector.pas with this one. }
-  DefaultValueManager := TConnectionProfileValueManager;
 
 end.

@@ -206,11 +206,12 @@ object frmSettingsDialog: TfrmSettingsDialog
                 OnChange = cbxProtocolsChange
               end
               object btnConnectionString: TButton
-                Left = 215
-                Top = 14
-                Width = 106
-                Height = 23
+                Left = 217
+                Top = 13
+                Width = 150
+                Height = 26
                 Action = actConnectionString
+                Images = imlMain
                 TabOrder = 1
               end
               object edtDatabase: TButtonedEdit
@@ -294,10 +295,6 @@ object frmSettingsDialog: TfrmSettingsDialog
           object tsAdvanced: TTabSheet
             Caption = 'Advanced'
             ImageIndex = 1
-            ExplicitLeft = 0
-            ExplicitTop = 0
-            ExplicitWidth = 0
-            ExplicitHeight = 0
           end
         end
       end
@@ -348,10 +345,6 @@ object frmSettingsDialog: TfrmSettingsDialog
     object tsDisplay: TTabSheet
       Caption = '&Resultgrid display settings'
       ImageIndex = 5
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       DesignSize = (
         670
         365)
@@ -797,10 +790,6 @@ object frmSettingsDialog: TfrmSettingsDialog
       Caption = 'Settings file'
       ImageIndex = 11
       OnEnter = tsSettingsEnter
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
     end
   end
   object btnApply: TButton
@@ -902,7 +891,8 @@ object frmSettingsDialog: TfrmSettingsDialog
       OnExecute = actDuplicateExecute
     end
     object actConnectionString: TAction
-      Caption = 'Connectionstring'
+      Caption = 'Build connectionstring'
+      ImageIndex = 9
       OnExecute = actConnectionStringExecute
     end
   end

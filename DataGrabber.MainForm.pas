@@ -32,7 +32,7 @@ uses
 
   ts.Interfaces, ts.Classes.ConnectionSettings, ts.Data,
 
-  DataGrabber.Interfaces, DataGrabber.Settings;
+  DataGrabber.Interfaces, DataGrabber.Settings, DataGrabber.ConnectionProfiles;
 
 {
   TODO:
@@ -166,6 +166,8 @@ type
     FManager     : IConnectionViewManager;
     FSettings    : IDGSettings;
     FConnections : IFuture<Boolean>;
+    function GetActiveConnectionView: IConnectionView;
+    function GetActiveConnectionProfile: TConnectionProfile;
 
   protected
     function GetData: IData;
@@ -189,6 +191,12 @@ type
 
     property Manager: IConnectionViewManager
       read GetManager;
+
+    property ActiveConnectionView: IConnectionView
+      read GetActiveConnectionView;
+
+    property ActiveConnectionProfile: TConnectionProfile
+      read GetActiveConnectionProfile;
 
     property Data: IData
       read GetData;
@@ -214,10 +222,7 @@ uses
 
   DDuce.ObjectInspector, DDuce.Logger, DDuce.Logger.Factories,
 
-  DataGrabber.Resources,
-
-
-  DataGrabber.ConnectionProfiles, DataGrabber.Factories;
+  DataGrabber.Resources, DataGrabber.Factories;
 
 {$REGION 'construction and destruction'}
 procedure TfrmMain.AfterConstruction;
@@ -357,6 +362,19 @@ end;
 {$ENDREGION}
 
 {$REGION 'property access methods'}
+function TfrmMain.GetActiveConnectionProfile: TConnectionProfile;
+begin
+  if Assigned(ActiveConnectionView) then
+    Result := ActiveConnectionView.ActiveConnectionProfile
+  else
+    Result := nil;
+end;
+
+function TfrmMain.GetActiveConnectionView: IConnectionView;
+begin
+  Result := Manager.ActiveConnectionView;
+end;
+
 function TfrmMain.GetData: IData;
 begin
   Result := Manager.ActiveData;
@@ -485,14 +503,6 @@ begin
       S := SUpdateable
     else
       S := SReadOnly;
-    if Data.ProviderMode then
-    begin
-      pnlProviderMode.Caption := SProviderMode;
-    end
-    else
-    begin
-      pnlProviderMode.Caption := SNativeMode;
-    end;
   end
   else
   begin
@@ -502,21 +512,16 @@ begin
     pnlElapsedTime.Caption         := '';
     pnlConstantFieldsCount.Caption := '';
     pnlEmptyFieldsCount.Caption    := '';
-//    if Assigned(Settings) and Settings.ProviderMode then
-//    begin
-//      pnlProviderMode.Caption := SProviderMode;
-//    end
-//    else
-//    begin
-//      pnlProviderMode.Caption := SNativeMode;
-//    end;
+    if Assigned(ActiveConnectionProfile) then
+    begin
+      if ActiveConnectionProfile.ProviderMode then
+        pnlProviderMode.Caption := SProviderMode
+      else
+        pnlProviderMode.Caption := SNativeMode;
+      pnlConnectionType.Caption := ActiveConnectionProfile.ConnectionType;
+      pnlGridType.Caption := Settings.GridType;
+    end;
   end;
-
-//  if Assigned(Settings) then
-//  begin
-//    pnlConnectionType.Caption := Settings.ConnectionType;
-//    pnlGridType.Caption := Settings.GridType;
-//  end;
   if Assigned(Data) and Assigned(Data.Connection) and Data.Connection.Connected then
     pnlConnectionStatus.Caption := SConnected
   else

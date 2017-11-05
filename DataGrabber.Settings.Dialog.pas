@@ -27,7 +27,7 @@ uses
 
   VirtualTrees,
 
-  zObjInspector,
+  zObjInspector, zObjInspTypes,
 
   kcontrols, kbuttons, kedits,
 
@@ -35,7 +35,8 @@ uses
 
   DDuce.Editor.Factories, DDuce.Editor.Interfaces,
 
-  DataGrabber.Settings, DataGrabber.ConnectionProfiles;
+  DataGrabber.Settings, DataGrabber.ConnectionProfiles,
+  DataGrabber.ConnectionProfileValueManager;
 
 type
   TApplySettingsMethod = reference to procedure;
@@ -192,6 +193,7 @@ type
     FObjectInspector     : TzObjectInspector;
     FVSTProfiles         : TVirtualStringTree;
     FModified            : Boolean;
+    FValueManager        : TConnectionProfileValueManager;
 
   protected
     procedure Apply;
@@ -207,11 +209,12 @@ type
     procedure UpdateProtocols(AConnectionType: string);
 
   public
+    procedure AfterConstruction; override;
+    procedure BeforeDestruction; override;
     constructor Create(
       AOwner    : TComponent;
       ASettings : IDGSettings
     ); reintroduce; virtual;
-    procedure AfterConstruction; override;
 
     property ApplySettingsMethod: TApplySettingsMethod
       read FApplySettingsMethod write FApplySettingsMethod;
@@ -235,8 +238,6 @@ uses
   DDuce.Factories,
 
   ts.Interfaces,
-
-  DataGrabber.ConnectionProfileValueManager,
 
   DataGrabber.Utils;
 
@@ -267,8 +268,9 @@ end;
 procedure TfrmSettingsDialog.AfterConstruction;
 begin
   inherited AfterConstruction;
+  FValueManager := TConnectionProfileValueManager.Create;
   FObjectInspector :=
-    TFactories.CreatezObjectInspector(Self, tsAdvanced);
+    TFactories.CreatezObjectInspector(Self, tsAdvanced, nil, FValueManager);
   FObjectInspector.SplitterPos     := FObjectInspector.Width div 2;
   FObjectInspector.SortByCategory  := False;
   FObjectInspector.OnBeforeAddItem := FObjectInspectorBeforeAddItem;
@@ -280,6 +282,12 @@ begin
   FEditor.Load(FSettings.FileName);
   InitializeControls;
 end;
+
+procedure TfrmSettingsDialog.BeforeDestruction;
+begin
+  FValueManager.Free;
+  inherited BeforeDestruction;
+end;
 {$ENDREGION}
 
 {$REGION 'action handlers'}
@@ -288,10 +296,6 @@ var
   CP: TConnectionProfile;
 begin
   CP := FSettings.ConnectionProfiles.Add;
-  // copy default settings
-//  CP.ConnectionType := FSettings.DefaultConnectionProfile ConnectionType;
-//  CP.ProviderMode   := FSettings.ProviderMode;
-//  CP.PacketRecords  := FSettings.PacketRecords;
   CP.ConnectionSettings.Assign(FSettings.ConnectionSettings);
   FVSTProfiles.RootNodeCount := FSettings.ConnectionProfiles.Count;
   SelectNode(FVSTProfiles, FVSTProfiles.RootNodeCount - 1);
@@ -316,12 +320,19 @@ end;
 procedure TfrmSettingsDialog.actConnectionStringExecute(Sender: TObject);
 var
   AC : TADOConnection;
+  CP : TConnectionProfile;
 begin
-  AC := TADOConnection.Create(Self);
-  try
-    EditConnectionString(AC);
-  finally
-    AC.Free;
+  CP := FSettings.ConnectionProfiles[FVSTProfiles.FocusedNode.Index];
+  if CP.ConnectionType = 'ADO' then
+  begin
+    AC := TADOConnection.Create(Self);
+    try
+      AC.ConnectionString := CP.ConnectionString;
+      EditConnectionString(AC);
+      CP.ConnectionString := AC.ConnectionString;
+    finally
+      AC.Free;
+    end;
   end;
 end;
 
@@ -359,8 +370,8 @@ var
 begin
   N := FVSTProfiles.FocusedNode.Index;
   FSettings.ConnectionProfiles[N].Index := N + 1;
-  SelectNode(FVSTProfiles, N + 1);
   FVSTProfiles.Refresh;
+  SelectNode(FVSTProfiles, N + 1);
 end;
 
 procedure TfrmSettingsDialog.actMoveUpExecute(Sender: TObject);
@@ -369,8 +380,8 @@ var
 begin
   N := FVSTProfiles.FocusedNode.Index;
   FSettings.ConnectionProfiles[N].Index := N - 1;
-  SelectNode(FVSTProfiles, N - 1);
   FVSTProfiles.Refresh;
+  SelectNode(FVSTProfiles, N - 1);
 end;
 {$ENDREGION}
 

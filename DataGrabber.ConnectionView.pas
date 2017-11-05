@@ -123,9 +123,6 @@ type
     property Form: TForm
       read GetForm;
 
-    property Manager: IConnectionViewManager
-      read GetManager;
-
     property ActiveDataView: IDGDataView
       read GetActiveDataView;
 
@@ -137,6 +134,9 @@ type
 
     property EditorView: IEditorView
       read GetEditorView;
+
+    property Manager: IConnectionViewManager
+      read GetManager;
   end;
 
 implementation

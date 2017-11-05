@@ -240,7 +240,9 @@ uses
   DDuce.ObjectInspector in '..\..\libraries\dduce\Source\Modules\ObjectInspector\DDuce.ObjectInspector.pas' {frmComponentInspector},
   ts.Data.Report in 'Modules\ts.Data.Report.pas',
   ts.Classes.ListReport.Columns in 'Modules\ts.Classes.ListReport.Columns.pas',
-  ts.Classes.ListReport in 'Modules\ts.Classes.ListReport.pas';
+  ts.Classes.ListReport in 'Modules\ts.Classes.ListReport.pas',
+  zValueManager in '..\..\components\zcontrols\Source\zValueManager.pas',
+  zObjInspTypes in '..\..\components\zcontrols\Source\zObjInspTypes.pas';
 
 {$R *.res}
 

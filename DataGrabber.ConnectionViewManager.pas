@@ -120,7 +120,6 @@ type
     procedure actStartTransactionExecute(Sender: TObject);
     procedure actCommitTransactionExecute(Sender: TObject);
     procedure actRollbackTransactionExecute(Sender: TObject);
-    procedure actProviderModeExecute(Sender: TObject);
     procedure actAutoSizeColsExecute(Sender: TObject);
     procedure actShowAllColumnsExecute(Sender: TObject);
     procedure actHideSelectedColumnsExecute(Sender: TObject);
@@ -255,12 +254,6 @@ end;
 procedure TdmConnectionViewManager.BeforeDestruction;
 begin
   FreeAndNil(FDataInspector);
-
-  //FSettings.FormSettings.Assign(Self);
-  //FSettings.FormSettings.VSplitterPos := pnlConnectionProfiles.Width;
-  //FSettings.FormSettings.HSplitterPos := pnlTop.Height;
-  //FSettings.Save;
-
   FreeAndNil(FConnectionViewList);
   inherited BeforeDestruction;
 end;
@@ -437,7 +430,6 @@ end;
 {$REGION 'ActiveData actions'}
 procedure TdmConnectionViewManager.actDataInspectorExecute(Sender: TObject);
 begin
-  ShowMessage('Not supported yet.');
 //  FSettings.DataInspectorVisible := actDataInspector.Checked;
 //  if actDataInspector.Checked then
 //    ShowToolWindow(FDataInspector)
@@ -448,20 +440,12 @@ end;
 procedure TdmConnectionViewManager.actCommitTransactionExecute(Sender: TObject);
 begin
   ShowMessage('Not supported yet.');
-//  ActiveDataView
-//
 end;
 
 procedure TdmConnectionViewManager.actExecuteExecute(Sender: TObject);
 begin
   ActiveData.MaxRecords := 0;
   Execute(ActiveConnectionView.EditorView.Text);
-end;
-
-procedure TdmConnectionViewManager.actProviderModeExecute(Sender: TObject);
-begin
-//  FSettings.ProviderMode  := actProviderMode.Checked;
-//  ActiveData.ProviderMode := FSettings.ProviderMode;
 end;
 
 procedure TdmConnectionViewManager.actRollbackTransactionExecute(
@@ -562,35 +546,20 @@ begin
   FStopWatch.Reset;
   Screen.Cursor := crSQLWait;
   try
-    //pnlStatus.Caption := SFetchingData;
-    //OptimizeWidth(pnlStatus);
-    //Application.ProcessMessages;
-    //FScriptParser.ParseText(ASQL);
     ActiveData.SQL := ASQL;
-//    if FScriptParser.StatementCount = 0 then
-//    begin
-//      ActiveData.SQL := ASQL;
-//    end
-//    else
-//    begin
-//      ActiveData.SQL := FScriptParser.Statements[0];
-//    end;
     FStopWatch.Start;
     ActiveData.Execute;
     FStopWatch.Stop;
-    //OptimizeWidth(pnlStatus);
-    //Application.ProcessMessages;
-//    if FDataInspector.Visible then
-//    begin
-//      FDataInspector.Data := ActiveData;
-//    end;
+    if FDataInspector.Visible then
+    begin
+      FDataInspector.Data := ActiveData;
+    end;
     if FFieldInspector.Visible then
     begin
       FFieldInspector.Data := ActiveData;
     end;
   finally
     Screen.Cursor := crDefault;
-//    pnlStatus.Caption := 'Ready';
 //    pnlElapsedTime.Caption := Format('%d ms', [FStopWatch.ElapsedMilliseconds]);
   end;
 end;

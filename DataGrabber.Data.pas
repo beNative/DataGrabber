@@ -71,6 +71,7 @@ type
     property NonEmptyFields: IList<TField>
       read GetNonEmptyFields;
 
+
     { IFieldVisibility }
     property ConstantFieldsVisible: Boolean
       read GetConstantFieldsVisible write SetConstantFieldsVisible;
@@ -117,11 +118,6 @@ begin
     UpdateFieldLists;
   end;
 end;
-
-//function TdmData.GetFavoriteFields: TObjectList<TField>;
-//begin
-//  Result := FFavoriteFields;
-//end;
 
 function TdmData.GetShowFavoriteFieldsOnly: Boolean;
 begin
