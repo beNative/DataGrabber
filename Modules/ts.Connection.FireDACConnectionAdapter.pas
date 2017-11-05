@@ -73,18 +73,10 @@ implementation
 
 {$REGION 'construction and destruction'}
 procedure TFireDACConnectionAdapter.AfterConstruction;
-var
- FDManager: TFDManager;
 begin
   inherited AfterConstruction;
   FConnection := TFDConnection.Create(nil);
-  FDManager := TFDManager.Create(nil);
-  try
-    FDManager.GetDriverNames(Protocols);
-  finally
-    FDManager.Free;
-  end;
-
+  FDManager.GetDriverNames(Protocols);
 end;
 
 procedure TFireDACConnectionAdapter.BeforeDestruction;
