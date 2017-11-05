@@ -375,9 +375,10 @@ begin
   if Assigned(dscMain.DataSet) and Assigned(Field) and
      (dscMain.DataSet.State in dsEditModes) and
      FGrid.MultiSelect and (FGrid.SelectedRows.Count > 0) then
-      UpdateMultiSelection(Field.FieldName, Field.Value);
-
-  FGrid.Invalidate;
+  begin
+    UpdateMultiSelection(Field.FieldName, Field.Value);
+  end;
+  FGrid.Refresh;
 end;
 
 procedure TfrmGridView.dscMainStateChange(Sender: TObject);
