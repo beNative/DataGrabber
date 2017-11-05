@@ -18,6 +18,12 @@ unit ts.Connection.FireDAC;
 
 interface
 
+{
+   Connection definitions can be defined in a file named FDConnectionDefs.ini
+   in the same directory as the executable.
+
+}
+
 uses
   System.SysUtils, System.Classes,
   Data.DB,
@@ -36,7 +42,6 @@ uses
 type
   TdmFireDACConnection = class(TdmConnection, IConnection)
     conFireDAC : TFDConnection;
-    FDManager  : TFDManager;
 
   protected
     function GetConnected: Boolean; override;

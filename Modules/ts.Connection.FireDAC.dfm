@@ -16,12 +16,4 @@ object dmFireDACConnection: TdmFireDACConnection
     Left = 24
     Top = 16
   end
-  object FDManager: TFDManager
-    FormatOptions.AssignedValues = [fvMapRules]
-    FormatOptions.OwnMapRules = True
-    FormatOptions.MapRules = <>
-    Active = True
-    Left = 112
-    Top = 16
-  end
 end
