@@ -23,6 +23,7 @@ unit ts.Classes.ListReport;
   Supported FastReport versions:
     3.x
     4.x
+    4.x
 
   Author: Tim Sinaeve
 }
@@ -1124,7 +1125,7 @@ begin
   if Assigned(ReportPage) then
   begin
     if lroColumnHeaderOnEveryPage in Options then
-       CH := TfrxColumnHeader.Create(ReportPage)
+      CH := TfrxColumnHeader.Create(ReportPage)
     else
       CH := TfrxHeader.Create(ReportPage);
 
@@ -1361,19 +1362,6 @@ begin
   end
 end;
 
-//function TtsFRListReport.GetTextWidth(const AText: string; AFont: TFont): Integer;
-//var
-//  Bitmap: Graphics.TBitmap;
-//begin
-//  Bitmap := Graphics.TBitmap.Create;
-//  try
-//    Bitmap.Canvas.Font.Assign(AFont);
-//    Result := Bitmap.Canvas.TextExtent(AText).cx;
-// finally
-//    Bitmap.Free;
-//  end;
-//end;
-
 function TtsFRListReport.GetTextWidth(const AText: string;
   AFont: TFont): Integer;
 var
@@ -1595,7 +1583,7 @@ end;
   preview is shown after the complete report is prepared. If False, the report
   is prepared in background while the preview is shown. }
 
-procedure TtsFRListReport.PreviewReport(AShowPrepared : Boolean);
+procedure TtsFRListReport.PreviewReport(AShowPrepared: Boolean);
 begin
   LockUpdate;
   try
@@ -1612,7 +1600,7 @@ begin
   end;
 end;
 
-function TtsFRListReport.PrintReport(AShowDialog : Boolean) : Boolean;
+function TtsFRListReport.PrintReport(AShowDialog: Boolean) : Boolean;
 begin
   LockUpdate;
   try
@@ -1687,9 +1675,9 @@ end;
 
 procedure TtsFRListReport.AssignColumnsFromDataSet;
 var
-  I         : Integer;
-  Field     : TField;
-  Column    : TtsListReportColumn;
+  I      : Integer;
+  Field  : TField;
+  Column : TtsListReportColumn;
 begin
   Columns.Clear;
   if Assigned(DataSet) then
