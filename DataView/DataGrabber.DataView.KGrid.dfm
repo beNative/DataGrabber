@@ -38,10 +38,11 @@ object frmKGrid: TfrmKGrid
     DefaultRowHeight = 18
     FixedCols = 0
     MinRowHeight = 18
-    Options = [goColMoving, goColSizing, goColSorting, goDrawFocusSelected, goEditing, goEnterMoves, goFixedHorzLine, goFixedVertLine, goHeader, goHeaderAlignment, goIndicateHiddenCells, goMouseCanHideCells, goRangeSelect, goRowSizing, goThemes, goThemedCells, goVertLine]
+    Options = [goEraseBackground, goColMoving, goColSizing, goColSorting, goDoubleBufferedCells, goDrawFocusSelected, goEditing, goEnterMoves, goFixedHorzLine, goFixedVertLine, goHeader, goHeaderAlignment, goHorzLine, goIndicateHiddenCells, goMouseCanHideCells, goRangeSelect, goRowSizing, goThemes, goThemedCells, goVertLine]
     RangeSelectStyle = rsMultiSelect
     RowCount = 2
     TabOrder = 0
+    OnDrawCell = grdMainDrawCell
     ColWidths = (
       0)
     RowHeights = (

@@ -126,6 +126,10 @@ type
     procedure SetGridType(const Value: string);
     function GetFileName: string;
     procedure SetFileName(const Value: string);
+    function GetShowHorizontalGridLines: Boolean;
+    function GetShowVerticalGridLines: Boolean;
+    procedure SetShowHorizontalGridLines(const Value: Boolean);
+    procedure SetShowVerticalGridLines(const Value: Boolean);
     {$ENDREGION}
 
     procedure Load;
@@ -163,6 +167,13 @@ type
 
     property DataTypeColors[Index: TDataType]: TColor
       read GetDataTypeColor write SetDataTypeColor;
+
+    property ShowHorizontalGridLines: Boolean
+      read GetShowHorizontalGridLines write SetShowHorizontalGridLines;
+
+    property ShowVerticalGridLines: Boolean
+      read GetShowVerticalGridLines write SetShowVerticalGridLines;
+
   end;
 
   IConnectionViews = interface

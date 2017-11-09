@@ -36,10 +36,18 @@ type
     pnlLeft     : TPanel;
     pnlRight    : TPanel;
 
-    procedure vstFieldsGetText(Sender: TBaseVirtualTree; Node: PVirtualNode;
-      Column: TColumnIndex; TextType: TVSTTextType; var CellText: string);
-    procedure vstFieldsFocusChanged(Sender: TBaseVirtualTree;
-      Node: PVirtualNode; Column: TColumnIndex);
+    procedure vstFieldsGetText(
+      Sender       : TBaseVirtualTree;
+      Node         : PVirtualNode;
+      Column       : TColumnIndex;
+      TextType     : TVSTTextType;
+      var CellText : string
+    );
+    procedure vstFieldsFocusChanged(
+      Sender : TBaseVirtualTree;
+      Node   : PVirtualNode;
+      Column : TColumnIndex
+    );
 
   private
     FData      : IData;

@@ -120,7 +120,6 @@ type
     N3: TMenuItem;
     Inspect1: TMenuItem;
     N4: TMenuItem;
-    iml1: TImageList;
     {$ENDREGION}
 
     {$REGION 'action handlers'}
@@ -224,7 +223,9 @@ implementation
 uses
   Vcl.Forms, Vcl.Clipbrd, Vcl.Dialogs,
 
-  DDuce.ObjectInspector,
+//  DDuce.ObjectInspector,
+
+  DDuce.ObjectInspector.zObjectInspector,
 
   DataGrabber.Settings.Dialog, DataGrabber.ConnectionView,
 

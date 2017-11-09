@@ -137,6 +137,10 @@ type
     procedure SetDataTypeColor(Index: TDataType; const Value: TColor);
     function GetGridCellColoring: Boolean;
     procedure SetGridCellColoring(const Value: Boolean);
+    function GetShowHorizontalGridLines: Boolean;
+    function GetShowVerticalGridLines: Boolean;
+    procedure SetShowHorizontalGridLines(const Value: Boolean);
+    procedure SetShowVerticalGridLines(const Value: Boolean);
     {$ENDREGION}
 
     property DataTypeColors[Index: TDataType]: TColor
@@ -147,6 +151,12 @@ type
 
     property GridCellColoring: Boolean
       read GetGridCellColoring write SetGridCellColoring;
+
+    property ShowHorizontalGridLines: Boolean
+      read GetShowHorizontalGridLines write SetShowHorizontalGridLines;
+
+    property ShowVerticalGridLines: Boolean
+      read GetShowVerticalGridLines write SetShowVerticalGridLines;
   end;
 
   IDataView = interface

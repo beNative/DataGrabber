@@ -66,6 +66,8 @@ type
     procedure InitializeGridColumns;
     procedure InitializeGridColumn(AGridColumn: TDBGridColumn);
 
+    procedure ApplyGridSettings;
+
     // shortcut methods
     function IsLookupField(const AFieldName: string) : Boolean;
     function IsCheckBoxField(const AFieldName: string) : Boolean;
@@ -198,9 +200,7 @@ implementation
 uses
   System.Math,
 
-  DDuce.ObjectInspector,
-
-  ts.Classes.KeyValues;
+  DDuce.ObjectInspector.zObjectInspector;
 
 {$REGION 'construction and destruction'}
 procedure TfrmGridView.AfterConstruction;
@@ -372,13 +372,13 @@ end;
 {$REGION 'event handlers'}
 procedure TfrmGridView.dscMainDataChange(Sender: TObject; Field: TField);
 begin
-  if Assigned(dscMain.DataSet) and Assigned(Field) and
-     (dscMain.DataSet.State in dsEditModes) and
-     FGrid.MultiSelect and (FGrid.SelectedRows.Count > 0) then
-  begin
-    UpdateMultiSelection(Field.FieldName, Field.Value);
-  end;
-  FGrid.Refresh;
+//  if Assigned(dscMain.DataSet) and Assigned(Field) and
+//     (dscMain.DataSet.State in dsEditModes) and
+//     FGrid.MultiSelect and (FGrid.SelectedRows.Count > 0) then
+//  begin
+//    UpdateMultiSelection(Field.FieldName, Field.Value);
+//  end;
+//  FGrid.Refresh;
 end;
 
 procedure TfrmGridView.dscMainStateChange(Sender: TObject);
@@ -548,18 +548,18 @@ end;
 
 procedure TfrmGridView.grdRowMultiSelect(Sender: TObject; Row: Integer;
   var Select: Boolean);
-var
-  KV : TtsKeyValues;
-  N  : Integer;
+//var
+//  KV : TtsKeyValues;
+//  N  : Integer;
 begin
-  KV := (Data as IDataSelection).SelectedRecords;
-  if Select then
-    KV[IntToStr(DataSet.RecNo)] := DataSet[(Data as IUpdatable).KeyName]
-  else
-  begin
-    N := KV.IndexOf(IntToStr(DataSet.RecNo));
-    KV.Delete(N);
-  end;
+//  KV := (Data as IDataSelection).SelectedRecords;
+//  if Select then
+//    KV[IntToStr(DataSet.RecNo)] := DataSet[(Data as IUpdatable).KeyName]
+//  else
+//  begin
+//    N := KV.IndexOf(IntToStr(DataSet.RecNo));
+//    KV.Delete(N);
+//  end;
 
 //  if (FGrid.SelectedRows.Count > Pred(MaxSelectionCount)) and Select then
 //  begin
@@ -622,6 +622,20 @@ end;
 {$ENDREGION}
 
 {$REGION 'public methods'}
+procedure TfrmGridView.ApplyGridSettings;
+begin
+  FGrid.GridLines := True;
+  if FSettings.ShowHorizontalGridLines then
+    FGrid.GridStyle := FGrid.GridStyle + [gsHorzLine]
+  else
+    FGrid.GridStyle := FGrid.GridStyle - [gsHorzLine];
+
+  if FSettings.ShowVerticalGridLines then
+    FGrid.GridStyle := FGrid.GridStyle + [gsVertLine]
+  else
+    FGrid.GridStyle := FGrid.GridStyle - [gsVertLine];
+end;
+
 procedure TfrmGridView.AssignParent(AParent: TWinControl);
 begin
   Parent      := AParent;
@@ -746,7 +760,6 @@ begin
   try
     (Data as IDataSelection).Update(AFieldName, AFieldValue);
   finally
-    //UpdateColumns;
     EndUpdate;
   end;
 end;
@@ -758,6 +771,7 @@ begin
     dscMain.DataSet := Data.DataSet;
     if Assigned(DataSet) and DataSet.Active then
     begin
+      ApplyGridSettings;
       InitializeGridColumns;
       UpdateColumnLists;
       AutoSizeColumns;

@@ -45,6 +45,8 @@ type
     FConnectionSettings       : TConnectionSettings;
     FRepositoryVisible        : Boolean;
     FDataInspectorVisible     : Boolean;
+    FShowVerticalGridLines    : Boolean;
+    FShowHorizontalGridLines  : Boolean;
 
     {$REGION 'property access methods'}
     function GetGridCellColoring: Boolean;
@@ -68,6 +70,10 @@ type
     procedure SetGridType(const Value: string);
     function GetFileName: string;
     procedure SetFileName(const Value: string);
+    function GetShowHorizontalGridLines: Boolean;
+    function GetShowVerticalGridLines: Boolean;
+    procedure SetShowHorizontalGridLines(const Value: Boolean);
+    procedure SetShowVerticalGridLines(const Value: Boolean);
     {$ENDREGION}
 
   protected
@@ -94,6 +100,12 @@ type
   published
     property GridCellColoring: Boolean
       read GetGridCellColoring write SetGridCellColoring default True;
+
+    property ShowHorizontalGridLines: Boolean
+      read GetShowHorizontalGridLines write SetShowHorizontalGridLines default True;
+
+    property ShowVerticalGridLines: Boolean
+      read GetShowVerticalGridLines write SetShowVerticalGridLines default True;
 
     property SQLTemplates: TSQLTemplates
       read FSQLTemplates write FSQLTemplates;
@@ -140,6 +152,8 @@ var
 begin
   inherited AfterConstruction;
   Name := 'Settings';
+  FShowVerticalGridLines := True;
+  FShowHorizontalGridLines := True;
   FDataTypeColors := TDictionary<TDataType, TColor>.Create;
   FConnectionSettings := TConnectionSettings.Create;
   for I := Low(TDataType) to High(TDataType) do
@@ -230,6 +244,26 @@ end;
 function TDGSettings.GetRepositoryVisible: Boolean;
 begin
   Result := FRepositoryVisible;
+end;
+
+function TDGSettings.GetShowHorizontalGridLines: Boolean;
+begin
+  Result := FShowHorizontalGridLines;
+end;
+
+procedure TDGSettings.SetShowHorizontalGridLines(const Value: Boolean);
+begin
+  FShowHorizontalGridLines := Value;
+end;
+
+function TDGSettings.GetShowVerticalGridLines: Boolean;
+begin
+  Result := FShowVerticalGridLines;
+end;
+
+procedure TDGSettings.SetShowVerticalGridLines(const Value: Boolean);
+begin
+  FShowVerticalGridLines := Value;
 end;
 
 procedure TDGSettings.SetRepositoryVisible(const Value: Boolean);

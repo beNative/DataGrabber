@@ -80,7 +80,6 @@ type
     chkProviderMode                : TCheckBox;
     chkSeperateThreads             : TCheckBox;
     chkUseIDInUpdatableQueries     : TCheckBox;
-    dlgColor                       : TColorDialog;
     edtCatalog                     : TButtonedEdit;
     edtDatabase                    : TButtonedEdit;
     edtPacketRecords               : TEdit;
@@ -119,6 +118,18 @@ type
     tsDisplay                      : TTabSheet;
     tsSettings                     : TTabSheet;
     chkSetAsDefault: TCheckBox;
+    btn1: TToolButton;
+    btn2: TToolButton;
+    grpGridLines: TGroupBox;
+    actGridlinesBoth: TAction;
+    actGridlinesHorizontal: TAction;
+    actGridlinesVertical: TAction;
+    actGridlinesNone: TAction;
+    tlb1: TToolBar;
+    btnGridlinesNone: TToolButton;
+    btnGridlinesVertical: TToolButton;
+    btnGridlinesHorizontal: TToolButton;
+    btnGridlinesAll: TToolButton;
     {$ENDREGION}
 
     {$REGION 'action handlers'}
@@ -178,6 +189,11 @@ type
     procedure rgpConnectionTypeClick(Sender: TObject);
     procedure tsSettingsEnter(Sender: TObject);
     procedure chkSetAsDefaultClick(Sender: TObject);
+    procedure actGridlinesHorizontalExecute(Sender: TObject);
+    procedure actGridlinesVerticalExecute(Sender: TObject);
+    procedure actGridlinesNoneExecute(Sender: TObject);
+    procedure chkGridCellColoringEnabledClick(Sender: TObject);
+    procedure actGridlinesBothExecute(Sender: TObject);
 //    procedure piConnectionProfilesGetEditorClass(
 //      Sender           : TObject;
 //      AInstance        : TObject;
@@ -196,6 +212,7 @@ type
     FVSTProfiles         : TVirtualStringTree;
     FModified            : Boolean;
     FValueManager        : TConnectionProfileValueManager;
+
     function GetSelectedProfile: TConnectionProfile;
 
   protected
@@ -380,6 +397,30 @@ begin
   SelectNode(FVSTProfiles, N);
 end;
 
+procedure TfrmSettingsDialog.actGridlinesBothExecute(Sender: TObject);
+begin
+  FSettings.ShowHorizontalGridLines := True;
+  FSettings.ShowVerticalGridLines   := True;
+end;
+
+procedure TfrmSettingsDialog.actGridlinesHorizontalExecute(Sender: TObject);
+begin
+  FSettings.ShowHorizontalGridLines := True;
+  FSettings.ShowVerticalGridLines   := False;
+end;
+
+procedure TfrmSettingsDialog.actGridlinesNoneExecute(Sender: TObject);
+begin
+  FSettings.ShowHorizontalGridLines := False;
+  FSettings.ShowVerticalGridLines   := False;
+end;
+
+procedure TfrmSettingsDialog.actGridlinesVerticalExecute(Sender: TObject);
+begin
+  FSettings.ShowHorizontalGridLines := False;
+  FSettings.ShowVerticalGridLines   := True;
+end;
+
 procedure TfrmSettingsDialog.actMoveDownExecute(Sender: TObject);
 var
   N: Integer;
@@ -442,7 +483,6 @@ begin
   if FModified and Assigned(OldNode) then
   begin
     CP := FSettings.ConnectionProfiles[OldNode.Index];
-    SaveConnectionProfileChanges(CP);
   end;
 end;
 
@@ -480,6 +520,15 @@ end;
 procedure TfrmSettingsDialog.chkFetchOnDemandClick(Sender: TObject);
 begin
   Changed;
+end;
+
+procedure TfrmSettingsDialog.chkGridCellColoringEnabledClick(Sender: TObject);
+var
+  CI : TCollectionItem;
+begin
+  for CI in pnlGridTypeColoring.ControlCollection do
+    with TControlItem(CI) do
+      Control.Enabled := (Sender as TCheckBox).Checked;
 end;
 
 procedure TfrmSettingsDialog.chkProviderModeClick(Sender: TObject);
@@ -611,6 +660,22 @@ begin
   btnStringColor.DlgColor   := FSettings.DataTypeColors[dtString];
   btnNULLColor.DlgColor     := FSettings.DataTypeColors[dtNULL];
   btnTimeColor.DlgColor     := FSettings.DataTypeColors[dtTime];
+
+
+  if FSettings.ShowHorizontalGridLines then
+  begin
+    if FSettings.ShowVerticalGridLines then
+      actGridlinesBoth.Checked := True
+    else
+      actGridlinesHorizontal.Checked := True;
+  end
+  else
+  begin
+    if FSettings.ShowVerticalGridLines then
+      actGridlinesVertical.Checked := True
+    else
+      actGridlinesNone.Checked := True;
+  end;
 
   chkGridCellColoringEnabled.Checked := FSettings.GridCellColoring;
   rgpConnectionType.Items.Clear;

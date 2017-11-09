@@ -78,6 +78,7 @@ type
     function SelectionToTextTable(AIncludeHeader: Boolean = False): string;
     function SelectionToWikiTable(AIncludeHeader: Boolean = False): string;
     function SelectionToFields(AQuoteItems: Boolean = True): string;
+    procedure ApplyGridSettings;
     procedure AutoSizeColumns;
     procedure Copy;
     procedure HideSelectedColumns;
@@ -119,7 +120,7 @@ implementation
 uses
   StrUtils, Clipbrd, Math,
 
-  DDuce.ObjectInspector,
+  DDuce.ObjectInspector.zObjectInspector,
 
   KFunctions,
 
@@ -254,7 +255,6 @@ begin
     begin
       if F is TNumericField then
       begin
-
         D := F.AsFloat;
         if IsZero(D) then
           C.Font.Color := clBlue
@@ -271,6 +271,7 @@ begin
       end;
     end;
   end;
+  C.FillRect(R);
   grdMain.CellPainter.DefaultDraw;
 end;
 {$ENDREGION}
@@ -337,6 +338,19 @@ end;
 {$ENDREGION}
 
 {$REGION 'public methods'}
+procedure TfrmKGrid.ApplyGridSettings;
+begin
+  if FSettings.ShowHorizontalGridLines then
+    grdMain.Options := grdMain.Options + [goHorzLine]
+  else
+    grdMain.Options := grdMain.Options - [goHorzLine];
+
+  if FSettings.ShowVerticalGridLines then
+    grdMain.Options := grdMain.Options + [goVertLine]
+  else
+    grdMain.Options := grdMain.Options - [goVertLine];
+end;
+
 procedure TfrmKGrid.AssignParent(AParent: TWinControl);
 begin
   Parent      := AParent;
@@ -587,6 +601,7 @@ begin
     dscMain.DataSet := Data.DataSet;
     if Assigned(DataSet) and DataSet.Active then
     begin
+      ApplyGridSettings;
       UpdateColumnLists;
       AutoSizeColumns;
     end;

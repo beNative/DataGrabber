@@ -102,6 +102,8 @@ type
     function GetGridType: string;
 
   protected
+    procedure ApplyGridSettings;
+
     procedure CopySelectionToClipboard(
       AController   : TcxGridTableController;
       AIncludeHeader: Boolean = False
@@ -204,7 +206,7 @@ uses
 
   cxGridDBDataDefinitions, cxGridCommon,
 
-  DDuce.ObjectInspector;
+  DDuce.ObjectInspector.zObjectInspector;
 
 {$REGION 'non-interfaced routines'}
 function GetTextWidth(const AText: string): Integer;
@@ -771,6 +773,7 @@ begin
   begin
     tvwMain.ClearItems;
     tvwMain.DataController.CreateAllItems;
+    ApplyGridSettings;
     BeginUpdate;
     try
       UpdateColumnLists;
@@ -932,6 +935,25 @@ end;
 function TfrmcxGrid.SelectionToFields(AQuoteItems: Boolean): string;
 begin
   Result := SelectionToFields(tvwMain.Controller, AQuoteItems);
+end;
+
+procedure TfrmcxGrid.ApplyGridSettings;
+var
+  GL: TcxGridLines;
+begin
+  GL := glNone;
+  if FSettings.ShowHorizontalGridLines then
+  begin
+    if FSettings.ShowVerticalGridLines then
+      GL := glBoth
+    else
+      GL := glHorizontal;
+  end
+  else if FSettings.ShowVerticalGridLines then
+  begin
+    GL := glVertical;
+  end;
+  tvwMain.OptionsView.GridLines := GL;
 end;
 {$ENDREGION}
 
