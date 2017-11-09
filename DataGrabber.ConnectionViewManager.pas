@@ -25,15 +25,19 @@ uses
 
   ts.Interfaces, ts.Modules.DataInspector, ts.Modules.FieldInspector,
 
-  DataGrabber.Interfaces, DataGrabber.Data;
+  DataGrabber.Interfaces, DataGrabber.Data,
 
+  DDuce.Logger;
+
+{$REGION 'documentation'}
 {
   The ConnectionViewManager is a singleton instance which manages:
     - the application settings (TDGSettings)
     - the ConnectionView instances (ConnectionViews)
-    - the active connection view
+    - the active connection view (ActiveConnectionView)
     - all actions that can be executed on the active connectionview
 }
+{$ENDREGION}
 
 type
   TdmConnectionViewManager = class(TDataModule, IConnectionViewManager)
@@ -92,7 +96,6 @@ type
     mniShowAllColumns             : TMenuItem;
     mniN1                         : TMenuItem;
     mniMergeColumns               : TMenuItem;
-    mniN2                         : TMenuItem;
     mniCopy                       : TMenuItem;
     mniCopyWikiTable              : TMenuItem;
     mniCopyTextTable              : TMenuItem;
@@ -101,7 +104,6 @@ type
     mniSelectionAsQuotedCommaText : TMenuItem;
     mniSelectionAsFields          : TMenuItem;
     mniSelectionAsQuotedFields    : TMenuItem;
-    mniN11                        : TMenuItem;
     mniInspectConnection          : TMenuItem;
     mniInspectDataSet             : TMenuItem;
     mniInspectFields              : TMenuItem;
@@ -112,6 +114,13 @@ type
     mniFormatSQL1                 : TMenuItem;
     mniAutoSizeCols               : TMenuItem;
     imlMain                       : TImageList;
+    Selection1: TMenuItem;
+    N1: TMenuItem;
+    N2: TMenuItem;
+    N3: TMenuItem;
+    Inspect1: TMenuItem;
+    N4: TMenuItem;
+    iml1: TImageList;
     {$ENDREGION}
 
     {$REGION 'action handlers'}
@@ -158,8 +167,6 @@ type
     FSettings             : IDGSettings;
     FConnectionViewList   : TConnectionViewList;
     FActiveConnectionView : IConnectionView;
-    FActiveDataView       : IDGDataView;
-    FActiveData           : IData;
     FStopWatch            : TStopwatch;
     FDataInspector        : TfrmDataInspector;
     FFieldInspector       : TfrmFieldInspector;
@@ -430,8 +437,10 @@ end;
 {$REGION 'ActiveData actions'}
 procedure TdmConnectionViewManager.actDataInspectorExecute(Sender: TObject);
 begin
-//  FSettings.DataInspectorVisible := actDataInspector.Checked;
-//  if actDataInspector.Checked then
+  FSettings.DataInspectorVisible := actDataInspector.Checked;
+  FDataInspector.Data := ActiveDataView.Data;
+  if actDataInspector.Checked then
+    FDataInspector.Show;
 //    ShowToolWindow(FDataInspector)
 //  else
 //    HideToolWindow(FDataInspector);
@@ -503,12 +512,18 @@ end;
 
 function TdmConnectionViewManager.GetActiveData: IData;
 begin
-  Result := FActiveData;
+  if Assigned(FActiveConnectionView) then
+    Result := FActiveConnectionView.ActiveData
+  else
+    Result := nil;
 end;
 
 function TdmConnectionViewManager.GetActiveDataView: IDGDataView;
 begin
-  Result := FActiveDataView;
+  if Assigned(FActiveConnectionView) then
+    Result := FActiveConnectionView.ActiveDataView
+  else
+    Result := nil;
 end;
 
 function TdmConnectionViewManager.GetConnectionViewPopupMenu: TPopupMenu;
@@ -581,20 +596,12 @@ begin
   if Assigned(ActiveData) and Assigned(ActiveDataView) then
   begin
     B := ActiveData.Active;
-    actMergeCells.Visible          := B and Supports(ActiveDataView, IMergable);
+    actMergeCells.Visible          := Supports(ActiveDataView, IMergable);
     actMergeCells.Enabled          := B and Supports(ActiveDataView, IMergable);
-    actGroupBySelection.Visible    := B and Supports(ActiveDataView, IGroupable);
+    actGroupBySelection.Visible    := Supports(ActiveDataView, IGroupable);
     actGroupBySelection.Enabled    := B and Supports(ActiveDataView, IGroupable);
     actMergeAllColumnCells.Visible := actMergeCells.Visible;
     actMergeAllColumnCells.Enabled := actMergeCells.Enabled;
-    actFavoriteFieldsOnly.Visible  := B;
-    actHideEmptyColumns.Visible    := B;
-    actHideConstantColumns.Visible := B;
-    actHideSelectedColumns.Visible := B;
-    actShowAllColumns.Visible      := B;
-    actPreview.Visible             := B;
-    actPrint.Visible               := B;
-    actDesigner.Visible            := B;
     actFavoriteFieldsOnly.Enabled  := B;
     actHideEmptyColumns.Enabled    := B;
     actHideConstantColumns.Enabled := B;
@@ -607,6 +614,7 @@ begin
     actHideConstantColumns.Checked := not ActiveDataView.ConstantColumnsVisible;
     actFavoriteFieldsOnly.Checked  :=
       (ActiveData as IFieldVisiblity).ShowFavoriteFieldsOnly;
+    Logger.Watch('ActiveDataView.RecordCount', ActiveDataView.RecordCount);
   end;
 end;
 
@@ -632,17 +640,24 @@ var
   DV : IDGDataView;
   D  : IData;
   C  : IConnection;
+  S  : string;
 begin
   EV := GlobalContainer.Resolve<IEditorView>;
   DV := GlobalContainer.Resolve<IDGDataView>(Settings.GridType);
   DV.Settings := FSettings as IDataViewSettings;
   DV.PopupMenu := ConnectionViewPopupMenu;
-  FActiveDataView := DV;
-  C := GlobalContainer.Resolve<IConnection>('FireDAC');
+  if Assigned(FActiveConnectionView) then
+  begin
+    S := FActiveConnectionView.ActiveConnectionProfile.ConnectionType;
+  end
+  else
+  begin
+    S := 'FireDAC';
+  end;
+  C := GlobalContainer.Resolve<IConnection>(S);
+  Logger.SendPointer('Connection', Pointer(C));
   D           := TdmData.Create(Self, C);
   DV.Data     := D;
-  FActiveData := D;
-  FActiveDataView := DV;
   CV := TfrmConnectionView.Create(Self, EV, DV, D);
   FConnectionViewList.Add(CV);
   ActiveConnectionView := CV;

@@ -176,7 +176,15 @@ type
 
     function GetForm: TForm;
     function GetActiveConnectionProfile: TConnectionProfile;
+    function GetActiveDataView: IDGDataView;
     function GetEditorView: IEditorView;
+    function GetActiveData: IData;
+
+    property ActiveDataView: IDGDataView
+      read GetActiveDataView;
+
+    property ActiveData: IData
+      read GetActiveData;
 
     property EditorView: IEditorView
       read GetEditorView;

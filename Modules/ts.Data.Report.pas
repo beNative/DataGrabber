@@ -78,7 +78,6 @@ uses
 
   DDuce.ObjectInspector;
 
-
 {$REGION 'construction and destruction'}
 constructor TDataReport.Create(const AData: IData);
 begin

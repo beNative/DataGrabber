@@ -118,6 +118,7 @@ type
     tsConnectionProfiles           : TTabSheet;
     tsDisplay                      : TTabSheet;
     tsSettings                     : TTabSheet;
+    chkSetAsDefault: TCheckBox;
     {$ENDREGION}
 
     {$REGION 'action handlers'}
@@ -176,6 +177,7 @@ type
     procedure edtProfileNameChange(Sender: TObject);
     procedure rgpConnectionTypeClick(Sender: TObject);
     procedure tsSettingsEnter(Sender: TObject);
+    procedure chkSetAsDefaultClick(Sender: TObject);
 //    procedure piConnectionProfilesGetEditorClass(
 //      Sender           : TObject;
 //      AInstance        : TObject;
@@ -194,6 +196,7 @@ type
     FVSTProfiles         : TVirtualStringTree;
     FModified            : Boolean;
     FValueManager        : TConnectionProfileValueManager;
+    function GetSelectedProfile: TConnectionProfile;
 
   protected
     procedure Apply;
@@ -218,6 +221,9 @@ type
 
     property ApplySettingsMethod: TApplySettingsMethod
       read FApplySettingsMethod write FApplySettingsMethod;
+
+    property SelectedProfile: TConnectionProfile
+      read GetSelectedProfile;
   end;
 
 procedure ExecuteSettingsDialog(
@@ -232,6 +238,8 @@ implementation
 uses
   System.Rtti,
   Data.DBConnAdmin, Data.Win.ADOConEd, Data.Win.ADODB,
+
+  FireDAC.VCLUI.ConnEdit,
 
   Spring.Container,
 
@@ -321,6 +329,7 @@ procedure TfrmSettingsDialog.actConnectionStringExecute(Sender: TObject);
 var
   AC : TADOConnection;
   CP : TConnectionProfile;
+  S  : string;
 begin
   CP := FSettings.ConnectionProfiles[FVSTProfiles.FocusedNode.Index];
   if CP.ConnectionType = 'ADO' then
@@ -333,7 +342,14 @@ begin
     finally
       AC.Free;
     end;
+  end
+  else if CP.ConnectionType = 'FireDAC' then
+  begin
+    S := CP.ConnectionString;
+    TfrmFDGUIxFormsConnEdit.Execute(S, '');
+    CP.ConnectionString := S;
   end;
+
 end;
 
 procedure TfrmSettingsDialog.actDeleteExecute(Sender: TObject);
@@ -382,6 +398,18 @@ begin
   FSettings.ConnectionProfiles[N].Index := N - 1;
   FVSTProfiles.Refresh;
   SelectNode(FVSTProfiles, N - 1);
+end;
+{$ENDREGION}
+
+{$REGION 'property access methods'}
+function TfrmSettingsDialog.GetSelectedProfile: TConnectionProfile;
+begin
+  if Assigned(FVSTProfiles.FocusedNode) then
+    Result := FSettings.ConnectionProfiles[FVSTProfiles.FocusedNode.Index]
+  else
+  begin
+    Result := nil;
+  end;
 end;
 {$ENDREGION}
 
@@ -457,6 +485,15 @@ end;
 procedure TfrmSettingsDialog.chkProviderModeClick(Sender: TObject);
 begin
   Changed;
+end;
+
+procedure TfrmSettingsDialog.chkSetAsDefaultClick(Sender: TObject);
+begin
+  if chkSetAsDefault.Checked and Assigned(SelectedProfile) then
+  begin
+    FSettings.DefaultConnectionProfile := SelectedProfile.Name;
+    Changed;
+  end;
 end;
 
 function TfrmSettingsDialog.FObjectInspectorBeforeAddItem(Sender: TControl;
@@ -646,6 +683,8 @@ begin
 
   rgpConnectionType.ItemIndex :=
     rgpConnectionType.Items.IndexOf(ACP.ConnectionType);
+
+  chkSetAsDefault.Checked := ACP.Name = FSettings.DefaultConnectionProfile;
 
   chkProviderMode.Checked := ACP.ProviderMode;
   edtPacketRecords.Text   := ACP.PacketRecords.ToString;

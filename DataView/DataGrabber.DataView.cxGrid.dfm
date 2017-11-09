@@ -34,9 +34,20 @@ object frmcxGrid: TfrmcxGrid
     LookAndFeel.Kind = lfStandard
     LookAndFeel.NativeStyle = True
     object tvwMain: TcxGridDBTableView
+      Navigator.Buttons.ConfirmDelete = True
       Navigator.Buttons.CustomButtons = <>
+      Navigator.Buttons.Append.Visible = True
+      Navigator.InfoPanel.Visible = True
       Navigator.Visible = True
       FilterBox.MRUItemsListDropDownCount = 10
+      FindPanel.ApplyInputDelay = 500
+      FindPanel.DisplayMode = fpdmManual
+      FindPanel.MRUItemsListCount = 100
+      FindPanel.MRUItemsListDropDownCount = 20
+      FindPanel.Position = fppBottom
+      FindPanel.ShowClearButton = False
+      FindPanel.ShowCloseButton = False
+      FindPanel.ShowFindButton = False
       OnCustomDrawCell = tvwMainCustomDrawCell
       DataController.DataSource = dscMain
       DataController.Options = [dcoAssignGroupingValues, dcoAssignMasterDetailKeys, dcoSaveExpanding, dcoSortByDisplayText, dcoFocusTopRowAfterSorting, dcoImmediatePost, dcoInsertOnNewItemRowFocusing]
@@ -48,9 +59,12 @@ object frmcxGrid: TfrmcxGrid
         end>
       DataController.Summary.FooterSummaryItems = <>
       DataController.Summary.SummaryGroups = <>
+      EditForm.DefaultColumnCount = 6
+      EditForm.DefaultStretch = fsHorizontal
       Filtering.ColumnFilteredItemsList = True
       Filtering.ColumnMRUItemsListCount = 10
       Filtering.ColumnPopup.MaxDropDownItemCount = 30
+      FilterRow.ApplyInputDelay = 500
       OptionsBehavior.CellHints = True
       OptionsBehavior.FocusCellOnTab = True
       OptionsBehavior.FocusFirstCellOnNewRecord = True
@@ -59,6 +73,7 @@ object frmcxGrid: TfrmcxGrid
       OptionsBehavior.IncSearch = True
       OptionsBehavior.NavigatorHints = True
       OptionsBehavior.BestFitMaxRecordCount = 100
+      OptionsBehavior.EditMode = emInplaceEditForm
       OptionsBehavior.PullFocusing = True
       OptionsCustomize.ColumnHiding = True
       OptionsCustomize.ColumnsQuickCustomization = True

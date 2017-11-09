@@ -35,10 +35,14 @@ type
     grdMain: TKDBGrid;
     dscMain: TDataSource;
 
-    procedure grdMainDrawCell(Sender: TObject; ACol, ARow: Integer; R: TRect;
-      State: TKGridDrawState);
+    procedure grdMainDrawCell(
+      Sender     : TObject;
+      ACol, ARow : Integer;
+      R          : TRect;
+      State      : TKGridDrawState
+    );
 
-  strict private
+  private
     FData                   : IData;
     FSettings               : IDataViewSettings;
     FEmptyColumnsVisible    : Boolean;

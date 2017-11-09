@@ -36,7 +36,7 @@ uses
      - one or more dataviews corresponding to the user input in the editor as
        multiple datasets can be returned as a result of one statement.
 
-     - a list of connectionprofiles
+     - a list of connectionprofiles (those defined in the settings)
 
      - an active connection profile (of the available profiles in
         FSettings.ConnectionProfiles)

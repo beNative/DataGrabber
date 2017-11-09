@@ -3,7 +3,7 @@ object frmSettingsDialog: TfrmSettingsDialog
   Top = 0
   Caption = 'Settings'
   ClientHeight = 437
-  ClientWidth = 684
+  ClientWidth = 721
   Color = clBtnFace
   Constraints.MinHeight = 476
   Constraints.MinWidth = 396
@@ -18,7 +18,7 @@ object frmSettingsDialog: TfrmSettingsDialog
   Position = poMainFormCenter
   ShowHint = True
   DesignSize = (
-    684
+    721
     437)
   PixelsPerInch = 96
   TextHeight = 13
@@ -26,7 +26,7 @@ object frmSettingsDialog: TfrmSettingsDialog
     AlignWithMargins = True
     Left = 3
     Top = 3
-    Width = 678
+    Width = 715
     Height = 394
     ActivePage = tsConnectionProfiles
     Align = alTop
@@ -48,7 +48,7 @@ object frmSettingsDialog: TfrmSettingsDialog
       object pnlConnectionProfileDetail: TPanel
         Left = 192
         Top = 0
-        Width = 478
+        Width = 515
         Height = 365
         Align = alClient
         BevelOuter = bvNone
@@ -56,7 +56,7 @@ object frmSettingsDialog: TfrmSettingsDialog
         object pgcConnectionProfile: TPageControl
           Left = 0
           Top = 0
-          Width = 478
+          Width = 515
           Height = 365
           ActivePage = tsBasic
           Align = alClient
@@ -64,12 +64,12 @@ object frmSettingsDialog: TfrmSettingsDialog
           object tsBasic: TTabSheet
             Caption = 'Basic'
             DesignSize = (
-              470
+              507
               337)
             object rgpConnectionType: TRadioGroup
               Left = 2
               Top = 45
-              Width = 464
+              Width = 501
               Height = 39
               Anchors = [akLeft, akTop, akRight]
               Caption = 'Connection type'
@@ -85,7 +85,7 @@ object frmSettingsDialog: TfrmSettingsDialog
             object grpClientSettings: TGroupBox
               Left = 3
               Top = 188
-              Width = 464
+              Width = 501
               Height = 146
               Anchors = [akLeft, akTop, akRight]
               Caption = 'Client settings'
@@ -164,13 +164,13 @@ object frmSettingsDialog: TfrmSettingsDialog
             object grpConnectionSettings: TGroupBox
               Left = 3
               Top = 90
-              Width = 465
+              Width = 502
               Height = 94
               Anchors = [akLeft, akTop, akRight]
               Caption = 'Connection settings'
               TabOrder = 2
               DesignSize = (
-                465
+                502
                 94)
               object lblProtocols: TLabel
                 Left = 10
@@ -217,7 +217,7 @@ object frmSettingsDialog: TfrmSettingsDialog
               object edtDatabase: TButtonedEdit
                 Left = 66
                 Top = 42
-                Width = 396
+                Width = 433
                 Height = 21
                 Anchors = [akLeft, akTop, akRight]
                 Images = imlMain
@@ -230,7 +230,7 @@ object frmSettingsDialog: TfrmSettingsDialog
               object edtCatalog: TButtonedEdit
                 Left = 66
                 Top = 68
-                Width = 396
+                Width = 433
                 Height = 21
                 Anchors = [akLeft, akTop, akRight]
                 Images = imlMain
@@ -244,23 +244,29 @@ object frmSettingsDialog: TfrmSettingsDialog
             object grpProfileSettings: TGroupBox
               Left = 3
               Top = 3
-              Width = 464
+              Width = 501
               Height = 36
               Anchors = [akLeft, akTop, akRight]
               TabOrder = 3
+              DesignSize = (
+                501
+                36)
               object lblProfileColor: TLabel
-                Left = 220
+                Left = 226
                 Top = 10
                 Width = 60
                 Height = 13
+                Anchors = [akTop, akRight]
                 Caption = 'Profile color:'
                 FocusControl = btnProfileColor
+                ExplicitLeft = 220
               end
               object btnProfileColor: TKColorButton
-                Left = 286
+                Left = 292
                 Top = 5
                 Width = 104
                 Height = 25
+                Anchors = [akTop, akRight]
                 FocusRect = False
                 Font.Charset = DEFAULT_CHARSET
                 Font.Color = clBtnText
@@ -275,8 +281,9 @@ object frmSettingsDialog: TfrmSettingsDialog
               object edtProfileName: TLabeledEdit
                 Left = 76
                 Top = 7
-                Width = 137
+                Width = 143
                 Height = 21
+                Anchors = [akLeft, akTop, akRight]
                 EditLabel.Width = 63
                 EditLabel.Height = 13
                 EditLabel.Caption = 'Profile name:'
@@ -289,6 +296,16 @@ object frmSettingsDialog: TfrmSettingsDialog
                 ParentFont = False
                 TabOrder = 1
                 OnChange = edtProfileNameChange
+              end
+              object chkSetAsDefault: TCheckBox
+                Left = 402
+                Top = 9
+                Width = 97
+                Height = 17
+                Anchors = [akTop, akRight]
+                Caption = 'Set as default'
+                TabOrder = 2
+                OnClick = chkSetAsDefaultClick
               end
             end
           end
@@ -346,12 +363,12 @@ object frmSettingsDialog: TfrmSettingsDialog
       Caption = '&Resultgrid display settings'
       ImageIndex = 5
       DesignSize = (
-        670
+        707
         365)
       object grpCellBackgroundColoring: TGroupBox
         Left = 3
         Top = 56
-        Width = 162
+        Width = 166
         Height = 302
         Caption = 'Grid cell background coloring'
         TabOrder = 0
@@ -778,7 +795,7 @@ object frmSettingsDialog: TfrmSettingsDialog
       object rgpGridTypes: TRadioGroup
         Left = 3
         Top = 1
-        Width = 664
+        Width = 701
         Height = 49
         Anchors = [akLeft, akTop, akRight]
         Caption = 'Grid type'
@@ -793,7 +810,7 @@ object frmSettingsDialog: TfrmSettingsDialog
     end
   end
   object btnApply: TButton
-    Left = 214
+    Left = 251
     Top = 403
     Width = 150
     Height = 26
@@ -806,7 +823,7 @@ object frmSettingsDialog: TfrmSettingsDialog
     TabOrder = 1
   end
   object btnClose: TButton
-    Left = 526
+    Left = 563
     Top = 403
     Width = 150
     Height = 26
@@ -819,7 +836,7 @@ object frmSettingsDialog: TfrmSettingsDialog
     TabOrder = 2
   end
   object btnCancel: TButton
-    Left = 370
+    Left = 407
     Top = 403
     Width = 150
     Height = 26

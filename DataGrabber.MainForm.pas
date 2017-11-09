@@ -67,39 +67,6 @@ type
     actInspectChromeTab           : TAction;
     ctMain                        : TChromeTabs;
     imlSpinner                    : TImageList;
-    mniADO                        : TMenuItem;
-    mniCopy                       : TMenuItem;
-    mniCopyTextTable              : TMenuItem;
-    mniCopyWikiTable              : TMenuItem;
-    mnicxGrid                     : TMenuItem;
-    mniDBX                        : TMenuItem;
-    mniFireDAC                    : TMenuItem;
-    mniFormatSQL                  : TMenuItem;
-    mniGridView                   : TMenuItem;
-    mniGroupBySelection           : TMenuItem;
-    mniHideConstantColumns        : TMenuItem;
-    mniHideEmptyColumns           : TMenuItem;
-    mniHideSelectedColumns        : TMenuItem;
-    mniInspectConnection          : TMenuItem;
-    mniInspectDataSet             : TMenuItem;
-    mniInspectFields              : TMenuItem;
-    mniInspectGrid                : TMenuItem;
-    mniKGrid                      : TMenuItem;
-    mniMergeColumns               : TMenuItem;
-    mniN1                         : TMenuItem;
-    mniN2                         : TMenuItem;
-    mniN3                         : TMenuItem;
-    mniN4                         : TMenuItem;
-    mniSelectionAsCommaText       : TMenuItem;
-    mniSelectionAsFields          : TMenuItem;
-    mniSelectionAsQuotedCommaText : TMenuItem;
-    mniSelectionAsQuotedFields    : TMenuItem;
-    mniSelectionAsTextTable       : TMenuItem;
-    mniSettings                   : TMenuItem;
-    mniShowAllColumns             : TMenuItem;
-    mniUNI                        : TMenuItem;
-    mniZEOS                       : TMenuItem;
-    N1                            : TMenuItem;
     pnlConnectionStatus           : TPanel;
     pnlConnectionType             : TPanel;
     pnlConnectionViews            : TPanel;
@@ -113,9 +80,6 @@ type
     pnlRecordCount                : TPanel;
     pnlStatus                     : TPanel;
     pnlStatusBar                  : TPanel;
-    ppm                           : TPopupMenu;
-    ppmConnectionTypes            : TPopupMenu;
-    ppmGridTypes                  : TPopupMenu;
     tlbMain                       : TToolBar;
     {$ENDREGION}
 
@@ -411,7 +375,7 @@ end;
 
 function TfrmMain.AddConnectionView: IConnectionView;
 var
-  CV : IConnectionView;
+  CV   : IConnectionView;
   LTab : TChromeTab;
 begin
   LockPaint(Self);

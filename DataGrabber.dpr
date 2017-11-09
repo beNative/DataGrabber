@@ -249,7 +249,7 @@ uses
 begin
   ReportMemoryLeaksOnShutdown := True;
   Application.Initialize;
-  Application.Title := 'DataGrabber';
+  Application.Title := 'DataGrabber 2';
   RegisterServices;
   //Application.CreateForm(TdmRepositoryData, dmRepositoryData);
   Application.CreateForm(TfrmMain, frmMain);

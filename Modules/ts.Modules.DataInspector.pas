@@ -47,25 +47,56 @@ type
 
     procedure dscMainDataChange(Sender: TObject; Field: TField);
     procedure FormShow(Sender: TObject);
-    procedure FInspectorGetCellText(Sender: TObject; Cell: TGridCell;
-      var Value: string);
-    procedure FInspectorSetEditText(Sender: TObject; Cell: TGridCell;
-      var Value: String);
-    procedure FInspectorGetCellReadOnly(Sender: TObject; Cell: TGridCell;
-      var CellReadOnly: Boolean);
-    procedure FInspectorEditCanModify(Sender: TObject; Cell: TGridCell;
-      var CanModify: Boolean);
-    procedure FInspectorGetEditStyle(Sender: TObject; Cell: TGridCell;
-      var Style: TGridEditStyle);
-    procedure FInspectorGetCheckKind(Sender: TObject; Cell: TGridCell;
-      var CheckKind: TGridCheckKind);
-    procedure FInspectorGetCheckAlignment(Sender: TObject; Cell: TGridCell;
-      var CheckAlignment: TAlignment);
-    procedure FInspectorGetCheckState(Sender: TObject; Cell: TGridCell;
-      var CheckState: TCheckBoxState);
-    procedure FInspectorCheckClick(Sender: TObject; Cell: TGridCell);
-    procedure FInspectorEditCanShow(Sender: TObject; Cell: TGridCell;
-      var CanShow: Boolean);
+
+    procedure FInspectorGetCellText(
+      Sender    : TObject;
+      Cell      : TGridCell;
+      var Value : string
+    );
+    procedure FInspectorSetEditText(
+      Sender    : TObject;
+      Cell      : TGridCell;
+      var Value : string
+    );
+    procedure FInspectorGetCellReadOnly(
+      Sender           : TObject;
+      Cell             : TGridCell;
+      var CellReadOnly : Boolean
+    );
+    procedure FInspectorEditCanModify(
+      Sender        : TObject;
+      Cell          : TGridCell;
+      var CanModify : Boolean
+    );
+    procedure FInspectorGetEditStyle(
+      Sender    : TObject;
+      Cell      : TGridCell;
+      var Style : TGridEditStyle
+    );
+    procedure FInspectorGetCheckKind(
+      Sender        : TObject;
+      Cell          : TGridCell;
+      var CheckKind : TGridCheckKind
+    );
+    procedure FInspectorGetCheckAlignment(
+      Sender             : TObject;
+      Cell               : TGridCell;
+      var CheckAlignment : TAlignment
+    );
+    procedure FInspectorGetCheckState(
+      Sender         : TObject;
+      Cell           : TGridCell;
+      var CheckState : TCheckBoxState
+    );
+    procedure FInspectorCheckClick(
+      Sender : TObject;
+      Cell   : TGridCell
+    );
+    procedure FInspectorEditCanShow(
+      Sender      : TObject;
+      Cell        : TGridCell;
+      var CanShow : Boolean
+    );
 
     procedure actHideEmptyFieldsExecute(Sender: TObject);
 
@@ -121,8 +152,12 @@ begin
   inherited Create(AOwner);
   FNonEmptyFields := TObjectList<TField>.Create(False);
   FInspector := TInspector.Create(Self);
-  FInspector.Parent := pnlMain;
-  FInspector.Align  := alClient;
+
+  FInspector.Color      := clWhite;
+  FInspector.FlatBorder := True;
+  FInspector.Parent     := pnlMain;
+  FInspector.Align      := alClient;
+
   FInspector.OnGetCellText       := FInspectorGetCellText;
   FInspector.OnSetEditText       := FInspectorSetEditText;
   FInspector.OnGetCellReadOnly   := FInspectorGetCellReadOnly;

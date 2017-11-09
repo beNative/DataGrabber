@@ -112,11 +112,14 @@ type
     FVisible          : Boolean;
     FWidth            : Extended;
 
+    function PointsFieldLength(
+      ACharCount : Integer;
+      AChar      : Char;
+      AFont      : TFont
+    ): Integer;
+
     procedure SetCollection(const Value: TtsListReportColumns); reintroduce;
     function GetCollection: TtsListReportColumns;
-
-    function PointsFieldLength(ACharCount: Integer; AChar: Char; AFont: TFont):
-      Integer;
     procedure SetMaxWidth(const Value: Extended);
     procedure SetMinWidth(const Value: Extended);
 
@@ -905,7 +908,6 @@ begin
      Collection.BeginUpdate;
    C := TtsListReportColumn(Source);
    try
-     { <PropertyName> := C.<PropertyName> }
      CellBorders      := C.CellBorders;
      CellColor        := C.CellColor;
      DataType         := C.DataType;

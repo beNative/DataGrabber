@@ -34,7 +34,7 @@ uses
   Data.DbxSybaseASA,
   Data.DbxSybaseASE,
 
-  ts.Interfaces, ts.Connection;
+  ts.Interfaces, ts.Connection, Data.DbxSqlite;
 
 type
   TdmDBXConnection = class(TdmConnection, IConnection)

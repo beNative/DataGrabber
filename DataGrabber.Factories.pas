@@ -51,28 +51,22 @@ procedure AddToolbarButtons(AToolBar: TToolbar; AManager: IConnectionViewManager
   end;
 
 begin
-  AddButton('actSettings');
   //AddButton('actFavoriteFieldsOnly');
-  AddButton('actShowAllColumns');
-  AddButton('actMergeAllColumnCells');
-  AddButton('actAutoSizeCols');
-  AddButton('actHideSelectedColumns');
-  AddButton('actHideConstantColumns');
-  AddButton('actHideEmptyColumns');
-  AddButton('actExecute');
-//  AddButton('actCreateModel');
-//  AddButton('actProviderMode');
-//  AddButton('actToggleFullScreen');
-//  AddButton('actRTTI');
-//  AddButton('actSyncEditorWithRepository');
-//  AddButton('actToggleRepositoryTree');
-
-
+  AddButton('actDataInspector');
   AddButton('actPreview');
   AddButton('actDesigner');
   AddButton('actPrint');
+  AddButton('actMergeAllColumnCells');
+  AddButton('actShowAllColumns');
+  AddButton('actHideSelectedColumns');
+  AddButton('actHideConstantColumns');
+  AddButton('actHideEmptyColumns');
+  AddButton('actAutoSizeCols');
+  AddButton('actToggleFullScreen');
+  AddButton('actSettings');
 
   //AddButton('actAddConnectionView');
+  AddButton('actExecute');
 end;
 
 function CreateInspector(AOwner : TComponent; AParent : TWinControl;

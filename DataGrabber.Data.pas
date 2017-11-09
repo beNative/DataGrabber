@@ -22,7 +22,7 @@ uses
   Winapi.Windows, Winapi.Messages,
   System.SysUtils, System.Variants, System.Classes,
   Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs,
-  Data.DB, Data.Win.ADODB,
+  Data.DB,
   Datasnap.DBClient, Datasnap.Provider,
 
   Spring, Spring.Collections,
@@ -71,7 +71,6 @@ type
     property NonEmptyFields: IList<TField>
       read GetNonEmptyFields;
 
-
     { IFieldVisibility }
     property ConstantFieldsVisible: Boolean
       read GetConstantFieldsVisible write SetConstantFieldsVisible;
@@ -85,6 +84,9 @@ type
   end;
 
 implementation
+
+uses
+  System.Threading;
 
 {$R *.dfm}
 
@@ -103,6 +105,16 @@ end;
 function TdmData.GetConstantFields: IList<TField>;
 begin
   Result := FConstantFields;
+end;
+
+function TdmData.GetEmptyFields: IList<TField>;
+begin
+  Result := FEmptyFields;
+end;
+
+function TdmData.GetNonEmptyFields: IList<TField>;
+begin
+  Result := FNonEmptyFields;
 end;
 
 function TdmData.GetConstantFieldsVisible: Boolean;
@@ -146,16 +158,6 @@ begin
     UpdateFieldLists;
   end;
 end;
-
-function TdmData.GetEmptyFields: IList<TField>;
-begin
-  Result := FEmptyFields;
-end;
-
-function TdmData.GetNonEmptyFields: IList<TField>;
-begin
-  Result := FNonEmptyFields;
-end;
 {$ENDREGION}
 
 {$REGION 'private methods'}
@@ -163,15 +165,16 @@ end;
 
 procedure TdmData.UpdateFieldLists;
 var
-  B : Boolean;
-  S : string;
-  T : string;
-  F : TField;
+  S        : string;
+  T        : string;
+  F        : TField;
+  LIsEmpty : Boolean;
+  LIsConst : Boolean;
 begin
+  DataSet.DisableControls;
   FConstantFields.Clear;
   FEmptyFields.Clear;
   FNonEmptyFields.Clear;
-  DataSet.DisableControls;
   try
     if DataSet.FindFirst then
     begin
@@ -179,25 +182,18 @@ begin
       begin
         // constant fields
         DataSet.FindFirst;
-        B := True;
-        S := F.AsString;;
-        while B and DataSet.FindNext do
+        S := F.AsString;
+        LIsConst := True;
+        LIsEmpty := F.IsNull or F.AsString.IsEmpty;
+        while (LIsConst or LIsEmpty) and DataSet.FindNext do
         begin
           T := F.AsString;
-          B := S = T;
+          LIsConst := LIsConst and (S = T);
+          LIsEmpty := LIsEmpty and (F.IsNull or T.IsEmpty);
         end;
-        if B then
+        if LIsConst then
           FConstantFields.Add(F);
-        // empty fields
-        DataSet.FindFirst;
-        S := F.AsString;
-        B := (S = '') or (S = '0') or (S = 'False');
-        while B and DataSet.FindNext do
-        begin
-          S := F.AsString;
-          B := (S = '') or (S = '0') or (S = 'False');
-        end;
-        if B then
+        if LIsEmpty then
           FEmptyFields.Add(F)
         else
           FNonEmptyFields.Add(F);
@@ -214,10 +210,10 @@ procedure TdmData.InitField(AField: TField);
 var
   B: Boolean;
 begin
-  inherited;
+  inherited InitField(AField);
   B := True;
-//  if ShowFavoriteFieldsOnly then
-//    B := FFavoriteFields.Contains(AField);
+  if ShowFavoriteFieldsOnly then
+    B := FFavoriteFields.Contains(AField);
   if B and not ConstantFieldsVisible then
     B := not FConstantFields.Contains(AField);
   if B and not EmptyFieldsVisible then
