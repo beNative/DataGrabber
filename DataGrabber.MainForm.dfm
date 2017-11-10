@@ -69,7 +69,7 @@ object frmMain: TfrmMain
     end
     object pnlEditMode: TPanel
       AlignWithMargins = True
-      Left = 467
+      Left = 519
       Top = 1
       Width = 50
       Height = 19
@@ -82,10 +82,11 @@ object frmMain: TfrmMain
       BevelKind = bkFlat
       BevelOuter = bvNone
       TabOrder = 1
+      ExplicitLeft = 467
     end
     object pnlElapsedTime: TPanel
       AlignWithMargins = True
-      Left = 311
+      Left = 363
       Top = 1
       Width = 50
       Height = 19
@@ -98,10 +99,11 @@ object frmMain: TfrmMain
       BevelKind = bkFlat
       BevelOuter = bvNone
       TabOrder = 2
+      ExplicitLeft = 311
     end
     object pnlProviderMode: TPanel
       AlignWithMargins = True
-      Left = 415
+      Left = 467
       Top = 1
       Width = 50
       Height = 19
@@ -114,10 +116,11 @@ object frmMain: TfrmMain
       BevelKind = bkFlat
       BevelOuter = bvNone
       TabOrder = 3
+      ExplicitLeft = 415
     end
     object pnlConnectionType: TPanel
       AlignWithMargins = True
-      Left = 363
+      Left = 415
       Top = 1
       Width = 50
       Height = 19
@@ -130,10 +133,11 @@ object frmMain: TfrmMain
       BevelKind = bkFlat
       BevelOuter = bvNone
       TabOrder = 4
+      ExplicitLeft = 363
     end
     object pnlGridType: TPanel
       AlignWithMargins = True
-      Left = 519
+      Left = 571
       Top = 1
       Width = 50
       Height = 19
@@ -146,6 +150,7 @@ object frmMain: TfrmMain
       BevelKind = bkFlat
       BevelOuter = bvNone
       TabOrder = 5
+      ExplicitLeft = 519
     end
     object pnlConnectionStatus: TPanel
       AlignWithMargins = True
@@ -201,7 +206,7 @@ object frmMain: TfrmMain
       Top = 1
       Width = 50
       Height = 19
-      Hint = 'Constant field count'
+      Hint = 'Constant fields count'
       Margins.Left = 1
       Margins.Top = 1
       Margins.Right = 1
@@ -227,6 +232,23 @@ object frmMain: TfrmMain
       BevelOuter = bvNone
       TabOrder = 10
     end
+    object pnlHiddenFieldsCount: TPanel
+      AlignWithMargins = True
+      Left = 311
+      Top = 1
+      Width = 50
+      Height = 19
+      Hint = 'Hidden fields count'
+      Margins.Left = 1
+      Margins.Top = 1
+      Margins.Right = 1
+      Margins.Bottom = 1
+      Align = alLeft
+      BevelKind = bkFlat
+      BevelOuter = bvNone
+      TabOrder = 11
+      ExplicitTop = 4
+    end
   end
   object pnlConnectionViews: TPanel
     Left = 0
@@ -236,8 +258,6 @@ object frmMain: TfrmMain
     Align = alClient
     BevelOuter = bvNone
     TabOrder = 2
-    ExplicitLeft = 1
-    ExplicitTop = 14
     object ctMain: TChromeTabs
       Left = 0
       Top = 0
@@ -568,11 +588,6 @@ object frmMain: TfrmMain
       LookAndFeel.ScrollButtons.Arrow.Disabled.OutlineSize = 1.000000000000000000
       LookAndFeel.ScrollButtons.Arrow.Disabled.OutlineAlpha = 200
       Align = alTop
-      Font.Charset = DEFAULT_CHARSET
-      Font.Color = clWindowText
-      Font.Height = -11
-      Font.Name = 'Segoe UI'
-      Font.Style = []
       TabOrder = 0
     end
   end

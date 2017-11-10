@@ -42,6 +42,7 @@ type
     FEmptyFieldsVisible     : Boolean;
     FShowFavoriteFieldsOnly : Boolean;
 
+   {$REGION 'property access methods'}
     function GetConstantFields: IList<TField>;
     function GetEmptyFields: IList<TField>;
     function GetNonEmptyFields: IList<TField>;
@@ -51,13 +52,18 @@ type
     procedure SetConstantFieldsVisible(const Value: Boolean);
     procedure SetEmptyFieldsVisible(const Value: Boolean);
     procedure SetShowFavoriteFieldsOnly(const Value: Boolean);
+    {$ENDREGION}
 
   protected
     procedure InitFields(ADataSet: TDataSet); override;
+
     procedure UpdateFieldLists;
+    procedure AfterExecute; override;
 
   public
     procedure AfterConstruction; override;
+
+    function ShowAllFields: Boolean;
 
     procedure InitField(AField: TField); override;
 
@@ -86,7 +92,9 @@ type
 implementation
 
 uses
-  System.Threading;
+  System.Threading,
+
+  DDuce.Logger;
 
 {$R *.dfm}
 
@@ -98,10 +106,18 @@ begin
   FEmptyFields    := TCollections.CreateObjectList<TField>(False);
   FNonEmptyFields := TCollections.CreateObjectList<TField>(False);
   FFavoriteFields := TCollections.CreateObjectList<TField>(False);
+  FConstantFieldsVisible := True;
+  FEmptyFieldsVisible    := True;
 end;
 {$ENDREGION}
 
 {$REGION 'property access methods'}
+procedure TdmData.AfterExecute;
+begin
+  inherited AfterExecute;
+  UpdateFieldLists;
+end;
+
 function TdmData.GetConstantFields: IList<TField>;
 begin
   Result := FConstantFields;
@@ -127,7 +143,7 @@ begin
   if Value <> ConstantFieldsVisible then
   begin
     FConstantFieldsVisible := Value;
-    UpdateFieldLists;
+    InitFields(DataSet);
   end;
 end;
 
@@ -145,6 +161,24 @@ begin
   end;
 end;
 
+function TdmData.ShowAllFields: Boolean;
+var
+  B : Boolean;
+  F : TField;
+begin
+  Result := False;
+  FConstantFieldsVisible := True;
+  FEmptyFieldsVisible    := True;
+  for F in DataSet.Fields do
+  begin
+    if not F.Visible then
+    begin
+      F.Visible := True;
+      Result := True;
+    end;
+  end;
+end;
+
 function TdmData.GetEmptyFieldsVisible: Boolean;
 begin
   Result := FEmptyFieldsVisible;
@@ -155,7 +189,7 @@ begin
   if Value <> EmptyFieldsVisible then
   begin
     FEmptyFieldsVisible := Value;
-    UpdateFieldLists;
+    InitFields(DataSet);
   end;
 end;
 {$ENDREGION}
@@ -218,13 +252,15 @@ begin
     B := not FConstantFields.Contains(AField);
   if B and not EmptyFieldsVisible then
     B := not FEmptyFields.Contains(AField);
+
+  Logger.SendComponent(AField.FieldName, AField);
   AField.Visible := B;
 end;
 
 procedure TdmData.InitFields(ADataSet: TDataSet);
 begin
-  if ADataSet = DataSet then
-    UpdateFieldLists;
+//  if ADataSet = DataSet then
+//    UpdateFieldLists;
   inherited InitFields(ADataSet);
 end;
 {$ENDREGION}

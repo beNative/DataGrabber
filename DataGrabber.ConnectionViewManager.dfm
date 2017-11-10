@@ -17,14 +17,15 @@ object dmConnectionViewManager: TdmConnectionViewManager
     end
     object actHideEmptyColumns: TAction
       Category = 'Grid'
-      AutoCheck = True
       Caption = 'Hide empty'
+      ImageIndex = 70
       ShortCut = 16453
       OnExecute = actHideEmptyColumnsExecute
     end
     object actShowAllColumns: TAction
       Category = 'Grid'
       Caption = 'Show All'
+      ImageIndex = 71
       OnExecute = actShowAllColumnsExecute
     end
     object actToggleStayOnTop: TAction
@@ -42,13 +43,14 @@ object dmConnectionViewManager: TdmConnectionViewManager
     object actHideSelectedColumns: TAction
       Category = 'Grid'
       Caption = 'Hide selected'
+      ImageIndex = 70
       ShortCut = 16456
       OnExecute = actHideSelectedColumnsExecute
     end
     object actHideConstantColumns: TAction
       Category = 'Grid'
-      AutoCheck = True
       Caption = 'Hide constant'
+      ImageIndex = 70
       ShortCut = 16459
       OnExecute = actHideConstantColumnsExecute
     end
@@ -89,7 +91,7 @@ object dmConnectionViewManager: TdmConnectionViewManager
     object actToggleFullScreen: TAction
       AutoCheck = True
       Caption = 'Toggle full screen'
-      ImageIndex = 15
+      ImageIndex = 9
       ShortCut = 122
     end
     object actCopy: TAction
@@ -144,6 +146,7 @@ object dmConnectionViewManager: TdmConnectionViewManager
     object actInspect: TAction
       Category = 'Inspect'
       Caption = 'actInspect'
+      ImageIndex = 32
       ShortCut = 16496
       OnExecute = actInspectExecute
     end
@@ -176,7 +179,7 @@ object dmConnectionViewManager: TdmConnectionViewManager
     end
     object actSettings: TAction
       Caption = 'Settings'
-      ImageIndex = 2
+      ImageIndex = 76
       OnExecute = actSettingsExecute
     end
     object actInspectDataSet: TAction
@@ -268,11 +271,9 @@ object dmConnectionViewManager: TdmConnectionViewManager
     end
     object mniHideEmptyColumns: TMenuItem
       Action = actHideEmptyColumns
-      AutoCheck = True
     end
     object mniHideConstantColumns: TMenuItem
       Action = actHideConstantColumns
-      AutoCheck = True
     end
     object mniShowAllColumns: TMenuItem
       Action = actShowAllColumns

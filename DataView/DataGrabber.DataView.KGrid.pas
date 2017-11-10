@@ -32,8 +32,8 @@ uses
 
 type
   TfrmKGrid = class(TForm, IDataView, IDGDataView)
-    grdMain: TKDBGrid;
-    dscMain: TDataSource;
+    grdMain : TKDBGrid;
+    dscMain : TDataSource;
 
     procedure grdMainDrawCell(
       Sender     : TObject;
@@ -43,19 +43,11 @@ type
     );
 
   private
-    FData                   : IData;
-    FSettings               : IDataViewSettings;
-    FEmptyColumnsVisible    : Boolean;
-    FConstantColumnsVisible : Boolean;
-    FEmptyCols              : TObjectList<TKGridCol>;
-    FConstCols              : TObjectList<TKGridCol>;
+    FData     : IData;
+    FSettings : IDataViewSettings;
 
     function GetDataSet: TDataSet;
     function GetRecordCount: Integer;
-    function GetConstantColumnsVisible: Boolean;
-    procedure SetConstantColumnsVisible(const Value: Boolean);
-    function GetEmptyColumnsVisible: Boolean;
-    procedure SetEmptyColumnsVisible(const Value: Boolean);
     function GetSettings: IDataViewSettings;
     procedure SetSettings(const Value: IDataViewSettings);
 
@@ -67,9 +59,7 @@ type
     function GetName: string;
 
   protected
-    procedure UpdateColumnLists;
     procedure SetPopupMenu(const Value: TPopupMenu);
-
 
   public
     function SelectionToCommaText(AQuoteItems: Boolean = True): string;
@@ -83,7 +73,6 @@ type
     procedure Copy;
     procedure HideSelectedColumns;
     procedure MergeAllColumnCells(AActive: Boolean);
-    procedure ShowAllColumns;
     procedure UpdateView;
     procedure BeginUpdate;
     procedure EndUpdate;
@@ -105,12 +94,6 @@ type
 
     property RecordCount: Integer
       read GetRecordCount;
-
-    property ConstantColumnsVisible: Boolean
-      read GetConstantColumnsVisible write SetConstantColumnsVisible;
-
-    property EmptyColumnsVisible: Boolean
-      read GetEmptyColumnsVisible write SetEmptyColumnsVisible;
   end;
 
 implementation
@@ -118,7 +101,8 @@ implementation
 {$R *.dfm}
 
 uses
-  StrUtils, Clipbrd, Math,
+  System.StrUtils, System.Math,
+  Vcl.Clipbrd,
 
   DDuce.ObjectInspector.zObjectInspector,
 
@@ -126,15 +110,10 @@ uses
 
   DataGrabber.Utils;
 
-
 {$REGION 'construction and destruction'}
 procedure TfrmKGrid.AfterConstruction;
 begin
-  inherited;
-  FEmptyCols                       := TObjectList<TKGridCol>.Create(False);
-  FConstCols                       := TObjectList<TKGridCol>.Create(False);
-  FConstantColumnsVisible          := True;
-  FEmptyColumnsVisible             := True;
+  inherited AfterConstruction;
   grdMain.Font.Name                := 'Callibri';
   grdMain.Colors.FocusedRangeBkGnd := clGray;
 end;
@@ -143,35 +122,11 @@ procedure TfrmKGrid.BeforeDestruction;
 begin
   if Assigned(FData) then
     FData.UnRegisterDataView(Self);
-  FreeAndNil(FEmptyCols);
-  FreeAndNil(FConstCols);
-  inherited;
+  inherited BeforeDestruction;
 end;
 {$ENDREGION}
 
 {$REGION 'property access methods'}
-function TfrmKGrid.GetConstantColumnsVisible: Boolean;
-begin
-  Result := FConstantColumnsVisible;
-end;
-
-procedure TfrmKGrid.SetConstantColumnsVisible(const Value: Boolean);
-var
-  C: TKGridCol;
-begin
-  if Value <> ConstantColumnsVisible then
-  begin
-    FConstantColumnsVisible := Value;
-    for C in FConstCols do
-      C.Visible := Value;
-  end;
-end;
-
-function TfrmKGrid.GetEmptyColumnsVisible: Boolean;
-begin
-  Result := FEmptyColumnsVisible;
-end;
-
 function TfrmKGrid.GetGridType: string;
 begin
   Result := 'GridView';
@@ -182,21 +137,9 @@ begin
   Result := inherited Name;
 end;
 
-procedure TfrmKGrid.SetEmptyColumnsVisible(const Value: Boolean);
-var
-  C: TKGridCol;
-begin
-  if Value <> EmptyColumnsVisible then
-  begin
-    FEmptyColumnsVisible := Value;
-    for C in FEmptyCols do
-      C.Visible := Value;
-  end;
-end;
-
 procedure TfrmKGrid.SetPopupMenu(const Value: TPopupMenu);
 begin
-//
+  grdMain.PopupMenu := Value;
 end;
 
 function TfrmKGrid.GetData: IData;
@@ -225,7 +168,6 @@ begin
   Result := DataSet.RecordCount;
 end;
 
-
 function TfrmKGrid.GetSettings: IDataViewSettings;
 begin
   Result := FSettings;
@@ -235,7 +177,6 @@ procedure TfrmKGrid.SetSettings(const Value: IDataViewSettings);
 begin
   FSettings := Value;
 end;
-
 {$ENDREGION}
 
 {$REGION 'event handlers'}
@@ -247,6 +188,11 @@ var
   D : Double;
 begin
   C := grdMain.CellPainter.Canvas;
+  if ARow = 0 then
+  begin
+    C.Font.Style := C.Font.Style + [fsBold];
+  end;
+
   grdMain.Cell[ACol, ARow].ApplyDrawProperties;
   if Settings.GridCellColoring and (State = []) then
   begin
@@ -292,47 +238,6 @@ begin
     T := SR.Col1;
     SR.Col1 := SR.Col2;
     SR.Col2 := T;
-  end;
-end;
-{$ENDREGION}
-
-{$REGION 'protected methods'}
-procedure TfrmKGrid.UpdateColumnLists;
-var
-  X : Integer;
-  Y : Integer;
-  B : Boolean;
-  S : string;
-  T : string;
-begin
-  FConstCols.Clear;
-  FEmptyCols.Clear;
-
-  for X := 0 to grdMain.ColCount - 1 do
-  begin
-    // constant columns
-    Y := 1;
-    B := True;
-    S := grdMain.Cells[X, Y];
-    while B and (Y < DataSet.RecordCount) do
-    begin
-      T := grdMain.Cells[X, Y];
-      B := S = T;
-      Inc(Y);
-    end;
-    if B then
-      FConstCols.Add(grdMain.Cols[X]);
-    // empty columns
-    Y := 1;
-    B := True;
-    while B and (Y < DataSet.RecordCount) do
-    begin
-      S := grdMain.Cells[X, Y];
-      B := (S = '') or (S = '0') or (S = 'False');
-      Inc(Y);
-    end;
-    if B then
-      FEmptyCols.Add(grdMain.Cols[X]);
   end;
 end;
 {$ENDREGION}
@@ -415,7 +320,7 @@ end;
 
 procedure TfrmKGrid.MergeAllColumnCells(AActive: Boolean);
 begin
-
+  // TODO
 end;
 
 function TfrmKGrid.SelectionToCommaText(AQuoteItems: Boolean): string;
@@ -491,7 +396,7 @@ end;
 
 function TfrmKGrid.SelectionToFields(AQuoteItems: Boolean): string;
 begin
-
+// TODO
 end;
 
 { does not take hidden columns into account! }
@@ -574,24 +479,7 @@ end;
 
 function TfrmKGrid.SelectionToWikiTable(AIncludeHeader: Boolean): string;
 begin
-
-end;
-
-procedure TfrmKGrid.ShowAllColumns;
-var
-  I: Integer;
-begin
-  BeginUpdate;
-  try
-    for I := 0 to grdMain.ColCount - 1 do
-    begin
-      grdMain.Cols[I].Visible := True;
-    end;
-    FEmptyColumnsVisible    := True;
-    FConstantColumnsVisible := True;
-  finally
-    EndUpdate;
-  end;
+// TODO
 end;
 
 procedure TfrmKGrid.UpdateView;
@@ -602,7 +490,6 @@ begin
     if Assigned(DataSet) and DataSet.Active then
     begin
       ApplyGridSettings;
-      UpdateColumnLists;
       AutoSizeColumns;
     end;
   finally

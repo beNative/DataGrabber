@@ -49,7 +49,9 @@ object frmcxGrid: TfrmcxGrid
       FindPanel.ShowCloseButton = False
       FindPanel.ShowFindButton = False
       OnCustomDrawCell = tvwMainCustomDrawCell
+      DataController.DataModeController.GridMode = True
       DataController.DataSource = dscMain
+      DataController.MultiThreadedOptions.Filtering = bTrue
       DataController.Options = [dcoAssignGroupingValues, dcoAssignMasterDetailKeys, dcoSaveExpanding, dcoSortByDisplayText, dcoFocusTopRowAfterSorting, dcoImmediatePost, dcoInsertOnNewItemRowFocusing]
       DataController.Summary.DefaultGroupSummaryItems = <
         item

@@ -18,6 +18,8 @@ unit ts.Modules.FieldInspector;
 
 interface
 
+{ A TField inspector for any given TDataSet descendant. }
+
 uses
   Winapi.Windows, Winapi.Messages,
   System.SysUtils, System.Variants, System.Classes,
@@ -26,15 +28,21 @@ uses
 
   DDuce.Components.PropertyInspector,
 
+  zObjInspector,
+
   VirtualTrees,
 
-  ts.Interfaces;
+  ts.Interfaces, System.Actions, Vcl.ActnList;
 
 type
   TfrmFieldInspector = class(TForm)
-    splVertical : TSplitter;
+    {$REGION 'designer controls'}
+    aclMain     : TActionList;
+    actInspect  : TAction;
     pnlLeft     : TPanel;
     pnlRight    : TPanel;
+    splVertical : TSplitter;
+    {$ENDREGION}
 
     procedure vstFieldsGetText(
       Sender       : TBaseVirtualTree;
@@ -48,10 +56,11 @@ type
       Node   : PVirtualNode;
       Column : TColumnIndex
     );
+    procedure actInspectExecute(Sender: TObject);
 
   private
     FData      : IData;
-    FPIField   : TPropertyInspector;
+    FOIField   : TzObjectInspector;
     FVSTFields : TVirtualStringTree;
 
     function GetData: IData;
@@ -75,27 +84,47 @@ implementation
 {$R *.dfm}
 
 uses
+  System.Math,
+
   DDuce.Factories, DDuce.Components.Factories,
 
-  System.Math;
+  DDuce.ObjectInspector.zObjectInspector;
 
 {$REGION 'construction and destruction'}
 constructor TfrmFieldInspector.Create(AOwner: TComponent; AData: IData);
+var
+  C: TVirtualTreeColumn;
 begin
   inherited Create(AOwner);
   Data := AData;
-  FPIField := TDDuceComponents.CreatePropertyInspector(Self, Self);
-  FPIField.Margins.Left := 0;
-
+  FOIField   := TFactories.CreatezObjectInspector(Self, pnlRight);
   FVSTFields := TFactories.CreateVirtualStringTree(Self, pnlLeft);
+    // cell in first column is fully selected
+  FVSTFields.TreeOptions.MiscOptions :=
+    FVSTFields.TreeOptions.MiscOptions + [toGridExtensions];
+  FVSTFields.TreeOptions.PaintOptions :=
+    FVSTFields.TreeOptions.PaintOptions - [toHideSelection];
+  FVSTFields.TreeOptions.PaintOptions :=
+    FVSTFields.TreeOptions.PaintOptions + [toPopupMode];
+  FVSTFields.TreeOptions.SelectionOptions :=
+    FVSTFields.TreeOptions.SelectionOptions - [toDisableDrawSelection];
+  FVSTFields.TreeOptions.SelectionOptions :=
+    FVSTFields.TreeOptions.SelectionOptions + [toAlwaysSelectNode];
   FVSTFields.OnGetText := vstFieldsGetText;
   FVSTFields.OnFocusChanged := vstFieldsFocusChanged;
-  with FVSTFields.Header.Columns.Add do
-    Width := 100;
-
-  with FVSTFields.Header.Columns.Add do
-    Width := 100;
-
+  FVSTFields.LineStyle := lsSolid;
+  FVSTFields.Header.Font.Style := FVSTFields.Header.Font.Style + [fsBold];
+  // required when using it as a grid
+  FVSTFields.Indent    := 0;
+  C := FVSTFields.Header.Columns.Add;
+  C.CaptionAlignment := taCenter;
+  C.Text             := 'Fieldname';
+  C := FVSTFields.Header.Columns.Add;
+  C.CaptionAlignment := taCenter;
+  C.Text             := 'Field class';
+  C.CaptionAlignment := taCenter;
+  C.Alignment        := taCenter;
+  C.Width := 120;
   FVSTFields.Margins.Right := 0;
 end;
 {$ENDREGION}
@@ -124,12 +153,19 @@ begin
 end;
 {$ENDREGION}
 
+{$REGION 'action handlers'}
+procedure TfrmFieldInspector.actInspectExecute(Sender: TObject);
+begin
+  InspectObject(FVSTFields);
+end;
+{$ENDREGION}
+
 {$REGION 'event handlers'}
 procedure TfrmFieldInspector.vstFieldsFocusChanged(Sender: TBaseVirtualTree;
   Node: PVirtualNode; Column: TColumnIndex);
 begin
-  FPIField.Clear;
-  FPIField.Add(DataSet.Fields[Node.Index]);
+  FOIField.Component := DataSet.Fields[Node.Index];
+  FOIField.SelectItem(-1); // this prevents any invalid selection
 end;
 
 procedure TfrmFieldInspector.vstFieldsGetText(Sender: TBaseVirtualTree;

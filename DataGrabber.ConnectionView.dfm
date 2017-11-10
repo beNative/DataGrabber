@@ -1,4 +1,5 @@
 object frmConnectionView: TfrmConnectionView
+  AlignWithMargins = True
   Left = 0
   Top = 0
   ClientHeight = 612
@@ -28,28 +29,32 @@ object frmConnectionView: TfrmConnectionView
     BevelOuter = bvNone
     TabOrder = 0
     object splVertical: TSplitter
-      Left = 209
+      Left = 193
       Top = 0
       Width = 8
       Height = 249
+      ExplicitLeft = 209
     end
     object pnlProfiles: TPanel
       Left = 0
       Top = 0
-      Width = 209
+      Width = 193
       Height = 249
       Align = alLeft
       BevelOuter = bvNone
       TabOrder = 0
     end
     object pnlEditor: TPanel
-      Left = 217
+      Left = 201
       Top = 0
-      Width = 612
+      Width = 628
       Height = 249
       Align = alClient
       BevelOuter = bvNone
       TabOrder = 1
+      ExplicitLeft = 215
+      ExplicitTop = 2
+      ExplicitWidth = 612
     end
   end
   object pnlBottom: TPanel

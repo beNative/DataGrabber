@@ -34,7 +34,12 @@ unit ts.Components.DBGridViewSort;
 
   TODO
     - use anonymous callback function to implement sorting logic on the dataset,
-      so we can remove depencies on TClientDataSet and TZAbstractRODataset
+      so we can remove depencies on TClientDataSet.
+
+      Eventually this functionality should not be implemented by a 'helper
+      component like this', but from a dedicated (interfaced) object that
+      exposes its sorting capabilities.
+
 }
 
 interface
@@ -164,9 +169,10 @@ type
   TtsDBGridViewSort = class(TtsCustomDBGridViewSort)
   protected
     function InternalSortDataSet(
-            ADataSet         : TDataSet;
+      ADataSet               : TDataSet;
       const ASortedFieldName : string;
-      var   ADescending      : Boolean): Boolean; override;
+      var   ADescending      : Boolean
+    ): Boolean; override;
   published
     property DBGridView;
     property SortedFieldName;

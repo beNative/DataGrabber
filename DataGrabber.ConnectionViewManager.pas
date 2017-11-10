@@ -25,7 +25,7 @@ uses
 
   ts.Interfaces, ts.Modules.DataInspector, ts.Modules.FieldInspector,
 
-  DataGrabber.Interfaces, DataGrabber.Data,
+  DataGrabber.Interfaces, DataGrabber.Data, DataGrabber.ConnectionProfiles,
 
   DDuce.Logger;
 
@@ -179,6 +179,7 @@ type
     function GetActionList: TActionList;
     function GetItem(AName: string): TCustomAction;
     function GetConnectionViewPopupMenu: TPopupMenu;
+    function GetDefaultConnectionProfile: TConnectionProfile;
     {$ENDREGION}
 
   protected
@@ -214,6 +215,9 @@ type
 
     property ConnectionViewPopupMenu: TPopupMenu
       read GetConnectionViewPopupMenu;
+
+    property DefaultConnectionProfile: TConnectionProfile
+      read GetDefaultConnectionProfile;
   end;
 
 implementation
@@ -222,8 +226,6 @@ implementation
 
 uses
   Vcl.Forms, Vcl.Clipbrd, Vcl.Dialogs,
-
-//  DDuce.ObjectInspector,
 
   DDuce.ObjectInspector.zObjectInspector,
 
@@ -245,7 +247,6 @@ begin
   FConnectionViewList := TConnectionViewList.Create;
   FDataInspector      := TfrmDataInspector.Create(Self);
   FFieldInspector     := TfrmFieldInspector.Create(Self);
-  FDataInspector.HideEmptyFields := True;
 
   // disable actions that are not fully implemented yet
   actSyncEditorWithRepository.Visible := False;
@@ -313,7 +314,8 @@ end;
 
 procedure TdmConnectionViewManager.actShowAllColumnsExecute(Sender: TObject);
 begin
-  ActiveDataView.ShowAllColumns;
+  if (ActiveData as IFieldVisiblity).ShowAllFields then
+    ActiveDataView.UpdateView;
 end;
 
 procedure TdmConnectionViewManager.actSelectionAsCommaTextExecute(
@@ -364,12 +366,16 @@ end;
 procedure TdmConnectionViewManager.actHideConstantColumnsExecute(
   Sender: TObject);
 begin
-  ActiveDataView.ConstantColumnsVisible := not actHideConstantColumns.Checked;
+  (ActiveData as IFieldVisiblity).ConstantFieldsVisible := not
+  (ActiveData as IFieldVisiblity).ConstantFieldsVisible;
+  ActiveDataView.UpdateView;
 end;
 
 procedure TdmConnectionViewManager.actHideEmptyColumnsExecute(Sender: TObject);
 begin
-  ActiveDataView.EmptyColumnsVisible := not actHideEmptyColumns.Checked;
+  (ActiveData as IFieldVisiblity).EmptyFieldsVisible :=
+    not (ActiveData as IFieldVisiblity).EmptyFieldsVisible;
+  ActiveDataView.UpdateView;
 end;
 
 procedure TdmConnectionViewManager.actHideSelectedColumnsExecute(
@@ -532,6 +538,11 @@ begin
   Result := ppmConnectionView;
 end;
 
+function TdmConnectionViewManager.GetDefaultConnectionProfile: TConnectionProfile;
+begin
+  Result := FSettings.ConnectionProfiles.Find(FSettings.DefaultConnectionProfile);
+end;
+
 function TdmConnectionViewManager.GetItem(AName: string): TCustomAction;
 var
   I: Integer;
@@ -611,8 +622,8 @@ begin
     actPreview.Enabled             := B;
     actPrint.Enabled               := B;
     actDesigner.Enabled            := B;
-    actHideEmptyColumns.Checked    := not ActiveDataView.EmptyColumnsVisible;
-    actHideConstantColumns.Checked := not ActiveDataView.ConstantColumnsVisible;
+    actHideEmptyColumns.Checked    := not (ActiveData as IFieldVisiblity).EmptyFieldsVisible;
+    actHideConstantColumns.Checked := not (ActiveData as IFieldVisiblity).ConstantFieldsVisible;
     actFavoriteFieldsOnly.Checked  :=
       (ActiveData as IFieldVisiblity).ShowFavoriteFieldsOnly;
     Logger.Watch('ActiveDataView.RecordCount', ActiveDataView.RecordCount);
@@ -642,6 +653,7 @@ var
   D  : IData;
   C  : IConnection;
   S  : string;
+  CP : TConnectionProfile;
 begin
   EV := GlobalContainer.Resolve<IEditorView>;
   DV := GlobalContainer.Resolve<IDGDataView>(Settings.GridType);
@@ -653,12 +665,15 @@ begin
   end
   else
   begin
-    S := 'FireDAC';
+    CP := DefaultConnectionProfile;
+    if Assigned(CP) then
+      S := CP.ConnectionType
+    else
+      S := 'FireDAC';
   end;
   C := GlobalContainer.Resolve<IConnection>(S);
-  Logger.SendPointer('Connection', Pointer(C));
-  D           := TdmData.Create(Self, C);
-  DV.Data     := D;
+  D       := TdmData.Create(Self, C);
+  DV.Data := D;
   CV := TfrmConnectionView.Create(Self, EV, DV, D);
   FConnectionViewList.Add(CV);
   ActiveConnectionView := CV;

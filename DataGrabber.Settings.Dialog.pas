@@ -162,13 +162,6 @@ type
       Node   : PVirtualNode;
       Column : TColumnIndex
     );
-    procedure FVSTProfilesFocusChanging(
-      Sender           : TBaseVirtualTree;
-      OldNode, NewNode : PVirtualNode;
-      OldColumn,
-      NewColumn : TColumnIndex;
-      var Allowed : Boolean
-    );
     procedure FVSTProfilesBeforeCellPaint(
       Sender          : TBaseVirtualTree;
       TargetCanvas    : TCanvas;
@@ -177,6 +170,13 @@ type
       CellPaintMode   : TVTCellPaintMode;
       CellRect        : TRect;
       var ContentRect : TRect
+    );
+    procedure FVSTProfilesPaintText(
+      Sender             : TBaseVirtualTree;
+      const TargetCanvas : TCanvas;
+      Node               : PVirtualNode;
+      Column             : TColumnIndex;
+      TextType           : TVSTTextType
     );
     procedure btnProfileColorClick(Sender: TObject);
     procedure cbxProtocolsChange(Sender: TObject);
@@ -194,12 +194,6 @@ type
     procedure actGridlinesNoneExecute(Sender: TObject);
     procedure chkGridCellColoringEnabledClick(Sender: TObject);
     procedure actGridlinesBothExecute(Sender: TObject);
-//    procedure piConnectionProfilesGetEditorClass(
-//      Sender           : TObject;
-//      AInstance        : TObject;
-//      APropInfo        : PPropInfo;
-//      var AEditorClass : TPropertyEditorClass
-//    );
     {$ENDREGION}
 
   private
@@ -253,7 +247,7 @@ implementation
 {$R *.dfm}
 
 uses
-  System.Rtti,
+  System.Rtti, System.UITypes,
   Data.DBConnAdmin, Data.Win.ADOConEd, Data.Win.ADODB,
 
   FireDAC.VCLUI.ConnEdit,
@@ -303,6 +297,8 @@ begin
   FEditorSettings := TEditorFactories.CreateSettings(Self);
   FManager        := TEditorFactories.CreateManager(Self, FEditorSettings);
   FEditor         := TEditorFactories.CreateView(tsSettings, FManager);
+  FEditor.Form.BorderStyle := bsSingle;
+  FEditor.Form.AlignWithMargins := True;
   FEditor.HighlighterName := 'JSON';
   FEditor.Load(FSettings.FileName);
   InitializeControls;
@@ -474,24 +470,12 @@ begin
   end;
 end;
 
-procedure TfrmSettingsDialog.FVSTProfilesFocusChanging(Sender: TBaseVirtualTree;
-  OldNode, NewNode: PVirtualNode; OldColumn, NewColumn: TColumnIndex;
-  var Allowed: Boolean);
-var
-  CP : TConnectionProfile;
-begin
-  if FModified and Assigned(OldNode) then
-  begin
-    CP := FSettings.ConnectionProfiles[OldNode.Index];
-  end;
-end;
-
 procedure TfrmSettingsDialog.FVSTProfilesFocusChanged(Sender: TBaseVirtualTree;
   Node: PVirtualNode; Column: TColumnIndex);
 var
   CP : TConnectionProfile;
 begin
-  if Node.Index >= FSettings.ConnectionProfiles.Count then
+  if Node.Index >= Cardinal(FSettings.ConnectionProfiles.Count) then
     Node.Index := FSettings.ConnectionProfiles.Count - 1;
   CP := FSettings.ConnectionProfiles[Node.Index];
   InspectConnectionProfile(CP);
@@ -504,6 +488,16 @@ procedure TfrmSettingsDialog.FVSTProfilesGetText(Sender: TBaseVirtualTree;
 begin
   if Node.Index < Cardinal(FSettings.ConnectionProfiles.Count) then
     CellText := FSettings.ConnectionProfiles[Node.Index].DisplayName;
+end;
+
+procedure TfrmSettingsDialog.FVSTProfilesPaintText(Sender: TBaseVirtualTree;
+  const TargetCanvas: TCanvas; Node: PVirtualNode; Column: TColumnIndex;
+  TextType: TVSTTextType);
+begin
+  if Sender.FocusedNode = Node then
+  begin
+    TargetCanvas.Font.Style := TargetCanvas.Font.Style + [fsBold];
+  end;
 end;
 {$ENDREGION}
 
@@ -563,7 +557,7 @@ end;
 
 procedure TfrmSettingsDialog.edtDatabaseRightButtonClick(Sender: TObject);
 begin
-//
+// TODO open file dialog?
 end;
 
 procedure TfrmSettingsDialog.edtProfileNameChange(Sender: TObject);
@@ -648,9 +642,8 @@ end;
 
 procedure TfrmSettingsDialog.InitializeControls;
 var
-  I  : Integer;
-  DV : IDGDataView;
-  S  : string;
+  I : Integer;
+  S : string;
 begin
   btnBooleanColor.DlgColor  := FSettings.DataTypeColors[dtBoolean];
   btnDateColor.DlgColor     := FSettings.DataTypeColors[dtDate];
@@ -660,7 +653,6 @@ begin
   btnStringColor.DlgColor   := FSettings.DataTypeColors[dtString];
   btnNULLColor.DlgColor     := FSettings.DataTypeColors[dtNULL];
   btnTimeColor.DlgColor     := FSettings.DataTypeColors[dtTime];
-
 
   if FSettings.ShowHorizontalGridLines then
   begin
@@ -686,10 +678,11 @@ begin
     Self,
     pnlConnectionProfilesList
   );
+  FVSTProfiles.AlignWithMargins  := False;
   FVSTProfiles.OnGetText         := FVSTProfilesGetText;
-  FVSTProfiles.OnFocusChanging   := FVSTProfilesFocusChanging;
   FVSTProfiles.OnFocusChanged    := FVSTProfilesFocusChanged;
   FVSTProfiles.OnBeforeCellPaint := FVSTProfilesBeforeCellPaint;
+  FVSTProfiles.OnPaintText       := FVSTProfilesPaintText;
   FVSTProfiles.Header.Options    := FVSTProfiles.Header.Options - [hoVisible];
   FVSTProfiles.TreeOptions.PaintOptions :=
     FVSTProfiles.TreeOptions.PaintOptions - [toHideSelection];
@@ -711,6 +704,7 @@ begin
   FVSTProfiles.RootNodeCount := FSettings.ConnectionProfiles.Count;
   FVSTProfiles.FocusedNode   := FVSTProfiles.GetFirstVisible;
   FVSTProfiles.Selected[FVSTProfiles.FocusedNode] := True;
+  pgcMain.ActivePage := tsConnectionProfiles;
 end;
 
 procedure TfrmSettingsDialog.InspectConnectionProfile(ACP: TConnectionProfile);
@@ -719,6 +713,7 @@ begin
   try
     FObjectInspector.Component := ACP;
     FObjectInspector.ExpandAll;
+    FObjectInspector.SelectItem(-1);
   finally
     FObjectInspector.EndUpdate;
   end;
@@ -762,7 +757,7 @@ end;
 
 procedure TfrmSettingsDialog.UpdateProtocols(AConnectionType: string);
 var
-  S: IConnection;
+  S : IConnection;
 begin
   if AConnectionType <> '' then
   begin

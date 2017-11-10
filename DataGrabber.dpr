@@ -242,7 +242,9 @@ uses
   ts.Classes.ListReport.Columns in 'Modules\ts.Classes.ListReport.Columns.pas',
   ts.Classes.ListReport in 'Modules\ts.Classes.ListReport.pas',
   zValueManager in '..\..\components\zcontrols\Source\zValueManager.pas',
-  zObjInspTypes in '..\..\components\zcontrols\Source\zObjInspTypes.pas';
+  zObjInspTypes in '..\..\components\zcontrols\Source\zObjInspTypes.pas',
+  DDuce.Factories.VirtualTrees in '..\..\libraries\dduce\Source\Factories\DDuce.Factories.VirtualTrees.pas',
+  DDuce.Factories.zObjInspector in '..\..\libraries\dduce\Source\Factories\DDuce.Factories.zObjInspector.pas';
 
 {$R *.res}
 

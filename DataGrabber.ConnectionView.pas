@@ -46,6 +46,7 @@ uses
 
 type
   TfrmConnectionView = class(TForm, IConnectionView)
+    {$REGION 'designer controls'}
     pnlBottom     : TPanel;
     pnlEditor     : TPanel;
     pnlGrid       : TPanel;
@@ -53,6 +54,7 @@ type
     pnlTop        : TPanel;
     splHorizontal : TSplitter;
     splVertical   : TSplitter;
+    {$ENDREGION}
 
     procedure FVSTProfilesBeforeCellPaint(
       Sender          : TBaseVirtualTree;
@@ -82,6 +84,7 @@ type
       Column             : TColumnIndex;
       TextType           : TVSTTextType
     );
+
     procedure tlbGridCustomDraw(
       Sender          : TToolBar;
       const ARect     : TRect;
@@ -96,6 +99,7 @@ type
     FActiveDataView : IDGDataView;
     FActiveData     : IData;
     FVSTProfiles    : TVirtualStringTree;
+    FDefaultNode    : PVirtualNode;
 
     function GetManager: IConnectionViewManager;
     function GetForm: TForm;
@@ -171,6 +175,7 @@ begin
   inherited AfterConstruction;
   InitializeEditorView;
   FVSTProfiles := TFactories.CreateVirtualStringTree(Self, pnlProfiles);
+  FVSTProfiles.AlignWithMargins  := False;
   FVSTProfiles.RootNodeCount     := Manager.Settings.ConnectionProfiles.Count;
   FVSTProfiles.OnBeforeCellPaint := FVSTProfilesBeforeCellPaint;
   FVSTProfiles.OnGetText         := FVSTProfilesGetText;
@@ -181,8 +186,6 @@ begin
     FVSTProfiles.TreeOptions.PaintOptions - [toHideSelection];
   FVSTProfiles.Colors.FocusedSelectionColor := clBtnHighlight;
   FVSTProfiles.Margins.Right := 0;
-  // TODO: select default node
-  FVSTProfiles.FocusedNode       := FVSTProfiles.GetFirstVisible;
   ApplySettings;
 end;
 
@@ -190,7 +193,6 @@ procedure TfrmConnectionView.InitializeEditorView;
 var
   F: TForm;
 begin
-  //FEditorView.OnStatusChange := EditorViewStatusChange;
   F := FEditorView as TForm;
   F.PopupMenu      := Manager.ConnectionViewPopupMenu;
   F.BorderStyle    := bsNone;
@@ -214,6 +216,7 @@ begin
   TargetCanvas.FillRect(CellRect);
   if Sender.FocusedNode = Node then
   begin
+    TargetCanvas.Pen.Width := 1;
     TargetCanvas.Pen.Color := clBlue;
     TargetCanvas.Rectangle(CellRect);
   end;
@@ -231,6 +234,10 @@ procedure TfrmConnectionView.FVSTProfilesGetText(Sender: TBaseVirtualTree;
   var CellText: string);
 begin
   CellText := Manager.Settings.ConnectionProfiles[Node.Index].DisplayName;
+  if Manager.Settings.ConnectionProfiles[Node.Index] =
+    (Owner as IConnectionViewManager).DefaultConnectionProfile
+  then
+    FDefaultNode := Node;
 end;
 
 procedure TfrmConnectionView.FVSTProfilesPaintText(Sender: TBaseVirtualTree;
@@ -239,7 +246,7 @@ procedure TfrmConnectionView.FVSTProfilesPaintText(Sender: TBaseVirtualTree;
 begin
   if Sender.FocusedNode = Node then
   begin
-    //TargetCanvas.Font.Style := TargetCanvas.Font.Style + [fsBold];
+    TargetCanvas.Font.Style := TargetCanvas.Font.Style + [fsBold];
   end;
 end;
 {$ENDREGION}
@@ -254,6 +261,15 @@ end;
 
 procedure TfrmConnectionView.FormShow(Sender: TObject);
 begin
+  FVSTProfiles.SetFocus;
+  if Assigned(FDefaultNode) then
+  begin
+    FVSTProfiles.FocusedNode := FDefaultNode
+  end
+  else
+  begin
+    FVSTProfiles.FocusedNode := FVSTProfiles.GetFirstVisible;
+  end;
   EditorView.SetFocus;
 end;
 

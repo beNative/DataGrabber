@@ -51,7 +51,7 @@ type
     function GetGridType: string;
 
   protected
-    // property access methods
+    {$REGION 'property access methods'}
     function GetConstantColumnsVisible: Boolean;
     procedure SetConstantColumnsVisible(const Value: Boolean); virtual;
     function GetData: IData;
@@ -61,6 +61,7 @@ type
     procedure SetSettings(const Value: IDataViewSettings);
     function GetEmptyColumnsVisible: Boolean;
     procedure SetEmptyColumnsVisible(const Value: Boolean); virtual;
+    {$ENDREGION}
 
     // TDataSource events
     procedure StateChange; virtual; abstract;

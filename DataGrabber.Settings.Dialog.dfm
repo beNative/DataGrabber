@@ -28,7 +28,7 @@ object frmSettingsDialog: TfrmSettingsDialog
     Top = 3
     Width = 715
     Height = 394
-    ActivePage = tsDisplay
+    ActivePage = tsConnectionProfiles
     Align = alTop
     Anchors = [akLeft, akTop, akRight, akBottom]
     Images = imlMain
@@ -37,39 +37,44 @@ object frmSettingsDialog: TfrmSettingsDialog
       Caption = 'Connection &profiles'
       ImageIndex = 9
       object splVertical: TSplitter
-        Left = 185
+        Left = 137
         Top = 0
         Width = 7
         Height = 365
         Color = clBtnHighlight
         ParentColor = False
+        ExplicitLeft = 185
         ExplicitHeight = 377
       end
       object pnlConnectionProfileDetail: TPanel
-        Left = 192
+        Left = 144
         Top = 0
-        Width = 515
+        Width = 563
         Height = 365
         Align = alClient
         BevelOuter = bvNone
         TabOrder = 0
+        ExplicitLeft = 192
+        ExplicitWidth = 515
         object pgcConnectionProfile: TPageControl
           Left = 0
           Top = 0
-          Width = 515
+          Width = 563
           Height = 365
           ActivePage = tsBasic
           Align = alClient
           TabOrder = 0
+          ExplicitWidth = 515
           object tsBasic: TTabSheet
             Caption = 'Basic'
+            ExplicitWidth = 507
             DesignSize = (
-              507
+              555
               337)
             object rgpConnectionType: TRadioGroup
               Left = 2
               Top = 45
-              Width = 501
+              Width = 549
               Height = 39
               Anchors = [akLeft, akTop, akRight]
               Caption = 'Connection type'
@@ -81,15 +86,17 @@ object frmSettingsDialog: TfrmSettingsDialog
                 'dbExpress')
               TabOrder = 0
               OnClick = rgpConnectionTypeClick
+              ExplicitWidth = 501
             end
             object grpClientSettings: TGroupBox
               Left = 3
               Top = 188
-              Width = 501
+              Width = 549
               Height = 146
               Anchors = [akLeft, akTop, akRight]
               Caption = 'Client settings'
               TabOrder = 1
+              ExplicitWidth = 501
               object lblPacketrecords: TLabel
                 Left = 152
                 Top = 44
@@ -164,13 +171,14 @@ object frmSettingsDialog: TfrmSettingsDialog
             object grpConnectionSettings: TGroupBox
               Left = 3
               Top = 90
-              Width = 502
+              Width = 550
               Height = 94
               Anchors = [akLeft, akTop, akRight]
               Caption = 'Connection settings'
               TabOrder = 2
+              ExplicitWidth = 502
               DesignSize = (
-                502
+                550
                 94)
               object lblProtocols: TLabel
                 Left = 10
@@ -217,7 +225,7 @@ object frmSettingsDialog: TfrmSettingsDialog
               object edtDatabase: TButtonedEdit
                 Left = 66
                 Top = 42
-                Width = 433
+                Width = 481
                 Height = 21
                 Anchors = [akLeft, akTop, akRight]
                 Images = imlMain
@@ -226,11 +234,12 @@ object frmSettingsDialog: TfrmSettingsDialog
                 TabOrder = 2
                 OnChange = edtDatabaseChange
                 OnRightButtonClick = edtDatabaseRightButtonClick
+                ExplicitWidth = 433
               end
               object edtCatalog: TButtonedEdit
                 Left = 66
                 Top = 68
-                Width = 433
+                Width = 481
                 Height = 21
                 Anchors = [akLeft, akTop, akRight]
                 Images = imlMain
@@ -239,20 +248,22 @@ object frmSettingsDialog: TfrmSettingsDialog
                 TabOrder = 3
                 OnChange = edtCatalogChange
                 OnRightButtonClick = edtDatabaseRightButtonClick
+                ExplicitWidth = 433
               end
             end
             object grpProfileSettings: TGroupBox
               Left = 3
               Top = 3
-              Width = 501
+              Width = 549
               Height = 36
               Anchors = [akLeft, akTop, akRight]
               TabOrder = 3
+              ExplicitWidth = 501
               DesignSize = (
-                501
+                549
                 36)
               object lblProfileColor: TLabel
-                Left = 226
+                Left = 274
                 Top = 10
                 Width = 60
                 Height = 13
@@ -262,7 +273,7 @@ object frmSettingsDialog: TfrmSettingsDialog
                 ExplicitLeft = 220
               end
               object btnProfileColor: TKColorButton
-                Left = 292
+                Left = 340
                 Top = 5
                 Width = 104
                 Height = 25
@@ -277,11 +288,12 @@ object frmSettingsDialog: TfrmSettingsDialog
                 TabOrder = 0
                 OnClick = btnProfileColorClick
                 ColorDlgOptions = [cdAnyColor]
+                ExplicitLeft = 292
               end
               object edtProfileName: TLabeledEdit
                 Left = 76
                 Top = 7
-                Width = 143
+                Width = 191
                 Height = 21
                 Anchors = [akLeft, akTop, akRight]
                 EditLabel.Width = 63
@@ -296,9 +308,10 @@ object frmSettingsDialog: TfrmSettingsDialog
                 ParentFont = False
                 TabOrder = 1
                 OnChange = edtProfileNameChange
+                ExplicitWidth = 143
               end
               object chkSetAsDefault: TCheckBox
-                Left = 402
+                Left = 450
                 Top = 9
                 Width = 97
                 Height = 17
@@ -306,19 +319,21 @@ object frmSettingsDialog: TfrmSettingsDialog
                 Caption = 'Set as default'
                 TabOrder = 2
                 OnClick = chkSetAsDefaultClick
+                ExplicitLeft = 402
               end
             end
           end
           object tsAdvanced: TTabSheet
             Caption = 'Advanced'
             ImageIndex = 1
+            ExplicitWidth = 507
           end
         end
       end
       object pnlConnectionProfilesList: TPanel
         Left = 0
         Top = 0
-        Width = 185
+        Width = 137
         Height = 365
         Align = alLeft
         BevelOuter = bvNone
@@ -326,11 +341,12 @@ object frmSettingsDialog: TfrmSettingsDialog
         object tlbConnectionProfiles: TToolBar
           Left = 0
           Top = 0
-          Width = 185
+          Width = 137
           Height = 25
           Caption = 'tlbConnectionProfiles'
           Images = imlMain
           TabOrder = 0
+          ExplicitWidth = 185
           object btnAdd: TToolButton
             Left = 0
             Top = 0
@@ -1444,7 +1460,7 @@ object frmSettingsDialog: TfrmSettingsDialog
       6EFF696969FF656565FF616161FF4F4F4FD700000000180200707E2512DBDF62
       38F8FA7341FFFA7341FFFA7341FFFA7341FFFA7341FFFA7341FFFA7341FFFA73
       41FFDF6237F87E2411DB180200700000000000000000000042BA1414C1F91010
-      D1FF1010D1FF1010D1FF1010D1FF1010D1FF1010D1FF1010D1FF1010D1FF1010
+      D1FF1010D1FF1010B6FF1010D1FF1010D1FF1010D1FF1010D1FF1010B6FF1010
       D1FF1010D1FF0E0EBEF9000042BA000000000B0B0B70E9E9E9FF59CE59FF63E5
       63FF63E563FFE1E1E1FFDDB159FFF5C463FFF5C463FFE1E1E1FFDD5959FFF563
       63FFF56363FFE9E9E9FF0B0B0B70000000005B5B5B8D818181CC7C7C7CCC7878
@@ -1452,63 +1468,63 @@ object frmSettingsDialog: TfrmSettingsDialog
       9EFFD3CECDFFD3CECDFFE8E5E5FF626262FF00000000460B00B3DA6238F8F16E
       3DFFF16E3DFFF16E3DFFF16E3DFFCF5930FFCF5930FFF16E3DFFF16E3DFFF16E
       3DFFF16E3DFFD95E34F8460B00B30000000000000000000054CC1B1BCEFF1010
-      C8FF1010C8FF1010C8FF1010C8FF1010C8FF1010C8FF1010C8FF1010C8FF1010
-      C8FF1010C8FF1010C8FF000054CC000000000D0D0D6FEAEAEAFF5ED35EFF68EA
+      C8FF1010B2FFDCDCDCFF1010B2FF1010C8FF1010C8FF1010B2FFEEEEEEFF1010
+      B2FF1010C8FF1010C8FF000054CC000000000D0D0D6FEAEAEAFF5ED35EFF68EA
       68FF68EA68FFE3E3E3FFE1B65EFFFACA68FFFACA68FFE3E3E3FFE15E5EFFFA68
       68FFFA6868FFEAEAEAFF0D0D0D6F00000000ADADADFFE4E2E2FFD7D5D5FFD5D3
       D2FFD1CECDFFCAC3C2FFC8C2C1FFCDC9C8FFCCCACAFFCCCAC9FFD8D6D6FF7271
       71FFB8B0ADFFB6AEADFFD3CECDFF666666FF00000000581001C4E86D41FFE566
       39FFE56639FFE56639FFC9562EFFE8E8E8FFECECECFFC9562EFFE56639FFE566
       39FFE56639FFE56639FF581001C40000000000000000000057CC2121C8FF1010
-      BEFF1010BEFF1010BEFF1010BEFF1010BEFF1010BEFF1010BEFF1010BEFF1010
-      BEFF1010BEFF1111BEFF000057CC000000000E0E0E6EEDEDEDFF5CCB5CFF61D6
+      BEFFD1D1D1FFD6D6D6FFDCDCDCFF1010ADFF1010ADFFEAEAEAFFEEEEEEFFEEEE
+      EEFF1010BEFF1111BEFF000057CC000000000E0E0E6EEDEDEDFF5CCB5CFF61D6
       61FF61D661FFE6E6E6FFD8B05CFFE5BA61FFE5BA61FFE6E6E6FFD85C5CFFE561
       61FFE56161FFEDEDEDFF0E0E0E6E00000000B3B3B3FFE0DDDDFFA6704BFFA670
       4BFFA6704BFFA6704BFFA6704BFFA6704BFFA6704BFFA6704BFFDAD5D4FF7676
       76FFB9B1B0FFB8B0AEFFD4CFCEFF6B6B6BFF000000005A1101C3DE6B41FFD85F
       34FFD85F34FFC3522BFFE0E0E0FFE4E4E4FFE8E8E8FFECECECFFC3522BFFD85F
       34FFD85F34FFD85F34FF5A1101C3000000000000000000005ACC3333C7FF1111
-      B4FF1010A8FF1010A8FF1010A8FF1010A8FF1010A8FF1010A8FF1010A8FF1010
-      A8FF1010B4FF1313B6FF00005ACC000000000E0E0E6DEFEFEFFFE9E9E9FFE9E9
+      B4FF1010B4FFD1D1D1FFD6D6D6FFDCDCDCFFE2E2E2FFE6E6E6FFEAEAEAFF1010
+      B4FF1010B4FF1313B6FF00005ACC000000000E0E0E6DEFEFEFFFE9E9E9FFE9E9
       E9FFE9E9E9FFE9E9E9FFE9E9E9FFE9E9E9FFE9E9E9FFE9E9E9FFE9E9E9FFE9E9
       E9FFE9E9E9FFEFEFEFFF0E0E0E6D00000000B9B9B9FFDEDBDBFFB47E58FFCE97
       6EFFD8AD90FFD9AE90FFD9AE90FFDAAE90FFD69F75FFA6704BFFD7D3D1FF7C7C
       7CFFBAB3B2FFBAB2B0FFD4D0CFFF717171FF000000005B1201C2D86E4AFFCB58
       2FFFBC4E28FFD7D7D7FFDCDCDCFFE0E0E0FFE4E4E4FFE8E8E8FFECECECFFBC4E
       28FFCB572EFFCC5A31FF5B1201C2000000000000000000005DCC4545CEFF2525
-      B5FFD0D0D0FFCCCCCCFFD1D1D1FFDCDCDCFFE8E8E8FFEEEEEEFFEEEEEEFFEEEE
-      EEFF1010AAFF1717B0FF00005DCC000000001010106CF1F1F1FF59DDB1FF63F5
+      B5FF1313ABFF1010AAFFD1D1D1FFD6D6D6FFDCDCDCFFE2E2E2FF1010AAFF1010
+      AAFF1010AAFF1717B0FF00005DCC000000001010106CF1F1F1FF59DDB1FF63F5
       C4FF63F5C4FFECECECFFDDDDDDFFF5F5F5FFF5F5F5FFECECECFFDD59B1FFF563
       C4FFF563C4FFF1F1F1FF1010106C00000000BFBFBFFFDFDCDCFFB37D57FFCB94
       6CFFCD966DFFCF986FFFD19A70FFD29B72FFD49D73FFA6704BFFD7D4D3FF8383
       83FF39A040FF359335FFD6D1D0FF767676FF000000005C1301C1DA7856FFC85E
       3AFFD4D4D4FFD3D3D3FFCEB4ABFFDCDCDCFFE0E0E0FFD8BEB5FFE8E8E8FFECEC
       ECFFBE4F29FFC35530FF5C1301C1000000000000000000005FCC4949D2FF3232
-      BBFFF8F8F8FFDEDEDEFFCECECEFFD1D1D1FFDCDCDCFFE8E8E8FFEEEEEEFFEEEE
-      EEFF1010A1FF1C1CACFF00005FCC000000001010106BF3F3F3FF5EE1B6FF68FA
+      BBFF2D2DB8FF12129FFFCECECEFFD1D1D1FFD6D6D6FFDCDCDCFF10109EFF1010
+      A1FF1010A1FF1C1CACFF00005FCC000000001010106BF3F3F3FF5EE1B6FF68FA
       CAFF68FACAFFEFEFEFFFE1E1E1FFFAFAFAFFFAFAFAFFEFEFEFFFE15EB6FFFA68
       CAFFFA68CAFFF3F3F3FF1010106B00000000C4C4C4FFE1DEDCFFB27B56FFC790
       69FFC9926BFFCB946CFFCD966EFFCF986FFFD19A71FFA6704BFFD9D5D4FF8A8A
       8AFF9FC8A3FF4EA854FFD7D3D1FF7C7C7CFF000000005E1501C1DD7C5AFFCC65
       43FFF8F8F8FFD7BDB4FFB24825FFD7D7D7FFDCDCDCFFB14724FFD8BEB5FFE8E8
       E8FFB44925FFBD5431FF5E1501C10000000000000000000062CC4F4FD8FF3636
-      BFFF3636BFFF3636BFFF3131BAFF2626B0FF1B1BA6FF1515A0FF11119CFF1111
-      9CFF1515A0FF2A2AB5FF000062CC000000001111116AF6F6F6FF5CD8B0FF61E5
+      BFFF2222ABFFFFFFFFFFF7F7F7FFE8E8E8FFDEDEDEFFDBDBDBFFDDDDDDFF1010
+      9BFF1515A0FF2A2AB5FF000062CC000000001111116AF6F6F6FF5CD8B0FF61E5
       BAFF61E5BAFFF2F2F2FFD8D8D8FFE5E5E5FFE5E5E5FFF2F2F2FFD85CB0FFE561
       BAFFE561BAFFF6F6F6FF1111116A00000000CACACAFFE1DFDEFFB07A55FFC38D
       66FFC58F68FFC89169FFCA936BFFCC956DFFCE976EFFA6704BFFDBD6D6FF9090
       90FFC0BAB8FFBFB8B7FFD7D3D3FF838383FF00000000611501C0E2825FFFCF68
       46FFCF6846FFCF6846FFC35C3AFFEBEBEBFFE2E2E2FFAE4725FFAD4523FFAD45
       23FFB04926FFC25E3BFF611501C00000000000000000000064CC5959E2FF4141
-      CAFF4141CAFF4141CAFF4141CAFF4141CAFF4141CAFF4141CAFF4141CAFF4141
-      CAFF4141CAFF4D4DD6FF000064CC0000000012121269F8F8F8FFF5F5F5FFF5F5
+      CAFFFFFFFFFFFFFFFFFFFFFFFFFF4141CAFF4141CAFFFFFFFFFFFFFFFFFFFFFF
+      FFFF4141CAFF4D4DD6FF000064CC0000000012121269F8F8F8FFF5F5F5FFF5F5
       F5FFF5F5F5FFF5F5F5FFF5F5F5FFF5F5F5FFF5F5F5FFF5F5F5FFF5F5F5FFF5F5
       F5FFF5F5F5FFF8F8F8FF1212126900000000CECECEFFE2DFDFFFAF7954FFB079
       54FFB07A55FFB17B56FFB27C56FFB37D57FFB47E58FFA6704BFFDCD8D7FF9797
       97FF8C8C8CFF898989FFD9D5D4FF8A8A8AFF00000000621701BFE88A67FFD66F
       4DFFD66F4DFFD66F4DFFCC6543FFFFFFFFFFFFFFFFFFCC6543FFD66F4DFFD66F
       4DFFD66F4DFFE07D5BFF621701BF0000000000000000000068CC6161EAFF4E4E
-      D7FF4E4ED7FF4E4ED7FF4E4ED7FF4E4ED7FF4E4ED7FF4E4ED7FF4E4ED7FF4E4E
+      D7FF4E4ED7FFFFFFFFFF4E4ED7FF4E4ED7FF4E4ED7FF4E4ED7FFFFFFFFFF4E4E
       D7FF4E4ED7FF5959E2FF000068CC0000000012121269FAFAFAFF59B1DDFF63C4
       F5FF63C4F5FFF8F8F8FF5959DDFF6363F5FF6363F5FFF8F8F8FFB159DDFFC463
       F5FFC463F5FFFAFAFAFF1212126900000000D3D3D3FFF1EFEFFFE2DFDFFFE2DF

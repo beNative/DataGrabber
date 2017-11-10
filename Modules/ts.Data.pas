@@ -138,6 +138,8 @@ uses
   Data.DB,
   Datasnap.DBClient, DataSnap.Provider,
 
+  DDuce.DynamicRecord,
+
   ts.Classes.SQL.CompoundCondition, ts.Classes.SQL.Params,
   ts.Classes.KeyValues, ts.Classes.ModuleManager,
 
@@ -151,9 +153,8 @@ const
 type
   TDataViewMethod = procedure(AIndex: Integer) of object;
 
-// REMARK: IData is REQUIRED in the header of any module that inherits from this
-// base module. If we ommit this we end up with
-// hard to trace bugs!!!
+// REMARK: IData is REQUIRED in the inheritance list of any module that descends
+// from this base module. Ommitting this will end up with hard to trace bugs!!!
 
 type
   TdmCustomModule = class (TDataModule, IConnection,
@@ -169,19 +170,41 @@ type
     procedure cdsMasterAfterOpen(ADataSet: TDataSet);
     procedure cdsMasterAfterScroll(ADataSet: TDataSet);
     procedure cdsMasterAfterPost(ADataSet: TDataSet);
-    procedure dspMasterUpdateData(Sender: TObject; DataSet: TCustomClientDataSet);
-    procedure dspMasterAfterUpdateRecord(Sender: TObject; SourceDS: TDataSet;
-      DeltaDS: TCustomClientDataSet; UpdateKind: TUpdateKind);
-    procedure cdsMasterAfterDelete(ADataSet: TDataSet);
-    procedure dscMasterDataChange(Sender: TObject; Field: TField);
-    procedure dspMasterGetTableName(Sender: TObject; DataSet: TDataSet;
-      var TableName: WideString);
-    procedure dspMasterBeforeUpdateRecord(Sender: TObject; SourceDS: TDataSet;
-      DeltaDS: TCustomClientDataSet; UpdateKind: TUpdateKind;
-      var Applied: Boolean);
-    procedure dspMasterUpdateError(Sender: TObject;
-      DataSet: TCustomClientDataSet; E: EUpdateError; UpdateKind: TUpdateKind;
-      var Response: TResolverResponse);
+
+    procedure dspMasterUpdateData(
+      Sender  : TObject;
+      DataSet : TCustomClientDataSet
+    );
+    procedure dspMasterAfterUpdateRecord(
+      Sender     : TObject;
+      SourceDS   : TDataSet;
+      DeltaDS    : TCustomClientDataSet;
+      UpdateKind : TUpdateKind
+    );
+    procedure cdsMasterAfterDelete(ADataSet : TDataSet);
+    procedure dscMasterDataChange(
+      Sender : TObject;
+      Field  : TField
+    );
+    procedure dspMasterGetTableName(
+      Sender        : TObject;
+      DataSet       : TDataSet;
+      var TableName : WideString
+    );
+    procedure dspMasterBeforeUpdateRecord(
+      Sender      : TObject;
+      SourceDS    : TDataSet;
+      DeltaDS     : TCustomClientDataSet;
+      UpdateKind  : TUpdateKind;
+      var Applied : Boolean
+    );
+    procedure dspMasterUpdateError(
+      Sender       : TObject;
+      DataSet      : TCustomClientDataSet;
+      E            : EUpdateError;
+      UpdateKind   : TUpdateKind;
+      var Response : TResolverResponse
+    );
 
   private
     // True when the list is executed for the current user criteria
@@ -197,8 +220,8 @@ type
     FKeyName           : string;
     FFieldNames        : TStrings;
     // holds the corresponding display values for the given parameter
-    FDisplayValues     : TtsKeyValues;
-    FDisplayLabels     : TtsKeyValues;
+    FDisplayValues     : TRecord;
+    FDisplayLabels     : TRecord;
     FMaxRecords        : Integer;
     FTableName         : string;
     FOnAfterUpdateData : TAfterUpdateDataEvent;
@@ -222,8 +245,8 @@ type
     function GetFieldNames: TStrings;
     function GetConditions: TSQLCompoundCondition;
     function GetParams: TSQLParams;
-    function GetDisplayValues: TtsKeyValues;
-    function GetDisplayLabels : TtsKeyValues;
+    function GetDisplayValues: IDynamicRecord;
+    function GetDisplayLabels: IDynamicRecord;
     function GetModuleItem: TtsModuleItem;
     function GetFetchOnDemand: Boolean;
     procedure SetFetchOnDemand(const Value: Boolean);
@@ -416,11 +439,11 @@ type
     { Values retrieved from the database to show on the form. These values are
       intended to be assigned to the corresponding controls on the form in the
       method UpdateActions. }
-    property DisplayValues : TtsKeyValues
+    property DisplayValues : IDynamicRecord
       read GetDisplayValues;
 
     { Localizable field descriptions that will be shown to the user. }
-    property DisplayLabels: TtsKeyValues
+    property DisplayLabels: IDynamicRecord
       read GetDisplayLabels;
 
     property Selection: TDataSelection
@@ -438,8 +461,6 @@ uses
   System.Variants, System.StrUtils,
   Vcl.Forms, Vcl.Controls, Vcl.Dialogs,
   Data.DBCommon,
-
-
 
   ts.Utils, ts.DBUtils,
 
@@ -481,8 +502,6 @@ begin
   FreeAndNil(FParams);
   FreeAndNil(FConditions);
   FreeAndNil(FFieldNames);
-  FreeAndNil(FDisplayValues);
-  FreeAndNil(FDisplayLabels);
   FreeAndNil(FSelection);
   FreeAndNil(FReport);
   FreeAndNil(FDataViews);
@@ -510,9 +529,7 @@ begin
   FFieldNames.Delimiter       := ',';
   FParams        := TSQLParams.Create(Self);
   FConditions    := TSQLCompoundCondition.Create(FParams);
-  FDisplayValues := TtsKeyValues.Create;
-  FDisplayLabels := TtsKeyValues.Create;
-  FProviderMode := True;
+  FProviderMode := False;
   dscMaster.DataSet := ClientDataSet;
   Initialize;
   UpdateDisplayValues;
@@ -553,12 +570,12 @@ begin
     Result := SourceDataSet;
 end;
 
-function TdmCustomModule.GetDisplayLabels: TtsKeyValues;
+function TdmCustomModule.GetDisplayLabels: IDynamicRecord;
 begin
   Result := FDisplayLabels;
 end;
 
-function TdmCustomModule.GetDisplayValues: TtsKeyValues;
+function TdmCustomModule.GetDisplayValues: IDynamicRecord;
 begin
   Result := FDisplayValues;
 end;
@@ -1121,7 +1138,7 @@ begin
     AField.Alignment := taCenter;
   end;
 
-  AField.DisplayLabel := DisplayLabels[AField.FieldName];
+  AField.DisplayLabel := DisplayLabels[AField.FieldName].AsString;
 end;
 
 { Calls InitField for every field in the given dataset. }

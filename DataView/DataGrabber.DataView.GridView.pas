@@ -44,11 +44,8 @@ type
     FData                   : IData;
     FGrid                   : TDBGridView;
     FGridSort               : TtsDBGridViewSort;
-    FEmptyCols              : IList<TDBGridColumn>;
-    FConstCols              : IList<TDBGridColumn>;
-    FConstantColumnsVisible : Boolean;
-    FEmptyColumnsVisible    : Boolean;
 
+    {$REGION 'property access methods'}
     function GetName: string;
     function GetDataSet: TDataSet;
     function GetRecordCount: Integer;
@@ -62,6 +59,7 @@ type
     procedure SetSettings(const Value: IDataViewSettings);
     function GetPopupMenu: TPopupMenu; reintroduce;
     procedure SetPopupMenu(const Value: TPopupMenu);
+    {$ENDREGION}
 
     procedure InitializeGridColumns;
     procedure InitializeGridColumn(AGridColumn: TDBGridColumn);
@@ -73,62 +71,62 @@ type
     function IsCheckBoxField(const AFieldName: string) : Boolean;
     function IsCellReadOnly(const ACell: TGridCell) : Boolean;
 
-    procedure grdKeyPress(
+    procedure FGridKeyPress(
       Sender  : TObject;
       var Key : Char
     );
-    procedure grdChanging(
+    procedure FGridChanging(
       Sender       : TObject;
       var Cell     : TGridCell;
       var Selected : Boolean
     );
-    procedure grdRowMultiSelect(
+    procedure FGridRowMultiSelect(
       Sender     : TObject;
       Row        : Integer;
       var Select : Boolean
     );
-    procedure grdClearMultiSelect(Sender : TObject);
-    procedure grdCheckClick(
+    procedure FGridClearMultiSelect(Sender : TObject);
+    procedure FGridCheckClick(
       Sender : TObject;
       Cell   : TGridCell
     );
-    procedure grdGetCheckState(
+    procedure FGridGetCheckState(
       Sender         : TObject;
       Cell           : TGridCell;
       var CheckState : TCheckBoxState
     );
-    procedure grdEditCanModify(
+    procedure FGridEditCanModify(
       Sender        : TObject;
       Cell          : TGridCell;
       var CanModify : Boolean
     );
-    procedure grdCellAcceptCursor(
+    procedure FGridCellAcceptCursor(
       Sender     : TObject;
       Cell       : TGridCell;
       var Accept : Boolean
     );
-    procedure grdGetCellReadOnly(
+    procedure FGridGetCellReadOnly(
       Sender           : TObject;
       Cell             : TGridCell;
       var CellReadOnly : Boolean
     );
-    procedure grdGetCellText(
+    procedure FGridGetCellText(
       Sender    : TObject;
       Cell      : TGridCell;
       var Value : string
     );
-    procedure grdGetCellColors(
+    procedure FGridGetCellColors(
       Sender : TObject;
       Cell   : TGridCell;
       Canvas : TCanvas
     );
-    procedure grdMouseWheelUp(
+    procedure FGridMouseWheelUp(
       Sender      : TObject;
       Shift       : TShiftState;
       MousePos    : TPoint;
       var Handled : Boolean
     );
-    procedure grdMouseWheelDown(
+    procedure FGridMouseWheelDown(
       Sender      : TObject;
       Shift       : TShiftState;
       MousePos    : TPoint;
@@ -150,11 +148,8 @@ type
     procedure BeginUpdate;
     procedure EndUpdate;
 
-    procedure UpdateColumnLists;
-
     procedure AssignParent(AParent: TWinControl);
     procedure HideSelectedColumns;
-    procedure ShowAllColumns;
     procedure AutoSizeColumns;
     procedure Copy;
     procedure Inspect;
@@ -180,12 +175,6 @@ type
     property RecordCount: Integer
        read GetRecordCount;
 
-    property ConstantColumnsVisible: Boolean
-      read GetConstantColumnsVisible write SetConstantColumnsVisible;
-
-    property EmptyColumnsVisible: Boolean
-      read GetEmptyColumnsVisible write SetEmptyColumnsVisible;
-
     property PopupMenu: TPopupMenu
       read GetPopupMenu write SetPopupMenu;
 
@@ -200,16 +189,16 @@ implementation
 uses
   System.Math,
 
-  DDuce.ObjectInspector.zObjectInspector;
+  DDuce.ObjectInspector.zObjectInspector, DDuce.Logger;
 
 {$REGION 'construction and destruction'}
 procedure TfrmGridView.AfterConstruction;
 begin
   inherited AfterConstruction;
-  FConstCols := TCollections.CreateObjectList<TDBGridColumn>(False);
-  FEmptyCols := TCollections.CreateObjectList<TDBGridColumn>(False);
-  FConstantColumnsVisible := True;
-  FEmptyColumnsVisible    := True;
+//  FConstCols := TCollections.CreateObjectList<TDBGridColumn>(False);
+//  FEmptyCols := TCollections.CreateObjectList<TDBGridColumn>(False);
+//  FConstantColumnsVisible := True;
+//  FEmptyColumnsVisible    := True;
 
   FGrid                          := TDBGridView.Create(Self);
   FGrid.Align                    := alClient;
@@ -228,31 +217,36 @@ begin
   FGrid.GridLines                := True;
   FGrid.GridColor                := clSilver;
   FGrid.MultiSelect              := True;
+
   FGrid.Header.FullSynchronizing := True;
   FGrid.Header.Synchronized      := True;
+  FGrid.Header.Font.Style        := [fsBold];
+  FGrid.Header.GridColor         := True;
   FGrid.Header.AutoHeight        := True;
+  FGrid.Header.Flat              := True;
+
   FGrid.Rows.AutoHeight          := True;
   FGrid.GridStyle                := [gsVertLine, gsHorzLine];
   FGrid.CursorKeys := [gkArrows, gkTabs, gkReturn, gkMouse, gkMouseWheel];
 
-  FGrid.OnCellAcceptCursor  := grdCellAcceptCursor;
-  FGrid.OnGetCellReadOnly   := grdGetCellReadOnly;
-  FGrid.OnGetCellColors     := grdGetCellColors;
-  FGrid.OnGetCellText       := grdGetCellText;
+  FGrid.OnCellAcceptCursor  := FGridCellAcceptCursor;
+  FGrid.OnGetCellReadOnly   := FGridGetCellReadOnly;
+  FGrid.OnGetCellColors     := FGridGetCellColors;
+  FGrid.OnGetCellText       := FGridGetCellText;
 
-  FGrid.OnEditCanModify     := grdEditCanModify;
+  FGrid.OnEditCanModify     := FGridEditCanModify;
 
-  FGrid.OnKeyPress          := grdKeyPress;
-  FGrid.OnChanging          := grdChanging;
+  FGrid.OnKeyPress          := FGridKeyPress;
+  FGrid.OnChanging          := FGridChanging;
 
-  FGrid.OnCheckClick        := grdCheckClick;
-  FGrid.OnGetCheckState     := grdGetCheckState;
+  FGrid.OnCheckClick        := FGridCheckClick;
+  FGrid.OnGetCheckState     := FGridGetCheckState;
 
-  FGrid.OnMouseWheelUp      := grdMouseWheelUp;
-  FGrid.OnMouseWheelDown    := grdMouseWheelDown;
+  FGrid.OnMouseWheelUp      := FGridMouseWheelUp;
+  FGrid.OnMouseWheelDown    := FGridMouseWheelDown;
 
-  FGrid.OnRowMultiSelect    := grdRowMultiSelect;
-  FGrid.OnClearMultiSelect  := grdClearMultiSelect;
+  FGrid.OnRowMultiSelect    := FGridRowMultiSelect;
+  FGrid.OnClearMultiSelect  := FGridClearMultiSelect;
 
   // the TtsDBGridViewSort component has to be created AFTER the event handler
   // assignments because the component remaps the event handlers, which is not
@@ -271,8 +265,8 @@ procedure TfrmGridView.BeforeDestruction;
 begin
   if Assigned(FData) then
     FData.UnRegisterDataView(Self);
-  FConstCols := nil;
-  FEmptyCols := nil;
+//  FConstCols := nil;
+//  FEmptyCols := nil;
   inherited BeforeDestruction;
 end;
 {$ENDREGION}
@@ -280,7 +274,7 @@ end;
 {$REGION 'property access methods'}
 function TfrmGridView.GetEmptyColumnsVisible: Boolean;
 begin
-  Result := FEmptyColumnsVisible;
+  //Result := FEmptyColumnsVisible;
 end;
 
 function TfrmGridView.GetGridType: string;
@@ -292,12 +286,12 @@ procedure TfrmGridView.SetEmptyColumnsVisible(const Value: Boolean);
 var
   C : TDBGridColumn;
 begin
-  if Value <> EmptyColumnsVisible then
-  begin
-    FEmptyColumnsVisible := Value;
-    for C in FEmptyCols do
-      C.Visible := Value;
-  end;
+//  if Value <> EmptyColumnsVisible then
+//  begin
+//    FEmptyColumnsVisible := Value;
+//    for C in FEmptyCols do
+//      C.Visible := Value;
+//  end;
 end;
 
 function TfrmGridView.GetName: string;
@@ -327,19 +321,19 @@ end;
 
 function TfrmGridView.GetConstantColumnsVisible: Boolean;
 begin
-  Result := FConstantColumnsVisible;
+  //Result := FConstantColumnsVisible;
 end;
 
 procedure TfrmGridView.SetConstantColumnsVisible(const Value: Boolean);
 var
   C : TDBGridColumn;
 begin
-  if Value <> ConstantColumnsVisible then
-  begin
-    FConstantColumnsVisible := Value;
-    for C in FConstCols do
-      C.Visible := Value and C.Field.Visible;
-  end
+//  if Value <> ConstantColumnsVisible then
+//  begin
+//    FConstantColumnsVisible := Value;
+//    for C in FConstCols do
+//      C.Visible := Value and C.Field.Visible;
+//  end
 end;
 
 function TfrmGridView.GetDataSet: TDataSet;
@@ -387,14 +381,14 @@ begin
   FGridSort.SortDirection := gsNone;
 end;
 
-procedure TfrmGridView.grdCellAcceptCursor(Sender: TObject; Cell: TGridCell;
+procedure TfrmGridView.FGridCellAcceptCursor(Sender: TObject; Cell: TGridCell;
   var Accept: Boolean);
 begin
 //  Accept := Accept and (not FGrid.Columns[Cell.Col].ReadOnly) and
 //    (not IsCellReadOnly(Cell));
 end;
 
-procedure TfrmGridView.grdChanging(Sender: TObject; var Cell: TGridCell;
+procedure TfrmGridView.FGridChanging(Sender: TObject; var Cell: TGridCell;
   var Selected: Boolean);
 begin
   if Assigned(DataSet) then
@@ -407,7 +401,7 @@ begin
   end;
 end;
 
-procedure TfrmGridView.grdCheckClick(Sender: TObject; Cell: TGridCell);
+procedure TfrmGridView.FGridCheckClick(Sender: TObject; Cell: TGridCell);
 var
   S  : string;
   C  : TDBGridColumn;
@@ -433,18 +427,18 @@ begin
   end;
 end;
 
-procedure TfrmGridView.grdClearMultiSelect(Sender: TObject);
+procedure TfrmGridView.FGridClearMultiSelect(Sender: TObject);
 begin
   (Data as IDataSelection).SelectedRecords.Clear;
 end;
 
-procedure TfrmGridView.grdEditCanModify(Sender: TObject; Cell: TGridCell;
+procedure TfrmGridView.FGridEditCanModify(Sender: TObject; Cell: TGridCell;
   var CanModify: Boolean);
 begin
   CanModify := CanModify and not IsCellReadOnly(Cell);
 end;
 
-procedure TfrmGridView.grdGetCellColors(Sender: TObject; Cell: TGridCell;
+procedure TfrmGridView.FGridGetCellColors(Sender: TObject; Cell: TGridCell;
   Canvas: TCanvas);
  var
   GV : TDBGridView;
@@ -455,36 +449,38 @@ begin
   begin
     GV := Sender as TDBGridView;
     F  := GV.Columns[Cell.Col].Field;
-    if not GV.IsCellHighlighted(Cell) and (F is TNumericField) then
+    if Assigned(F) then
     begin
-      D := F.AsFloat;
-      if IsZero(D) then
-        Canvas.Font.Color := clBlue
-      else if D < 0 then
-        Canvas.Font.Color := clRed;
-    end;
-
-    if not GV.IsCellHighlighted(Cell) then
-    begin
-      if F.AsString = '' then
+      if not GV.IsCellHighlighted(Cell) and (F is TNumericField) then
       begin
-        Canvas.Brush.Color := $00EFEFEF;
-      end
-      else
+        D := F.AsFloat;
+        if IsZero(D) then
+          Canvas.Font.Color := clBlue
+        else if D < 0 then
+          Canvas.Font.Color := clRed;
+      end;
+      if not GV.IsCellHighlighted(Cell) then
       begin
-        Canvas.Brush.Color := Settings.FieldTypeColors[F.DataType];
+        if F.AsString = '' then
+        begin
+          Canvas.Brush.Color := $00EFEFEF;
+        end
+        else
+        begin
+          Canvas.Brush.Color := Settings.FieldTypeColors[F.DataType];
+        end;
       end;
     end;
   end;
 end;
 
-procedure TfrmGridView.grdGetCellReadOnly(Sender: TObject; Cell: TGridCell;
+procedure TfrmGridView.FGridGetCellReadOnly(Sender: TObject; Cell: TGridCell;
   var CellReadOnly: Boolean);
 begin
   CellReadOnly := CellReadOnly and IsCellReadOnly(Cell);
 end;
 
-procedure TfrmGridView.grdGetCellText(Sender: TObject; Cell: TGridCell;
+procedure TfrmGridView.FGridGetCellText(Sender: TObject; Cell: TGridCell;
   var Value: string);
 var
   GV : TDBGridView;
@@ -494,7 +490,7 @@ begin
     Value := '';
 end;
 
-procedure TfrmGridView.grdGetCheckState(Sender: TObject; Cell: TGridCell;
+procedure TfrmGridView.FGridGetCheckState(Sender: TObject; Cell: TGridCell;
   var CheckState: TCheckBoxState);
 var
   GV : TDBGridView;
@@ -509,7 +505,7 @@ begin
     CheckState := cbUnchecked;
 end;
 
-procedure TfrmGridView.grdKeyPress(Sender: TObject; var Key: Char);
+procedure TfrmGridView.FGridKeyPress(Sender: TObject; var Key: Char);
 var
   GV   : TDBGridView;
 begin
@@ -518,7 +514,7 @@ begin
     Key := ',';
 end;
 
-procedure TfrmGridView.grdMouseWheelDown(Sender: TObject; Shift: TShiftState;
+procedure TfrmGridView.FGridMouseWheelDown(Sender: TObject; Shift: TShiftState;
   MousePos: TPoint; var Handled: Boolean);
 var
   GV : TDBGridView;
@@ -532,7 +528,7 @@ begin
   end
 end;
 
-procedure TfrmGridView.grdMouseWheelUp(Sender: TObject; Shift: TShiftState;
+procedure TfrmGridView.FGridMouseWheelUp(Sender: TObject; Shift: TShiftState;
   MousePos: TPoint; var Handled: Boolean);
 var
   GV : TDBGridView;
@@ -546,7 +542,7 @@ begin
   end
 end;
 
-procedure TfrmGridView.grdRowMultiSelect(Sender: TObject; Row: Integer;
+procedure TfrmGridView.FGridRowMultiSelect(Sender: TObject; Row: Integer;
   var Select: Boolean);
 //var
 //  KV : TtsKeyValues;
@@ -601,23 +597,17 @@ begin
   end
   else
   begin
-    AGridColumn.MaxWidth := 200;
+    AGridColumn.MaxWidth := 800;
   end;
+  AGridColumn.Visible := Assigned(AGridColumn.Field) and AGridColumn.Field.Visible;
 end;
 
 procedure TfrmGridView.InitializeGridColumns;
 var
   I : Integer;
 begin
-  BeginUpdate;
-  try
-    FGrid.Columns.BeginUpdate;
-    for I := 0 to FGrid.Columns.Count - 1 do
-      InitializeGridColumn(FGrid.Columns[I]);
-    FGrid.Columns.EndUpdate;
-  finally
-    EndUpdate;
-  end;
+  for I := 0 to FGrid.Columns.Count - 1 do
+    InitializeGridColumn(FGrid.Columns[I]);
 end;
 {$ENDREGION}
 
@@ -651,24 +641,22 @@ end;
 
 procedure TfrmGridView.Copy;
 begin
-
+// TODO
 end;
 
 procedure TfrmGridView.BeginUpdate;
 begin
   FGrid.LockLayout;
-  FGrid.LockUpdate;
 end;
 
 procedure TfrmGridView.EndUpdate;
 begin
   FGrid.UnLockLayout(False);
-  FGrid.UnLockUpdate(True);
 end;
 
 procedure TfrmGridView.HideSelectedColumns;
 begin
-
+// TODO
 end;
 
 procedure TfrmGridView.Inspect;
@@ -678,79 +666,28 @@ end;
 
 function TfrmGridView.SelectionToCommaText(AQuoteItems: Boolean): string;
 begin
-
+// TODO
 end;
 
 function TfrmGridView.SelectionToDelimitedTable(ADelimiter: string;
   AIncludeHeader: Boolean): string;
 begin
-
+// TODO
 end;
 
 function TfrmGridView.SelectionToFields(AQuoteItems: Boolean): string;
 begin
-
+// TODO
 end;
 
 function TfrmGridView.SelectionToTextTable(AIncludeHeader: Boolean): string;
 begin
-
+// TODO
 end;
 
 function TfrmGridView.SelectionToWikiTable(AIncludeHeader: Boolean): string;
 begin
-
-end;
-
-procedure TfrmGridView.ShowAllColumns;
-var
-  I: Integer;
-begin
-  for I := 0 to FGrid.Columns.Count - 1 do
-  begin
-    FGrid.Columns[I].Visible := True;
-  end;
-  FEmptyColumnsVisible    := True;
-  FConstantColumnsVisible := True;
-end;
-
-procedure TfrmGridView.UpdateColumnLists;
-var
-  X : Integer;
-  Y : Integer;
-  B : Boolean;
-  S : string;
-  T : string;
-begin
-  FConstCols.Clear;
-  FEmptyCols.Clear;
-
-  for X := 0 to FGrid.Columns.Count - 1 do
-  begin
-    // constant columns
-    Y := 0;
-    B := True;
-    S := FGrid.Cells[X, Y];
-    while B and (Y < DataSet.RecordCount) do
-    begin
-      T := FGrid.Cells[X, Y];
-      B := S = T;
-      Inc(Y);
-    end;
-    if B then
-      FConstCols.Add(FGrid.Columns[X]);
-    // empty columns
-    Y := 0;
-    B := True;
-    while B and (Y < DataSet.RecordCount) do
-    begin
-      S := FGrid.Cells[X, Y];
-      B := (S = '') or (S = '0') or (S = 'False');
-      Inc(Y);
-    end;
-    if B then
-      FEmptyCols.Add(FGrid.Columns[X]);;
-  end;
+// TODO
 end;
 
 procedure TfrmGridView.UpdateMultiSelection(const AFieldName: string;
@@ -773,12 +710,11 @@ begin
     begin
       ApplyGridSettings;
       InitializeGridColumns;
-      UpdateColumnLists;
-      AutoSizeColumns;
     end;
   finally
     EndUpdate;
   end;
+  AutoSizeColumns; // needs to be done after all FGrid.UnLockLayout
 end;
 {$ENDREGION}
 

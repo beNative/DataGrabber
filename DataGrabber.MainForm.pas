@@ -81,6 +81,7 @@ type
     pnlStatus                     : TPanel;
     pnlStatusBar                  : TPanel;
     tlbMain                       : TToolBar;
+    pnlHiddenFieldsCount: TPanel;
     {$ENDREGION}
 
     {$REGION 'action handlers'}
@@ -463,6 +464,7 @@ begin
       Format(SConstantFieldCount, [(Data as IFieldLists).ConstantFields.Count]);
     pnlEmptyFieldsCount.Caption :=
       Format(SEmptyFieldCount, [(Data as IFieldLists).EmptyFields.Count]);
+    pnlHiddenFieldsCount.Caption := 'Unknown';
     if Data.CanModify then
       S := SUpdateable
     else
@@ -498,6 +500,7 @@ begin
   OptimizeWidth(pnlFieldCount);
   OptimizeWidth(pnlEmptyFieldsCount);
   OptimizeWidth(pnlConstantFieldsCount);
+  OptimizeWidth(pnlHiddenFieldsCount);
   OptimizeWidth(pnlElapsedTime);
   OptimizeWidth(pnlConnectionType);
   OptimizeWidth(pnlProviderMode);

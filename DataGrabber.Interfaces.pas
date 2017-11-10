@@ -54,10 +54,6 @@ type
     function GetData: IData;
     procedure SetData(const Value: IData);
     function GetRecordCount: Integer;
-    function GetConstantColumnsVisible: Boolean;
-    procedure SetConstantColumnsVisible(const Value: Boolean);
-    function GetEmptyColumnsVisible: Boolean;
-    procedure SetEmptyColumnsVisible(const Value: Boolean);
     function GetSettings: IDataViewSettings;
     procedure SetSettings(const Value: IDataViewSettings);
     function GetPopupMenu: TPopupMenu;
@@ -74,8 +70,8 @@ type
     function SelectionToFields(AQuoteItems: Boolean = True): string;
     procedure AutoSizeColumns;
     procedure Copy;
+
     procedure HideSelectedColumns;
-    procedure ShowAllColumns;
     procedure BeginUpdate;
     procedure EndUpdate;
 
@@ -88,12 +84,6 @@ type
 
     property RecordCount: Integer
       read GetRecordCount;
-
-    property ConstantColumnsVisible: Boolean
-      read GetConstantColumnsVisible write SetConstantColumnsVisible;
-
-    property EmptyColumnsVisible: Boolean
-      read GetEmptyColumnsVisible write SetEmptyColumnsVisible;
 
     property Settings: IDataViewSettings
       read GetSettings write SetSettings;
@@ -218,6 +208,7 @@ type
     function GetActionList: TActionList;
     function GetItem(AName: string): TCustomAction;
     function GetConnectionViewPopupMenu: TPopupMenu;
+    function GetDefaultConnectionProfile: TConnectionProfile;
     {$ENDREGION}
 
     function AddConnectionView: IConnectionView;
@@ -237,6 +228,9 @@ type
 
     property ActionList: TActionList
       read GetActionList;
+
+    property DefaultConnectionProfile: TConnectionProfile
+      read GetDefaultConnectionProfile;
 
     property Items[AName: string]: TCustomAction
       read GetItem; default;
@@ -320,6 +314,8 @@ type
     procedure SetEmptyFieldsVisible(const Value: Boolean);
     procedure SetShowFavoriteFieldsOnly(const Value: Boolean);
     {$ENDREGION}
+
+    function ShowAllFields: Boolean;
 
     property ConstantFieldsVisible: Boolean
       read GetConstantFieldsVisible write SetConstantFieldsVisible;

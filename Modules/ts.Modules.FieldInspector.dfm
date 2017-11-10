@@ -2,9 +2,11 @@ object frmFieldInspector: TfrmFieldInspector
   Left = 0
   Top = 0
   BorderStyle = bsSizeToolWin
-  ClientHeight = 575
-  ClientWidth = 611
+  Caption = 'Field inspector'
+  ClientHeight = 606
+  ClientWidth = 684
   Color = clBtnFace
+  DoubleBuffered = True
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
   Font.Height = -11
@@ -14,27 +16,42 @@ object frmFieldInspector: TfrmFieldInspector
   PixelsPerInch = 96
   TextHeight = 13
   object splVertical: TSplitter
-    Left = 185
+    Left = 333
     Top = 0
     Width = 8
-    Height = 575
+    Height = 606
+    Align = alRight
+    ExplicitLeft = 179
+    ExplicitHeight = 575
   end
   object pnlLeft: TPanel
-    Left = 0
-    Top = 0
-    Width = 185
-    Height = 575
-    Align = alLeft
-    BevelOuter = bvNone
-    TabOrder = 0
-  end
-  object pnlRight: TPanel
-    Left = 193
-    Top = 0
-    Width = 418
-    Height = 575
+    AlignWithMargins = True
+    Left = 3
+    Top = 3
+    Width = 327
+    Height = 600
     Align = alClient
     BevelOuter = bvNone
+    TabOrder = 0
+    ExplicitWidth = 334
+  end
+  object pnlRight: TPanel
+    AlignWithMargins = True
+    Left = 344
+    Top = 3
+    Width = 337
+    Height = 600
+    Align = alRight
+    BevelOuter = bvNone
     TabOrder = 1
+  end
+  object aclMain: TActionList
+    Left = 296
+    Top = 296
+    object actInspect: TAction
+      Caption = 'actInspect'
+      ShortCut = 16457
+      OnExecute = actInspectExecute
+    end
   end
 end

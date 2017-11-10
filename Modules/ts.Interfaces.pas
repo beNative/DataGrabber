@@ -24,7 +24,7 @@ uses
   Data.DB, Data.Win.ADODB,
   Datasnap.DBClient,
 
-  DDuce.Components.DBGridView,
+  DDuce.Components.DBGridView, DDuce.DynamicRecord,
 
   ts.Classes.ListReport,
   ts.Classes.SQL.CompoundCondition, ts.Classes.SQL.Params,
@@ -189,8 +189,8 @@ type
     function GetMaxRecords: Integer;
     procedure SetMaxRecords(const Value: Integer);
     function GetParams: TSQLParams;
-    function GetDisplayValues : TtsKeyValues;
-    function GetDisplayLabels : TtsKeyValues;
+    function GetDisplayValues : IDynamicRecord;
+    function GetDisplayLabels : IDynamicRecord;
     function GetPacketRecords: Integer;
     procedure SetPacketRecords(const Value: Integer);
     function GetSQL: string;
@@ -243,10 +243,10 @@ type
     property FetchOnDemand: Boolean
       read GetFetchOnDemand write SetFetchOnDemand;
 
-    property DisplayLabels: TtsKeyValues
+    property DisplayLabels: IDynamicRecord
       read GetDisplayLabels;
 
-    property DisplayValues: TtsKeyValues
+    property DisplayValues: IDynamicRecord
       read GetDisplayValues;
 
     property ProviderMode: Boolean

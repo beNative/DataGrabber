@@ -71,28 +71,19 @@ type
     );
 
   private
-    FSettings               : IDataViewSettings;
-    FMergeColumnCells       : Boolean;
-    FAutoSizeCols           : Boolean;
-    FEmptyCols              : IList<TcxGridDBColumn>;
-    FConstCols              : IList<TcxGridDBColumn>;
-    FEmptyColumnsVisible    : Boolean;
-    FConstantColumnsVisible : Boolean;
-    FData                   : IData;
+    FSettings         : IDataViewSettings;
+    FMergeColumnCells : Boolean;
+    FAutoSizeCols     : Boolean;
+    FData             : IData;
 
+    {$REGION 'property access methods'}
     function GetName: string;
     function GetDataSet: TDataSet;
     function GetRecordCount: Integer;
     function GetMergeColumnCells: Boolean;
     procedure SetMergeColumnCells(const Value: Boolean);
-    function GetGridMode: Boolean;
-    procedure SetGridMode(const Value: Boolean);
     function GetAutoSizeCols: Boolean;
     procedure SetAutoSizeCols(const Value: Boolean);
-    function GetConstantColumnsVisible: Boolean;
-    procedure SetConstantColumnsVisible(const Value: Boolean);
-    function GetEmptyColumnsVisible: Boolean;
-    procedure SetEmptyColumnsVisible(const Value: Boolean);
     function GetSettings: IDataViewSettings;
     procedure SetSettings(const Value: IDataViewSettings);
     function GetData: IData;
@@ -100,6 +91,7 @@ type
     function GetPopupMenu: TPopupMenu; reintroduce;
     procedure SetPopupMenu(const Value: TPopupMenu);
     function GetGridType: string;
+    {$ENDREGION}
 
   protected
     procedure ApplyGridSettings;
@@ -109,25 +101,25 @@ type
       AIncludeHeader: Boolean = False
     );
     function SelectionToDelimitedTable(
-      AController   : TcxGridTableController;
-      ADelimiter    : string = #9; // TAB
-      AIncludeHeader: Boolean = True
+      AController    : TcxGridTableController;
+      ADelimiter     : string = #9; // TAB
+      AIncludeHeader : Boolean = True
     ): string; overload;
     function SelectionToCommaText(
-      AController: TcxGridTableController;
-      AQuoteItems: Boolean = True
+      AController : TcxGridTableController;
+      AQuoteItems : Boolean = True
     ): string; overload;
     function SelectionToFields(
-      AController: TcxGridTableController;
-      AQuoteItems: Boolean = True
+      AController : TcxGridTableController;
+      AQuoteItems : Boolean = True
     ): string; overload;
     function SelectionToTextTable(
-      AController   : TcxGridTableController;
-      AIncludeHeader: Boolean = False
+      AController    : TcxGridTableController;
+      AIncludeHeader : Boolean = False
     ): string; overload;
     function SelectionToWikiTable(
-      AController   : TcxGridTableController;
-      AIncludeHeader: Boolean = False
+      AController    : TcxGridTableController;
+      AIncludeHeader : Boolean = False
     ): string; overload;
 
     procedure UpdateColumnLists;
@@ -140,7 +132,6 @@ type
     procedure AssignParent(AParent: TWinControl);
     procedure HideSelectedColumns;
     procedure MergeAllColumnCells(AActive: Boolean);
-    procedure ShowAllColumns;
     procedure AutoSizeColumns;
     procedure GroupBySelectedColumns;
     procedure Copy;
@@ -171,9 +162,6 @@ type
     property Settings: IDataViewSettings
       read GetSettings write SetSettings;
 
-    property GridMode: Boolean
-      read GetGridMode write SetGridMode;
-
     property RecordCount: Integer
       read GetRecordCount;
 
@@ -182,12 +170,6 @@ type
 
     property AutoSizeCols: Boolean
       read GetAutoSizeCols write SetAutoSizeCols;
-
-    property ConstantColumnsVisible: Boolean
-      read GetConstantColumnsVisible write SetConstantColumnsVisible;
-
-    property EmptyColumnsVisible: Boolean
-      read GetEmptyColumnsVisible write SetEmptyColumnsVisible;
 
     property PopupMenu: TPopupMenu
       read GetPopupMenu write SetPopupMenu;
@@ -258,12 +240,7 @@ end;
 procedure TfrmcxGrid.AfterConstruction;
 begin
   inherited AfterConstruction;
-  FEmptyCols := TCollections.CreateObjectList<TcxGridDBColumn>(False);
-  FConstCols := TCollections.CreateObjectList<TcxGridDBColumn>(False);
-  FConstantColumnsVisible := True;
-  FEmptyColumnsVisible    := True;
   FAutoSizeCols := True;
-  GridMode      := False;
 end;
 
 procedure TfrmcxGrid.BeforeDestruction;
@@ -342,23 +319,9 @@ begin
   grdMain.PopupMenu := Value;
 end;
 
-function TfrmcxGrid.GetGridMode: Boolean;
-begin
-  Result := tvwMain.DataController.DataModeController.GridMode;
-end;
-
 function TfrmcxGrid.GetGridType: string;
 begin
   Result := 'cxGrid';
-end;
-
-procedure TfrmcxGrid.SetGridMode(const Value: Boolean);
-begin
-  if Value <> GridMode then
-  begin
-    tvwMain.DataController.DataModeController.GridMode := Value;
-    tvwMain.DataController.DataModeController.GridModeBufferCount := 0;
-  end;
 end;
 
 function TfrmcxGrid.GetAutoSizeCols: Boolean;
@@ -376,34 +339,6 @@ begin
       tvwMain.OptionsBehavior.BestFitMaxRecordCount := 100;
       AutoSizeColumns;
     end;
-  end;
-end;
-
-function TfrmcxGrid.GetConstantColumnsVisible: Boolean;
-begin
-  Result := FConstantColumnsVisible;
-end;
-
-procedure TfrmcxGrid.SetConstantColumnsVisible(const Value: Boolean);
-begin
-  if Value <> ConstantColumnsVisible then
-  begin
-    FConstantColumnsVisible := Value;
-    UpdateColumnLists;
-  end;
-end;
-
-function TfrmcxGrid.GetEmptyColumnsVisible: Boolean;
-begin
-  Result := FEmptyColumnsVisible;
-end;
-
-procedure TfrmcxGrid.SetEmptyColumnsVisible(const Value: Boolean);
-begin
-  if Value <> EmptyColumnsVisible then
-  begin
-    FEmptyColumnsVisible := Value;
-    UpdateColumnLists;
   end;
 end;
 {$ENDREGION}
@@ -715,55 +650,55 @@ end;
 
 {$REGION 'public methods'}
 procedure TfrmcxGrid.UpdateColumnLists;
-var
-  X       : Integer;
-  Y       : Integer;
-  IsEmpty : Boolean;
-  IsConst : Boolean;
-  DC      : TcxGridDBDataController;
-  S       : string;
-  T       : string;
-  C       : TcxGridDBColumn;
+//var
+//  X       : Integer;
+//  Y       : Integer;
+//  IsEmpty : Boolean;
+//  IsConst : Boolean;
+//  DC      : TcxGridDBDataController;
+//  S       : string;
+//  T       : string;
+//  C       : TcxGridDBColumn;
 begin
-  FConstCols.Clear;
-  FEmptyCols.Clear;
-  DC := tvwMain.DataController;
-  if DC.RecordCount > 0 then
-  begin
-    BeginUpdate;
-    try
-      for X := 0 to tvwMain.ColumnCount - 1 do
-      begin
-        C := tvwMain.Columns[X];
-        Y := 0;
-        IsEmpty := True;
-        while IsEmpty and (Y < DC.RecordCount) do
-        begin
-          S := VarToStrDef(DC.GetValue(Y, X), '');
-          IsEmpty := (S = '') or (S = '0') or (S = 'False');
-          Inc(Y);
-        end;
-        if IsEmpty then
-          FEmptyCols.Add(C);
-        Y := 0;
-        IsConst := True;
-        S := VarToStrDef(DC.GetValue(Y, X), '');
-        while IsConst and (Y < DC.RecordCount) do
-        begin
-          T := VarToStrDef(DC.GetValue(Y, X), '');
-          IsConst := S = T;
-          Inc(Y);
-        end;
-        if IsConst then
-          FConstCols.Add(C);
-        C.Visible := (DC.RecordCount <= 1) or
-          ((not (not EmptyColumnsVisible and IsEmpty)) and
-          (not (not ConstantColumnsVisible and IsConst)));
-      end;
-    finally
-      EndUpdate;
-    end;
-  end;
+//  FConstCols.Clear;
+//  FEmptyCols.Clear;
+//  DC := tvwMain.DataController;
+//  if DC.RecordCount > 0 then
+//  begin
+//    BeginUpdate;
+//    try
+//      for X := 0 to tvwMain.ColumnCount - 1 do
+//      begin
+//        C := tvwMain.Columns[X];
+//        Y := 0;
+//        IsEmpty := True;
+//        while IsEmpty and (Y < DC.RecordCount) do
+//        begin
+//          S := VarToStrDef(DC.GetValue(Y, X), '');
+//          IsEmpty := (S = '') or (S = '0') or (S = 'False');
+//          Inc(Y);
+//        end;
+//        if IsEmpty then
+//          FEmptyCols.Add(C);
+//        Y := 0;
+//        IsConst := True;
+//        S := VarToStrDef(DC.GetValue(Y, X), '');
+//        while IsConst and (Y < DC.RecordCount) do
+//        begin
+//          T := VarToStrDef(DC.GetValue(Y, X), '');
+//          IsConst := S = T;
+//          Inc(Y);
+//        end;
+//        if IsConst then
+//          FConstCols.Add(C);
+//        C.Visible := (DC.RecordCount <= 1) or
+//          ((not (not EmptyColumnsVisible and IsEmpty)) and
+//          (not (not ConstantColumnsVisible and IsConst)));
+//      end;
+//    finally
+//      EndUpdate;
+//    end;
+//  end;
 end;
 
 procedure TfrmcxGrid.UpdateView;
@@ -773,10 +708,9 @@ begin
   begin
     tvwMain.ClearItems;
     tvwMain.DataController.CreateAllItems;
-    ApplyGridSettings;
     BeginUpdate;
     try
-      UpdateColumnLists;
+      ApplyGridSettings;
     finally
       EndUpdate;
     end;
@@ -799,34 +733,20 @@ begin
   Result := SelectionToTextTable(tvwMain.Controller, AIncludeHeader);
 end;
 
-procedure TfrmcxGrid.ShowAllColumns;
-var
-  I: Integer;
-begin
-  BeginUpdate;
-  try
-   for I := 0 to tvwMain.ColumnCount - 1 do
-   begin
-     tvwMain.Columns[I].Visible := True;
-   end;
-  FEmptyColumnsVisible    := True;
-  FConstantColumnsVisible := True;
-  finally
-    EndUpdate;
-  end
-end;
-
 procedure TfrmcxGrid.HideSelectedColumns;
 var
   C : TcxGridTableController;
   I : Integer;
+  J : Integer;
 begin
   BeginUpdate;
   try
     C := tvwMain.Controller;
     for I := 0 to C.SelectedColumnCount - 1 do
     begin
-      tvwMain.Columns[C.SelectedColumns[I].Index].Visible := False;
+      J := C.SelectedColumns[I].Index;
+      tvwMain.Columns[J].Visible := False;
+      tvwMain.Columns[J].DataBinding.Field.Visible := False;
     end;
   finally
     EndUpdate;
@@ -864,6 +784,7 @@ procedure TfrmcxGrid.AutoSizeColumns;
 begin
   tvwMain.BeginBestFitUpdate;
   try
+    UpdateColumnLists;
     tvwMain.ApplyBestFit;
   finally
     tvwMain.EndBestFitUpdate;
