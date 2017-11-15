@@ -232,7 +232,7 @@ type
     FReport            : TDataReport;
     FNativeDataSet     : INativeDataSet;
 
-    // private property access methods
+    {$REGION 'property access methods'}
     function GetFields: TFields;
     function GetActive: Boolean;
     function GetClientDataSet: TClientDataSet;
@@ -254,15 +254,15 @@ type
     procedure SetPacketRecords(const Value: Integer);
     function GetSQL: string;
     procedure SetSQL(const Value: string);
+    {$ENDREGION}
 
     // SourceDataSet Events
     procedure SourceDataSetAfterOpen(ADataSet: TDataSet);
 
   protected
-    // protected property access methods
+    {$REGION 'virtual property access methods'}
     function GetDataSet: TDataSet; virtual;
     function GetRecordCount: Integer; virtual;
-
     procedure SetExecuted(const Value: Boolean); virtual;
     function GetFromClause : string; virtual;
     function GetGroupByClause : string; virtual;
@@ -271,14 +271,20 @@ type
     function GetSourceDataSet: TDataSet; virtual;
     function GetProviderMode: Boolean; virtual;
     procedure SetProviderMode(const Value: Boolean); virtual;
+    {$ENDREGION}
 
-    { IUpdatable }
+    {$REGION 'IUpdatable'}
     function GetKeyName: string;
     procedure SetKeyName(const Value: string);
     function GetTableName : string;
     procedure SetTableName(const Value: string);
     function GetOnAfterUpdateData : TAfterUpdateDataEvent;
     procedure SetOnAfterUpdateData(const Value : TAfterUpdateDataEvent);
+
+    procedure BeginUpdate;
+    procedure EndUpdate;
+    function Post: Boolean;
+    {$ENDREGION}
 
     procedure DataSetFieldChanged(AField : TField); virtual;
     function GetRowID : Variant; virtual;
@@ -289,11 +295,6 @@ type
     procedure AssignKeyValues(AKeyValues : TtsKeyValues); virtual;
     procedure AssignRecordCount; virtual;
     procedure AssignProviderMode; virtual;
-
-    { IUpdatable }
-    procedure BeginUpdate;
-    procedure EndUpdate;
-    function Post: Boolean;
 
     procedure DoAfterUpdateData(AUpdateKind : TUpdateKind); dynamic;
 
@@ -330,7 +331,7 @@ type
     procedure DataViewBeforeExecute(AIndex: Integer);
     procedure DataViewAfterExecute(AIndex: Integer);
 
-     // protected properties
+
     { IData }
     property FieldNames : TStrings
       read GetFieldNames;
@@ -462,6 +463,8 @@ uses
   Vcl.Forms, Vcl.Controls, Vcl.Dialogs,
   Data.DBCommon,
 
+  Spring,
+
   ts.Utils, ts.DBUtils,
 
   DDuce.Logger;
@@ -514,8 +517,7 @@ end;
 procedure TdmCustomModule.AfterConstruction;
 begin
   inherited AfterConstruction;
-  if not Assigned(FConnection) then
-    raise Exception.Create('Connection is not assigned!');
+  Guard.CheckNotNull(FConnection, 'FConnection');
   FNativeDataSet := FConnection.CreateNativeDataSet;
   FDataViews  := TInterfaceList.Create;
   FReport     := TDataReport.Create(Self);
@@ -1070,10 +1072,15 @@ begin
     end
     else
     begin
-      (SourceDataSet as IProviderSupportNG).PSSetCommandText(ACommandText);
-      SourceDataSet.Active := True;
+      try
+        (SourceDataSet as IProviderSupportNG).PSSetCommandText(ACommandText);
+        SourceDataSet.Active := True;
+      except
+        SourceDataSet.Active := False;
+      end;
     end;
-    FNativeDataSet.AfterExecute;
+    if SourceDataSet.Active then
+      FNativeDataSet.AfterExecute;
   end;
 end;
 
@@ -1362,7 +1369,8 @@ begin
       AssignRecordCount;
       FExecuted := True;
     finally
-      AfterExecute;
+      if DataSet.Active then
+        AfterExecute;
     end;
   finally
     EndUpdate;

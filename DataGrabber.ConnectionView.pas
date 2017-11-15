@@ -109,8 +109,9 @@ type
     function GetActiveConnectionProfile: TConnectionProfile;
 
   protected
-    procedure Copy;
     procedure InitializeEditorView;
+    procedure InitializeConnectionProfilesView;
+    procedure Copy;
     procedure UpdateActions; override;
 
     procedure ApplySettings;
@@ -174,18 +175,7 @@ procedure TfrmConnectionView.AfterConstruction;
 begin
   inherited AfterConstruction;
   InitializeEditorView;
-  FVSTProfiles := TFactories.CreateVirtualStringTree(Self, pnlProfiles);
-  FVSTProfiles.AlignWithMargins  := False;
-  FVSTProfiles.RootNodeCount     := Manager.Settings.ConnectionProfiles.Count;
-  FVSTProfiles.OnBeforeCellPaint := FVSTProfilesBeforeCellPaint;
-  FVSTProfiles.OnGetText         := FVSTProfilesGetText;
-  FVSTProfiles.OnFocusChanged    := FVSTProfilesFocusChanged;
-  FVSTProfiles.OnPaintText       := FVSTProfilesPaintText;
-  FVSTProfiles.Header.Options := FVSTProfiles.Header.Options - [hoVisible];
-  FVSTProfiles.TreeOptions.PaintOptions :=
-    FVSTProfiles.TreeOptions.PaintOptions - [toHideSelection];
-  FVSTProfiles.Colors.FocusedSelectionColor := clBtnHighlight;
-  FVSTProfiles.Margins.Right := 0;
+  InitializeConnectionProfilesView;
   ApplySettings;
 end;
 
@@ -316,6 +306,23 @@ end;
 {$ENDREGION}
 
 {$REGION 'protected methods'}
+procedure TfrmConnectionView.InitializeConnectionProfilesView;
+begin
+  FVSTProfiles := TFactories.CreateVirtualStringTree(Self, pnlProfiles);
+  FVSTProfiles.AlignWithMargins  := False;
+  FVSTProfiles.RootNodeCount     := Manager.Settings.ConnectionProfiles.Count;
+  FVSTProfiles.OnBeforeCellPaint := FVSTProfilesBeforeCellPaint;
+  FVSTProfiles.OnGetText         := FVSTProfilesGetText;
+  FVSTProfiles.OnFocusChanged    := FVSTProfilesFocusChanged;
+  FVSTProfiles.OnPaintText       := FVSTProfilesPaintText;
+  FVSTProfiles.Header.Options := FVSTProfiles.Header.Options - [hoVisible];
+  FVSTProfiles.TreeOptions.PaintOptions :=
+    FVSTProfiles.TreeOptions.PaintOptions - [toHideSelection];
+  FVSTProfiles.Colors.FocusedSelectionColor := clBtnHighlight;
+  FVSTProfiles.Margins.Right := 0;
+  FVSTProfiles.Indent        := 0;
+end;
+
 procedure TfrmConnectionView.ApplySettings;
 var
   CP: TConnectionProfile;

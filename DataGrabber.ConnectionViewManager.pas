@@ -36,6 +36,9 @@ uses
     - the ConnectionView instances (ConnectionViews)
     - the active connection view (ActiveConnectionView)
     - all actions that can be executed on the active connectionview
+
+    TODO:
+      react on changes in manager
 }
 {$ENDREGION}
 
@@ -53,7 +56,6 @@ type
     actSelectionAsWiki            : TAction;
     actSelectionAsText            : TAction;
     actMergeAllColumnCells        : TAction;
-    actGridMode                   : TAction;
     actAutoSizeCols               : TAction;
     actFormatSQL                  : TAction;
     actToggleFullScreen           : TAction;
@@ -120,6 +122,7 @@ type
     N3: TMenuItem;
     Inspect1: TMenuItem;
     N4: TMenuItem;
+    actAddConnectionView: TAction;
     {$ENDREGION}
 
     {$REGION 'action handlers'}
@@ -135,7 +138,6 @@ type
     procedure actSelectionAsWikiExecute(Sender: TObject);
     procedure actSelectionAsTextExecute(Sender: TObject);
     procedure actMergeAllColumnCellsExecute(Sender: TObject);
-    procedure actGridModeExecute(Sender: TObject);
     procedure actCopyExecute(Sender: TObject);
     procedure actGroupBySelectionExecute(Sender: TObject);
     procedure actSelectionAsCommaTextExecute(Sender: TObject);
@@ -160,6 +162,7 @@ type
     procedure actDesignerExecute(Sender: TObject);
     procedure actPrintExecute(Sender: TObject);
     procedure actSettingsExecute(Sender: TObject);
+    procedure actAddConnectionViewExecute(Sender: TObject);
     {$ENDREGION}
 
   private
@@ -296,10 +299,6 @@ begin
   ActiveDataView.UpdateView;
 end;
 
-procedure TdmConnectionViewManager.actGridModeExecute(Sender: TObject);
-begin
-  ShowMessage('Not supported yet.');
-end;
 
 procedure TdmConnectionViewManager.actGridViewExecute(Sender: TObject);
 begin
@@ -426,6 +425,11 @@ procedure TdmConnectionViewManager.actMergeCellsExecute(Sender: TObject);
 begin
   (ActiveDataView as IMergable).MergeColumnCells :=
     not (ActiveDataView as IMergable).MergeColumnCells;
+end;
+
+procedure TdmConnectionViewManager.actAddConnectionViewExecute(Sender: TObject);
+begin
+  AddConnectionView;
 end;
 
 procedure TdmConnectionViewManager.actAutoSizeColsExecute(Sender: TObject);
@@ -626,7 +630,7 @@ begin
     actHideConstantColumns.Checked := not (ActiveData as IFieldVisiblity).ConstantFieldsVisible;
     actFavoriteFieldsOnly.Checked  :=
       (ActiveData as IFieldVisiblity).ShowFavoriteFieldsOnly;
-    Logger.Watch('ActiveDataView.RecordCount', ActiveDataView.RecordCount);
+    Logger.Watch('RecordCount', ActiveDataView.RecordCount);
   end;
 end;
 
@@ -671,6 +675,7 @@ begin
     else
       S := 'FireDAC';
   end;
+  Logger.Info('Creating connection of type %s', [S]);
   C := GlobalContainer.Resolve<IConnection>(S);
   D       := TdmData.Create(Self, C);
   DV.Data := D;

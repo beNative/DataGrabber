@@ -297,7 +297,7 @@ begin
   FEditorSettings := TEditorFactories.CreateSettings(Self);
   FManager        := TEditorFactories.CreateManager(Self, FEditorSettings);
   FEditor         := TEditorFactories.CreateView(tsSettings, FManager);
-  FEditor.Form.BorderStyle := bsSingle;
+  FEditor.Form.BorderStyle := bsNone;
   FEditor.Form.AlignWithMargins := True;
   FEditor.HighlighterName := 'JSON';
   FEditor.Load(FSettings.FileName);
@@ -687,6 +687,7 @@ begin
   FVSTProfiles.TreeOptions.PaintOptions :=
     FVSTProfiles.TreeOptions.PaintOptions - [toHideSelection];
   FVSTProfiles.Colors.FocusedSelectionColor := clBtnHighlight;
+  FVSTProfiles.Indent    := 0;
 
   S := 'GridView';
   I := rgpGridTypes.Items.Add(S);

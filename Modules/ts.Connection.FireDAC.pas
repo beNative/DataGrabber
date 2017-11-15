@@ -70,6 +70,10 @@ type
     property Protocols: TStrings
       read GetProtocols;
 
+  public
+    procedure AfterConstruction; override;
+
+
   end;
 
 implementation
@@ -78,6 +82,16 @@ uses
   ts.Data.NativeFireDAC;
 
 {$R *.dfm}
+
+{$REGION 'construction and destruction'}
+procedure TdmFireDACConnection.AfterConstruction;
+begin
+  inherited AfterConstruction;
+  conFireDAC.FetchOptions.Mode := fmAll;
+  conFireDAC.FetchOptions.RecordCountMode := cmTotal;
+
+end;
+{$ENDREGION}
 
 {$REGION 'property access methods'}
 function TdmFireDACConnection.GetConnected: Boolean;

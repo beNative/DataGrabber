@@ -119,14 +119,6 @@
         </DCCReference>
         <DCCReference Include="Modules\ts.Interfaces.pas"/>
         <DCCReference Include="DataGrabber.Utils.pas"/>
-        <DCCReference Include="Modules\ts.Connection.ADO.pas">
-            <Form>dmADOConnection</Form>
-            <DesignClass>TDataModule</DesignClass>
-        </DCCReference>
-        <DCCReference Include="Modules\ts.Connection.DBX.pas">
-            <Form>dmDBXConnection</Form>
-            <DesignClass>TDataModule</DesignClass>
-        </DCCReference>
         <DCCReference Include="Modules\ts.Classes.SQL.Statement.pas"/>
         <DCCReference Include="Modules\ts.Classes.ConnectionSettings.pas"/>
         <DCCReference Include="DataGrabber.Settings.pas"/>
@@ -203,11 +195,6 @@
             <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="Modules\ts.Classes.KeyValues.pas"/>
-        <DCCReference Include="Modules\ts.Connection.FireDAC.pas">
-            <Form>dmFireDACConnection</Form>
-            <FormType>dfm</FormType>
-            <DesignClass>TDataModule</DesignClass>
-        </DCCReference>
         <DCCReference Include="Modules\ts.Data.NativeFireDAC.pas"/>
         <DCCReference Include="Modules\ts.Connection.FireDACConnectionAdapter.pas"/>
         <DCCReference Include="..\..\libraries\dduce\Source\DDuce.DynamicRecord.pas"/>
@@ -766,6 +753,12 @@
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
+                <DeployFile LocalName="ModelSupport_DataGrabber\DataGrabber\GridView\default.txaPackage" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Win32">
+                        <RemoteDir>.\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
                 <DeployFile LocalName="ModelSupport_DataGrabber\DataGrabber\GridView\default.txvpck" Configuration="Release" Class="ProjectFile">
                     <Platform Name="Win32">
                         <RemoteDir>.\</RemoteDir>
@@ -773,12 +766,6 @@
                     </Platform>
                 </DeployFile>
                 <DeployFile LocalName="ModelSupport_DataGrabber\DataGrabber\DBXConnection\default.txvpck" Configuration="Release" Class="ProjectFile">
-                    <Platform Name="Win32">
-                        <RemoteDir>.\</RemoteDir>
-                        <Overwrite>true</Overwrite>
-                    </Platform>
-                </DeployFile>
-                <DeployFile LocalName="ModelSupport_DataGrabber\DataGrabber\GridView\default.txaPackage" Configuration="Debug" Class="ProjectFile">
                     <Platform Name="Win32">
                         <RemoteDir>.\</RemoteDir>
                         <Overwrite>true</Overwrite>

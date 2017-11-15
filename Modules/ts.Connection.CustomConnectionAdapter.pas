@@ -70,8 +70,8 @@ type
       read GetConnectionType;
 
   public
-    procedure BeforeDestruction; override;
     procedure AfterConstruction; override;
+    procedure BeforeDestruction; override;
   end;
 
 implementation

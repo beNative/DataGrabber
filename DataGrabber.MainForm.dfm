@@ -1,6 +1,6 @@
 object frmMain: TfrmMain
-  Left = 350
-  Top = 119
+  Left = 731
+  Top = 411
   Caption = 'DataGrabber'
   ClientHeight = 593
   ClientWidth = 1082
@@ -15,7 +15,7 @@ object frmMain: TfrmMain
   KeyPreview = True
   OldCreateOrder = False
   PopupMode = pmAuto
-  Position = poScreenCenter
+  Position = poDesigned
   ScreenSnap = True
   ShowHint = True
   OnShortCut = FormShortCut
@@ -82,7 +82,6 @@ object frmMain: TfrmMain
       BevelKind = bkFlat
       BevelOuter = bvNone
       TabOrder = 1
-      ExplicitLeft = 467
     end
     object pnlElapsedTime: TPanel
       AlignWithMargins = True
@@ -99,7 +98,6 @@ object frmMain: TfrmMain
       BevelKind = bkFlat
       BevelOuter = bvNone
       TabOrder = 2
-      ExplicitLeft = 311
     end
     object pnlProviderMode: TPanel
       AlignWithMargins = True
@@ -116,7 +114,6 @@ object frmMain: TfrmMain
       BevelKind = bkFlat
       BevelOuter = bvNone
       TabOrder = 3
-      ExplicitLeft = 415
     end
     object pnlConnectionType: TPanel
       AlignWithMargins = True
@@ -133,7 +130,6 @@ object frmMain: TfrmMain
       BevelKind = bkFlat
       BevelOuter = bvNone
       TabOrder = 4
-      ExplicitLeft = 363
     end
     object pnlGridType: TPanel
       AlignWithMargins = True
@@ -150,7 +146,6 @@ object frmMain: TfrmMain
       BevelKind = bkFlat
       BevelOuter = bvNone
       TabOrder = 5
-      ExplicitLeft = 519
     end
     object pnlConnectionStatus: TPanel
       AlignWithMargins = True
@@ -247,7 +242,6 @@ object frmMain: TfrmMain
       BevelKind = bkFlat
       BevelOuter = bvNone
       TabOrder = 11
-      ExplicitTop = 4
     end
   end
   object pnlConnectionViews: TPanel

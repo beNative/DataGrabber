@@ -32,15 +32,21 @@ uses
   FireDAC.Phys.MySQL, FireDAC.Phys.ODBC, FireDAC.Phys.PG, FireDAC.Phys.SQLite,
   FireDAC.Phys.TData, FireDAC.Phys.TDBX,
 
+  FireDAC.VCLUI.Async,
+  FireDAC.Comp.UI,
+
   ts.Interfaces,
   ts.Data.NativeFireDAC,
+
+
 
   ts.Connection.CustomConnectionAdapter;
 
 type
   TFireDACConnectionAdapter = class(TCustomConnectionAdapter, IConnection, IMetaData)
   private
-    FConnection : TFDConnection;
+    FConnection         : TFDConnection;
+    FAsyncExecuteDialog : TFDGUIxAsyncExecuteDialog;
 
   protected
     function GetConnectionType: string; override;
@@ -56,13 +62,16 @@ type
     function Execute(const ACommandText: string): Boolean; override;
 
     { IMetaData }
-    procedure GetTableNames(AList: TStrings; const ASchemaName: string = '');
+    procedure GetTableNames(
+      AList             : TStrings;
+      const ASchemaName : string = ''
+    );
     procedure GetFieldNames(
-            AList       : TStrings;
+      AList             : TStrings;
       const ATableName  : string;
       const ASchemaName : string = ''
     );
-    procedure GetSchemaNames(AList : TStrings);
+    procedure GetSchemaNames(AList: TStrings);
 
   public
     procedure AfterConstruction; override;
@@ -71,11 +80,26 @@ type
 
 implementation
 
+uses
+  Vcl.Forms;
+
 {$REGION 'construction and destruction'}
 procedure TFireDACConnectionAdapter.AfterConstruction;
 begin
   inherited AfterConstruction;
   FConnection := TFDConnection.Create(nil);
+  FConnection.FetchOptions.Mode := fmAll;
+  FConnection.FetchOptions.RecordCountMode := cmTotal;
+  FConnection.ResourceOptions.CmdExecMode := amCancelDialog;
+  // send no prepare command to the database
+  FConnection.ResourceOptions.DirectExecute  := True;
+
+  // cancel dialog
+  FAsyncExecuteDialog := TFDGUIxAsyncExecuteDialog.Create(FConnection);
+  FAsyncExecuteDialog.Provider  := 'Forms';
+  FAsyncExecuteDialog.Caption   := Application.Title;
+  FAsyncExecuteDialog.ShowDelay := 100;
+
   FDManager.GetDriverNames(Protocols);
 end;
 

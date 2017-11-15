@@ -52,9 +52,6 @@ object frmConnectionView: TfrmConnectionView
       Align = alClient
       BevelOuter = bvNone
       TabOrder = 1
-      ExplicitLeft = 215
-      ExplicitTop = 2
-      ExplicitWidth = 612
     end
   end
   object pnlBottom: TPanel

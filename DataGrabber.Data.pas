@@ -92,8 +92,6 @@ type
 implementation
 
 uses
-  System.Threading,
-
   DDuce.Logger;
 
 {$R *.dfm}
@@ -253,7 +251,6 @@ begin
   if B and not EmptyFieldsVisible then
     B := not FEmptyFields.Contains(AField);
 
-  Logger.SendComponent(AField.FieldName, AField);
   AField.Visible := B;
 end;
 
