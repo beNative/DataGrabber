@@ -177,6 +177,48 @@ type
       read GetGridType;
   end;
 
+  IClientData = interface
+  ['{370064CD-1FF1-41D6-9338-00DD0CBC64EE}']
+    {$REGION 'property access methods'}
+    function GetParams: TSQLParams;
+    function GetProviderMode: Boolean;
+    procedure SetProviderMode(const Value: Boolean);
+    {$ENDREGION}
+
+    procedure RefreshRecord(ADataSet: TCustomClientDataSet);
+
+    property Params: TSQLParams
+      read GetParams;
+
+    property ProviderMode: Boolean
+      read GetProviderMode write SetProviderMode;
+  end;
+
+  IDataViews = interface
+  ['{A8DB2F5C-E794-44D3-82ED-E0052BB3EFFE}']
+    procedure RegisterDataView(ADataView: IDataView);
+    procedure UnregisterDataView(ADataView: IDataView);
+    procedure UpdateDataViews;
+  end;
+
+  IDisplayData = interface
+  ['{C4368A5B-2444-425B-B008-AB3F3FD750A9}']
+    {$REGION 'property access methods'}
+    function GetDisplayValues : IDynamicRecord;
+    function GetDisplayLabels : IDynamicRecord;
+    {$ENDREGION}
+
+    function IsLookupField(const AFieldName: string): Boolean;
+    function IsCheckBoxField(const AFieldName: string): Boolean;
+    function IsRequiredField(const AFieldName: string): Boolean;
+
+    property DisplayLabels: IDynamicRecord
+      read GetDisplayLabels;
+
+    property DisplayValues: IDynamicRecord
+      read GetDisplayValues;
+  end;
+
   IData = interface
   ['{3DFA4682-620B-406F-BE20-F9C04719965B}']
     {$REGION 'property access methods'}
@@ -188,30 +230,16 @@ type
     procedure SetExecuted(const Value: Boolean);
     function GetMaxRecords: Integer;
     procedure SetMaxRecords(const Value: Integer);
-    function GetParams: TSQLParams;
-    function GetDisplayValues : IDynamicRecord;
-    function GetDisplayLabels : IDynamicRecord;
     function GetPacketRecords: Integer;
     procedure SetPacketRecords(const Value: Integer);
     function GetSQL: string;
     procedure SetSQL(const Value: string);
     function GetCanModify: Boolean;
-    function GetProviderMode: Boolean;
-    procedure SetProviderMode(const Value: Boolean);
     function GetFetchOnDemand: Boolean;
     procedure SetFetchOnDemand(const Value: Boolean);
     {$ENDREGION}
 
     procedure Execute;
-    procedure RefreshRecord(ADataSet: TCustomClientDataSet);
-
-    procedure RegisterDataView(ADataView: IDataView);
-    procedure UnregisterDataView(ADataView: IDataView);
-    procedure UpdateDataViews;
-
-    function IsLookupField(const AFieldName: string): Boolean;
-    function IsCheckBoxField(const AFieldName: string): Boolean;
-    function IsRequiredField(const AFieldName: string): Boolean;
 
     property SQL: string
       read GetSQL write SetSQL;
@@ -228,9 +256,6 @@ type
     property Executed: Boolean
       read GetExecuted write SetExecuted;
 
-    property Params: TSQLParams
-      read GetParams;
-
     property RecordCount: Integer
       read GetRecordCount;
 
@@ -242,15 +267,6 @@ type
 
     property FetchOnDemand: Boolean
       read GetFetchOnDemand write SetFetchOnDemand;
-
-    property DisplayLabels: IDynamicRecord
-      read GetDisplayLabels;
-
-    property DisplayValues: IDynamicRecord
-      read GetDisplayValues;
-
-    property ProviderMode: Boolean
-      read GetProviderMode write SetProviderMode;
 
     property Connection: IConnection
       read GetConnection;

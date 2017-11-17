@@ -234,8 +234,8 @@ begin
   DataSet.DisableControls;
   try
     PrepareReport;
-    if Data.Params['prmPrinter'] <> Unassigned then
-      FReport.Report.PrintOptions.Printer := Data.Params['prmPrinter'];
+//    if Data.Params['prmPrinter'] <> Unassigned then
+//      FReport.Report.PrintOptions.Printer := Data.Params['prmPrinter'];
     FReport.PrintReport;
   finally
     DataSet.EnableControls;

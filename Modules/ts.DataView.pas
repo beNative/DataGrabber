@@ -172,7 +172,7 @@ begin
   if Value <> Data then
   begin
     FData := Value;
-    FData.RegisterDataView(Self);
+    (FData as IDataViews).RegisterDataView(Self);
     dscMain.DataSet := FData.DataSet;
     UpdateView;
   end;

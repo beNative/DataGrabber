@@ -264,7 +264,7 @@ end;
 procedure TfrmGridView.BeforeDestruction;
 begin
   if Assigned(FData) then
-    FData.UnRegisterDataView(Self);
+    (FData as IDataViews).UnRegisterDataView(Self);
 //  FConstCols := nil;
 //  FEmptyCols := nil;
   inherited BeforeDestruction;
@@ -351,7 +351,7 @@ begin
   if Value <> Data then
   begin
     FData := Value;
-    FData.RegisterDataView(Self);
+    (FData as IDataViews).RegisterDataView(Self);
     dscMain.DataSet := Data.DataSet;
     UpdateView;
   end;
@@ -573,12 +573,12 @@ end;
 
 function TfrmGridView.IsCheckBoxField(const AFieldName: string): Boolean;
 begin
-  Result := Data.IsCheckBoxField(AFieldName);
+  Result := (Data as IDisplayData).IsCheckBoxField(AFieldName);
 end;
 
 function TfrmGridView.IsLookupField(const AFieldName: string): Boolean;
 begin
-  Result := Data.IsLookupField(AFieldName);
+  Result := (Data as IDisplayData).IsLookupField(AFieldName);
 end;
 
 procedure TfrmGridView.InitializeGridColumn(AGridColumn: TDBGridColumn);

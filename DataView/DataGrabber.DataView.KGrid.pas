@@ -121,7 +121,7 @@ end;
 procedure TfrmKGrid.BeforeDestruction;
 begin
   if Assigned(FData) then
-    FData.UnRegisterDataView(Self);
+    (FData as IDataViews).UnRegisterDataView(Self);
   inherited BeforeDestruction;
 end;
 {$ENDREGION}
@@ -152,7 +152,7 @@ begin
   if Value <> Data then
   begin
     FData := Value;
-    FData.RegisterDataView(Self);
+    (FData as IDataViews).RegisterDataView(Self);
     dscMain.DataSet := Data.DataSet;
     UpdateView;
   end;

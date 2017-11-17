@@ -341,7 +341,7 @@ begin
     begin
       FActiveData.Connection.ConnectionSettings.Assign(CP.ConnectionSettings);
       FActiveData.PacketRecords := CP.PacketRecords;
-      FActiveData.ProviderMode  := CP.ProviderMode;
+      //FActiveData.ProviderMode  := CP.ProviderMode;
       FActiveData.FetchOnDemand := CP.FetchOnDemand;
     end;
   end;

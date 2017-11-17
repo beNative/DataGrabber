@@ -158,8 +158,11 @@ type
 
 type
   TdmCustomModule = class (TDataModule, IConnection,
+                                        IClientData,
                                         IData,
+                                        IDataViews,
                                         IUpdatable,
+                                        IDisplayData,
                                         IDataSelection,
                                         IDataReport)
     cdsMaster : TClientDataSet;
@@ -220,8 +223,8 @@ type
     FKeyName           : string;
     FFieldNames        : TStrings;
     // holds the corresponding display values for the given parameter
-    FDisplayValues     : TRecord;
-    FDisplayLabels     : TRecord;
+    FDisplayValues     : DynamicRecord;
+    FDisplayLabels     : DynamicRecord;
     FMaxRecords        : Integer;
     FTableName         : string;
     FOnAfterUpdateData : TAfterUpdateDataEvent;

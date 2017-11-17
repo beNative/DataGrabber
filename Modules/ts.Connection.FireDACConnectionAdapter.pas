@@ -38,8 +38,6 @@ uses
   ts.Interfaces,
   ts.Data.NativeFireDAC,
 
-
-
   ts.Connection.CustomConnectionAdapter;
 
 type

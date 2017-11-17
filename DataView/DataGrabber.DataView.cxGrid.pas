@@ -247,7 +247,7 @@ procedure TfrmcxGrid.BeforeDestruction;
 begin
   inherited BeforeDestruction;
   if Assigned(FData) then
-    FData.UnRegisterDataView(Self);
+    (FData as IDataViews).UnRegisterDataView(Self);
 end;
 {$ENDREGION}
 
@@ -262,9 +262,9 @@ begin
   if Value <> Data then
   begin
     if Data <> nil then
-      FData.UnregisterDataView(Self);
+      (FData as IDataViews).UnregisterDataView(Self);
     FData := Value;
-    FData.RegisterDataView(Self);
+    (FData as IDataViews).RegisterDataView(Self);
     dscMain.DataSet := DataSet;
     UpdateView;
   end;

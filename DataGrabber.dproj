@@ -408,6 +408,11 @@
         <DCCReference Include="..\..\components\zcontrols\Source\zObjInspTypes.pas"/>
         <DCCReference Include="..\..\libraries\dduce\Source\Factories\DDuce.Factories.VirtualTrees.pas"/>
         <DCCReference Include="..\..\libraries\dduce\Source\Factories\DDuce.Factories.zObjInspector.pas"/>
+        <DCCReference Include="DataGrabber.Data.FireDAC.pas">
+            <Form>dmDataFireDAC</Form>
+            <FormType>dfm</FormType>
+            <DesignClass>TDataModule</DesignClass>
+        </DCCReference>
         <None Include="ModelSupport_DataGrabber\XMLSerializer\default.txvpck"/>
         <None Include="ModelSupport_DataGrabber\ts\Classes\SQL\Statement\default.txaPackage"/>
         <None Include="ModelSupport_DataGrabber\DataGrabber\DBXConnection\default.txaPackage"/>
