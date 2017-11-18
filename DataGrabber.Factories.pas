@@ -39,9 +39,20 @@ function CreateInspector(
 implementation
 
 uses
-  Vcl.Forms,
+  Vcl.Forms;
 
-  ts.Utils.Actions;
+
+procedure AddActionButton(AParent: TToolBar; AAction: TBasicAction);
+var
+  TB: TToolButton;
+begin
+  TB := TToolButton.Create(AParent.Owner);
+  TB.Parent := AParent;
+  if not Assigned(AAction) then
+    TB.Style := tbsSeparator
+  else
+    TB.Action := AAction;
+end;
 
 procedure AddToolbarButtons(AToolBar: TToolbar; AManager: IConnectionViewManager);
 

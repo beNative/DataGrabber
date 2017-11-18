@@ -26,8 +26,6 @@ uses
 
   KControls, KGrids, KDBGrids,
 
-  ts.Interfaces,
-
   DataGrabber.Interfaces;
 
 type
@@ -57,6 +55,8 @@ type
 
     function GetGridType: string;
     function GetName: string;
+
+    procedure DataAfterExecute(Sender: TObject);
 
   protected
     procedure SetPopupMenu(const Value: TPopupMenu);
@@ -121,7 +121,7 @@ end;
 procedure TfrmKGrid.BeforeDestruction;
 begin
   if Assigned(FData) then
-    (FData as IDataViews).UnRegisterDataView(Self);
+    (FData as IDataEvents).OnAfterExecute.Remove(DataAfterExecute);
   inherited BeforeDestruction;
 end;
 {$ENDREGION}
@@ -151,9 +151,11 @@ procedure TfrmKGrid.SetData(const Value: IData);
 begin
   if Value <> Data then
   begin
+    if Data <> nil then
+     (Data as IDataEvents).OnAfterExecute.Remove(DataAfterExecute);
     FData := Value;
-    (FData as IDataViews).RegisterDataView(Self);
-    dscMain.DataSet := Data.DataSet;
+    (Data as IDataEvents).OnAfterExecute.Add(DataAfterExecute);
+    dscMain.DataSet := DataSet;
     UpdateView;
   end;
 end;
@@ -293,6 +295,11 @@ end;
 procedure TfrmKGrid.Copy;
 begin
   Clipboard.AsText := Trim(SelectionToDelimitedTable(#9, False));
+end;
+
+procedure TfrmKGrid.DataAfterExecute(Sender: TObject);
+begin
+  UpdateView;
 end;
 
 procedure TfrmKGrid.HideSelectedColumns;

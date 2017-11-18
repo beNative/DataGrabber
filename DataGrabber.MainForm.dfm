@@ -69,7 +69,7 @@ object frmMain: TfrmMain
     end
     object pnlEditMode: TPanel
       AlignWithMargins = True
-      Left = 519
+      Left = 415
       Top = 1
       Width = 50
       Height = 19
@@ -82,6 +82,7 @@ object frmMain: TfrmMain
       BevelKind = bkFlat
       BevelOuter = bvNone
       TabOrder = 1
+      ExplicitLeft = 519
     end
     object pnlElapsedTime: TPanel
       AlignWithMargins = True
@@ -99,41 +100,9 @@ object frmMain: TfrmMain
       BevelOuter = bvNone
       TabOrder = 2
     end
-    object pnlProviderMode: TPanel
-      AlignWithMargins = True
-      Left = 467
-      Top = 1
-      Width = 50
-      Height = 19
-      Hint = 'Provider mode'
-      Margins.Left = 1
-      Margins.Top = 1
-      Margins.Right = 1
-      Margins.Bottom = 1
-      Align = alLeft
-      BevelKind = bkFlat
-      BevelOuter = bvNone
-      TabOrder = 3
-    end
-    object pnlConnectionType: TPanel
-      AlignWithMargins = True
-      Left = 415
-      Top = 1
-      Width = 50
-      Height = 19
-      Hint = 'Connection type'
-      Margins.Left = 1
-      Margins.Top = 1
-      Margins.Right = 1
-      Margins.Bottom = 1
-      Align = alLeft
-      BevelKind = bkFlat
-      BevelOuter = bvNone
-      TabOrder = 4
-    end
     object pnlGridType: TPanel
       AlignWithMargins = True
-      Left = 571
+      Left = 467
       Top = 1
       Width = 50
       Height = 19
@@ -145,7 +114,8 @@ object frmMain: TfrmMain
       Align = alLeft
       BevelKind = bkFlat
       BevelOuter = bvNone
-      TabOrder = 5
+      TabOrder = 3
+      ExplicitLeft = 571
     end
     object pnlConnectionStatus: TPanel
       AlignWithMargins = True
@@ -161,7 +131,7 @@ object frmMain: TfrmMain
       Align = alLeft
       BevelKind = bkFlat
       BevelOuter = bvNone
-      TabOrder = 6
+      TabOrder = 4
     end
     object pnlRecordCount: TPanel
       AlignWithMargins = True
@@ -177,7 +147,7 @@ object frmMain: TfrmMain
       Align = alLeft
       BevelKind = bkFlat
       BevelOuter = bvNone
-      TabOrder = 7
+      TabOrder = 5
     end
     object pnlFieldCount: TPanel
       AlignWithMargins = True
@@ -193,7 +163,7 @@ object frmMain: TfrmMain
       Align = alLeft
       BevelKind = bkFlat
       BevelOuter = bvNone
-      TabOrder = 8
+      TabOrder = 6
     end
     object pnlConstantFieldsCount: TPanel
       AlignWithMargins = True
@@ -209,7 +179,7 @@ object frmMain: TfrmMain
       Align = alLeft
       BevelKind = bkFlat
       BevelOuter = bvNone
-      TabOrder = 9
+      TabOrder = 7
     end
     object pnlEmptyFieldsCount: TPanel
       AlignWithMargins = True
@@ -225,7 +195,7 @@ object frmMain: TfrmMain
       Align = alLeft
       BevelKind = bkFlat
       BevelOuter = bvNone
-      TabOrder = 10
+      TabOrder = 8
     end
     object pnlHiddenFieldsCount: TPanel
       AlignWithMargins = True
@@ -241,7 +211,7 @@ object frmMain: TfrmMain
       Align = alLeft
       BevelKind = bkFlat
       BevelOuter = bvNone
-      TabOrder = 11
+      TabOrder = 9
     end
   end
   object pnlConnectionViews: TPanel

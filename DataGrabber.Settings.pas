@@ -23,10 +23,8 @@ uses
   Vcl.Graphics,
   Data.DB,
 
-  ts.Classes.ConnectionSettings, ts.Interfaces,
-
   DataGrabber.Interfaces, DataGrabber.SQLTemplates, DataGrabber.FormSettings,
-  DataGrabber.ConnectionProfiles;
+  DataGrabber.ConnectionSettings, DataGrabber.ConnectionProfiles;
 
 const
   SETTINGS_FILE = 'Settings.json';

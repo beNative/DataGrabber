@@ -28,7 +28,7 @@ uses
 
   DDuce.Components.GridView, DDuce.Components.DBGridView,
 
-  ts.Interfaces, ts.Components.DBGridViewSort,
+  //ts.Components.DBGridViewSort,
 
   DataGrabber.Interfaces;
 
@@ -43,7 +43,7 @@ type
     FSettings               : IDataViewSettings;
     FData                   : IData;
     FGrid                   : TDBGridView;
-    FGridSort               : TtsDBGridViewSort;
+//    FGridSort               : TtsDBGridViewSort;
 
     {$REGION 'property access methods'}
     function GetName: string;
@@ -60,6 +60,8 @@ type
     function GetPopupMenu: TPopupMenu; reintroduce;
     procedure SetPopupMenu(const Value: TPopupMenu);
     {$ENDREGION}
+
+    procedure DataAfterExecute(Sender: TObject);
 
     procedure InitializeGridColumns;
     procedure InitializeGridColumn(AGridColumn: TDBGridColumn);
@@ -251,9 +253,9 @@ begin
   // the TtsDBGridViewSort component has to be created AFTER the event handler
   // assignments because the component remaps the event handlers, which is not
   // very clean...
-  FGridSort            := TtsDBGridViewSort.Create(Self);
-  FGridSort.DBGridView := FGrid;
-  FGridSort.SortedColumnColorEnabled := True;
+//  FGridSort            := TtsDBGridViewSort.Create(Self);
+  //FGridSort.DBGridView := FGrid;
+//  FGridSort.SortedColumnColorEnabled := True;
 end;
 
 constructor TfrmGridView.Create;
@@ -261,13 +263,16 @@ begin
   inherited Create(Application);
 end;
 
+procedure TfrmGridView.DataAfterExecute(Sender: TObject);
+begin
+  UpdateView;
+end;
+
 procedure TfrmGridView.BeforeDestruction;
 begin
-  if Assigned(FData) then
-    (FData as IDataViews).UnRegisterDataView(Self);
-//  FConstCols := nil;
-//  FEmptyCols := nil;
   inherited BeforeDestruction;
+  if Assigned(FData) then
+    (FData as IDataEvents).OnAfterExecute.Remove(DataAfterExecute);
 end;
 {$ENDREGION}
 
@@ -350,9 +355,11 @@ procedure TfrmGridView.SetData(const Value: IData);
 begin
   if Value <> Data then
   begin
+    if Data <> nil then
+     (Data as IDataEvents).OnAfterExecute.Remove(DataAfterExecute);
     FData := Value;
-    (FData as IDataViews).RegisterDataView(Self);
-    dscMain.DataSet := Data.DataSet;
+    (Data as IDataEvents).OnAfterExecute.Add(DataAfterExecute);
+    dscMain.DataSet := DataSet;
     UpdateView;
   end;
 end;
@@ -377,8 +384,8 @@ end;
 
 procedure TfrmGridView.dscMainStateChange(Sender: TObject);
 begin
-  FGridSort.SortedFieldName := '';
-  FGridSort.SortDirection := gsNone;
+//  FGridSort.SortedFieldName := '';
+//  FGridSort.SortDirection := gsNone;
 end;
 
 procedure TfrmGridView.FGridCellAcceptCursor(Sender: TObject; Cell: TGridCell;
@@ -429,7 +436,7 @@ end;
 
 procedure TfrmGridView.FGridClearMultiSelect(Sender: TObject);
 begin
-  (Data as IDataSelection).SelectedRecords.Clear;
+  //(Data as IDataSelection).SelectedRecords.Clear;
 end;
 
 procedure TfrmGridView.FGridEditCanModify(Sender: TObject; Cell: TGridCell;
@@ -695,7 +702,7 @@ procedure TfrmGridView.UpdateMultiSelection(const AFieldName: string;
 begin
   BeginUpdate;
   try
-    (Data as IDataSelection).Update(AFieldName, AFieldValue);
+    //(Data as IDataSelection).Update(AFieldName, AFieldValue);
   finally
     EndUpdate;
   end;

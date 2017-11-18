@@ -26,8 +26,6 @@ uses
 
   VirtualTrees,
 
-  ts.Interfaces,
-
   DataGrabber.Interfaces, DataGrabber.ConnectionProfiles;
 
 {
@@ -116,6 +114,7 @@ type
 
     procedure ApplySettings;
 
+
   public
     procedure AfterConstruction; override;
     constructor Create(
@@ -124,6 +123,9 @@ type
       ADataView   : IDGDataView;
       AData       : IData
     ); reintroduce; virtual;
+    procedure BeforeDestruction; override;
+
+
 
     property Form: TForm
       read GetForm;
@@ -168,6 +170,7 @@ begin
   FEditorView     := AEditorView;
   FActiveDataView := ADataView;
   FActiveData     := AData;
+
   ActiveDataView.AssignParent(pnlBottom);
 end;
 
@@ -177,6 +180,14 @@ begin
   InitializeEditorView;
   InitializeConnectionProfilesView;
   ApplySettings;
+end;
+
+procedure TfrmConnectionView.BeforeDestruction;
+begin
+  FEditorView := nil;
+  FActiveDataView := nil;
+  FActiveData := nil;
+  inherited BeforeDestruction;
 end;
 
 procedure TfrmConnectionView.InitializeEditorView;
@@ -337,13 +348,9 @@ begin
     ];
     Application.Title := CP.Name;
     Caption := CP.Name;
-    if CP.ConnectionType <> '' then
-    begin
-      FActiveData.Connection.ConnectionSettings.Assign(CP.ConnectionSettings);
-      FActiveData.PacketRecords := CP.PacketRecords;
-      //FActiveData.ProviderMode  := CP.ProviderMode;
-      FActiveData.FetchOnDemand := CP.FetchOnDemand;
-    end;
+      //FActiveData.Connection.ConnectionSettings.Assign(CP.ConnectionSettings);
+    FActiveData.PacketRecords := CP.PacketRecords;
+    FActiveData.FetchOnDemand := CP.FetchOnDemand;
   end;
 end;
 

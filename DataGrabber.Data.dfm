@@ -1,2 +1,0 @@
-inherited dmData: TdmData
-end

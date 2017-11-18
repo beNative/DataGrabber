@@ -27,8 +27,6 @@ uses
 
   DDuce.Components.PropertyInspector,
 
-  ts.Interfaces,
-
   DataGrabber.ConnectionProfiles;
 
 type
@@ -69,14 +67,12 @@ begin
 end;
 
 procedure TProtocolPropertyEditor.GetValues(AValues: TStrings);
-var
-  S: IConnection;
 begin
-  if ConnectionProfile.ConnectionType <> '' then
-  begin
-    S := GlobalContainer.Resolve<IConnection>(ConnectionProfile.ConnectionType);
-    AValues.Assign(S.Protocols);
-  end;
+//  if ConnectionProfile.ConnectionType <> '' then
+//  begin
+//    S := GlobalContainer.Resolve<IConnection>(ConnectionProfile.ConnectionType);
+//    AValues.Assign(S.Protocols);
+//  end;
 end;
 {$ENDREGION}
 

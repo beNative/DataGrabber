@@ -30,13 +30,11 @@ uses
   cxGridCustomTableView, cxGridTableView, cxGridDBTableView, cxInplaceContainer,
   cxVGrid, cxOI, cxGridExportLink, cxGridCustomPopupMenu, cxGridPopupMenu,
   cxLookAndFeels, cxLookAndFeelPainters, cxGridCardView, cxGridBandedTableView,
-  cxGridDBCardView, cxGridDBBandedTableView, cxNavigator,
+  cxGridDBCardView, cxGridDBBandedTableView, cxNavigator, cxFilter, cxData,
 
   Spring.Collections,
 
-  ts.Interfaces,
-
-  DataGrabber.Interfaces, cxFilter, cxData;
+  DataGrabber.Interfaces;
 
 {
   TODO: DataShaper
@@ -92,6 +90,8 @@ type
     procedure SetPopupMenu(const Value: TPopupMenu);
     function GetGridType: string;
     {$ENDREGION}
+
+    procedure DataAfterExecute(Sender: TObject);
 
   protected
     procedure ApplyGridSettings;
@@ -237,6 +237,11 @@ begin
   Name := '';
 end;
 
+procedure TfrmcxGrid.DataAfterExecute(Sender: TObject);
+begin
+  UpdateView;
+end;
+
 procedure TfrmcxGrid.AfterConstruction;
 begin
   inherited AfterConstruction;
@@ -245,9 +250,9 @@ end;
 
 procedure TfrmcxGrid.BeforeDestruction;
 begin
-  inherited BeforeDestruction;
   if Assigned(FData) then
-    (FData as IDataViews).UnRegisterDataView(Self);
+    (FData as IDataEvents).OnAfterExecute.Remove(DataAfterExecute);
+  inherited BeforeDestruction;
 end;
 {$ENDREGION}
 
@@ -262,9 +267,9 @@ begin
   if Value <> Data then
   begin
     if Data <> nil then
-      (FData as IDataViews).UnregisterDataView(Self);
+     (Data as IDataEvents).OnAfterExecute.Remove(DataAfterExecute);
     FData := Value;
-    (FData as IDataViews).RegisterDataView(Self);
+    (Data as IDataEvents).OnAfterExecute.Add(DataAfterExecute);
     dscMain.DataSet := DataSet;
     UpdateView;
   end;

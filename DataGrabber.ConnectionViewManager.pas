@@ -23,9 +23,9 @@ uses
   System.ImageList,
   Vcl.ActnList, Vcl.Menus, Vcl.ImgList, Vcl.Controls,
 
-  ts.Interfaces, ts.Modules.DataInspector, ts.Modules.FieldInspector,
+  DataGrabber.DataInspector, DataGrabber.FieldInspector,
 
-  DataGrabber.Interfaces, DataGrabber.Data, DataGrabber.ConnectionProfiles,
+  DataGrabber.Interfaces, DataGrabber.ConnectionProfiles,
 
   DDuce.Logger;
 
@@ -233,6 +233,7 @@ uses
   DDuce.ObjectInspector.zObjectInspector,
 
   DataGrabber.Settings.Dialog, DataGrabber.ConnectionView,
+  DataGrabber.Data.FireDac,
 
   Spring.Container;
 
@@ -385,7 +386,7 @@ end;
 
 procedure TdmConnectionViewManager.actInspectConnectionExecute(Sender: TObject);
 begin
-  InspectComponent(ActiveData.Connection.Connection);
+  ///InspectComponent(ActiveData.Connection.Connection);
 end;
 
 procedure TdmConnectionViewManager.actInspectDataSetExecute(Sender: TObject);
@@ -487,19 +488,19 @@ end;
 
 procedure TdmConnectionViewManager.actPrintExecute(Sender: TObject);
 begin
-  (ActiveData as IDataReport).PrintReport;
+  //(ActiveData as IDataReport).PrintReport;
 end;
 
 procedure TdmConnectionViewManager.actDesignerExecute(Sender: TObject);
 begin
-  (ActiveData as IDataReport).DesignReport;
-  (ActiveData as IDataReport).EditProperties;
+//  (ActiveData as IDataReport).DesignReport;
+//  (ActiveData as IDataReport).EditProperties;
 end;
 
 procedure TdmConnectionViewManager.actPreviewExecute(Sender: TObject);
 begin
-  (ActiveData as IDataReport).ReportTitle := 'DataGrabber';
-  (ActiveData as IDataReport).PreviewReport;
+//  (ActiveData as IDataReport).ReportTitle := 'DataGrabber';
+//  (ActiveData as IDataReport).PreviewReport;
 end;
 {$ENDREGION}
 {$ENDREGION}
@@ -655,7 +656,6 @@ var
   EV : IEditorView;
   DV : IDGDataView;
   D  : IData;
-  C  : IConnection;
   S  : string;
   CP : TConnectionProfile;
 begin
@@ -665,19 +665,16 @@ begin
   DV.PopupMenu := ConnectionViewPopupMenu;
   if Assigned(FActiveConnectionView) then
   begin
-    S := FActiveConnectionView.ActiveConnectionProfile.ConnectionType;
+    CP := FActiveConnectionView.ActiveConnectionProfile;
   end
   else
   begin
     CP := DefaultConnectionProfile;
-    if Assigned(CP) then
-      S := CP.ConnectionType
-    else
-      S := 'FireDAC';
   end;
-  Logger.Info('Creating connection of type %s', [S]);
-  C := GlobalContainer.Resolve<IConnection>(S);
-  D       := TdmData.Create(Self, C);
+  D := TdmDataFireDAC.Create(Self, FSettings);
+  //(D as IConnection).ConnectionSettings.Assign(CP.ConnectionSettings);
+
+
   DV.Data := D;
   CV := TfrmConnectionView.Create(Self, EV, DV, D);
   FConnectionViewList.Add(CV);

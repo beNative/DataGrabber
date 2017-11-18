@@ -28,27 +28,6 @@ uses
   System.SysUtils,
   Vcl.Forms,
 
-  ts.Interfaces,
-  {$IFDEF ADO}
-  ts.Connection.ADOConnectionAdapter,
-  {$ENDIF}
-
-  {$IFDEF DBX}
-  ts.Connection.DBXConnectionAdapter,
-  {$ENDIF}
-
-  {$IFDEF ZEOSDBO}
-  ts.Connection.ZEOSConnectionAdapter,
-  {$ENDIF}
-
-  {$IFDEF UNIDAC}
-  ts.Connection.UNIConnectionAdapter,
-  {$ENDIF}
-
-  {$IFDEF FIREDAC}
-  ts.Connection.FireDACConnectionAdapter,
-  {$ENDIF}
-
   DataGrabber.ConnectionViewManager, DataGrabber.Settings,
   DataGrabber.Interfaces, DataGrabber.EditorView,
 
@@ -63,13 +42,6 @@ uses
 
   Spring, Spring.Container.Common, Spring.Container;
 
-type
-  TRefCounting = Spring.Container.Common.TRefCounting;
-
-const
-  MIN_POOLSIZE = 1;
-  MAX_POOLSIZE = 5;
-
 procedure RegisterServices;
 begin
   GlobalContainer.RegisterType<TDGSettings>
@@ -82,41 +54,6 @@ begin
 
   GlobalContainer.RegisterType<TfrmConnectionView>
                  .Implements<IConnectionView>;
-
-  {$IFDEF ADO}
-  GlobalContainer.RegisterType<TADOConnectionAdapter>
-                 .Implements<IConnection>('ADO')
-                 .AsSingleton(TRefCounting.True)
-                 .AsPooled(MIN_POOLSIZE, MAX_POOLSIZE);
-  {$ENDIF}
-
-  {$IFDEF ZEOSDBO}
-  GlobalContainer.RegisterType<TZEOSConnectionAdapter>
-                 .Implements<IConnection>('ZEOS')
-                 .AsSingleton(TRefCounting.True)
-                 .AsPooled(MIN_POOLSIZE, MAX_POOLSIZE);
-  {$ENDIF}
-
-  {$IFDEF UNIDAC}
-  GlobalContainer.RegisterType<TUNIConnectionAdapter>
-                 .Implements<IConnection>('UNI')
-                 .AsSingleton(TRefCounting.True)
-                 .AsPooled(MIN_POOLSIZE, MAX_POOLSIZE);
-  {$ENDIF}
-
-  {$IFDEF FIREDAC}
-  GlobalContainer.RegisterType<TFireDACConnectionAdapter>
-                 .Implements<IConnection>('FireDAC')
-                 .AsSingleton(TRefCounting.True)
-                 .AsPooled(MIN_POOLSIZE, MAX_POOLSIZE);
-  {$ENDIF}
-
-  {$IFDEF DBX}
-  GlobalContainer.RegisterType<TDBXConnectionAdapter>
-                 .Implements<IConnection>('DBX')
-                 .AsSingleton(TRefCounting.True)
-                 .AsPooled(MIN_POOLSIZE, MAX_POOLSIZE);
-  {$ENDIF}
 
   {$IFDEF DEVEXPRESS}
   GlobalContainer.RegisterType<TfrmcxGrid>

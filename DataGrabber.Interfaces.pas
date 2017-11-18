@@ -23,13 +23,27 @@ uses
   Vcl.Graphics, Vcl.Controls, Vcl.Menus, Vcl.Forms, Vcl.ActnList,
   Data.DB,
 
-  Spring.Collections,
-
-  DataGrabber.ConnectionProfiles, DataGrabber.FormSettings,
+  Spring, Spring.Collections,
 
   BCEditor.Editor.Base,
 
-  ts.Classes.ConnectionSettings, ts.Interfaces;
+  DDuce.DynamicRecord,
+
+  DataGrabber.ConnectionProfiles, DataGrabber.FormSettings,
+  DataGrabber.ConnectionSettings;
+
+
+type
+  TDataType = (
+    dtBoolean,
+    dtString,
+    dtInteger,
+    dtFloat,
+    dtDate,
+    dtTime,
+    dtDateTime,
+    dtNULL
+  );
 
 const
   DEFAULT_DATATYPE_COLORS : array [TDataType] of TColor = (
@@ -47,6 +61,124 @@ const
 type
   TConnectionViewList = TInterfaceList;
   IEditorView = interface;
+
+  IData = interface
+  ['{E9302765-9038-43CE-AEEA-F51B70F27983}']
+    {$REGION 'property access methods'}
+    function GetDataSet : TDataSet;
+    function GetRecordCount : Integer;
+    function GetExecuted: Boolean;
+    function GetActive: Boolean;
+    //function GetConnection: IConnection;
+    procedure SetExecuted(const Value: Boolean);
+    function GetMaxRecords: Integer;
+    procedure SetMaxRecords(const Value: Integer);
+    function GetPacketRecords: Integer;
+    procedure SetPacketRecords(const Value: Integer);
+    function GetSQL: string;
+    procedure SetSQL(const Value: string);
+    function GetCanModify: Boolean;
+    function GetFetchOnDemand: Boolean;
+    procedure SetFetchOnDemand(const Value: Boolean);
+    {$ENDREGION}
+
+    procedure Execute;
+
+    property SQL: string
+      read GetSQL write SetSQL;
+
+    property DataSet: TDataSet
+      read GetDataSet;
+
+    property Active: Boolean
+      read GetActive;
+
+    property CanModify: Boolean
+      read GetCanModify;
+
+    property Executed: Boolean
+      read GetExecuted write SetExecuted;
+
+    property RecordCount: Integer
+      read GetRecordCount;
+
+    property MaxRecords: Integer
+      read GetMaxRecords write SetMaxRecords;
+
+    property PacketRecords: Integer
+      read GetPacketRecords write SetPacketRecords;
+
+    property FetchOnDemand: Boolean
+      read GetFetchOnDemand write SetFetchOnDemand;
+
+  end;
+
+  IDataViewSettings = interface
+['{217E9DD3-DCAE-416F-B0F6-6BC9997BE2BC}']
+    {$REGION 'property access methods'}
+    function GetDataTypeColor(Index: TDataType): TColor;
+    function GetFieldTypeColor(Index: TFieldType): TColor;
+    procedure SetDataTypeColor(Index: TDataType; const Value: TColor);
+    function GetGridCellColoring: Boolean;
+    procedure SetGridCellColoring(const Value: Boolean);
+    function GetShowHorizontalGridLines: Boolean;
+    function GetShowVerticalGridLines: Boolean;
+    procedure SetShowHorizontalGridLines(const Value: Boolean);
+    procedure SetShowVerticalGridLines(const Value: Boolean);
+    {$ENDREGION}
+
+    property DataTypeColors[Index: TDataType]: TColor
+      read GetDataTypeColor write SetDataTypeColor;
+
+    property FieldTypeColors[Index: TFieldType]: TColor
+      read GetFieldTypeColor;
+
+    property GridCellColoring: Boolean
+      read GetGridCellColoring write SetGridCellColoring;
+
+    property ShowHorizontalGridLines: Boolean
+      read GetShowHorizontalGridLines write SetShowHorizontalGridLines;
+
+    property ShowVerticalGridLines: Boolean
+      read GetShowVerticalGridLines write SetShowVerticalGridLines;
+  end;
+
+
+  IDataView = interface
+  ['{66617CAF-874A-4637-878B-93B8B73C5129}']
+    {$REGION 'property access methods'}
+    function GetName: string;
+    function GetGridType: string;
+    function GetSettings: IDataViewSettings;
+    procedure SetSettings(const Value: IDataViewSettings);
+    {$ENDREGION}
+
+    procedure UpdateView;
+
+    property Name: string
+      read GetName;
+
+    property GridType: string
+      read GetGridType;
+  end;
+
+  IDisplayData = interface
+  ['{23DD7881-2A51-454D-90F2-3706D6635DF7}']
+    {$REGION 'property access methods'}
+    function GetDisplayValues : IDynamicRecord;
+    function GetDisplayLabels : IDynamicRecord;
+    {$ENDREGION}
+
+    function IsLookupField(const AFieldName: string): Boolean;
+    function IsCheckBoxField(const AFieldName: string): Boolean;
+    function IsRequiredField(const AFieldName: string): Boolean;
+
+    property DisplayLabels: IDynamicRecord
+      read GetDisplayLabels;
+
+    property DisplayValues: IDynamicRecord
+      read GetDisplayValues;
+  end;
 
   IDGDataView = interface(IDataView)
     ['{B88F97B2-35BA-42A3-A35A-8122604E482B}']
@@ -325,6 +457,14 @@ type
 
     property ShowFavoriteFieldsOnly: Boolean
       read GetShowFavoriteFieldsOnly write SetShowFavoriteFieldsOnly;
+  end;
+
+  IDataEvents = interface
+  ['{DC3463F3-B311-4E5A-AA9C-34F5EE468759}']
+    function GetOnAfterExecute: IEvent<TNotifyEvent>;
+
+    property OnAfterExecute: IEvent<TNotifyEvent>
+      read GetOnAfterExecute;
   end;
 
 implementation

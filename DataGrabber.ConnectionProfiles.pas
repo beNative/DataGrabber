@@ -22,7 +22,7 @@ uses
   System.SysUtils, System.Classes,
   Vcl.Graphics,
 
-  ts.Classes.ConnectionSettings;
+  DataGrabber.ConnectionSettings;
 
 type
   TConnectionProfiles = class;
@@ -47,7 +47,6 @@ type
     procedure SetVisibleItems(const Value: string);
     function GetFavoriteFields: string;
     procedure SetFavoriteFields(const Value: string);
-    procedure SetConnectionType(const Value: string);
     procedure SetDisplayName(const Value: string); override;
     function GetDisplayName: string; override;
 
@@ -66,6 +65,7 @@ type
     property Name: string
       read FName write SetDisplayName;
 
+    { The name as shown in the user interface. }
     property DisplayName: string
       read GetDisplayName write SetDisplayName;
 
@@ -84,17 +84,11 @@ type
     property ConnectionSettings: TConnectionSettings
       read FConnectionSettings write FConnectionSettings;
 
-    property ProviderMode: Boolean
-      read FProviderMode write FProviderMode;
-
     property FetchOnDemand: Boolean
       read FFetchOnDemand write FFetchOnDemand;
 
     property PacketRecords: Integer
       read FPacketRecords write FPacketRecords;
-
-    property ConnectionType: string
-      read FConnectionType write SetConnectionType;
   end;
 
   TConnectionProfileClass = class of TConnectionProfile;
@@ -284,15 +278,6 @@ begin
   inherited Collection := Value;
 end;
 
-procedure TConnectionProfile.SetConnectionType(const Value: string);
-begin
-  if Value <> ConnectionType then
-  begin
-    FConnectionType := Value;
-    ConnectionSettings.Protocol := '';
-  end;
-end;
-
 // By default, DisplayName is the name of the TCollectionItem descendant class
 // of which the item is an instance. By providing a dedicated field each item
 // in the Collection editor can be displayed with a unique name.
@@ -346,7 +331,6 @@ begin
    try
      ProfileColor     := CP.ProfileColor;
      ConnectionString := CP.ConnectionString;
-     ConnectionType   := CP.ConnectionType;
      VisibleItems     := CP.VisibleItems;
      ConnectionSettings.Assign(CP.ConnectionSettings);
    finally

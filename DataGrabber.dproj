@@ -110,49 +110,18 @@
             <MainSource>MainSource</MainSource>
         </DelphiCompile>
         <DCCReference Include="DataGrabber.Resources.pas"/>
-        <DCCReference Include="Modules\ts.Modules.DataInspector.pas">
+        <DCCReference Include="DataGrabber.DataInspector.pas">
             <Form>frmDataInspector</Form>
         </DCCReference>
-        <DCCReference Include="Modules\ts.Data.pas">
-            <Form>dmCustomModule</Form>
-            <DesignClass>TDataModule</DesignClass>
-        </DCCReference>
-        <DCCReference Include="Modules\ts.Interfaces.pas"/>
         <DCCReference Include="DataGrabber.Utils.pas"/>
-        <DCCReference Include="Modules\ts.Classes.SQL.Statement.pas"/>
-        <DCCReference Include="Modules\ts.Classes.ConnectionSettings.pas"/>
         <DCCReference Include="DataGrabber.Settings.pas"/>
         <DCCReference Include="DataGrabber.SQLTemplates.pas"/>
         <DCCReference Include="DataGrabber.Settings.Dialog.pas">
             <Form>frmSettingsDialog</Form>
         </DCCReference>
-        <DCCReference Include="Modules\ts.Classes.ModuleManager.pas"/>
-        <DCCReference Include="Modules\ts.Modules.FieldInspector.pas">
+        <DCCReference Include="DataGrabber.FieldInspector.pas">
             <Form>frmFieldInspector</Form>
         </DCCReference>
-        <DCCReference Include="Modules\ts.DataView.pas">
-            <Form>frmDataView</Form>
-        </DCCReference>
-        <DCCReference Include="DataGrabber.PropertyEditors.pas"/>
-        <DCCReference Include="Modules\ts.Data.Selection.pas"/>
-        <DCCReference Include="Modules\ts.Data.NativeADO.pas"/>
-        <DCCReference Include="Modules\ts.Data.Native.pas"/>
-        <DCCReference Include="Modules\ts.Data.NativeDBX.pas"/>
-        <DCCReference Include="Modules\ts.Classes.SQL.CompoundCondition.pas"/>
-        <DCCReference Include="Modules\ts.Classes.SQL.ComparisonCondition.pas"/>
-        <DCCReference Include="Modules\ts.Classes.SQL.Condition.pas"/>
-        <DCCReference Include="Modules\ts.Classes.SQL.Params.pas"/>
-        <DCCReference Include="Modules\ts.Utils.pas"/>
-        <DCCReference Include="Modules\ts.Classes.Alignment.pas"/>
-        <DCCReference Include="Modules\ts.Modules.List.Columns.pas"/>
-        <DCCReference Include="Modules\ts.DBUtils.pas"/>
-        <DCCReference Include="Modules\ts.Modules.Memo.pas">
-            <Form>frmMemo</Form>
-        </DCCReference>
-        <DCCReference Include="Modules\ts.Components.DBGridViewSort.pas"/>
-        <DCCReference Include="Modules\ts.Utils.Actions.pas"/>
-        <DCCReference Include="Modules\ts.Connection.ADOConnectionAdapter.pas"/>
-        <DCCReference Include="Modules\ts.Connection.DBXConnectionAdapter.pas"/>
         <DCCReference Include="DataView\DataGrabber.DataView.cxGrid.pas">
             <Form>frmcxGrid</Form>
             <FormType>dfm</FormType>
@@ -162,11 +131,6 @@
             <Form>frmGridView</Form>
             <FormType>dfm</FormType>
         </DCCReference>
-        <DCCReference Include="Modules\ts.Connection.CustomConnectionAdapter.pas"/>
-        <DCCReference Include="Modules\ts.Connection.pas">
-            <Form>dmConnection</Form>
-            <DesignClass>TDataModule</DesignClass>
-        </DCCReference>
         <DCCReference Include="DataGrabber.RegisterServices.pas"/>
         <DCCReference Include="DataGrabber.ConnectionProfiles.pas"/>
         <DCCReference Include="DataGrabber.ConnectionView.pas">
@@ -175,11 +139,6 @@
         </DCCReference>
         <DCCReference Include="DataGrabber.ConnectionViewManager.pas">
             <Form>dmConnectionViewManager</Form>
-            <FormType>dfm</FormType>
-            <DesignClass>TDataModule</DesignClass>
-        </DCCReference>
-        <DCCReference Include="DataGrabber.Data.pas">
-            <Form>dmData</Form>
             <FormType>dfm</FormType>
             <DesignClass>TDataModule</DesignClass>
         </DCCReference>
@@ -194,9 +153,6 @@
             <Form>frmMain</Form>
             <FormType>dfm</FormType>
         </DCCReference>
-        <DCCReference Include="Modules\ts.Classes.KeyValues.pas"/>
-        <DCCReference Include="Modules\ts.Data.NativeFireDAC.pas"/>
-        <DCCReference Include="Modules\ts.Connection.FireDACConnectionAdapter.pas"/>
         <DCCReference Include="..\..\libraries\dduce\Source\DDuce.DynamicRecord.pas"/>
         <DCCReference Include="..\..\libraries\dduce\Source\DDuce.RandomData.pas"/>
         <DCCReference Include="..\..\libraries\dduce\Source\DDuce.Reflect.pas"/>
@@ -401,9 +357,6 @@
             <Form>frmComponentInspector</Form>
             <FormType>dfm</FormType>
         </DCCReference>
-        <DCCReference Include="Modules\ts.Data.Report.pas"/>
-        <DCCReference Include="Modules\ts.Classes.ListReport.Columns.pas"/>
-        <DCCReference Include="Modules\ts.Classes.ListReport.pas"/>
         <DCCReference Include="..\..\components\zcontrols\Source\zValueManager.pas"/>
         <DCCReference Include="..\..\components\zcontrols\Source\zObjInspTypes.pas"/>
         <DCCReference Include="..\..\libraries\dduce\Source\Factories\DDuce.Factories.VirtualTrees.pas"/>
@@ -413,6 +366,7 @@
             <FormType>dfm</FormType>
             <DesignClass>TDataModule</DesignClass>
         </DCCReference>
+        <DCCReference Include="DataGrabber.ConnectionSettings.pas"/>
         <None Include="ModelSupport_DataGrabber\XMLSerializer\default.txvpck"/>
         <None Include="ModelSupport_DataGrabber\ts\Classes\SQL\Statement\default.txaPackage"/>
         <None Include="ModelSupport_DataGrabber\DataGrabber\DBXConnection\default.txaPackage"/>
@@ -758,6 +712,12 @@
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
+                <DeployFile LocalName="ModelSupport_DataGrabber\DataGrabber\DBXConnection\default.txvpck" Configuration="Release" Class="ProjectFile">
+                    <Platform Name="Win32">
+                        <RemoteDir>.\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
                 <DeployFile LocalName="ModelSupport_DataGrabber\DataGrabber\GridView\default.txaPackage" Configuration="Debug" Class="ProjectFile">
                     <Platform Name="Win32">
                         <RemoteDir>.\</RemoteDir>
@@ -765,12 +725,6 @@
                     </Platform>
                 </DeployFile>
                 <DeployFile LocalName="ModelSupport_DataGrabber\DataGrabber\GridView\default.txvpck" Configuration="Release" Class="ProjectFile">
-                    <Platform Name="Win32">
-                        <RemoteDir>.\</RemoteDir>
-                        <Overwrite>true</Overwrite>
-                    </Platform>
-                </DeployFile>
-                <DeployFile LocalName="ModelSupport_DataGrabber\DataGrabber\DBXConnection\default.txvpck" Configuration="Release" Class="ProjectFile">
                     <Platform Name="Win32">
                         <RemoteDir>.\</RemoteDir>
                         <Overwrite>true</Overwrite>

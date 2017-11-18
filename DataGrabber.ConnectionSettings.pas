@@ -14,7 +14,8 @@
   limitations under the License.
 }
 
-unit ts.Classes.ConnectionSettings;
+
+unit DataGrabber.ConnectionSettings;
 
 interface
 
@@ -256,5 +257,6 @@ end;
 
 initialization
   RegisterClasses([TConnectionSettings]);
+
 
 end.

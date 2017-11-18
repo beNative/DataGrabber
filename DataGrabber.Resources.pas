@@ -53,8 +53,6 @@ resourcestring
   SEmptyFieldCount    = '%d empty fields';
   SUpdateable         = 'Updateable';
   SReadOnly           = 'ReadOnly';
-  SProviderMode       = 'Provider mode';
-  SNativeMode         = 'Native mode';
   SConnected          = 'Connected';
   SDisconnected       = 'Disconnected';
 

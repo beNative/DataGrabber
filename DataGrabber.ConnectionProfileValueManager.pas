@@ -62,7 +62,7 @@ uses
 
   Spring.Container,
 
-  ts.Interfaces,
+  DataGrabber.Interfaces,
 
   DDuce.Logger;
 
@@ -126,23 +126,22 @@ end;
 procedure TConnectionProfileValueManager.GetListItems(
   const PItem: PPropItem; Items: TStrings);
 var
-  C  : IConnection;
   CP : TConnectionProfile;
 begin
   CP := nil;
-  if PItem.Name = 'ConnectionType' then
-  begin
-    for C in GlobalContainer.ResolveAll<IConnection> do
-      Items.Add(C.ConnectionType);
-  end
-  else if PItem.Name = 'Protocol' then
+//  if PItem.Name = 'ConnectionType' then
+//  begin
+//    for C in GlobalContainer.ResolveAll<IConnection> do
+//      Items.Add(C.ConnectionType);
+//  end
+  if PItem.Name = 'Protocol' then
   begin
     CP := PItem.Component as TConnectionProfile;
-    if CP.ConnectionType <> '' then
-    begin
-      C := GlobalContainer.Resolve<IConnection>(CP.ConnectionType);
-      Items.Assign(C.Protocols);
-    end;
+//    if CP.ConnectionType <> '' then
+//    begin
+//      C := GlobalContainer.Resolve<IConnection>(CP.ConnectionType);
+//      Items.Assign(C.Protocols);
+//    end;
   end
   else
   begin
