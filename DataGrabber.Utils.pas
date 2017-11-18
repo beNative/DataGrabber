@@ -21,15 +21,25 @@ interface
 uses
   Winapi.Windows,
   System.Classes,
-  Vcl.Controls,
+  Vcl.Controls, Vcl.Graphics,
 
   VirtualTrees;
 
 function ContainsFocus(AControl: TWinControl): Boolean;
 
-function GetTextWidth(const AText: string): Integer;
+function GetTextWidth(const AText: string): Integer; overload;
 
 function GetMaxTextWidth(AStrings: TStrings): Integer;
+
+function GetTextWidth(
+  const AText : string;
+  AFont       : TFont
+): Integer; overload;
+
+function GetTextHeight(
+  const AText : string;
+  AFont       : TFont
+): Integer;
 
 function Explode(ASeparator, AText: string): TStringList;
 
@@ -50,15 +60,158 @@ procedure SelectNode(
   ANode : PVirtualNode
 ); overload;
 
+procedure RunApplication(
+  AParams : string;
+  AFile   : string;
+  AWait   : Boolean = True
+);
+
+procedure LockPaint(AControl: TWinControl);
+
+procedure UnlockPaint(AControl: TWinControl);
+
 implementation
 
 uses
+  Winapi.ShellAPI, Winapi.Messages,
   System.Math, System.Character, System.SysUtils,
-  Vcl.Forms,
-
-  ts.Utils;
+  Vcl.Forms;
 
 {$REGION 'interfaced routines'}
+function GetTextHeight(const AText: string; AFont: TFont): Integer;
+var
+  Bitmap: TBitmap;
+begin
+  Bitmap := TBitmap.Create;
+  try
+    Bitmap.Canvas.Font.Assign(AFont);
+    Result := Bitmap.Canvas.TextExtent(AText).cy;
+  finally
+    Bitmap.Free;
+  end;
+end;
+
+function GetTextWidth(const AText: string; AFont: TFont): Integer;
+var
+  Bitmap : TBitmap;
+begin
+  Bitmap := TBitmap.Create;
+  try
+    Bitmap.Canvas.Font.Assign(AFont);
+    Result := Bitmap.Canvas.TextExtent(AText).cx;
+  finally
+    Bitmap.Free;
+  end;
+end;
+
+procedure LockPaint(AControl: TWinControl);
+begin
+  if Assigned(AControl) and (AControl.Handle <> 0) then
+  begin
+    SendMessage(AControl.Handle, WM_SETREDRAW, 0, 0);
+  end;
+end;
+
+procedure UnlockPaint(AControl: TWinControl);
+begin
+  if Assigned(AControl) and (AControl.Handle <> 0) then
+  begin
+    SendMessage(AControl.Handle, WM_SETREDRAW, 1, 0);
+    RedrawWindow(
+      AControl.Handle,
+      nil,
+      0,
+      RDW_ERASE or RDW_FRAME or RDW_INVALIDATE or RDW_ALLCHILDREN
+    );
+  end;
+end;
+
+procedure RunApplication(AParams: string; AFile: string; AWait : Boolean);
+  // borrowed from Project JEDI Code Library (JCL)
+  procedure ResetMemory(out P; Size: Longint);
+  begin
+    if Size > 0 then
+    begin
+      Byte(P) := 0;
+      FillChar(P, Size, 0);
+    end;
+  end;
+  // borrowed from Project JEDI Code Library (JCL)
+  function PCharOrNil(const S: string): PChar;
+  begin
+    Result := Pointer(S);
+  end;
+  // borrowed from Project JEDI Code Library (JCL)
+  function ShellExecAndWait(const FileName: string;
+  const Parameters: string = ''; const Verb: string = '';
+  CmdShow: Integer = SW_HIDE; const Directory: string = ''): Boolean;
+  var
+    Sei: TShellExecuteInfo;
+    Res: LongBool;
+    Msg: tagMSG;
+  begin
+    ResetMemory(Sei, SizeOf(Sei));
+    Sei.cbSize := SizeOf(Sei);
+    Sei.fMask := SEE_MASK_DOENVSUBST  or SEE_MASK_FLAG_NO_UI  or SEE_MASK_NOCLOSEPROCESS or
+      SEE_MASK_FLAG_DDEWAIT;
+    Sei.lpFile := PChar(FileName);
+    Sei.lpParameters := PCharOrNil(Parameters);
+    Sei.lpVerb := PCharOrNil(Verb);
+    Sei.nShow := CmdShow;
+    Sei.lpDirectory := PCharOrNil(Directory);
+    {$TYPEDADDRESS ON}
+    Result := ShellExecuteEx(@Sei);
+    {$IFNDEF TYPEDADDRESS_ON}
+    {$TYPEDADDRESS OFF}
+    {$ENDIF ~TYPEDADDRESS_ON}
+    if Result then
+    begin
+      WaitForInputIdle(Sei.hProcess, INFINITE);
+      while WaitForSingleObject(Sei.hProcess, 10) = WAIT_TIMEOUT do
+        repeat
+          Msg.hwnd := 0;
+          Res := PeekMessage(Msg, Sei.Wnd, 0, 0, PM_REMOVE);
+          if Res then
+          begin
+            TranslateMessage(Msg);
+            DispatchMessage(Msg);
+          end;
+        until not Res;
+      CloseHandle(Sei.hProcess);
+    end;
+  end;
+   // borrowed from Project JEDI Code Library (JCL)
+  function ShellExecEx(const FileName: string; const Parameters: string = '';
+  const Verb: string = ''; CmdShow: Integer = SW_SHOWNORMAL): Boolean;
+  var
+    Sei: TShellExecuteInfo;
+  begin
+    ResetMemory(Sei, SizeOf(Sei));
+    Sei.cbSize := SizeOf(Sei);
+    Sei.fMask := SEE_MASK_DOENVSUBST or SEE_MASK_FLAG_NO_UI;
+    Sei.lpFile := PChar(FileName);
+    Sei.lpParameters := PCharOrNil(Parameters);
+    Sei.lpVerb := PCharOrNil(Verb);
+    Sei.nShow := CmdShow;
+    {$TYPEDADDRESS ON}
+    Result := ShellExecuteEx(@Sei);
+    {$IFNDEF TYPEDADDRESS_ON}
+    {$TYPEDADDRESS OFF}
+    {$ENDIF ~TYPEDADDRESS_ON}
+  end;
+
+begin
+  if FileExists(AFile) then
+  begin
+    if AWait then
+      ShellExecAndWait(AFile, AParams)
+    else
+      ShellExecEx(AFile, AParams);
+  end
+  else
+    raise Exception.CreateFmt('"%s" not found', [AFile]);
+end;
+
 function GetTextWidth(const AText: string): Integer;
 var
   SL      : TStringList;

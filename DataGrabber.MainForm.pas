@@ -30,8 +30,7 @@ uses
 
   ChromeTabs, ChromeTabsClasses, ChromeTabsTypes,
 
-  ts.Interfaces, ts.Classes.ConnectionSettings, ts.Data,
-
+  DataGrabber.ConnectionSettings,
   DataGrabber.Interfaces, DataGrabber.Settings, DataGrabber.ConnectionProfiles;
 
 {
@@ -57,9 +56,6 @@ uses
 }
 
 type
-  TModuleClass = class of TdmCustomModule;
-
-type
   TfrmMain = class(TForm)
     {$REGION 'designer controls'}
     aclMain                       : TActionList;
@@ -68,7 +64,6 @@ type
     ctMain                        : TChromeTabs;
     imlSpinner                    : TImageList;
     pnlConnectionStatus           : TPanel;
-    pnlConnectionType             : TPanel;
     pnlConnectionViews            : TPanel;
     pnlConstantFieldsCount        : TPanel;
     pnlEditMode                   : TPanel;
@@ -76,7 +71,6 @@ type
     pnlEmptyFieldsCount           : TPanel;
     pnlFieldCount                 : TPanel;
     pnlGridType                   : TPanel;
-    pnlProviderMode               : TPanel;
     pnlRecordCount                : TPanel;
     pnlStatus                     : TPanel;
     pnlStatusBar                  : TPanel;
@@ -129,14 +123,13 @@ type
 
   private
     FManager     : IConnectionViewManager;
-    FSettings    : IDGSettings;
-    FConnections : IFuture<Boolean>;
-    function GetActiveConnectionView: IConnectionView;
-    function GetActiveConnectionProfile: TConnectionProfile;
+    FSettings    : ISettings;
 
   protected
+    function GetActiveConnectionView: IConnectionView;
+    function GetActiveConnectionProfile: TConnectionProfile;
     function GetData: IData;
-    function GetSettings: IDGSettings;
+    function GetSettings: ISettings;
     function GetManager: IConnectionViewManager;
 
     procedure UpdateStatusBar;
@@ -166,7 +159,7 @@ type
     property Data: IData
       read GetData;
 
-    property Settings: IDGSettings
+    property Settings: ISettings
       read GetSettings;
   end;
 
@@ -183,11 +176,9 @@ uses
 
   Spring.Container,
 
-  ts.Utils,
-
   DDuce.ObjectInspector, DDuce.Logger, DDuce.Logger.Factories,
 
-  DataGrabber.Resources, DataGrabber.Factories;
+  DataGrabber.Utils, DataGrabber.Resources, DataGrabber.Factories;
 
 {$REGION 'construction and destruction'}
 procedure TfrmMain.AfterConstruction;
@@ -196,31 +187,12 @@ begin
   Logger.Channels.Add(TLoggerFactories.CreateWinIPCChannel);
   Logger.Clear;
   FManager  := GlobalContainer.Resolve<IConnectionViewManager>;
-  FSettings := GlobalContainer.Resolve<IDGSettings>;
+  FSettings := GlobalContainer.Resolve<ISettings>;
   AddConnectionView;
   tlbMain.Images := FManager.ActionList.Images;
   InitializeActions;
   pnlStatus.Caption := SReady;
-  SetWindowSizeGrip(pnlStatusBar.Handle, True);
-
   FManager.ActiveConnectionView.EditorView.Text := EXAMPLE_QUERY;
-
-  // prepare registered connections in seperate thread. This reduces load time
-  // when the settings dialog is first invoked.
-  FConnections := TTask.Future<Boolean>(function: Boolean
-    var
-      C : IConnection;
-    begin
-      Result := True;
-      CoInitialize(nil);
-      try
-        for C in GlobalContainer.ResolveAll<IConnection> do
-          Result := Result and Assigned(C);
-      finally
-        CoUninitialize;
-      end;
-    end
-  );
 end;
 
 procedure TfrmMain.BeforeDestruction;
@@ -345,7 +317,7 @@ begin
   Result := Manager.ActiveData;
 end;
 
-function TfrmMain.GetSettings: IDGSettings;
+function TfrmMain.GetSettings: ISettings;
 begin
   Result := FSettings;
 end;
@@ -364,7 +336,7 @@ begin
   S := APanel.Caption;
   if Trim(S) <> '' then
   begin
-    APanel.Width := ts.Utils.GetTextWidth(APanel.Caption, APanel.Font) + 10;
+    APanel.Width := GetTextWidth(APanel.Caption, APanel.Font) + 10;
     APanel.AlignWithMargins := True;
   end
   else
@@ -480,15 +452,10 @@ begin
     pnlEmptyFieldsCount.Caption    := '';
     if Assigned(ActiveConnectionProfile) then
     begin
-      if ActiveConnectionProfile.ProviderMode then
-        pnlProviderMode.Caption := SProviderMode
-      else
-        pnlProviderMode.Caption := SNativeMode;
-      pnlConnectionType.Caption := ActiveConnectionProfile.ConnectionType;
       pnlGridType.Caption := Settings.GridType;
     end;
   end;
-  if Assigned(Data) and Assigned(Data.Connection) and Data.Connection.Connected then
+  if Assigned(Data) {and Assigned(Data.Connection) and Data.Connection.Connected} then
     pnlConnectionStatus.Caption := SConnected
   else
     pnlConnectionStatus.Caption := SDisconnected;
@@ -502,8 +469,6 @@ begin
   OptimizeWidth(pnlConstantFieldsCount);
   OptimizeWidth(pnlHiddenFieldsCount);
   OptimizeWidth(pnlElapsedTime);
-  OptimizeWidth(pnlConnectionType);
-  OptimizeWidth(pnlProviderMode);
   OptimizeWidth(pnlEditMode);
   OptimizeWidth(pnlGridType);
 end;

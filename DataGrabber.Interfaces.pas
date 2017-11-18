@@ -22,14 +22,28 @@ uses
   System.Classes,
   Vcl.Graphics, Vcl.Controls, Vcl.Menus, Vcl.Forms, Vcl.ActnList,
   Data.DB,
+  FireDAC.Comp.Client,
 
-  Spring.Collections,
-
-  DataGrabber.ConnectionProfiles, DataGrabber.FormSettings,
+  Spring, Spring.Collections,
 
   BCEditor.Editor.Base,
 
-  ts.Classes.ConnectionSettings, ts.Interfaces;
+  DDuce.DynamicRecord,
+
+  DataGrabber.ConnectionProfiles, DataGrabber.FormSettings,
+  DataGrabber.ConnectionSettings;
+
+type
+  TDataType = (
+    dtBoolean,
+    dtString,
+    dtInteger,
+    dtFloat,
+    dtDate,
+    dtTime,
+    dtDateTime,
+    dtNULL
+  );
 
 const
   DEFAULT_DATATYPE_COLORS : array [TDataType] of TColor = (
@@ -48,17 +62,110 @@ type
   TConnectionViewList = TInterfaceList;
   IEditorView = interface;
 
-  IDGDataView = interface(IDataView)
-    ['{B88F97B2-35BA-42A3-A35A-8122604E482B}']
+  IData = interface
+  ['{0E8958C3-CECD-4E3F-A990-B73635E50F26}']
     {$REGION 'property access methods'}
+    function GetDataSet : TDataSet;
+    function GetRecordCount : Integer;
+    function GetExecuted: Boolean;
+    function GetActive: Boolean;
+    procedure SetExecuted(const Value: Boolean);
+    function GetMaxRecords: Integer;
+    procedure SetMaxRecords(const Value: Integer);
+    function GetPacketRecords: Integer;
+    procedure SetPacketRecords(const Value: Integer);
+    function GetSQL: string;
+    procedure SetSQL(const Value: string);
+    function GetCanModify: Boolean;
+    function GetFetchOnDemand: Boolean;
+    procedure SetFetchOnDemand(const Value: Boolean);
+    function GetConnectionSettings: TConnectionSettings;
+    function GetConnection: TFDConnection;
+    {$ENDREGION}
+
+    procedure Execute;
+
+    property SQL: string
+      read GetSQL write SetSQL;
+
+    property DataSet: TDataSet
+      read GetDataSet;
+
+    property Connection: TFDConnection
+      read GetConnection;
+
+    property Active: Boolean
+      read GetActive;
+
+    property CanModify: Boolean
+      read GetCanModify;
+
+    property Executed: Boolean
+      read GetExecuted write SetExecuted;
+
+    property RecordCount: Integer
+      read GetRecordCount;
+
+    property MaxRecords: Integer
+      read GetMaxRecords write SetMaxRecords;
+
+    property ConnectionSettings: TConnectionSettings
+      read GetConnectionSettings;
+
+  end;
+
+  IDataViewSettings = interface
+  ['{62EF3A18-73C5-4FAA-BBA1-D203AD028F38}']
+    {$REGION 'property access methods'}
+    function GetDataTypeColor(Index: TDataType): TColor;
+    function GetFieldTypeColor(Index: TFieldType): TColor;
+    procedure SetDataTypeColor(Index: TDataType; const Value: TColor);
+    function GetGridCellColoring: Boolean;
+    procedure SetGridCellColoring(const Value: Boolean);
+    function GetShowHorizontalGridLines: Boolean;
+    function GetShowVerticalGridLines: Boolean;
+    procedure SetShowHorizontalGridLines(const Value: Boolean);
+    procedure SetShowVerticalGridLines(const Value: Boolean);
+    {$ENDREGION}
+
+    property DataTypeColors[Index: TDataType]: TColor
+      read GetDataTypeColor write SetDataTypeColor;
+
+    property FieldTypeColors[Index: TFieldType]: TColor
+      read GetFieldTypeColor;
+
+    property GridCellColoring: Boolean
+      read GetGridCellColoring write SetGridCellColoring;
+
+    property ShowHorizontalGridLines: Boolean
+      read GetShowHorizontalGridLines write SetShowHorizontalGridLines;
+
+    property ShowVerticalGridLines: Boolean
+      read GetShowVerticalGridLines write SetShowVerticalGridLines;
+  end;
+
+  IDataView = interface
+  ['{50D61670-EBD1-4A52-8915-C8006053E2B2}']
+    {$REGION 'property access methods'}
+    function GetName: string;
+    function GetGridType: string;
+    function GetSettings: IDataViewSettings;
+    procedure SetSettings(const Value: IDataViewSettings);
+
     function GetData: IData;
     procedure SetData(const Value: IData);
     function GetRecordCount: Integer;
-    function GetSettings: IDataViewSettings;
-    procedure SetSettings(const Value: IDataViewSettings);
     function GetPopupMenu: TPopupMenu;
     procedure SetPopupMenu(const Value: TPopupMenu);
     {$ENDREGION}
+
+    procedure UpdateView;
+
+    property Name: string
+      read GetName;
+
+    property GridType: string
+      read GetGridType;
 
     function SelectionToCommaText(AQuoteItems: Boolean = True): string;
     function SelectionToDelimitedTable(
@@ -72,6 +179,7 @@ type
     procedure Copy;
 
     procedure HideSelectedColumns;
+
     procedure BeginUpdate;
     procedure EndUpdate;
 
@@ -92,7 +200,25 @@ type
       read GetPopupMenu write SetPopupMenu;
   end;
 
-  IDGSettings = interface
+  IDisplayData = interface
+  ['{8BC40D7C-00EC-469D-B8A1-675A52A8F2BF}']
+    {$REGION 'property access methods'}
+    function GetDisplayValues : IDynamicRecord;
+    function GetDisplayLabels : IDynamicRecord;
+    {$ENDREGION}
+
+    function IsLookupField(const AFieldName: string): Boolean;
+    function IsCheckBoxField(const AFieldName: string): Boolean;
+    function IsRequiredField(const AFieldName: string): Boolean;
+
+    property DisplayLabels: IDynamicRecord
+      read GetDisplayLabels;
+
+    property DisplayValues: IDynamicRecord
+      read GetDisplayValues;
+  end;
+
+  ISettings = interface
   ['{C6E48393-6FBA-451B-A565-921F11E433F0}']
     {$REGION 'property access methods'}
     function GetGridCellColoring: Boolean;
@@ -167,7 +293,7 @@ type
   end;
 
   IConnectionViews = interface
-  ['{5D11A4DE-8D5F-41A1-9B98-A5EEAB1EE17C}']
+  ['{23BCBF9F-640E-415E-A305-317A049443E4}']
   end;
 
   IConnectionView = interface
@@ -177,11 +303,11 @@ type
 
     function GetForm: TForm;
     function GetActiveConnectionProfile: TConnectionProfile;
-    function GetActiveDataView: IDGDataView;
+    function GetActiveDataView: IDataView;
     function GetEditorView: IEditorView;
     function GetActiveData: IData;
 
-    property ActiveDataView: IDGDataView
+    property ActiveDataView: IDataView
       read GetActiveDataView;
 
     property ActiveData: IData
@@ -202,8 +328,8 @@ type
     {$REGION 'property access methods'}
     function GetActiveConnectionView: IConnectionView;
     procedure SetActiveConnectionView(const Value: IConnectionView);
-    function GetSettings: IDGSettings;
-    function GetActiveDataView: IDGDataView;
+    function GetSettings: ISettings;
+    function GetActiveDataView: IDataView;
     function GetActiveData: IData;
     function GetActionList: TActionList;
     function GetItem(AName: string): TCustomAction;
@@ -217,13 +343,13 @@ type
     property ActiveConnectionView: IConnectionView
       read GetActiveConnectionView write SetActiveConnectionView;
 
-    property ActiveDataView: IDGDataView
+    property ActiveDataView: IDataView
       read GetActiveDataView;
 
     property ActiveData: IData
       read GetActiveData;
 
-    property Settings: IDGSettings
+    property Settings: ISettings
       read GetSettings;
 
     property ActionList: TActionList
@@ -241,7 +367,7 @@ type
   end;
 
   IEditorView = interface
-  ['{E5E24E2A-AAFB-46EB-8E0F-E9BAC2E114FB}']
+  ['{9E365515-2202-458B-98C2-6995344E81DD}']
     {$REGION 'property access methods'}
     function GetText: string;
     procedure SetText(const Value: string);
@@ -265,17 +391,16 @@ type
   end;
 
   ISelection = interface
-  ['{5E7F286D-7975-411F-9559-49616F1445B8}']
-
+  ['{121A5480-7187-4A0C-BCDD-019C6FC635A4}']
   end;
 
   IGroupable = interface
-  ['{54AE6150-862B-4F69-A877-7D72B88C4FB4}']
+  ['{C3E37BA9-5FCF-4AC5-A747-495F0B13E8E4}']
     procedure GroupBySelectedColumns;
   end;
 
   IMergable = interface
-  ['{713C0738-96A5-4A98-B5E4-71A1C96B0D88}']
+  ['{68285D0A-5DE8-4782-BC1F-EF9D4A7A0C7E}']
     {$REGION 'property access methods'}
     function GetMergeColumnCells: Boolean;
     procedure SetMergeColumnCells(const Value: Boolean);
@@ -287,7 +412,7 @@ type
   end;
 
   IFieldLists = interface
-  ['{DB8D457B-101A-4994-9CBB-CAB24EE27ECF}']
+  ['{0AC7FBDA-CAF3-49B2-990D-7053D3188D51}']
     {$REGION 'property access methods'}
     function GetConstantFields: IList<TField>;
     function GetEmptyFields: IList<TField>;
@@ -305,7 +430,7 @@ type
   end;
 
   IFieldVisiblity = interface
-  ['{E7D8A634-78EE-442F-8098-155D0C0763B3}']
+  ['{DEAE8EF5-FE14-4743-8FC7-1A12A41303E2}']
     {$REGION 'property access methods'}
     function GetConstantFieldsVisible: Boolean;
     function GetEmptyFieldsVisible: Boolean;
@@ -325,6 +450,14 @@ type
 
     property ShowFavoriteFieldsOnly: Boolean
       read GetShowFavoriteFieldsOnly write SetShowFavoriteFieldsOnly;
+  end;
+
+  IDataEvents = interface
+  ['{D5F40BC1-DD0A-4396-873A-DF70D97245A6}']
+    function GetOnAfterExecute: IEvent<TNotifyEvent>;
+
+    property OnAfterExecute: IEvent<TNotifyEvent>
+      read GetOnAfterExecute;
   end;
 
 implementation

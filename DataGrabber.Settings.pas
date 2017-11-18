@@ -23,18 +23,12 @@ uses
   Vcl.Graphics,
   Data.DB,
 
-  ts.Classes.ConnectionSettings, ts.Interfaces,
-
-  DataGrabber.Interfaces, DataGrabber.SQLTemplates, DataGrabber.FormSettings,
-  DataGrabber.ConnectionProfiles;
-
-const
-  SETTINGS_FILE = 'Settings.json';
+  DataGrabber.Interfaces, DataGrabber.FormSettings,
+  DataGrabber.ConnectionSettings, DataGrabber.ConnectionProfiles;
 
 type
-  TDGSettings = class(TComponent, IDGSettings, IDataViewSettings)
+  TSettings = class(TComponent, ISettings, IDataViewSettings)
   private
-    FSQLTemplates             : TSQLTemplates;
     FFormSettings             : TFormSettings;
     FDataTypeColors           : TDictionary<TDataType, TColor>;
     FGridCellColoring         : Boolean;
@@ -76,9 +70,6 @@ type
     procedure SetShowVerticalGridLines(const Value: Boolean);
     {$ENDREGION}
 
-  protected
-    procedure AssignStandardSettings;
-
   public
     constructor Create(AOwner: TComponent); override;
 
@@ -106,9 +97,6 @@ type
 
     property ShowVerticalGridLines: Boolean
       read GetShowVerticalGridLines write SetShowVerticalGridLines default True;
-
-    property SQLTemplates: TSQLTemplates
-      read FSQLTemplates write FSQLTemplates;
 
     property FormSettings: TFormSettings
       read GetFormSettings write SetFormSettings;
@@ -138,15 +126,20 @@ uses
   System.SysUtils,
   Vcl.Forms, Vcl.GraphUtil, Vcl.Dialogs,
 
-  JsonDataObjects;
+  JsonDataObjects,
+
+  DataGrabber.Resources;
 
 {$REGION 'construction and destruction'}
-constructor TDGSettings.Create(AOwner: TComponent);
+constructor TSettings.Create(AOwner: TComponent);
 begin
-  inherited Create(Application);
+  if not Assigned(AOwner) then
+    inherited Create(Application)
+  else
+    inherited Create(AOwner);
 end;
 
-procedure TDGSettings.AfterConstruction;
+procedure TSettings.AfterConstruction;
 var
   I : TDataType;
 begin
@@ -164,7 +157,7 @@ begin
   FGridCellColoring := True;
 end;
 
-procedure TDGSettings.BeforeDestruction;
+procedure TSettings.BeforeDestruction;
 begin
   FreeAndNil(FConnectionProfiles);
   FreeAndNil(FFormSettings);
@@ -175,7 +168,7 @@ end;
 {$ENDREGION}
 
 {$REGION 'property access methods'}
-function TDGSettings.GetFieldTypeColor(Index: TFieldType): TColor;
+function TSettings.GetFieldTypeColor(Index: TFieldType): TColor;
 begin
   case Index of
     ftString, ftFixedChar, ftWideString, ftFixedWideChar, ftWideMemo, ftMemo,
@@ -211,112 +204,112 @@ begin
   end;
 end;
 
-function TDGSettings.GetGridCellColoring: Boolean;
+function TSettings.GetGridCellColoring: Boolean;
 begin
   Result := FGridCellColoring;
 end;
 
-procedure TDGSettings.SetGridCellColoring(const Value: Boolean);
+procedure TSettings.SetGridCellColoring(const Value: Boolean);
 begin
   FGridCellColoring := Value;
 end;
 
-function TDGSettings.GetGridType: string;
+function TSettings.GetGridType: string;
 begin
   Result := FGridType;
 end;
 
-procedure TDGSettings.SetGridType(const Value: string);
+procedure TSettings.SetGridType(const Value: string);
 begin
   FGridType := Value;
 end;
 
-function TDGSettings.GetConnectionProfiles: TConnectionProfiles;
+function TSettings.GetConnectionProfiles: TConnectionProfiles;
 begin
   Result := FConnectionProfiles;
 end;
 
-procedure TDGSettings.SetConnectionProfiles(const Value: TConnectionProfiles);
+procedure TSettings.SetConnectionProfiles(const Value: TConnectionProfiles);
 begin
   FConnectionProfiles := Value;
 end;
 
-function TDGSettings.GetRepositoryVisible: Boolean;
+function TSettings.GetRepositoryVisible: Boolean;
 begin
   Result := FRepositoryVisible;
 end;
 
-function TDGSettings.GetShowHorizontalGridLines: Boolean;
+function TSettings.GetShowHorizontalGridLines: Boolean;
 begin
   Result := FShowHorizontalGridLines;
 end;
 
-procedure TDGSettings.SetShowHorizontalGridLines(const Value: Boolean);
+procedure TSettings.SetShowHorizontalGridLines(const Value: Boolean);
 begin
   FShowHorizontalGridLines := Value;
 end;
 
-function TDGSettings.GetShowVerticalGridLines: Boolean;
+function TSettings.GetShowVerticalGridLines: Boolean;
 begin
   Result := FShowVerticalGridLines;
 end;
 
-procedure TDGSettings.SetShowVerticalGridLines(const Value: Boolean);
+procedure TSettings.SetShowVerticalGridLines(const Value: Boolean);
 begin
   FShowVerticalGridLines := Value;
 end;
 
-procedure TDGSettings.SetRepositoryVisible(const Value: Boolean);
+procedure TSettings.SetRepositoryVisible(const Value: Boolean);
 begin
   FRepositoryVisible := Value;
 end;
 
-function TDGSettings.GetConnectionSettings: TConnectionSettings;
+function TSettings.GetConnectionSettings: TConnectionSettings;
 begin
   Result := FConnectionSettings;
 end;
 
-procedure TDGSettings.SetConnectionSettings(const Value: TConnectionSettings);
+procedure TSettings.SetConnectionSettings(const Value: TConnectionSettings);
 begin
   FConnectionSettings := Value;
 end;
 
-function TDGSettings.GetDataTypeColor(Index: TDataType): TColor;
+function TSettings.GetDataTypeColor(Index: TDataType): TColor;
 begin
   Result := FDataTypeColors[Index];
 end;
 
-procedure TDGSettings.SetDataTypeColor(Index: TDataType; const Value: TColor);
+procedure TSettings.SetDataTypeColor(Index: TDataType; const Value: TColor);
 begin
   FDataTypeColors[Index] := Value;
 end;
 
-function TDGSettings.GetDefaultConnectionProfile: string;
+function TSettings.GetDefaultConnectionProfile: string;
 begin
   Result := FDefaultConnectionProfile;
 end;
 
-procedure TDGSettings.SetDefaultConnectionProfile(const Value: string);
+procedure TSettings.SetDefaultConnectionProfile(const Value: string);
 begin
   FDefaultConnectionProfile := Value;
 end;
 
-function TDGSettings.GetDataInspectorVisible: Boolean;
+function TSettings.GetDataInspectorVisible: Boolean;
 begin
   Result := FDataInspectorVisible;
 end;
 
-procedure TDGSettings.SetDataInspectorVisible(const Value: Boolean);
+procedure TSettings.SetDataInspectorVisible(const Value: Boolean);
 begin
   FDataInspectorVisible := Value;
 end;
 
-function TDGSettings.GetFileName: string;
+function TSettings.GetFileName: string;
 begin
   Result := FFileName;
 end;
 
-procedure TDGSettings.SetFileName(const Value: string);
+procedure TSettings.SetFileName(const Value: string);
 begin
   if Value <> FileName then
   begin
@@ -324,35 +317,29 @@ begin
   end;
 end;
 
-function TDGSettings.GetFormSettings: TFormSettings;
+function TSettings.GetFormSettings: TFormSettings;
 begin
   Result := FFormSettings;
 end;
 
-procedure TDGSettings.SetFormSettings(const Value: TFormSettings);
+procedure TSettings.SetFormSettings(const Value: TFormSettings);
 begin
   FFormSettings := Value;
 end;
 {$ENDREGION}
 
-{$REGION 'protected methods'}
-procedure TDGSettings.AssignStandardSettings;
-begin
-end;
-{$ENDREGION}
-
 {$REGION 'public methods'}
-procedure TDGSettings.Load;
+procedure TSettings.Load;
 var
-  JO  : TJsonObject;
-  I   : Integer;
-  CP  : TConnectionProfile;
+  JO : TJsonObject;
+  I  : Integer;
+  CP : TConnectionProfile;
 begin
-  if FileExists('settings.json') then
+  if FileExists(FileName) then
   begin
     JO := TJsonObject.Create;
     try
-      JO.LoadFromFile('settings.json');
+      JO.LoadFromFile(FileName);
       JO.ToSimpleObject(Self);
       JO['FormSettings'].ObjectValue.ToSimpleObject(FFormSettings);
       for I := 0 to JO['ConnectionProfiles'].ArrayValue.Count - 1 do
@@ -369,7 +356,7 @@ begin
   end;
 end;
 
-procedure TDGSettings.Save;
+procedure TSettings.Save;
 var
   JO : TJsonObject;
   I  : Integer;
@@ -389,7 +376,7 @@ begin
         .ObjectValue
         .FromSimpleObject(ConnectionProfiles[I].ConnectionSettings);
     end;
-    JO.SaveToFile('settings.json', False);
+    JO.SaveToFile(FileName, False);
   finally
     JO.Free;
   end;
@@ -397,6 +384,6 @@ end;
 {$ENDREGION}
 
 initialization
-  TDGSettings.ClassName;
+  TSettings.ClassName;
 
 end.

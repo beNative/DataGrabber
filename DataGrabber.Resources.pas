@@ -43,6 +43,8 @@ const
     '  inner join Genre g'                    + #13#10 +
     '    on (g.GenreId = t.GenreId)';
 
+  SETTINGS_FILE = 'settings.json';
+
 resourcestring
   SFetchingData       = 'Fetching data...';
   SUpdatingView       = 'Updating view...';
@@ -53,8 +55,6 @@ resourcestring
   SEmptyFieldCount    = '%d empty fields';
   SUpdateable         = 'Updateable';
   SReadOnly           = 'ReadOnly';
-  SProviderMode       = 'Provider mode';
-  SNativeMode         = 'Native mode';
   SConnected          = 'Connected';
   SDisconnected       = 'Disconnected';
 

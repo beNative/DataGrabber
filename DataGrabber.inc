@@ -14,11 +14,6 @@
   limitations under the License.
 }
 
-{.$DEFINE ZEOSDBO}
-{$DEFINE ADO}
-{$DEFINE DBX}
-{$DEFINE FIREDAC}
-
 {$DEFINE KGRID}
 {$DEFINE DEVEXPRESS}
 {$DEFINE FASTREPORT}

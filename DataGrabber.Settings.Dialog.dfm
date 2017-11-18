@@ -28,7 +28,7 @@ object frmSettingsDialog: TfrmSettingsDialog
     Top = 3
     Width = 715
     Height = 394
-    ActivePage = tsDisplay
+    ActivePage = tsConnectionProfiles
     Align = alTop
     Anchors = [akLeft, akTop, akRight, akBottom]
     Images = imlMain
@@ -36,10 +36,6 @@ object frmSettingsDialog: TfrmSettingsDialog
     object tsConnectionProfiles: TTabSheet
       Caption = 'Connection &profiles'
       ImageIndex = 9
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object splVertical: TSplitter
         Left = 137
         Top = 0
@@ -68,29 +64,9 @@ object frmSettingsDialog: TfrmSettingsDialog
           TabOrder = 0
           object tsBasic: TTabSheet
             Caption = 'Basic'
-            ExplicitLeft = 0
-            ExplicitTop = 0
-            ExplicitWidth = 0
-            ExplicitHeight = 0
             DesignSize = (
               555
               337)
-            object rgpConnectionType: TRadioGroup
-              Left = 2
-              Top = 45
-              Width = 549
-              Height = 39
-              Anchors = [akLeft, akTop, akRight]
-              Caption = 'Connection type'
-              Columns = 4
-              ItemIndex = 0
-              Items.Strings = (
-                'ADO'
-                'FireDAC'
-                'dbExpress')
-              TabOrder = 0
-              OnClick = rgpConnectionTypeClick
-            end
             object grpClientSettings: TGroupBox
               Left = 3
               Top = 188
@@ -98,67 +74,27 @@ object frmSettingsDialog: TfrmSettingsDialog
               Height = 146
               Anchors = [akLeft, akTop, akRight]
               Caption = 'Client settings'
-              TabOrder = 1
+              TabOrder = 0
               object lblPacketrecords: TLabel
-                Left = 152
-                Top = 44
+                Left = 136
+                Top = 28
                 Width = 75
                 Height = 13
                 Caption = 'Packet records:'
                 FocusControl = edtPacketRecords
               end
-              object chkProviderMode: TCheckBox
-                Left = 16
-                Top = 24
-                Width = 116
-                Height = 17
-                Caption = 'Provider mode'
-                Checked = True
-                DoubleBuffered = False
-                ParentDoubleBuffered = False
-                State = cbChecked
-                TabOrder = 0
-                OnClick = chkProviderModeClick
-              end
               object edtPacketRecords: TEdit
-                Left = 239
-                Top = 41
+                Left = 217
+                Top = 25
                 Width = 58
                 Height = 21
                 Alignment = taCenter
-                TabOrder = 1
+                TabOrder = 0
                 Text = '100'
               end
-              object chkSeperateThreads: TCheckBox
-                Left = 16
-                Top = 69
-                Width = 169
-                Height = 17
-                Caption = 'Execute in seperate threads'
-                Enabled = False
-                TabOrder = 2
-              end
-              object chkAllowMultipleInstances: TCheckBox
-                Left = 16
-                Top = 92
-                Width = 169
-                Height = 17
-                Caption = 'Allow multiple instances'
-                Enabled = False
-                TabOrder = 3
-              end
-              object chkUseIDInUpdatableQueries: TCheckBox
-                Left = 16
-                Top = 115
-                Width = 232
-                Height = 17
-                Caption = 'Use ID as primary key in updatable queries.'
-                Enabled = False
-                TabOrder = 4
-              end
               object chkFetchOnDemand: TCheckBox
-                Left = 37
-                Top = 43
+                Left = 16
+                Top = 27
                 Width = 100
                 Height = 17
                 Caption = 'Fetch on demand'
@@ -166,28 +102,28 @@ object frmSettingsDialog: TfrmSettingsDialog
                 DoubleBuffered = False
                 ParentDoubleBuffered = False
                 State = cbChecked
-                TabOrder = 5
+                TabOrder = 1
                 OnClick = chkFetchOnDemandClick
               end
             end
             object grpConnectionSettings: TGroupBox
               Left = 3
-              Top = 90
+              Top = 41
               Width = 550
-              Height = 94
+              Height = 145
               Anchors = [akLeft, akTop, akRight]
               Caption = 'Connection settings'
-              TabOrder = 2
+              TabOrder = 1
               DesignSize = (
                 550
-                94)
-              object lblProtocols: TLabel
+                145)
+              object lblDriver: TLabel
                 Left = 10
                 Top = 19
-                Width = 39
+                Width = 33
                 Height = 13
-                Caption = 'Protocol'
-                FocusControl = cbxProtocols
+                Caption = 'Driver:'
+                FocusControl = cbxDrivers
               end
               object lblDatabase: TLabel
                 Left = 10
@@ -205,14 +141,14 @@ object frmSettingsDialog: TfrmSettingsDialog
                 Caption = 'Catalog:'
                 FocusControl = edtCatalog
               end
-              object cbxProtocols: TComboBox
+              object cbxDrivers: TComboBox
                 Left = 66
                 Top = 16
                 Width = 145
                 Height = 21
                 DropDownCount = 30
                 TabOrder = 0
-                OnChange = cbxProtocolsChange
+                OnChange = cbxDriversChange
               end
               object btnConnectionString: TButton
                 Left = 217
@@ -238,16 +174,15 @@ object frmSettingsDialog: TfrmSettingsDialog
               end
               object edtCatalog: TButtonedEdit
                 Left = 66
-                Top = 68
+                Top = 69
                 Width = 481
                 Height = 21
                 Anchors = [akLeft, akTop, akRight]
                 Images = imlMain
+                RightButton.Enabled = False
                 RightButton.ImageIndex = 10
-                RightButton.Visible = True
                 TabOrder = 3
                 OnChange = edtCatalogChange
-                OnRightButtonClick = edtDatabaseRightButtonClick
               end
             end
             object grpProfileSettings: TGroupBox
@@ -256,7 +191,7 @@ object frmSettingsDialog: TfrmSettingsDialog
               Width = 549
               Height = 36
               Anchors = [akLeft, akTop, akRight]
-              TabOrder = 3
+              TabOrder = 2
               DesignSize = (
                 549
                 36)
@@ -321,10 +256,6 @@ object frmSettingsDialog: TfrmSettingsDialog
           object tsAdvanced: TTabSheet
             Caption = 'Advanced'
             ImageIndex = 1
-            ExplicitLeft = 0
-            ExplicitTop = 0
-            ExplicitWidth = 0
-            ExplicitHeight = 0
           end
         end
       end
@@ -901,10 +832,6 @@ object frmSettingsDialog: TfrmSettingsDialog
       Caption = 'Settings file'
       ImageIndex = 11
       OnEnter = tsSettingsEnter
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
     end
   end
   object btnApply: TButton
@@ -1716,5 +1643,9 @@ object frmSettingsDialog: TfrmSettingsDialog
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
       000000000000}
+  end
+  object dlgOpenFile: TOpenDialog
+    Left = 544
+    Top = 296
   end
 end

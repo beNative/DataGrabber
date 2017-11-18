@@ -14,7 +14,8 @@
   limitations under the License.
 }
 
-unit ts.Classes.ConnectionSettings;
+
+unit DataGrabber.ConnectionSettings;
 
 interface
 
@@ -32,27 +33,35 @@ type
     FDatabase         : string;
     FCatalog          : string;
     FReadOnly         : Boolean;
-    FDisconnectedMode : Boolean;
     FOnChanged        : TNotifyEvent;
+    FFetchOnDemand    : Boolean;
+    FPacketRecords    : Integer;
+    FConnectionString : string;
 
+    {$REGION 'property access methods'}
     function GetCatalog: string;
     function GetDatabase: string;
     function GetHostName: string;
     function GetPassword: string;
     function GetPort: Integer;
-    function GetProtocol: string;
+    function GetDriverName: string;
     function GetUser: string;
     procedure SetCatalog(const Value: string);
     procedure SetDatabase(const Value: string);
     procedure SetHostName(const Value: string);
     procedure SetPassword(const Value: string);
     procedure SetPort(const Value: Integer);
-    procedure SetProtocol(const Value: string);
+    procedure SetDriverName(const Value: string);
     procedure SetUser(const Value: string);
-    function GetDisconnectedMode: Boolean;
     function GetReadOnly: Boolean;
-    procedure SetDisconnectedMode(const Value: Boolean);
     procedure SetReadOnly(const Value: Boolean);
+    function GetFetchOnDemand: Boolean;
+    function GetPacketRecords: Integer;
+    procedure SetFetchOnDemand(const Value: Boolean);
+    procedure SetPacketRecords(const Value: Integer);
+    function GetConnectionString: string;
+    procedure SetConnectionString(const Value: string);
+    {$ENDREGION}
 
   protected
     procedure Changed;
@@ -61,8 +70,8 @@ type
     procedure Assign(Source: TPersistent); override;
 
   published
-    property Protocol: string
-      read GetProtocol write SetProtocol;
+    property DriverName: string
+      read GetDriverName write SetDriverName;
 
     property HostName: string
       read GetHostName write SetHostName;
@@ -85,8 +94,14 @@ type
     property ReadOnly: Boolean
       read GetReadOnly write SetReadOnly;
 
-    property DisconnectedMode: Boolean
-      read GetDisconnectedMode write SetDisconnectedMode;
+    property FetchOnDemand: Boolean
+      read GetFetchOnDemand write SetFetchOnDemand;
+
+    property PacketRecords: Integer
+      read GetPacketRecords write SetPacketRecords;
+
+    property ConnectionString: string
+      read GetConnectionString write SetConnectionString;
 
     property OnChanged: TNotifyEvent
       read FOnChanged write FOnChanged;
@@ -109,6 +124,20 @@ begin
   end;
 end;
 
+function TConnectionSettings.GetConnectionString: string;
+begin
+  Result := FConnectionString;
+end;
+
+procedure TConnectionSettings.SetConnectionString(const Value: string);
+begin
+  if Value <> ConnectionString then
+  begin
+    FConnectionString := Value;
+    Changed;
+  end;
+end;
+
 function TConnectionSettings.GetDatabase: string;
 begin
   Result := FDatabase;
@@ -123,16 +152,16 @@ begin
   end;
 end;
 
-function TConnectionSettings.GetDisconnectedMode: Boolean;
+function TConnectionSettings.GetFetchOnDemand: Boolean;
 begin
-  Result := FDisconnectedMode;
+  Result := FFetchOnDemand;
 end;
 
-procedure TConnectionSettings.SetDisconnectedMode(const Value: Boolean);
+procedure TConnectionSettings.SetFetchOnDemand(const Value: Boolean);
 begin
-  if Value <> DisconnectedMode then
+  if Value <> FetchOnDemand then
   begin
-    FDisconnectedMode := Value;
+    FFetchOnDemand := Value;
     Changed;
   end;
 end;
@@ -147,6 +176,20 @@ begin
   if Value <> HostName then
   begin
     FHostName := Value;
+    Changed;
+  end;
+end;
+
+function TConnectionSettings.GetPacketRecords: Integer;
+begin
+  Result := FPacketRecords;
+end;
+
+procedure TConnectionSettings.SetPacketRecords(const Value: Integer);
+begin
+  if Value <> PacketRecords then
+  begin
+    FPacketRecords := Value;
     Changed;
   end;
 end;
@@ -193,14 +236,14 @@ begin
   end;
 end;
 
-function TConnectionSettings.GetProtocol: string;
+function TConnectionSettings.GetDriverName: string;
 begin
   Result := FProtocol;
 end;
 
-procedure TConnectionSettings.SetProtocol(const Value: string);
+procedure TConnectionSettings.SetDriverName(const Value: string);
 begin
-  if Value <> Protocol then
+  if Value <> DriverName then
   begin
     FProtocol := Value;
     Changed;
@@ -238,19 +281,21 @@ begin
   if (Source <> Self) and (Source is TConnectionSettings) then
   begin
     CS := TConnectionSettings(Source);
-    FProtocol         := CS.Protocol;
+    FProtocol         := CS.DriverName;
     FPassword         := CS.Password;
     FCatalog          := CS.Catalog;
     FHostName         := CS.HostName;
     FUser             := CS.User;
     FPort             := CS.Port;
     FDatabase         := CS.Database;
-    FDisconnectedMode := CS.DisconnectedMode;
+    FFetchOnDemand    := CS.FetchOnDemand;
+    FPacketRecords    := CS.PacketRecords;
     FReadOnly         := CS.ReadOnly;
+    FConnectionString := CS.ConnectionString;
     Changed;
   end
   else
-    inherited;
+    inherited Assign(Source);
 end;
 {$ENDREGION}
 

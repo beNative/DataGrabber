@@ -1,24 +1,23 @@
 object frmcxGrid: TfrmcxGrid
   Left = 0
   Top = 0
-  Width = 589
-  Height = 358
+  ClientHeight = 319
+  ClientWidth = 573
+  Color = clBtnFace
   DoubleBuffered = True
-  Ctl3D = False
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
   Font.Height = -11
   Font.Name = 'Se'
   Font.Style = []
-  ParentCtl3D = False
-  ParentDoubleBuffered = False
-  ParentFont = False
-  TabOrder = 0
+  OldCreateOrder = False
+  PixelsPerInch = 96
+  TextHeight = 14
   object grdMain: TcxGrid
     Left = 0
     Top = 0
-    Width = 589
-    Height = 358
+    Width = 573
+    Height = 319
     Align = alClient
     BevelInner = bvNone
     BevelOuter = bvNone

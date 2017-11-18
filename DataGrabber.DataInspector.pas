@@ -14,7 +14,7 @@
   limitations under the License.
 }
 
-unit ts.Modules.DataInspector;
+unit DataGrabber.DataInspector;
 
 {
   TODO: support for custom inplace editors, especially for memo-fields
@@ -31,7 +31,7 @@ uses
 
   DDuce.Components.GridView, DDuce.Components.Inspector,
 
-  ts.Interfaces;
+  DataGrabber.Interfaces;
 
 const
   MAX_WIDTH = 400;

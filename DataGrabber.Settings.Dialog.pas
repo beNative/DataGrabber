@@ -52,8 +52,14 @@ type
     actConnectionString            : TAction;
     actDelete                      : TAction;
     actDuplicate                   : TAction;
+    actGridlinesBoth               : TAction;
+    actGridlinesHorizontal         : TAction;
+    actGridlinesNone               : TAction;
+    actGridlinesVertical           : TAction;
     actMoveDown                    : TAction;
     actMoveUp                      : TAction;
+    btn1                           : TToolButton;
+    btn2                           : TToolButton;
     btnAdd                         : TToolButton;
     btnApply                       : TButton;
     btnBooleanColor                : TKColorButton;
@@ -65,6 +71,10 @@ type
     btnDelete                      : TToolButton;
     btnDuplicate                   : TToolButton;
     btnFloatColor                  : TKColorButton;
+    btnGridlinesAll                : TToolButton;
+    btnGridlinesHorizontal         : TToolButton;
+    btnGridlinesNone               : TToolButton;
+    btnGridlinesVertical           : TToolButton;
     btnIntegerColor                : TKColorButton;
     btnMemoColor                   : TKColorButton;
     btnMoveDown                    : TToolButton;
@@ -73,13 +83,10 @@ type
     btnProfileColor                : TKColorButton;
     btnStringColor                 : TKColorButton;
     btnTimeColor                   : TKColorButton;
-    cbxProtocols                   : TComboBox;
-    chkAllowMultipleInstances      : TCheckBox;
+    cbxDrivers: TComboBox;
     chkFetchOnDemand               : TCheckBox;
     chkGridCellColoringEnabled     : TCheckBox;
-    chkProviderMode                : TCheckBox;
-    chkSeperateThreads             : TCheckBox;
-    chkUseIDInUpdatableQueries     : TCheckBox;
+    chkSetAsDefault                : TCheckBox;
     edtCatalog                     : TButtonedEdit;
     edtDatabase                    : TButtonedEdit;
     edtPacketRecords               : TEdit;
@@ -87,6 +94,7 @@ type
     grpCellBackgroundColoring      : TGroupBox;
     grpClientSettings              : TGroupBox;
     grpConnectionSettings          : TGroupBox;
+    grpGridLines                   : TGroupBox;
     grpProfileSettings             : TGroupBox;
     imlMain                        : TImageList;
     lblBoolean                     : TLabel;
@@ -100,7 +108,7 @@ type
     lblNULL                        : TLabel;
     lblPacketrecords               : TLabel;
     lblProfileColor                : TLabel;
-    lblProtocols                   : TLabel;
+    lblDriver: TLabel;
     lblString                      : TLabel;
     lblTimes                       : TLabel;
     pgcConnectionProfile           : TPageControl;
@@ -108,28 +116,16 @@ type
     pnlConnectionProfileDetail     : TPanel;
     pnlConnectionProfilesList      : TPanel;
     pnlGridTypeColoring            : TGridPanel;
-    rgpConnectionType              : TRadioGroup;
     rgpGridTypes                   : TRadioGroup;
     splVertical                    : TSplitter;
+    tlb1                           : TToolBar;
     tlbConnectionProfiles          : TToolBar;
     tsAdvanced                     : TTabSheet;
     tsBasic                        : TTabSheet;
     tsConnectionProfiles           : TTabSheet;
     tsDisplay                      : TTabSheet;
     tsSettings                     : TTabSheet;
-    chkSetAsDefault: TCheckBox;
-    btn1: TToolButton;
-    btn2: TToolButton;
-    grpGridLines: TGroupBox;
-    actGridlinesBoth: TAction;
-    actGridlinesHorizontal: TAction;
-    actGridlinesVertical: TAction;
-    actGridlinesNone: TAction;
-    tlb1: TToolBar;
-    btnGridlinesNone: TToolButton;
-    btnGridlinesVertical: TToolButton;
-    btnGridlinesHorizontal: TToolButton;
-    btnGridlinesAll: TToolButton;
+    dlgOpenFile: TOpenDialog;
     {$ENDREGION}
 
     {$REGION 'action handlers'}
@@ -179,14 +175,13 @@ type
       TextType           : TVSTTextType
     );
     procedure btnProfileColorClick(Sender: TObject);
-    procedure cbxProtocolsChange(Sender: TObject);
+    procedure cbxDriversChange(Sender: TObject);
     procedure chkFetchOnDemandClick(Sender: TObject);
     procedure chkProviderModeClick(Sender: TObject);
     procedure edtCatalogChange(Sender: TObject);
     procedure edtDatabaseChange(Sender: TObject);
     procedure edtDatabaseRightButtonClick(Sender: TObject);
     procedure edtProfileNameChange(Sender: TObject);
-    procedure rgpConnectionTypeClick(Sender: TObject);
     procedure tsSettingsEnter(Sender: TObject);
     procedure chkSetAsDefaultClick(Sender: TObject);
     procedure actGridlinesHorizontalExecute(Sender: TObject);
@@ -200,7 +195,7 @@ type
     FEditorSettings      : IEditorSettings;
     FEditor              : IEditorView;
     FManager             : IEditorManager;
-    FSettings            : IDGSettings;
+    FSettings            : ISettings;
     FApplySettingsMethod : TApplySettingsMethod;
     FObjectInspector     : TzObjectInspector;
     FVSTProfiles         : TVirtualStringTree;
@@ -217,17 +212,15 @@ type
     procedure Changed;
 
     procedure InspectConnectionProfile(ACP: TConnectionProfile);
-    procedure InitializeConnectionProfileControls;
     procedure UpdateConnectionProfileControls(ACP: TConnectionProfile);
     procedure SaveConnectionProfileChanges(ACP: TConnectionProfile);
-    procedure UpdateProtocols(AConnectionType: string);
 
   public
     procedure AfterConstruction; override;
     procedure BeforeDestruction; override;
     constructor Create(
       AOwner    : TComponent;
-      ASettings : IDGSettings
+      ASettings : ISettings
     ); reintroduce; virtual;
 
     property ApplySettingsMethod: TApplySettingsMethod
@@ -238,7 +231,7 @@ type
   end;
 
 procedure ExecuteSettingsDialog(
-  ASettings            : IDGSettings;
+  ASettings            : ISettings;
   AApplySettingsMethod : TApplySettingsMethod = nil
 );
 
@@ -248,20 +241,17 @@ implementation
 
 uses
   System.Rtti, System.UITypes,
-  Data.DBConnAdmin, Data.Win.ADOConEd, Data.Win.ADODB,
 
-  FireDAC.VCLUI.ConnEdit,
+  FireDAC.VCLUI.ConnEdit, FireDAC.Comp.Client,
 
   Spring.Container,
 
   DDuce.Factories,
 
-  ts.Interfaces,
-
   DataGrabber.Utils;
 
 {$REGION 'interfaced routines'}
-procedure ExecuteSettingsDialog(ASettings: IDGSettings;
+procedure ExecuteSettingsDialog(ASettings: ISettings;
   AApplySettingsMethod: TApplySettingsMethod);
 var
   Form : TfrmSettingsDialog;
@@ -278,7 +268,7 @@ end;
 
 {$REGION 'construction and destruction'}
 constructor TfrmSettingsDialog.Create(AOwner: TComponent;
-  ASettings: IDGSettings);
+  ASettings: ISettings);
 begin
   inherited Create(AOwner);
   FSettings := ASettings;
@@ -297,9 +287,9 @@ begin
   FEditorSettings := TEditorFactories.CreateSettings(Self);
   FManager        := TEditorFactories.CreateManager(Self, FEditorSettings);
   FEditor         := TEditorFactories.CreateView(tsSettings, FManager);
-  FEditor.Form.BorderStyle := bsNone;
+  FEditor.Form.BorderStyle      := bsNone;
   FEditor.Form.AlignWithMargins := True;
-  FEditor.HighlighterName := 'JSON';
+  FEditor.HighlighterName       := 'JSON';
   FEditor.Load(FSettings.FileName);
   InitializeControls;
 end;
@@ -340,29 +330,13 @@ end;
 
 procedure TfrmSettingsDialog.actConnectionStringExecute(Sender: TObject);
 var
-  AC : TADOConnection;
   CP : TConnectionProfile;
   S  : string;
 begin
   CP := FSettings.ConnectionProfiles[FVSTProfiles.FocusedNode.Index];
-  if CP.ConnectionType = 'ADO' then
-  begin
-    AC := TADOConnection.Create(Self);
-    try
-      AC.ConnectionString := CP.ConnectionString;
-      EditConnectionString(AC);
-      CP.ConnectionString := AC.ConnectionString;
-    finally
-      AC.Free;
-    end;
-  end
-  else if CP.ConnectionType = 'FireDAC' then
-  begin
-    S := CP.ConnectionString;
-    TfrmFDGUIxFormsConnEdit.Execute(S, '');
-    CP.ConnectionString := S;
-  end;
-
+  S := CP.ConnectionSettings.ConnectionString;
+  TfrmFDGUIxFormsConnEdit.Execute(S, '');
+  CP.ConnectionSettings.ConnectionString := S;
 end;
 
 procedure TfrmSettingsDialog.actDeleteExecute(Sender: TObject);
@@ -506,7 +480,7 @@ begin
   Changed;
 end;
 
-procedure TfrmSettingsDialog.cbxProtocolsChange(Sender: TObject);
+procedure TfrmSettingsDialog.cbxDriversChange(Sender: TObject);
 begin
   Changed;
 end;
@@ -557,26 +531,24 @@ end;
 
 procedure TfrmSettingsDialog.edtDatabaseRightButtonClick(Sender: TObject);
 begin
-// TODO open file dialog?
+  dlgOpenFile.FileName := edtDatabase.Text;
+  if dlgOpenFile.Execute then
+    edtDatabase.Text := dlgOpenFile.FileName;
+
 end;
 
 procedure TfrmSettingsDialog.edtProfileNameChange(Sender: TObject);
 begin
-  Changed;
+  if Assigned(SelectedProfile) then
+  begin
+    SelectedProfile.Name := edtProfileName.Text;
+    Changed;
+  end;
 end;
 
 procedure TfrmSettingsDialog.tsSettingsEnter(Sender: TObject);
 begin
   FEditor.Load(FSettings.FileName);
-end;
-
-procedure TfrmSettingsDialog.rgpConnectionTypeClick(Sender: TObject);
-begin
-  if rgpConnectionType.ItemIndex >= 0 then
-  begin
-    Changed;
-    UpdateProtocols(rgpConnectionType.Items[rgpConnectionType.ItemIndex]);
-  end;
 end;
 {$ENDREGION}
 
@@ -591,14 +563,11 @@ procedure TfrmSettingsDialog.SaveConnectionProfileChanges(
 begin
   ACP.Name           := edtProfileName.Text;
   ACP.ProfileColor   := btnProfileColor.DlgColor;
-  ACP.ConnectionType :=
-    rgpConnectionType.Items[rgpConnectionType.ItemIndex];
-  ACP.ProviderMode   := chkProviderMode.Checked;
-  ACP.PacketRecords  := StrToIntDef(edtPacketRecords.Text, 0);
-
-  ACP.ConnectionSettings.Protocol := cbxProtocols.Text;
-  ACP.ConnectionSettings.Database := edtDatabase.Text;
-  ACP.ConnectionSettings.Catalog  := edtCatalog.Text;
+  ACP.ConnectionSettings.DriverName    := cbxDrivers.Text;
+  ACP.ConnectionSettings.Database      := edtDatabase.Text;
+  ACP.ConnectionSettings.Catalog       := edtCatalog.Text;
+  ACP.ConnectionSettings.FetchOnDemand := chkFetchOnDemand.Checked;
+  ACP.ConnectionSettings.PacketRecords := StrToIntDef(edtPacketRecords.Text, 0);
   FModified := False;
 end;
 
@@ -632,14 +601,6 @@ begin
   FEditor.Load(FSettings.FileName);
 end;
 
-procedure TfrmSettingsDialog.InitializeConnectionProfileControls;
-var
-  C : IConnection;
-begin
-  for C in GlobalContainer.ResolveAll<IConnection> do
-    rgpConnectionType.Items.Add(C.ConnectionType);
-end;
-
 procedure TfrmSettingsDialog.InitializeControls;
 var
   I : Integer;
@@ -653,7 +614,6 @@ begin
   btnStringColor.DlgColor   := FSettings.DataTypeColors[dtString];
   btnNULLColor.DlgColor     := FSettings.DataTypeColors[dtNULL];
   btnTimeColor.DlgColor     := FSettings.DataTypeColors[dtTime];
-
   if FSettings.ShowHorizontalGridLines then
   begin
     if FSettings.ShowVerticalGridLines then
@@ -668,11 +628,7 @@ begin
     else
       actGridlinesNone.Checked := True;
   end;
-
   chkGridCellColoringEnabled.Checked := FSettings.GridCellColoring;
-  rgpConnectionType.Items.Clear;
-
-  InitializeConnectionProfileControls;
 
   FVSTProfiles := TFactories.CreateVirtualStringTree(
     Self,
@@ -725,12 +681,11 @@ var
   B: Boolean;
 begin
   inherited UpdateActions;
-  B := chkProviderMode.Checked;
-  chkFetchOnDemand.Enabled := B;
-  edtPacketRecords.Enabled := B and chkFetchOnDemand.Checked;
-  lblPacketrecords.Enabled := B and chkFetchOnDemand.Checked;
+  actApply.Enabled        := FModified;
+  edtPacketRecords.Enabled := chkFetchOnDemand.Checked;
+  lblPacketrecords.Enabled := chkFetchOnDemand.Checked;
   B := Assigned(FVSTProfiles.FocusedNode);
-  actMoveUp.Enabled := B and (FVSTProfiles.FocusedNode.Index > 0);
+  actMoveUp.Enabled   := B and (FVSTProfiles.FocusedNode.Index > 0);
   actMoveDown.Enabled := B
     and (FVSTProfiles.FocusedNode.Index < FVSTProfiles.RootNodeCount - 1);
   actDelete.Enabled := B;
@@ -741,30 +696,13 @@ procedure TfrmSettingsDialog.UpdateConnectionProfileControls(
 begin
   edtProfileName.Text      := ACP.Name;
   btnProfileColor.DlgColor := ACP.ProfileColor;
-
-  rgpConnectionType.ItemIndex :=
-    rgpConnectionType.Items.IndexOf(ACP.ConnectionType);
-
-  chkSetAsDefault.Checked := ACP.Name = FSettings.DefaultConnectionProfile;
-
-  chkProviderMode.Checked := ACP.ProviderMode;
-  edtPacketRecords.Text   := ACP.PacketRecords.ToString;
-
-  UpdateProtocols(ACP.ConnectionType);
-  cbxProtocols.Text := ACP.ConnectionSettings.Protocol;
-  edtDatabase.Text  := ACP.ConnectionSettings.Database;
-  edtCatalog.Text   := ACP.ConnectionSettings.Catalog;
-end;
-
-procedure TfrmSettingsDialog.UpdateProtocols(AConnectionType: string);
-var
-  S : IConnection;
-begin
-  if AConnectionType <> '' then
-  begin
-    S := GlobalContainer.Resolve<IConnection>(AConnectionType);
-    cbxProtocols.Items.Assign(S.Protocols);
-  end;
+  chkSetAsDefault.Checked  := ACP.Name = FSettings.DefaultConnectionProfile;
+  edtPacketRecords.Text    := ACP.ConnectionSettings.PacketRecords.ToString;
+  chkFetchOnDemand.Checked := ACP.ConnectionSettings.FetchOnDemand;
+  FDManager.GetDriverNames(cbxDrivers.Items);
+  cbxDrivers.Text  := ACP.ConnectionSettings.DriverName;
+  edtDatabase.Text := ACP.ConnectionSettings.Database;
+  edtCatalog.Text  := ACP.ConnectionSettings.Catalog;
 end;
 {$ENDREGION}
 
