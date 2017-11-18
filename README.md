@@ -23,3 +23,4 @@ Commercial components (optional):
 
 Some screenshots:
 
+![Main view](https://github.com/beNative/DataGrabber/blob/master/Wiki/DataGrabber - FieldInspector 18-11-2017 20-23-13.png)
