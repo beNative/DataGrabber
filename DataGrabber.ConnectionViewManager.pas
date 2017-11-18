@@ -262,6 +262,7 @@ begin
   actFavoriteFieldsOnly.Visible       := False;
   actRtti.Visible                     := False;
   actToggleFullScreen.Visible         := False;
+  actDataInspector.Visible            := False;
 end;
 
 procedure TdmConnectionViewManager.BeforeDestruction;

@@ -81,10 +81,7 @@ end;
 {$REGION 'protected methods'}
 function TConnectionProfileValueManager.HasButton(
   const PItem: PPropItem): Boolean;
-var
-  CP : TConnectionProfile;
 begin
-  CP := GetConnectionProfile(PItem);
   Result := inherited HasButton(PItem);
 end;
 
@@ -148,13 +145,9 @@ end;
 
 procedure TConnectionProfileValueManager.GetListItems(
   const PItem: PPropItem; Items: TStrings);
-var
-  CP : TConnectionProfile;
 begin
-  CP := nil;
-  if PItem.Name = 'Protocol' then
+  if PItem.Name = 'DriverName' then
   begin
-    CP := PItem.Component as TConnectionProfile;
     FDManager.GetDriverNames(Items);
   end
   else
