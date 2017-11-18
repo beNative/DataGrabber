@@ -1,20 +1,26 @@
 # DataGrabber
-This is a query tool that started years ago and is now being ported and extended to support Delphi10Seattle. It will make extensive use of the DDuce library which holds some common modules that are shared by some of my other projects.
+This is a query tool that started years ago and is now being ported and extended to support Delphi10 and later. It makes extensive use of the DDuce library which holds some common modules that are shared by some of my other projects and is maturing along with this project.
 
-Connection topologies:
+Connection topology:
 - FireDAC
-- ADO
-- dbExpress
-- UNIDAC (optional)
-- ZeosDBO (optional)
 
-External dependencies:
-- Spring4D
-- DDuce
-- Virtual Treeview
-- ZeosDBO
+External dependencies and references:
+* [Spring4D](http://bitbucket.org/sglienke/spring4d)
+* [DSharp](http://bitbucket.org/sglienke/dsharp)
+* [DDuce](http://github.com/beNative/dduce)
+* [Virtual treeview](http://github.com/Virtual-TreeView/Virtual-TreeView)
+* [TzObjectInspector](http://github.com/MahdiSafsafi/zcontrols)
+* [JsonDataObjects](http://github.com/ahausladen/JsonDataObjects)
+* [Chinook database](http://github.com/lerocha/chinook-database)
+* [SQLite](https://www.sqlite.org/)
+* [TBCEditor]
+* [TChromeTabs](http://github.com/norgepaul/TChromeTabs) 
+* [DSharp](http://bitbucket.org/sglienke/dsharp)
 
 Commercial components (optional):
 - FastReport
 - DevExpress
-- UniDac
+
+Some screenshots:
+
+![Main view](https://github.com/beNative/DataGrabber/blob/master/Wiki/DataGrabber - FieldInspector 18-11-2017 20-23-13.png)
