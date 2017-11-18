@@ -8,7 +8,6 @@ uses
   DataGrabber.DataInspector in 'DataGrabber.DataInspector.pas' {frmDataInspector},
   DataGrabber.Utils in 'DataGrabber.Utils.pas',
   DataGrabber.Settings in 'DataGrabber.Settings.pas',
-  DataGrabber.SQLTemplates in 'DataGrabber.SQLTemplates.pas',
   DataGrabber.Settings.Dialog in 'DataGrabber.Settings.Dialog.pas' {frmSettingsDialog},
   DataGrabber.FieldInspector in 'DataGrabber.FieldInspector.pas' {frmFieldInspector},
   DataGrabber.DataView.cxGrid in 'DataView\DataGrabber.DataView.cxGrid.pas' {frmcxGrid: TFrame},

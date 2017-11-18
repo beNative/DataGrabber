@@ -41,7 +41,6 @@ implementation
 uses
   Vcl.Forms;
 
-
 procedure AddActionButton(AParent: TToolBar; AAction: TBasicAction);
 var
   TB: TToolButton;

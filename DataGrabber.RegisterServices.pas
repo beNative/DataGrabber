@@ -42,10 +42,12 @@ uses
 
   Spring, Spring.Container.Common, Spring.Container;
 
+  // TODO: use factories instead of DI ?
+
 procedure RegisterServices;
 begin
-  GlobalContainer.RegisterType<TDGSettings>
-                 .Implements<IDGSettings>
+  GlobalContainer.RegisterType<TSettings>
+                 .Implements<ISettings>
                  .AsSingleton(TRefCounting.True);
 
   GlobalContainer.RegisterType<TdmConnectionViewManager>
@@ -57,16 +59,16 @@ begin
 
   {$IFDEF DEVEXPRESS}
   GlobalContainer.RegisterType<TfrmcxGrid>
-                 .Implements<IDGDataView>('cxGrid');
+                 .Implements<IDataView>('cxGrid');
   {$ENDIF}
 
   {$IFDEF KGRID}
   GlobalContainer.RegisterType<TfrmKGrid>
-                 .Implements<IDGDataView>('KGrid');
+                 .Implements<IDataView>('KGrid');
   {$ENDIF}
 
   GlobalContainer.RegisterType<TfrmGridView>
-                 .Implements<IDGDataView>('GridView');
+                 .Implements<IDataView>('GridView');
 
   GlobalContainer.RegisterType<TfrmEditorView>
                  .Implements<IEditorView>;

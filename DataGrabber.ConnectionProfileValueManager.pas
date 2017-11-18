@@ -47,6 +47,7 @@ type
     function HasDialog(const PItem: PPropItem): Boolean; override;
 
     function GetDialog(const PItem: PPropItem): TComponentClass; override;
+    function DialogResultValue(const PItem: PPropItem; Dialog: TComponent): TValue; override;
 
     procedure GetListItems(
       const PItem : PPropItem;
@@ -58,7 +59,7 @@ implementation
 
 uses
   System.StrUtils,
-  Data.Win.ADODb,
+  FireDAC.Comp.Client, FireDAC.VCLUI.ConnEdit,
 
   Spring.Container,
 
@@ -84,9 +85,6 @@ var
   CP : TConnectionProfile;
 begin
   CP := GetConnectionProfile(PItem);
-
-  //CP.
-
   Result := inherited HasButton(PItem);
 end;
 
@@ -102,7 +100,7 @@ end;
 function TConnectionProfileValueManager.HasList(
   const PItem: PPropItem): Boolean;
 begin
-  if MatchStr(PItem.Name, ['ConnectionType', 'Protocol']) then
+  if MatchStr(PItem.Name, ['Protocol']) then
     Result := True
   else
   begin
@@ -113,14 +111,39 @@ end;
 procedure TConnectionProfileValueManager.SetValue(const PItem: PPropItem;
   var Value: TValue);
 begin
-
   inherited SetValue(PItem, Value);
 end;
 
 function TConnectionProfileValueManager.GetDialog(
   const PItem: PPropItem): TComponentClass;
+var
+  S : string;
+  CP : TConnectionProfile;
 begin
+  if PItem.Name = 'ConnectionString' then
+  begin
+    S := PItem.Value.AsString;
+    TfrmFDGUIxFormsConnEdit.Execute(S, '');
+    CP := PItem.Component as TConnectionProfile;
+    CP.ConnectionSettings.ConnectionString := S;
+  end;
   Result := inherited GetDialog(PItem);
+end;
+
+function TConnectionProfileValueManager.DialogResultValue(
+  const PItem: PPropItem; Dialog: TComponent): TValue;
+var
+  CP : TConnectionProfile;
+begin
+  if PItem.Name = 'ConnectionString' then
+  begin
+    CP := PItem.Component as TConnectionProfile;
+    Result := CP.ConnectionSettings.ConnectionString;
+  end
+  else
+  begin
+    Result := inherited DialogResultValue(PItem, Dialog);
+  end;
 end;
 
 procedure TConnectionProfileValueManager.GetListItems(
@@ -129,19 +152,10 @@ var
   CP : TConnectionProfile;
 begin
   CP := nil;
-//  if PItem.Name = 'ConnectionType' then
-//  begin
-//    for C in GlobalContainer.ResolveAll<IConnection> do
-//      Items.Add(C.ConnectionType);
-//  end
   if PItem.Name = 'Protocol' then
   begin
     CP := PItem.Component as TConnectionProfile;
-//    if CP.ConnectionType <> '' then
-//    begin
-//      C := GlobalContainer.Resolve<IConnection>(CP.ConnectionType);
-//      Items.Assign(C.Protocols);
-//    end;
+    FDManager.GetDriverNames(Items);
   end
   else
   begin

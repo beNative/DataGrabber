@@ -166,7 +166,7 @@ type
     {$ENDREGION}
 
   private
-    FSettings             : IDGSettings;
+    FSettings             : ISettings;
     FConnectionViewList   : TConnectionViewList;
     FActiveConnectionView : IConnectionView;
     FStopWatch            : TStopwatch;
@@ -174,10 +174,10 @@ type
     FFieldInspector       : TfrmFieldInspector;
 
     {$REGION 'property access methods'}
-    function GetSettings: IDGSettings;
+    function GetSettings: ISettings;
     function GetActiveConnectionView: IConnectionView;
     procedure SetActiveConnectionView(const Value: IConnectionView);
-    function GetActiveDataView: IDGDataView;
+    function GetActiveDataView: IDataView;
     function GetActiveData: IData;
     function GetActionList: TActionList;
     function GetItem(AName: string): TCustomAction;
@@ -192,7 +192,7 @@ type
     procedure UpdateConnectionViewCaptions;
 
   public
-    constructor Create(ASettings: IDGSettings); reintroduce; virtual;
+    constructor Create(ASettings: ISettings); reintroduce; virtual;
     procedure AfterConstruction; override;
     procedure BeforeDestruction; override;
 
@@ -201,13 +201,13 @@ type
     property ActiveConnectionView: IConnectionView
       read GetActiveConnectionView write SetActiveConnectionView;
 
-    property ActiveDataView: IDGDataView
+    property ActiveDataView: IDataView
       read GetActiveDataView;
 
     property ActiveData: IData
       read GetActiveData;
 
-    property Settings: IDGSettings
+    property Settings: ISettings
       read GetSettings;
 
     property ActionList: TActionList
@@ -238,7 +238,7 @@ uses
   Spring.Container;
 
 {$REGION 'construction and destruction'}
-constructor TdmConnectionViewManager.Create(ASettings: IDGSettings);
+constructor TdmConnectionViewManager.Create(ASettings: ISettings);
 begin
   inherited Create(Application);
   FSettings := ASettings;
@@ -386,7 +386,7 @@ end;
 
 procedure TdmConnectionViewManager.actInspectConnectionExecute(Sender: TObject);
 begin
-  ///InspectComponent(ActiveData.Connection.Connection);
+  InspectComponent(ActiveData.Connection);
 end;
 
 procedure TdmConnectionViewManager.actInspectDataSetExecute(Sender: TObject);
@@ -453,9 +453,6 @@ begin
   FDataInspector.Data := ActiveDataView.Data;
   if actDataInspector.Checked then
     FDataInspector.Show;
-//    ShowToolWindow(FDataInspector)
-//  else
-//    HideToolWindow(FDataInspector);
 end;
 
 procedure TdmConnectionViewManager.actCommitTransactionExecute(Sender: TObject);
@@ -530,7 +527,7 @@ begin
     Result := nil;
 end;
 
-function TdmConnectionViewManager.GetActiveDataView: IDGDataView;
+function TdmConnectionViewManager.GetActiveDataView: IDataView;
 begin
   if Assigned(FActiveConnectionView) then
     Result := FActiveConnectionView.ActiveDataView
@@ -561,7 +558,7 @@ begin
     Result := nil;
 end;
 
-function TdmConnectionViewManager.GetSettings: IDGSettings;
+function TdmConnectionViewManager.GetSettings: ISettings;
 begin
   Result := FSettings;
 end;
@@ -654,13 +651,12 @@ function TdmConnectionViewManager.AddConnectionView: IConnectionView;
 var
   CV : IConnectionView;
   EV : IEditorView;
-  DV : IDGDataView;
+  DV : IDataView;
   D  : IData;
-  S  : string;
   CP : TConnectionProfile;
 begin
   EV := GlobalContainer.Resolve<IEditorView>;
-  DV := GlobalContainer.Resolve<IDGDataView>(Settings.GridType);
+  DV := GlobalContainer.Resolve<IDataView>(Settings.GridType);
   DV.Settings := FSettings as IDataViewSettings;
   DV.PopupMenu := ConnectionViewPopupMenu;
   if Assigned(FActiveConnectionView) then
@@ -671,10 +667,7 @@ begin
   begin
     CP := DefaultConnectionProfile;
   end;
-  D := TdmDataFireDAC.Create(Self, FSettings);
-  //(D as IConnection).ConnectionSettings.Assign(CP.ConnectionSettings);
-
-
+  D := TdmDataFireDAC.Create(Self, CP.ConnectionSettings);
   DV.Data := D;
   CV := TfrmConnectionView.Create(Self, EV, DV, D);
   FConnectionViewList.Add(CV);

@@ -117,13 +117,13 @@ object frmSettingsDialog: TfrmSettingsDialog
               DesignSize = (
                 550
                 145)
-              object lblProtocols: TLabel
+              object lblDriver: TLabel
                 Left = 10
                 Top = 19
-                Width = 39
+                Width = 33
                 Height = 13
-                Caption = 'Protocol'
-                FocusControl = cbxProtocols
+                Caption = 'Driver:'
+                FocusControl = cbxDrivers
               end
               object lblDatabase: TLabel
                 Left = 10
@@ -141,14 +141,14 @@ object frmSettingsDialog: TfrmSettingsDialog
                 Caption = 'Catalog:'
                 FocusControl = edtCatalog
               end
-              object cbxProtocols: TComboBox
+              object cbxDrivers: TComboBox
                 Left = 66
                 Top = 16
                 Width = 145
                 Height = 21
                 DropDownCount = 30
                 TabOrder = 0
-                OnChange = cbxProtocolsChange
+                OnChange = cbxDriversChange
               end
               object btnConnectionString: TButton
                 Left = 217
@@ -174,16 +174,15 @@ object frmSettingsDialog: TfrmSettingsDialog
               end
               object edtCatalog: TButtonedEdit
                 Left = 66
-                Top = 68
+                Top = 69
                 Width = 481
                 Height = 21
                 Anchors = [akLeft, akTop, akRight]
                 Images = imlMain
+                RightButton.Enabled = False
                 RightButton.ImageIndex = 10
-                RightButton.Visible = True
                 TabOrder = 3
                 OnChange = edtCatalogChange
-                OnRightButtonClick = edtDatabaseRightButtonClick
               end
             end
             object grpProfileSettings: TGroupBox
@@ -1644,5 +1643,9 @@ object frmSettingsDialog: TfrmSettingsDialog
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
       000000000000}
+  end
+  object dlgOpenFile: TOpenDialog
+    Left = 544
+    Top = 296
   end
 end

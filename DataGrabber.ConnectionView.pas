@@ -94,7 +94,7 @@ type
 
   private
     FEditorView     : IEditorView;
-    FActiveDataView : IDGDataView;
+    FActiveDataView : IDataView;
     FActiveData     : IData;
     FVSTProfiles    : TVirtualStringTree;
     FDefaultNode    : PVirtualNode;
@@ -102,7 +102,7 @@ type
     function GetManager: IConnectionViewManager;
     function GetForm: TForm;
     function GetActiveData: IData;
-    function GetActiveDataView: IDGDataView;
+    function GetActiveDataView: IDataView;
     function GetEditorView: IEditorView;
     function GetActiveConnectionProfile: TConnectionProfile;
 
@@ -111,26 +111,22 @@ type
     procedure InitializeConnectionProfilesView;
     procedure Copy;
     procedure UpdateActions; override;
-
     procedure ApplySettings;
-
 
   public
     procedure AfterConstruction; override;
     constructor Create(
       AOwner      : TComponent;
       AEditorView : IEditorView;
-      ADataView   : IDGDataView;
+      ADataView   : IDataView;
       AData       : IData
     ); reintroduce; virtual;
     procedure BeforeDestruction; override;
 
-
-
     property Form: TForm
       read GetForm;
 
-    property ActiveDataView: IDGDataView
+    property ActiveDataView: IDataView
       read GetActiveDataView;
 
     property ActiveData: IData
@@ -161,7 +157,7 @@ uses
 
 {$REGION 'construction and destruction'}
 constructor TfrmConnectionView.Create(AOwner: TComponent;
-  AEditorView: IEditorView; ADataView: IDGDataView; AData: IData);
+  AEditorView: IEditorView; ADataView: IDataView; AData: IData);
 begin
   inherited Create(AOwner);
   Guard.CheckNotNull(AEditorView, 'AEditorView');
@@ -170,7 +166,6 @@ begin
   FEditorView     := AEditorView;
   FActiveDataView := ADataView;
   FActiveData     := AData;
-
   ActiveDataView.AssignParent(pnlBottom);
 end;
 
@@ -188,18 +183,6 @@ begin
   FActiveDataView := nil;
   FActiveData := nil;
   inherited BeforeDestruction;
-end;
-
-procedure TfrmConnectionView.InitializeEditorView;
-var
-  F: TForm;
-begin
-  F := FEditorView as TForm;
-  F.PopupMenu      := Manager.ConnectionViewPopupMenu;
-  F.BorderStyle    := bsNone;
-  F.Parent         := pnlTop;
-  F.Align          := alClient;
-  F.Visible        := True;
 end;
 {$ENDREGION}
 
@@ -295,7 +278,7 @@ begin
   Result := FActiveData;
 end;
 
-function TfrmConnectionView.GetActiveDataView: IDGDataView;
+function TfrmConnectionView.GetActiveDataView: IDataView;
 begin
   Result := FActiveDataView;
 end;
@@ -326,12 +309,24 @@ begin
   FVSTProfiles.OnGetText         := FVSTProfilesGetText;
   FVSTProfiles.OnFocusChanged    := FVSTProfilesFocusChanged;
   FVSTProfiles.OnPaintText       := FVSTProfilesPaintText;
-  FVSTProfiles.Header.Options := FVSTProfiles.Header.Options - [hoVisible];
+  FVSTProfiles.Header.Options    := FVSTProfiles.Header.Options - [hoVisible];
   FVSTProfiles.TreeOptions.PaintOptions :=
     FVSTProfiles.TreeOptions.PaintOptions - [toHideSelection];
   FVSTProfiles.Colors.FocusedSelectionColor := clBtnHighlight;
   FVSTProfiles.Margins.Right := 0;
   FVSTProfiles.Indent        := 0;
+end;
+
+procedure TfrmConnectionView.InitializeEditorView;
+var
+  F: TForm;
+begin
+  F := FEditorView as TForm;
+  F.PopupMenu   := Manager.ConnectionViewPopupMenu;
+  F.BorderStyle := bsNone;
+  F.Parent      := pnlTop;
+  F.Align       := alClient;
+  F.Visible     := True;
 end;
 
 procedure TfrmConnectionView.ApplySettings;
@@ -348,9 +343,7 @@ begin
     ];
     Application.Title := CP.Name;
     Caption := CP.Name;
-      //FActiveData.Connection.ConnectionSettings.Assign(CP.ConnectionSettings);
-    FActiveData.PacketRecords := CP.PacketRecords;
-    FActiveData.FetchOnDemand := CP.FetchOnDemand;
+//    FActiveData.ConnectionSettings.Assign(CP.ConnectionSettings);
   end;
 end;
 

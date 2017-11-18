@@ -28,12 +28,10 @@ uses
 
   DDuce.Components.GridView, DDuce.Components.DBGridView,
 
-  //ts.Components.DBGridViewSort,
-
   DataGrabber.Interfaces;
 
 type
-  TfrmGridView = class(TForm, IDataView, IDGDataView)
+  TfrmGridView = class(TForm, IDataView)
     dscMain: TDataSource;
 
     procedure dscMainStateChange(Sender: TObject);
@@ -197,11 +195,6 @@ uses
 procedure TfrmGridView.AfterConstruction;
 begin
   inherited AfterConstruction;
-//  FConstCols := TCollections.CreateObjectList<TDBGridColumn>(False);
-//  FEmptyCols := TCollections.CreateObjectList<TDBGridColumn>(False);
-//  FConstantColumnsVisible := True;
-//  FEmptyColumnsVisible    := True;
-
   FGrid                          := TDBGridView.Create(Self);
   FGrid.Align                    := alClient;
   FGrid.Parent                   := Self;
@@ -580,12 +573,14 @@ end;
 
 function TfrmGridView.IsCheckBoxField(const AFieldName: string): Boolean;
 begin
-  Result := (Data as IDisplayData).IsCheckBoxField(AFieldName);
+  //Result := (Data as IDisplayData).IsCheckBoxField(AFieldName);
+  Result := False;
 end;
 
 function TfrmGridView.IsLookupField(const AFieldName: string): Boolean;
 begin
-  Result := (Data as IDisplayData).IsLookupField(AFieldName);
+  //Result := (Data as IDisplayData).IsLookupField(AFieldName);
+  Result := False;
 end;
 
 procedure TfrmGridView.InitializeGridColumn(AGridColumn: TDBGridColumn);

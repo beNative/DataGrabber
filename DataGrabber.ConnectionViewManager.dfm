@@ -143,7 +143,7 @@ object dmConnectionViewManager: TdmConnectionViewManager
     end
     object actInspect: TAction
       Category = 'Inspect'
-      Caption = 'actInspect'
+      Caption = 'Inspect'
       ImageIndex = 32
       ShortCut = 16496
       OnExecute = actInspectExecute
@@ -151,7 +151,7 @@ object dmConnectionViewManager: TdmConnectionViewManager
     object actDataInspector: TAction
       Category = 'Inspect'
       AutoCheck = True
-      Caption = 'Toggle data inspector'
+      Caption = 'Data inspector'
       OnExecute = actDataInspectorExecute
     end
     object actcxGrid: TAction
@@ -182,22 +182,22 @@ object dmConnectionViewManager: TdmConnectionViewManager
     end
     object actInspectDataSet: TAction
       Category = 'Inspect'
-      Caption = 'Inspect dataset'
+      Caption = 'Dataset'
       OnExecute = actInspectDataSetExecute
     end
     object actInspectConnection: TAction
       Category = 'Inspect'
-      Caption = 'connection'
+      Caption = 'Connection'
       OnExecute = actInspectConnectionExecute
     end
     object actInspectGrid: TAction
       Category = 'Inspect'
-      Caption = 'Inspect grid'
+      Caption = 'Grid'
       OnExecute = actInspectGridExecute
     end
     object actInspectFields: TAction
       Category = 'Inspect'
-      Caption = 'Inspect fields'
+      Caption = 'Fields'
       OnExecute = actInspectFieldsExecute
     end
     object actToggleRepositoryTree: TAction
@@ -250,7 +250,7 @@ object dmConnectionViewManager: TdmConnectionViewManager
     end
     object actSelectionAsWhereIn: TAction
       Category = 'Grid'
-      Caption = 'Selection as WHERE ... IN (...)'
+      Caption = '... as SQL WHERE ... IN (...) clause'
       OnExecute = actSelectionAsWhereInExecute
     end
     object actCreateModel: TAction
@@ -342,15 +342,12 @@ object dmConnectionViewManager: TdmConnectionViewManager
       end
       object mniInspectDataSet: TMenuItem
         Action = actInspectDataSet
-        Caption = 'Dataset'
       end
       object mniInspectFields: TMenuItem
         Action = actInspectFields
-        Caption = 'Fields'
       end
       object mniInspectGrid: TMenuItem
         Action = actInspectGrid
-        Caption = 'Grid'
       end
     end
     object mniN3: TMenuItem

@@ -43,6 +43,8 @@ const
     '  inner join Genre g'                    + #13#10 +
     '    on (g.GenreId = t.GenreId)';
 
+  SETTINGS_FILE = 'settings.json';
+
 resourcestring
   SFetchingData       = 'Fetching data...';
   SUpdatingView       = 'Updating view...';

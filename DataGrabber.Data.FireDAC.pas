@@ -1,4 +1,4 @@
-{
+﻿{
   Copyright (C) 2013-2017 Tim Sinaeve tim.sinaeve@gmail.com
 
   Licensed under the Apache License, Version 2.0 (the "License");
@@ -35,6 +35,15 @@ uses
   FireDAC.Stan.Pool, FireDAC.Stan.Async, FireDAC.Stan.Param,
   FireDAC.UI.Intf,
   FireDAC.Phys, FireDAC.Phys.Intf,
+  FireDAC.Phys.Oracle, FireDAC.Phys.MSSQL, FireDAC.Phys.ADS, FireDAC.Phys.ASA,
+  FireDAC.Phys.DB2, FireDAC.Phys.DS, FireDAC.Phys.FB, FireDAC.Phys.IB,
+  FireDAC.Phys.Infx, FireDAC.Phys.MongoDB, FireDAC.Phys.MSAcc,
+  FireDAC.Phys.MySQL, FireDAC.Phys.ODBC, FireDAC.Phys.PG, FireDAC.Phys.SQLite,
+  FireDAC.Phys.TData, FireDAC.Phys.TDBX,
+
+  FireDAC.VCLUI.Async,
+  FireDAC.Comp.UI,
+
   FireDAC.DApt.Intf, FireDAC.DApt,
   FireDAC.DatS,
   FireDAC.Comp.DataSet, FireDAC.Comp.Client,
@@ -45,11 +54,10 @@ uses
   DataGrabber.ConnectionSettings, DataGrabber.Interfaces;
 
 type
-  TdmDataFireDAC = class(TDataModule, IData, IFieldLists, IFieldVisiblity,
-    IDataEvents)
+  TdmDataFireDAC = class(TDataModule, IData, IDataEvents, IFieldLists,
+    IFieldVisiblity)
     conMain    : TFDConnection;
     qryMain    : TFDQuery;
-    dsMemTable : TFDMemTable;
 
   private
     FConstantFields         : IList<TField>;
@@ -61,14 +69,12 @@ type
     FShowFavoriteFieldsOnly : Boolean;
     FExecuted               : Boolean;
     FFetchOnDemand          : Boolean;
-    FConnectionString       : string;
     FPacketRecords          : Integer;
     FSQL                    : string;
     FConnectionSettings     : TConnectionSettings;
     FMaxRecords             : Integer;
     FProtocols              : TStrings;
     FOnAfterExecute         : Event<TNotifyEvent>;
-    FSettings               : IDGSettings;
 
     {$REGION 'property access methods'}
     function GetConstantFields: IList<TField>;
@@ -80,21 +86,16 @@ type
     procedure SetConstantFieldsVisible(const Value: Boolean);
     procedure SetEmptyFieldsVisible(const Value: Boolean);
     procedure SetShowFavoriteFieldsOnly(const Value: Boolean);
-    {$ENDREGION}
-
     function GetConnected: Boolean;
     procedure SetConnected(const Value: Boolean);
     function GetConnectionString: string;
     procedure SetConnectionString(const Value: string);
     function GetProtocols: TStrings;
     function GetConnectionSettings: TConnectionSettings;
-
-    {$REGION 'property access methods'}
     function GetDataSet : TDataSet;
     function GetRecordCount : Integer;
     function GetExecuted: Boolean;
     function GetActive: Boolean;
-    //function GetConnection: IConnection;
     procedure SetExecuted(const Value: Boolean);
     function GetMaxRecords: Integer;
     procedure SetMaxRecords(const Value: Integer);
@@ -105,18 +106,18 @@ type
     function GetCanModify: Boolean;
     function GetFetchOnDemand: Boolean;
     procedure SetFetchOnDemand(const Value: Boolean);
+    function GetFDQuery: TFDQuery;
+    function GetOnAfterExecute: IEvent<TNotifyEvent>;
+    function GetConnection: TFDConnection;
     {$ENDREGION}
 
-    procedure Execute; overload;
+    procedure Execute;
 
     procedure InternalExecute(const ACommandText : string); virtual;
 
-    function Execute(const ACommandText: string): Boolean; overload;
-    function GetConnection: TFDConnection;
-    function GetFDQuery: TFDQuery;
-    function GetOnAfterExecute: IEvent<TNotifyEvent>;
-
   protected
+
+    procedure InitializeConnection;
     procedure InitFields(ADataSet: TDataSet);
 
     procedure UpdateFieldLists;
@@ -169,14 +170,17 @@ type
     {$ENDREGION}
 
   public
-    constructor Create(AOwner: TComponent; ASettings: IDGSettings); reintroduce;
+    constructor Create(
+      AOwner    : TComponent;
+      ASettings : TConnectionSettings
+    ); reintroduce;
     procedure AfterConstruction; override;
 
     function ShowAllFields: Boolean;
     procedure InitField(AField: TField);
     procedure BeforeDestruction; override;
 
-    { IFieldLists }
+    {$REGION 'IFieldLists'}
     property ConstantFields: IList<TField>
       read GetConstantFields;
 
@@ -185,8 +189,9 @@ type
 
     property NonEmptyFields: IList<TField>
       read GetNonEmptyFields;
+    {$ENDREGION}
 
-    { IFieldVisibility }
+    {$REGION 'IFieldVisibility'}
     property ConstantFieldsVisible: Boolean
       read GetConstantFieldsVisible write SetConstantFieldsVisible;
 
@@ -195,9 +200,12 @@ type
 
     property ShowFavoriteFieldsOnly: Boolean
       read GetShowFavoriteFieldsOnly write SetShowFavoriteFieldsOnly;
+    {$ENDREGION}
 
+    {$REGION 'IDataEvents'}
     property OnAfterExecute: IEvent<TNotifyEvent>
       read GetOnAfterExecute;
+    {$ENDREGION}
 
   end;
 
@@ -206,6 +214,15 @@ implementation
 {$R *.dfm}
 
 {$REGION 'construction and destruction'}
+constructor TdmDataFireDAC.Create(AOwner: TComponent;
+  ASettings: TConnectionSettings);
+begin
+  inherited Create(AOwner);
+  FConnectionSettings := TConnectionSettings.Create;
+  Guard.CheckNotNull(ASettings, 'ASettings');
+  FConnectionSettings.Assign(ASettings);
+end;
+
 procedure TdmDataFireDAC.AfterConstruction;
 begin
   inherited AfterConstruction;
@@ -215,24 +232,18 @@ begin
   FFavoriteFields := TCollections.CreateObjectList<TField>(False);
   FConstantFieldsVisible := True;
   FEmptyFieldsVisible    := True;
-  FPacketRecords         := -1; // fetch all
-  FMaxRecords            := -1; // fetch all
   FProtocols := TStringList.Create;
   FDManager.GetDriverNames(Protocols);
+  InitializeConnection;
 end;
 
 procedure TdmDataFireDAC.BeforeDestruction;
 begin
+  FConnectionSettings.Free;
   FProtocols.Free;
   FOnAfterExecute.RemoveAll(Self);
   inherited BeforeDestruction;
 end;
-constructor TdmDataFireDAC.Create(AOwner: TComponent; ASettings: IDGSettings);
-begin
-  inherited Create(AOwner);
-  FSettings := ASettings;
-end;
-
 {$ENDREGION}
 
 {$REGION 'property access methods'}
@@ -297,7 +308,6 @@ begin
 end;
 {$ENDREGION}
 
-{$REGION 'IConnection'}
 function TdmDataFireDAC.GetFDQuery: TFDQuery;
 begin
   Result := qryMain;
@@ -385,6 +395,14 @@ begin
   Result := Connection.Connected;
 end;
 
+procedure TdmDataFireDAC.SetConnected(const Value: Boolean);
+begin
+  if Value <> Connected then
+  begin
+    Connection.Connected := Value;
+  end;
+end;
+
 function TdmDataFireDAC.GetConnection: TFDConnection;
 begin
   Result := conMain;
@@ -394,35 +412,22 @@ function TdmDataFireDAC.GetConnectionSettings: TConnectionSettings;
 begin
   Result := FConnectionSettings;
 end;
-{$ENDREGION}
-
-{$REGION 'IData'}
-
-{$ENDREGION}
 
 function TdmDataFireDAC.GetOnAfterExecute: IEvent<TNotifyEvent>;
 begin
   Result := FOnAfterExecute;
 end;
 
-procedure TdmDataFireDAC.SetConnected(const Value: Boolean);
-begin
-  if Value <> Connected then
-  begin
-    Connection.Connected := Value;
-  end;
-end;
-
 function TdmDataFireDAC.GetConnectionString: string;
 begin
-  Result := Connection.ConnectionString;
+  Result := conMain.ConnectionString;
 end;
 
 procedure TdmDataFireDAC.SetConnectionString(const Value: string);
 begin
   if Value <> ConnectionString then
   begin
-    Connection.ConnectionString := Value;
+    conMain.ConnectionString := Value;
   end;
 end;
 
@@ -441,7 +446,6 @@ end;
 {$ENDREGION}
 
 {$REGION 'protected methods'}
-
 procedure TdmDataFireDAC.InitField(AField: TField);
 var
   B: Boolean;
@@ -465,25 +469,49 @@ begin
     InitField(Field);
 end;
 
+procedure TdmDataFireDAC.InitializeConnection;
+begin
+  conMain.FetchOptions.RowsetSize := ConnectionSettings.PacketRecords;
+  if ConnectionSettings.FetchOnDemand then
+    conMain.FetchOptions.Mode := fmOnDemand
+  else
+    conMain.FetchOptions.Mode := fmAll;
+  conMain.ConnectionString := ConnectionSettings.ConnectionString;
+  conMain.DriverName       := ConnectionSettings.DriverName;
+
+
+  if ConnectionSettings.DriverName <> '' then
+  begin
+    Connected := False;
+    conMain.DriverName := ConnectionSettings.DriverName;
+    //Connection.Offlined := ConnectionSettings.DisconnectedMode;
+    with conMain.Params do
+    begin
+      Values['Server']    := ConnectionSettings.HostName;
+      Values['Database']  := ConnectionSettings.Database;
+      Values['User_Name'] := ConnectionSettings.User;
+      Values['Password']  := ConnectionSettings.Password;
+      Values['OSAuthent'] := 'Yes';
+    end;
+    Connection.LoginPrompt := False;
+    // Set this to prevent issues with FireDac's need for a cursor object﻿
+    Connection.ResourceOptions.SilentMode := True;
+    Connection.ResourceOptions.AutoReconnect := True;
+  end;
+
+end;
+
 procedure TdmDataFireDAC.InternalExecute(const ACommandText: string);
 begin
   if Trim(ACommandText) <> '' then
   begin
-    FDQuery.Active := False;
-    FDQuery.FetchOptions.RecsMax := MaxRecords;
-    if FetchOnDemand then
-      FDQuery.FetchOptions.Mode := fmOnDemand
-    else
-      FDQuery.FetchOptions.Mode := fmAll;
-    FDQuery.FetchOptions.RowsetSize := PacketRecords;
-    FDQuery.SQL.Text := ACommandText;
-    FDQuery.ExecSQL;
+    FDQuery.Close;
+    FDQuery.Open(ACommandText);
   end;
 end;
 
 function TdmDataFireDAC.ShowAllFields: Boolean;
 var
-  B : Boolean;
   F : TField;
 begin
   Result := False;
@@ -539,14 +567,6 @@ begin
     DataSet.EnableControls;
   end;
 end;
-{$ENDREGION}
-
-
-function TdmDataFireDAC.Execute(const ACommandText: string): Boolean;
-begin
-  SQL := ACommandText;
-  Execute;
-end;
 
 procedure TdmDataFireDAC.Execute;
 begin
@@ -557,6 +577,7 @@ begin
     OnAfterExecute.Invoke(Self);
   FExecuted := True;
 end;
+{$ENDREGION}
 
 end.
 

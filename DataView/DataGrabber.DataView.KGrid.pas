@@ -29,7 +29,7 @@ uses
   DataGrabber.Interfaces;
 
 type
-  TfrmKGrid = class(TForm, IDataView, IDGDataView)
+  TfrmKGrid = class(TForm, IDataView)
     grdMain : TKDBGrid;
     dscMain : TDataSource;
 

@@ -82,7 +82,6 @@ object frmMain: TfrmMain
       BevelKind = bkFlat
       BevelOuter = bvNone
       TabOrder = 1
-      ExplicitLeft = 519
     end
     object pnlElapsedTime: TPanel
       AlignWithMargins = True
@@ -115,7 +114,6 @@ object frmMain: TfrmMain
       BevelKind = bkFlat
       BevelOuter = bvNone
       TabOrder = 3
-      ExplicitLeft = 571
     end
     object pnlConnectionStatus: TPanel
       AlignWithMargins = True

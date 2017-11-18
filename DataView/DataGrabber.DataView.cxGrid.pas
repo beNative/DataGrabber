@@ -45,7 +45,7 @@ uses
 }
 
 type
-  TfrmcxGrid = class(TFrame, IDataView, IDGDataView, IGroupable, IMergable)
+  TfrmcxGrid = class(TForm, IDataView, IGroupable, IMergable)
     dscMain        : TDataSource;
     grdMain        : TcxGrid;
     grlGrid1Level1 : TcxGridLevel;
@@ -122,10 +122,7 @@ type
       AIncludeHeader : Boolean = False
     ): string; overload;
 
-    procedure UpdateColumnLists;
-
   public
-    constructor Create; reintroduce;
     procedure AfterConstruction; override;
     procedure BeforeDestruction; override;
 
@@ -141,17 +138,22 @@ type
     procedure BeginUpdate;
     procedure EndUpdate;
 
-    function SelectionToWikiTable(AIncludeHeader: Boolean = False): string;
-      overload;
-    function SelectionToTextTable(AIncludeHeader: Boolean = False): string;
-      overload;
-    function SelectionToDelimitedTable(
-      ADelimiter    : string = #9; // TAB
-      AIncludeHeader: Boolean = True
+    function SelectionToWikiTable(
+      AIncludeHeader : Boolean = False
     ): string; overload;
-    function SelectionToCommaText(AQuoteItems: Boolean = True): string;
-      overload;
-    function SelectionToFields(AQuoteItems: Boolean = True): string; overload;
+    function SelectionToTextTable(
+      AIncludeHeader : Boolean = False
+    ): string; overload;
+    function SelectionToDelimitedTable(
+      ADelimiter     : string = #9; // TAB
+      AIncludeHeader : Boolean = True
+    ): string; overload;
+    function SelectionToCommaText(
+      AQuoteItems : Boolean = True
+    ): string; overload;
+    function SelectionToFields(
+      AQuoteItems : Boolean = True
+    ): string; overload;
 
     property DataSet: TDataSet
       read GetDataSet;
@@ -231,17 +233,6 @@ end;
 {$ENDREGION}
 
 {$REGION 'construction and destruction'}
-constructor TfrmcxGrid.Create;
-begin
-  inherited Create(Application);
-  Name := '';
-end;
-
-procedure TfrmcxGrid.DataAfterExecute(Sender: TObject);
-begin
-  UpdateView;
-end;
-
 procedure TfrmcxGrid.AfterConstruction;
 begin
   inherited AfterConstruction;
@@ -349,6 +340,11 @@ end;
 {$ENDREGION}
 
 {$REGION 'event handlers'}
+procedure TfrmcxGrid.DataAfterExecute(Sender: TObject);
+begin
+  UpdateView;
+end;
+
 procedure TfrmcxGrid.tvwMainCustomDrawCell(Sender: TcxCustomGridTableView;
   ACanvas: TcxCanvas; AViewInfo: TcxGridTableDataCellViewInfo;
   var ADone: Boolean);
@@ -654,58 +650,6 @@ end;
 {$ENDREGION}
 
 {$REGION 'public methods'}
-procedure TfrmcxGrid.UpdateColumnLists;
-//var
-//  X       : Integer;
-//  Y       : Integer;
-//  IsEmpty : Boolean;
-//  IsConst : Boolean;
-//  DC      : TcxGridDBDataController;
-//  S       : string;
-//  T       : string;
-//  C       : TcxGridDBColumn;
-begin
-//  FConstCols.Clear;
-//  FEmptyCols.Clear;
-//  DC := tvwMain.DataController;
-//  if DC.RecordCount > 0 then
-//  begin
-//    BeginUpdate;
-//    try
-//      for X := 0 to tvwMain.ColumnCount - 1 do
-//      begin
-//        C := tvwMain.Columns[X];
-//        Y := 0;
-//        IsEmpty := True;
-//        while IsEmpty and (Y < DC.RecordCount) do
-//        begin
-//          S := VarToStrDef(DC.GetValue(Y, X), '');
-//          IsEmpty := (S = '') or (S = '0') or (S = 'False');
-//          Inc(Y);
-//        end;
-//        if IsEmpty then
-//          FEmptyCols.Add(C);
-//        Y := 0;
-//        IsConst := True;
-//        S := VarToStrDef(DC.GetValue(Y, X), '');
-//        while IsConst and (Y < DC.RecordCount) do
-//        begin
-//          T := VarToStrDef(DC.GetValue(Y, X), '');
-//          IsConst := S = T;
-//          Inc(Y);
-//        end;
-//        if IsConst then
-//          FConstCols.Add(C);
-//        C.Visible := (DC.RecordCount <= 1) or
-//          ((not (not EmptyColumnsVisible and IsEmpty)) and
-//          (not (not ConstantColumnsVisible and IsConst)));
-//      end;
-//    finally
-//      EndUpdate;
-//    end;
-//  end;
-end;
-
 procedure TfrmcxGrid.UpdateView;
 begin
   dscMain.DataSet := DataSet;
@@ -781,15 +725,16 @@ end;
 
 procedure TfrmcxGrid.AssignParent(AParent: TWinControl);
 begin
-  Parent := AParent;
-  Align  := alClient;
+  Parent      := AParent;
+  BorderStyle := bsNone;
+  Align       := alClient;
+  Visible     := True;
 end;
 
 procedure TfrmcxGrid.AutoSizeColumns;
 begin
   tvwMain.BeginBestFitUpdate;
   try
-    UpdateColumnLists;
     tvwMain.ApplyBestFit;
   finally
     tvwMain.EndBestFitUpdate;

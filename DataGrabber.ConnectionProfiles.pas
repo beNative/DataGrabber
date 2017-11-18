@@ -69,9 +69,6 @@ type
     property DisplayName: string
       read GetDisplayName write SetDisplayName;
 
-    property ConnectionString: string
-      read FConnectionString write FConnectionString;
-
     property ProfileColor: TColor
       read FProfileColor write FProfileColor default clWhite;
 
@@ -83,12 +80,6 @@ type
 
     property ConnectionSettings: TConnectionSettings
       read FConnectionSettings write FConnectionSettings;
-
-    property FetchOnDemand: Boolean
-      read FFetchOnDemand write FFetchOnDemand;
-
-    property PacketRecords: Integer
-      read FPacketRecords write FPacketRecords;
   end;
 
   TConnectionProfileClass = class of TConnectionProfile;
@@ -330,7 +321,6 @@ begin
      Collection.BeginUpdate;
    try
      ProfileColor     := CP.ProfileColor;
-     ConnectionString := CP.ConnectionString;
      VisibleItems     := CP.VisibleItems;
      ConnectionSettings.Assign(CP.ConnectionSettings);
    finally

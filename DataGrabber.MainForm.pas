@@ -123,13 +123,13 @@ type
 
   private
     FManager     : IConnectionViewManager;
-    FSettings    : IDGSettings;
+    FSettings    : ISettings;
 
   protected
     function GetActiveConnectionView: IConnectionView;
     function GetActiveConnectionProfile: TConnectionProfile;
     function GetData: IData;
-    function GetSettings: IDGSettings;
+    function GetSettings: ISettings;
     function GetManager: IConnectionViewManager;
 
     procedure UpdateStatusBar;
@@ -159,7 +159,7 @@ type
     property Data: IData
       read GetData;
 
-    property Settings: IDGSettings
+    property Settings: ISettings
       read GetSettings;
   end;
 
@@ -187,15 +187,12 @@ begin
   Logger.Channels.Add(TLoggerFactories.CreateWinIPCChannel);
   Logger.Clear;
   FManager  := GlobalContainer.Resolve<IConnectionViewManager>;
-  FSettings := GlobalContainer.Resolve<IDGSettings>;
+  FSettings := GlobalContainer.Resolve<ISettings>;
   AddConnectionView;
   tlbMain.Images := FManager.ActionList.Images;
   InitializeActions;
   pnlStatus.Caption := SReady;
-  //SetWindowSizeGrip(pnlStatusBar.Handle, True);
-
-  //FManager.ActiveConnectionView.EditorView.Text := EXAMPLE_QUERY;
-
+  FManager.ActiveConnectionView.EditorView.Text := EXAMPLE_QUERY;
 end;
 
 procedure TfrmMain.BeforeDestruction;
@@ -320,7 +317,7 @@ begin
   Result := Manager.ActiveData;
 end;
 
-function TfrmMain.GetSettings: IDGSettings;
+function TfrmMain.GetSettings: ISettings;
 begin
   Result := FSettings;
 end;
@@ -339,7 +336,7 @@ begin
   S := APanel.Caption;
   if Trim(S) <> '' then
   begin
-    APanel.Width := DataGrabber.Utils.GetTextWidth(APanel.Caption, APanel.Font) + 10;
+    APanel.Width := GetTextWidth(APanel.Caption, APanel.Font) + 10;
     APanel.AlignWithMargins := True;
   end
   else
