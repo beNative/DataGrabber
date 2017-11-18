@@ -30,15 +30,10 @@ type
   TConnectionProfile = class(TCollectionItem)
   private
     FName               : string;
-    FConnectionString   : string;
     FProfileColor       : TColor;
     FVisibleItems       : TStrings;
     FFavoriteFields     : TStrings;
     FConnectionSettings : TConnectionSettings;
-    FConnectionType     : string;
-    FFetchOnDemand      : Boolean;
-    FPacketRecords      : Integer;
-    FProviderMode       : Boolean;
 
   protected
     procedure SetCollection(const Value: TConnectionProfiles); reintroduce;
