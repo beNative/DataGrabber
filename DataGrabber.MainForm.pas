@@ -176,7 +176,7 @@ uses
 
   Spring.Container,
 
-  DDuce.ObjectInspector, DDuce.Logger, DDuce.Logger.Factories,
+  DDuce.ObjectInspector.zObjectInspector, DDuce.Logger, DDuce.Logger.Factories,
 
   DataGrabber.Utils, DataGrabber.Resources, DataGrabber.Factories;
 

@@ -31,11 +31,6 @@ uses
 
 type
   TConnectionProfileValueManager = class(TzCustomValueManager)
-  private
-    function GetConnectionProfile(
-      const PItem: PPropItem
-    ): TConnectionProfile;
-
   public
     procedure SetValue(
       const PItem : PPropItem;
@@ -66,17 +61,6 @@ uses
   DataGrabber.Interfaces,
 
   DDuce.Logger;
-
-{$REGION 'private methods'}
-function TConnectionProfileValueManager.GetConnectionProfile(
-  const PItem: PPropItem): TConnectionProfile;
-begin
-  if Assigned(PItem.Parent) then
-    Result := PItem.Parent.Instance as TConnectionProfile
-  else
-    Result := PItem.Instance as TConnectionProfile;
-end;
-{$ENDREGION}
 
 {$REGION 'protected methods'}
 function TConnectionProfileValueManager.HasButton(

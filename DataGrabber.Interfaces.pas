@@ -70,15 +70,9 @@ type
     function GetExecuted: Boolean;
     function GetActive: Boolean;
     procedure SetExecuted(const Value: Boolean);
-    function GetMaxRecords: Integer;
-    procedure SetMaxRecords(const Value: Integer);
-    function GetPacketRecords: Integer;
-    procedure SetPacketRecords(const Value: Integer);
     function GetSQL: string;
     procedure SetSQL(const Value: string);
     function GetCanModify: Boolean;
-    function GetFetchOnDemand: Boolean;
-    procedure SetFetchOnDemand(const Value: Boolean);
     function GetConnectionSettings: TConnectionSettings;
     function GetConnection: TFDConnection;
     {$ENDREGION}
@@ -105,9 +99,6 @@ type
 
     property RecordCount: Integer
       read GetRecordCount;
-
-    property MaxRecords: Integer
-      read GetMaxRecords write SetMaxRecords;
 
     property ConnectionSettings: TConnectionSettings
       read GetConnectionSettings;
@@ -289,7 +280,6 @@ type
 
     property ShowVerticalGridLines: Boolean
       read GetShowVerticalGridLines write SetShowVerticalGridLines;
-
   end;
 
   IConnectionViews = interface

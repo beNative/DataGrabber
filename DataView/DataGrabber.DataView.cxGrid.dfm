@@ -29,8 +29,8 @@ object frmcxGrid: TfrmcxGrid
     ParentFont = False
     TabOrder = 0
     LevelTabs.Slants.Positions = []
-    LevelTabs.Style = 5
-    LookAndFeel.Kind = lfStandard
+    LevelTabs.Style = 6
+    LookAndFeel.Kind = lfUltraFlat
     LookAndFeel.NativeStyle = True
     object tvwMain: TcxGridDBTableView
       Navigator.Buttons.ConfirmDelete = True
@@ -40,13 +40,9 @@ object frmcxGrid: TfrmcxGrid
       Navigator.Visible = True
       FilterBox.MRUItemsListDropDownCount = 10
       FindPanel.ApplyInputDelay = 500
-      FindPanel.DisplayMode = fpdmManual
       FindPanel.MRUItemsListCount = 100
       FindPanel.MRUItemsListDropDownCount = 20
       FindPanel.Position = fppBottom
-      FindPanel.ShowClearButton = False
-      FindPanel.ShowCloseButton = False
-      FindPanel.ShowFindButton = False
       OnCustomDrawCell = tvwMainCustomDrawCell
       DataController.DataModeController.GridMode = True
       DataController.DataSource = dscMain
@@ -74,7 +70,6 @@ object frmcxGrid: TfrmcxGrid
       OptionsBehavior.IncSearch = True
       OptionsBehavior.NavigatorHints = True
       OptionsBehavior.BestFitMaxRecordCount = 100
-      OptionsBehavior.EditMode = emInplaceEditForm
       OptionsBehavior.PullFocusing = True
       OptionsCustomize.ColumnHiding = True
       OptionsCustomize.ColumnsQuickCustomization = True
@@ -85,12 +80,9 @@ object frmcxGrid: TfrmcxGrid
       OptionsSelection.MultiSelect = True
       OptionsSelection.CellMultiSelect = True
       OptionsView.CellEndEllipsis = True
+      OptionsView.FocusRect = False
       OptionsView.ExpandButtonsForEmptyDetails = False
-      OptionsView.Footer = True
-      OptionsView.FooterAutoHeight = True
-      OptionsView.FooterMultiSummaries = True
       OptionsView.GridLineColor = clSilver
-      OptionsView.GroupFooterMultiSummaries = True
       OptionsView.HeaderEndEllipsis = True
       OnCustomDrawGroupSummaryCell = tvwMainCustomDrawGroupSummaryCell
     end

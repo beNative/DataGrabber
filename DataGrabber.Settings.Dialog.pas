@@ -24,6 +24,7 @@ uses
   System.Classes, System.TypInfo,
   Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, Vcl.ToolWin,
   Vcl.StdCtrls, Vcl.ComCtrls, Vcl.ActnList, Vcl.Buttons, Vcl.ImgList,
+  FireDAC.Stan.Intf,
 
   VirtualTrees,
 
@@ -83,10 +84,11 @@ type
     btnProfileColor                : TKColorButton;
     btnStringColor                 : TKColorButton;
     btnTimeColor                   : TKColorButton;
-    cbxDrivers: TComboBox;
+    cbxDrivers                     : TComboBox;
     chkFetchOnDemand               : TCheckBox;
     chkGridCellColoringEnabled     : TCheckBox;
     chkSetAsDefault                : TCheckBox;
+    dlgOpenFile                    : TOpenDialog;
     edtCatalog                     : TButtonedEdit;
     edtDatabase                    : TButtonedEdit;
     edtPacketRecords               : TEdit;
@@ -102,13 +104,13 @@ type
     lblDatabase                    : TLabel;
     lblDates                       : TLabel;
     lblDateTimes                   : TLabel;
+    lblDriver                      : TLabel;
     lblFloats                      : TLabel;
     lblIntegers                    : TLabel;
     lblMemo                        : TLabel;
     lblNULL                        : TLabel;
     lblPacketrecords               : TLabel;
     lblProfileColor                : TLabel;
-    lblDriver: TLabel;
     lblString                      : TLabel;
     lblTimes                       : TLabel;
     pgcConnectionProfile           : TPageControl;
@@ -125,7 +127,8 @@ type
     tsConnectionProfiles           : TTabSheet;
     tsDisplay                      : TTabSheet;
     tsSettings                     : TTabSheet;
-    dlgOpenFile: TOpenDialog;
+    actTestConnection: TAction;
+    btnTestConnection: TButton;
     {$ENDREGION}
 
     {$REGION 'action handlers'}
@@ -189,6 +192,7 @@ type
     procedure actGridlinesNoneExecute(Sender: TObject);
     procedure chkGridCellColoringEnabledClick(Sender: TObject);
     procedure actGridlinesBothExecute(Sender: TObject);
+    procedure actTestConnectionExecute(Sender: TObject);
     {$ENDREGION}
 
   private
@@ -242,13 +246,14 @@ implementation
 uses
   System.Rtti, System.UITypes,
 
-  FireDAC.VCLUI.ConnEdit, FireDAC.Comp.Client,
+  FireDAC.VCLUI.ConnEdit, FireDAC.Comp.Client, FireDAC.Stan.Option,
 
-  Spring.Container,
+  Spring, Spring.Container,  Spring.Helpers, Spring.Reflection,
 
-  DDuce.Factories,
+  DDuce.Factories, DDuce.Logger,
 
-  DataGrabber.Utils;
+  DataGrabber.Utils, DataGrabber.ConnectionSettings;
+
 
 {$REGION 'interfaced routines'}
 procedure ExecuteSettingsDialog(ASettings: ISettings;
@@ -280,7 +285,7 @@ begin
   FValueManager := TConnectionProfileValueManager.Create;
   FObjectInspector :=
     TFactories.CreatezObjectInspector(Self, tsAdvanced, nil, FValueManager);
-  FObjectInspector.SplitterPos     := FObjectInspector.Width div 2;
+  FObjectInspector.SplitterPos     := FObjectInspector.Width div 4;
   FObjectInspector.SortByCategory  := False;
   FObjectInspector.OnBeforeAddItem := FObjectInspectorBeforeAddItem;
 
@@ -330,13 +335,45 @@ end;
 
 procedure TfrmSettingsDialog.actConnectionStringExecute(Sender: TObject);
 var
-  CP : TConnectionProfile;
-  S  : string;
+  CD : IFDStanConnectionDef;
+  OC : IFDStanOptions;
+  CS : TConnectionSettings;
 begin
-  CP := FSettings.ConnectionProfiles[FVSTProfiles.FocusedNode.Index];
-  S := CP.ConnectionSettings.ConnectionString;
-  TfrmFDGUIxFormsConnEdit.Execute(S, '');
-  CP.ConnectionSettings.ConnectionString := S;
+  CS := SelectedProfile.ConnectionSettings;
+  OC := TFDOptionsContainer.Create(
+    FDManager, // inherit standard options from global manager instance
+    TFDFetchOptions,
+    TFDUpdateOptions,
+    TFDResourceOptions,
+    nil
+  );
+  CD := FDManager.ConnectionDefs.AddConnectionDef;
+  CD.Params.DriverID := CS .DriverName;
+  CD.Params.Database := CS .Database;
+  CD.Params.UserName := CS .UserName;
+  CD.Params.Password := CS .Password;
+  OC.FetchOptions.RecsMax := CS.MaxRecords;
+  if CS .FetchOnDemand then
+    OC.FetchOptions.Mode := fmOnDemand
+  else
+    OC.FetchOptions.Mode := fmAll;
+  OC.FetchOptions.RowsetSize := CS .PacketRecords;
+  CD.WriteOptions(
+    OC.FormatOptions, OC.UpdateOptions, OC.FetchOptions, OC.ResourceOptions
+  );
+  TfrmFDGUIxFormsConnEdit.Execute(CD, '');
+  Logger.Info(CD.Params.Text);
+  CD.ReadOptions(
+    OC.FormatOptions, OC.UpdateOptions, OC.FetchOptions, OC.ResourceOptions
+  );
+  CS.MaxRecords := OC.FetchOptions.RecsMax;
+  CS.PacketRecords := OC.FetchOptions.RowsetSize;
+  CS.FetchOnDemand := OC.FetchOptions.Mode = fmOnDemand;
+
+  CS.Database   := CD.Params.Database;
+  CS.DriverName := CD.Params.DriverID;
+  CS.UserName   := CD.Params.UserName;
+  CS.Password   := CD.Params.Password;
 end;
 
 procedure TfrmSettingsDialog.actDeleteExecute(Sender: TObject);
@@ -410,6 +447,11 @@ begin
   FVSTProfiles.Refresh;
   SelectNode(FVSTProfiles, N - 1);
 end;
+procedure TfrmSettingsDialog.actTestConnectionExecute(Sender: TObject);
+begin
+  //
+end;
+
 {$ENDREGION}
 
 {$REGION 'property access methods'}
@@ -516,7 +558,7 @@ end;
 function TfrmSettingsDialog.FObjectInspectorBeforeAddItem(Sender: TControl;
   PItem: PPropItem): Boolean;
 begin
-  Result := not (PItem.Prop.PropertyType is TRttiMethodType);
+  Result := PItem.Prop.IsWritable;
 end;
 
 procedure TfrmSettingsDialog.edtCatalogChange(Sender: TObject);
@@ -534,7 +576,6 @@ begin
   dlgOpenFile.FileName := edtDatabase.Text;
   if dlgOpenFile.Execute then
     edtDatabase.Text := dlgOpenFile.FileName;
-
 end;
 
 procedure TfrmSettingsDialog.edtProfileNameChange(Sender: TObject);
@@ -561,8 +602,8 @@ end;
 procedure TfrmSettingsDialog.SaveConnectionProfileChanges(
   ACP: TConnectionProfile);
 begin
-  ACP.Name           := edtProfileName.Text;
-  ACP.ProfileColor   := btnProfileColor.DlgColor;
+  ACP.Name         := edtProfileName.Text;
+  ACP.ProfileColor := btnProfileColor.DlgColor;
   ACP.ConnectionSettings.DriverName    := cbxDrivers.Text;
   ACP.ConnectionSettings.Database      := edtDatabase.Text;
   ACP.ConnectionSettings.Catalog       := edtCatalog.Text;

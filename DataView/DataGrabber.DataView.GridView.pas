@@ -41,16 +41,11 @@ type
     FSettings               : IDataViewSettings;
     FData                   : IData;
     FGrid                   : TDBGridView;
-//    FGridSort               : TtsDBGridViewSort;
 
     {$REGION 'property access methods'}
     function GetName: string;
     function GetDataSet: TDataSet;
     function GetRecordCount: Integer;
-    function GetConstantColumnsVisible: Boolean;
-    procedure SetConstantColumnsVisible(const Value: Boolean);
-    function GetEmptyColumnsVisible: Boolean;
-    procedure SetEmptyColumnsVisible(const Value: Boolean);
     function GetData: IData;
     procedure SetData(const Value: IData);
     function GetSettings: IDataViewSettings;
@@ -136,10 +131,6 @@ type
   private
     function GetGridType: string;
 
-    procedure UpdateMultiSelection(
-      const AFieldName  : string;
-      const AFieldValue : Variant
-    );
   public
     constructor Create; reintroduce;
     procedure AfterConstruction; override;
@@ -154,12 +145,22 @@ type
     procedure Copy;
     procedure Inspect;
 
-    function SelectionToCommaText(AQuoteItems: Boolean = True): string;
-    function SelectionToDelimitedTable(ADelimiter : string = #9;
-      AIncludeHeader: Boolean = True): string;
-    function SelectionToTextTable(AIncludeHeader: Boolean = False): string;
-    function SelectionToWikiTable(AIncludeHeader: Boolean = False): string;
-    function SelectionToFields(AQuoteItems: Boolean = True): string;
+    function SelectionToCommaText(
+      AQuoteItems: Boolean = True
+    ): string;
+    function SelectionToDelimitedTable(
+      ADelimiter     : string = #9;
+      AIncludeHeader : Boolean = True
+    ): string;
+    function SelectionToTextTable(
+      AIncludeHeader: Boolean = False
+    ): string;
+    function SelectionToWikiTable(
+      AIncludeHeader: Boolean = False
+    ): string;
+    function SelectionToFields(
+      AQuoteItems: Boolean = True
+    ): string;
 
     procedure UpdateView;
 
@@ -202,63 +203,44 @@ begin
   FGrid.CheckBoxes               := True;
   FGrid.DataSource               := dscMain;
   FGrid.DefaultLayout            := True;
+  FGrid.AllowEdit                := True;
   FGrid.DoubleBuffered           := True;
   FGrid.ColumnClick              := True;
   FGrid.EndEllipsis              := True;
   FGrid.Font.Name                := 'Callibri';
   FGrid.ShowCellTips             := True;
-  FGrid.CheckStyle               := cs3D;
+  FGrid.CheckStyle               := csFlat;
   FGrid.ColumnsFullDrag          := True;
   FGrid.GridLines                := True;
   FGrid.GridColor                := clSilver;
   FGrid.MultiSelect              := True;
-
   FGrid.Header.FullSynchronizing := True;
   FGrid.Header.Synchronized      := True;
   FGrid.Header.Font.Style        := [fsBold];
   FGrid.Header.GridColor         := True;
   FGrid.Header.AutoHeight        := True;
   FGrid.Header.Flat              := True;
-
   FGrid.Rows.AutoHeight          := True;
   FGrid.GridStyle                := [gsVertLine, gsHorzLine];
   FGrid.CursorKeys := [gkArrows, gkTabs, gkReturn, gkMouse, gkMouseWheel];
-
   FGrid.OnCellAcceptCursor  := FGridCellAcceptCursor;
   FGrid.OnGetCellReadOnly   := FGridGetCellReadOnly;
   FGrid.OnGetCellColors     := FGridGetCellColors;
   FGrid.OnGetCellText       := FGridGetCellText;
-
   FGrid.OnEditCanModify     := FGridEditCanModify;
-
   FGrid.OnKeyPress          := FGridKeyPress;
   FGrid.OnChanging          := FGridChanging;
-
   FGrid.OnCheckClick        := FGridCheckClick;
   FGrid.OnGetCheckState     := FGridGetCheckState;
-
   FGrid.OnMouseWheelUp      := FGridMouseWheelUp;
   FGrid.OnMouseWheelDown    := FGridMouseWheelDown;
-
   FGrid.OnRowMultiSelect    := FGridRowMultiSelect;
   FGrid.OnClearMultiSelect  := FGridClearMultiSelect;
-
-  // the TtsDBGridViewSort component has to be created AFTER the event handler
-  // assignments because the component remaps the event handlers, which is not
-  // very clean...
-//  FGridSort            := TtsDBGridViewSort.Create(Self);
-  //FGridSort.DBGridView := FGrid;
-//  FGridSort.SortedColumnColorEnabled := True;
 end;
 
 constructor TfrmGridView.Create;
 begin
   inherited Create(Application);
-end;
-
-procedure TfrmGridView.DataAfterExecute(Sender: TObject);
-begin
-  UpdateView;
 end;
 
 procedure TfrmGridView.BeforeDestruction;
@@ -269,27 +251,17 @@ begin
 end;
 {$ENDREGION}
 
-{$REGION 'property access methods'}
-function TfrmGridView.GetEmptyColumnsVisible: Boolean;
+{$REGION 'event handlers'}
+procedure TfrmGridView.DataAfterExecute(Sender: TObject);
 begin
-  //Result := FEmptyColumnsVisible;
+  UpdateView;
 end;
+{$ENDREGION}
 
+{$REGION 'property access methods'}
 function TfrmGridView.GetGridType: string;
 begin
   Result := 'GridView';
-end;
-
-procedure TfrmGridView.SetEmptyColumnsVisible(const Value: Boolean);
-var
-  C : TDBGridColumn;
-begin
-//  if Value <> EmptyColumnsVisible then
-//  begin
-//    FEmptyColumnsVisible := Value;
-//    for C in FEmptyCols do
-//      C.Visible := Value;
-//  end;
 end;
 
 function TfrmGridView.GetName: string;
@@ -315,23 +287,6 @@ end;
 procedure TfrmGridView.SetSettings(const Value: IDataViewSettings);
 begin
   FSettings := Value;
-end;
-
-function TfrmGridView.GetConstantColumnsVisible: Boolean;
-begin
-  //Result := FConstantColumnsVisible;
-end;
-
-procedure TfrmGridView.SetConstantColumnsVisible(const Value: Boolean);
-var
-  C : TDBGridColumn;
-begin
-//  if Value <> ConstantColumnsVisible then
-//  begin
-//    FConstantColumnsVisible := Value;
-//    for C in FConstCols do
-//      C.Visible := Value and C.Field.Visible;
-//  end
 end;
 
 function TfrmGridView.GetDataSet: TDataSet;
@@ -384,8 +339,8 @@ end;
 procedure TfrmGridView.FGridCellAcceptCursor(Sender: TObject; Cell: TGridCell;
   var Accept: Boolean);
 begin
-//  Accept := Accept and (not FGrid.Columns[Cell.Col].ReadOnly) and
-//    (not IsCellReadOnly(Cell));
+  Accept := Accept and (not FGrid.Columns[Cell.Col].ReadOnly) and
+    (not IsCellReadOnly(Cell));
 end;
 
 procedure TfrmGridView.FGridChanging(Sender: TObject; var Cell: TGridCell;
@@ -690,17 +645,6 @@ end;
 function TfrmGridView.SelectionToWikiTable(AIncludeHeader: Boolean): string;
 begin
 // TODO
-end;
-
-procedure TfrmGridView.UpdateMultiSelection(const AFieldName: string;
-  const AFieldValue: Variant);
-begin
-  BeginUpdate;
-  try
-    //(Data as IDataSelection).Update(AFieldName, AFieldValue);
-  finally
-    EndUpdate;
-  end;
 end;
 
 procedure TfrmGridView.UpdateView;

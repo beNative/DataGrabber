@@ -135,34 +135,36 @@ object frmSettingsDialog: TfrmSettingsDialog
               end
               object lblCatalog: TLabel
                 Left = 10
-                Top = 71
+                Top = 72
                 Width = 41
                 Height = 13
                 Caption = 'Catalog:'
                 FocusControl = edtCatalog
               end
               object cbxDrivers: TComboBox
-                Left = 66
+                Left = 76
                 Top = 16
-                Width = 145
+                Width = 163
                 Height = 21
+                Anchors = [akLeft, akTop, akRight]
                 DropDownCount = 30
                 TabOrder = 0
                 OnChange = cbxDriversChange
               end
               object btnConnectionString: TButton
-                Left = 217
+                Left = 245
                 Top = 13
                 Width = 150
                 Height = 26
                 Action = actConnectionString
+                Anchors = [akTop, akRight]
                 Images = imlMain
                 TabOrder = 1
               end
               object edtDatabase: TButtonedEdit
-                Left = 66
+                Left = 76
                 Top = 42
-                Width = 481
+                Width = 471
                 Height = 21
                 Anchors = [akLeft, akTop, akRight]
                 Images = imlMain
@@ -173,9 +175,9 @@ object frmSettingsDialog: TfrmSettingsDialog
                 OnRightButtonClick = edtDatabaseRightButtonClick
               end
               object edtCatalog: TButtonedEdit
-                Left = 66
+                Left = 76
                 Top = 69
-                Width = 481
+                Width = 471
                 Height = 21
                 Anchors = [akLeft, akTop, akRight]
                 Images = imlMain
@@ -183,6 +185,15 @@ object frmSettingsDialog: TfrmSettingsDialog
                 RightButton.ImageIndex = 10
                 TabOrder = 3
                 OnChange = edtCatalogChange
+              end
+              object btnTestConnection: TButton
+                Left = 397
+                Top = 13
+                Width = 150
+                Height = 26
+                Action = actTestConnection
+                Anchors = [akTop, akRight]
+                TabOrder = 4
               end
             end
             object grpProfileSettings: TGroupBox
@@ -969,6 +980,11 @@ object frmSettingsDialog: TfrmSettingsDialog
       GroupIndex = 1
       ImageIndex = 14
       OnExecute = actGridlinesNoneExecute
+    end
+    object actTestConnection: TAction
+      Caption = 'Test connection'
+      Enabled = False
+      OnExecute = actTestConnectionExecute
     end
   end
   object imlMain: TImageList

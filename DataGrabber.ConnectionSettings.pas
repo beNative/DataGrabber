@@ -19,23 +19,47 @@ unit DataGrabber.ConnectionSettings;
 
 interface
 
+{
+  FireDAC connection parameters
+
+  Name      := 'MSSQL_Connection';
+  DriverID  := 'MSSQL';
+  Server    := '127.0.0.1';
+  Database  := 'Northwind';
+  OSAuthent := True;
+
+  UserName
+  Password
+
+  Pooled
+  PoolCleanupTimeout
+  PoolExpireTimeout
+  PoolMaximumItems
+
+}
+
 uses
-  System.Classes;
+  System.Classes,
+
+  Spring;
 
 type
   TConnectionSettings = class(TPersistent)
   private
-    FUser             : string;
-    FProtocol         : string;
+    FUserName         : string;
+    FDriverName       : string;
     FPort             : Integer;
     FPassword         : string;
     FHostName         : string;
     FDatabase         : string;
     FCatalog          : string;
     FReadOnly         : Boolean;
-    FOnChanged        : TNotifyEvent;
+    FOnChanged        : Event<TNotifyEvent>;
     FFetchOnDemand    : Boolean;
     FPacketRecords    : Integer;
+    FMaxRecords       : Integer;
+    FAutoReconnect    : Boolean;
+    FOSAuthent        : Boolean;
     FConnectionString : string;
 
     {$REGION 'property access methods'}
@@ -45,14 +69,14 @@ type
     function GetPassword: string;
     function GetPort: Integer;
     function GetDriverName: string;
-    function GetUser: string;
+    function GetUserName: string;
     procedure SetCatalog(const Value: string);
     procedure SetDatabase(const Value: string);
     procedure SetHostName(const Value: string);
     procedure SetPassword(const Value: string);
     procedure SetPort(const Value: Integer);
     procedure SetDriverName(const Value: string);
-    procedure SetUser(const Value: string);
+    procedure SetUserName(const Value: string);
     function GetReadOnly: Boolean;
     procedure SetReadOnly(const Value: Boolean);
     function GetFetchOnDemand: Boolean;
@@ -61,15 +85,30 @@ type
     procedure SetPacketRecords(const Value: Integer);
     function GetConnectionString: string;
     procedure SetConnectionString(const Value: string);
+    function GetMaxRecords: Integer;
+    procedure SetMaxRecords(const Value: Integer);
+    function GetOnChanged: IEvent<TNotifyEvent>;
+    function GetAutoReconnect: Boolean;
+    procedure SetAutoReconnect(const Value: Boolean);
+    function GetOSAuthent: Boolean;
+    procedure SetOSAuthent(const Value: Boolean);
     {$ENDREGION}
 
   protected
     procedure Changed;
 
   public
+
     procedure Assign(Source: TPersistent); override;
+    procedure AfterConstruction; override;
+
+    property ConnectionString: string
+      read GetConnectionString write SetConnectionString;
 
   published
+    property AutoReconnect: Boolean
+      read GetAutoReconnect write SetAutoReconnect default True;
+
     property DriverName: string
       read GetDriverName write SetDriverName;
 
@@ -79,11 +118,12 @@ type
     property Port: Integer
       read GetPort write SetPort default 0;
 
+    { Database name or file. }
     property Database: string
       read GetDatabase write SetDatabase;
 
-    property User: string
-      read GetUser write SetUser;
+    property UserName: string
+      read GetUserName write SetUserName;
 
     property Password: string
       read GetPassword write SetPassword;
@@ -94,22 +134,46 @@ type
     property ReadOnly: Boolean
       read GetReadOnly write SetReadOnly;
 
+    property MaxRecords: Integer
+      read GetMaxRecords write SetMaxRecords;
+
     property FetchOnDemand: Boolean
       read GetFetchOnDemand write SetFetchOnDemand;
 
     property PacketRecords: Integer
       read GetPacketRecords write SetPacketRecords;
 
-    property ConnectionString: string
-      read GetConnectionString write SetConnectionString;
+    property OSAuthent: Boolean read GetOSAuthent write SetOSAuthent;
 
-    property OnChanged: TNotifyEvent
-      read FOnChanged write FOnChanged;
+    property OnChanged: IEvent<TNotifyEvent>
+      read GetOnChanged;
   end;
 
 implementation
 
+{$REGION 'construction and destruction'}
+procedure TConnectionSettings.AfterConstruction;
+begin
+  inherited AfterConstruction;
+  FAutoReconnect := True;
+end;
+{$ENDREGION}
+
 {$REGION 'property access methods'}
+function TConnectionSettings.GetAutoReconnect: Boolean;
+begin
+  Result := FAutoReconnect;
+end;
+
+procedure TConnectionSettings.SetAutoReconnect(const Value: Boolean);
+begin
+  if Value <> AutoReconnect then
+  begin
+    FAutoReconnect := Value;
+    Changed;
+  end;
+end;
+
 function TConnectionSettings.GetCatalog: string;
 begin
   Result := FCatalog;
@@ -180,6 +244,39 @@ begin
   end;
 end;
 
+function TConnectionSettings.GetMaxRecords: Integer;
+begin
+  Result := FMaxRecords;
+end;
+
+procedure TConnectionSettings.SetMaxRecords(const Value: Integer);
+begin
+  if Value <> MaxRecords then
+  begin
+    FMaxRecords := Value;
+    Changed;
+  end;
+end;
+
+function TConnectionSettings.GetOSAuthent: Boolean;
+begin
+  Result := FOSAuthent;
+end;
+
+procedure TConnectionSettings.SetOSAuthent(const Value: Boolean);
+begin
+  if Value <> OSAuthent then
+  begin
+    FOSAuthent := Value;
+    Changed;
+  end;
+end;
+
+function TConnectionSettings.GetOnChanged: IEvent<TNotifyEvent>;
+begin
+  Result := FOnChanged;
+end;
+
 function TConnectionSettings.GetPacketRecords: Integer;
 begin
   Result := FPacketRecords;
@@ -238,28 +335,28 @@ end;
 
 function TConnectionSettings.GetDriverName: string;
 begin
-  Result := FProtocol;
+  Result := FDriverName;
 end;
 
 procedure TConnectionSettings.SetDriverName(const Value: string);
 begin
   if Value <> DriverName then
   begin
-    FProtocol := Value;
+    FDriverName := Value;
     Changed;
   end;
 end;
 
-function TConnectionSettings.GetUser: string;
+function TConnectionSettings.GetUserName: string;
 begin
-  Result := FUser;
+  Result := FUserName;
 end;
 
-procedure TConnectionSettings.SetUser(const Value: string);
+procedure TConnectionSettings.SetUserName(const Value: string);
 begin
-  if Value <> User then
+  if Value <> UserName then
   begin
-    FUser := Value;
+    FUserName := Value;
     Changed;
   end;
 end;
@@ -268,8 +365,8 @@ end;
 {$REGION 'protected methods'}
 procedure TConnectionSettings.Changed;
 begin
-  if Assigned(FOnChanged) then
-    FOnChanged(Self);
+  if FOnChanged.CanInvoke then
+    FOnChanged.Invoke(Self);
 end;
 {$ENDREGION}
 
@@ -281,17 +378,19 @@ begin
   if (Source <> Self) and (Source is TConnectionSettings) then
   begin
     CS := TConnectionSettings(Source);
-    FProtocol         := CS.DriverName;
+    FDriverName       := CS.DriverName;
     FPassword         := CS.Password;
     FCatalog          := CS.Catalog;
     FHostName         := CS.HostName;
-    FUser             := CS.User;
+    FUserName         := CS.UserName;
     FPort             := CS.Port;
     FDatabase         := CS.Database;
     FFetchOnDemand    := CS.FetchOnDemand;
     FPacketRecords    := CS.PacketRecords;
     FReadOnly         := CS.ReadOnly;
     FConnectionString := CS.ConnectionString;
+    FMaxRecords       := CS.MaxRecords;
+    FAutoReconnect    := CS.AutoReconnect;
     Changed;
   end
   else

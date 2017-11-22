@@ -34,10 +34,11 @@ type
     dscMain : TDataSource;
 
     procedure grdMainDrawCell(
-      Sender     : TObject;
-      ACol, ARow : Integer;
-      R          : TRect;
-      State      : TKGridDrawState
+      Sender : TObject;
+      ACol   : Integer;
+      ARow   : Integer;
+      R      : TRect;
+      State  : TKGridDrawState
     );
 
   private
@@ -62,26 +63,32 @@ type
     procedure SetPopupMenu(const Value: TPopupMenu);
 
   public
+    procedure AfterConstruction; override;
+    procedure BeforeDestruction; override;
+
     function SelectionToCommaText(AQuoteItems: Boolean = True): string;
-    function SelectionToDelimitedTable(ADelimiter : string = #9;
-      AIncludeHeader: Boolean = True): string;
     function SelectionToTextTable(AIncludeHeader: Boolean = False): string;
     function SelectionToWikiTable(AIncludeHeader: Boolean = False): string;
     function SelectionToFields(AQuoteItems: Boolean = True): string;
+    function SelectionToDelimitedTable(
+      ADelimiter     : string = #9;
+      AIncludeHeader : Boolean = True
+    ): string;
+
     procedure ApplyGridSettings;
     procedure AutoSizeColumns;
+
     procedure Copy;
     procedure HideSelectedColumns;
     procedure MergeAllColumnCells(AActive: Boolean);
+
     procedure UpdateView;
     procedure BeginUpdate;
     procedure EndUpdate;
 
     procedure AssignParent(AParent: TWinControl);
-    procedure AfterConstruction; override;
 
     procedure Inspect;
-    procedure BeforeDestruction; override;
 
     property DataSet: TDataSet
       read GetDataSet;

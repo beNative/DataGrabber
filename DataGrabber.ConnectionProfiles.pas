@@ -36,6 +36,7 @@ type
     FConnectionSettings : TConnectionSettings;
 
   protected
+    {$REGION 'property access methods'}
     procedure SetCollection(const Value: TConnectionProfiles); reintroduce;
     function GetCollection: TConnectionProfiles;
     function GetVisibleItems: string;
@@ -44,6 +45,7 @@ type
     procedure SetFavoriteFields(const Value: string);
     procedure SetDisplayName(const Value: string); override;
     function GetDisplayName: string; override;
+    {$ENDREGION}
 
   public
     constructor Create(Collection: TCollection); override;

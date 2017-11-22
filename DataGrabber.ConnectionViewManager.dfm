@@ -261,6 +261,11 @@ object dmConnectionViewManager: TdmConnectionViewManager
       ImageIndex = 75
       OnExecute = actAddConnectionViewExecute
     end
+    object actInspectFDManager: TAction
+      Category = 'Inspect'
+      Caption = 'Inspect connection manager'
+      OnExecute = actInspectFDManagerExecute
+    end
   end
   object ppmConnectionView: TPopupMenu
     Images = imlMain
@@ -337,6 +342,10 @@ object dmConnectionViewManager: TdmConnectionViewManager
     end
     object Inspect1: TMenuItem
       Caption = 'Inspect components'
+      object Inspectconnectionmanager1: TMenuItem
+        Action = actInspectFDManager
+        Caption = 'Connection manager'
+      end
       object mniInspectConnection: TMenuItem
         Action = actInspectConnection
       end

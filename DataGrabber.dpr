@@ -208,7 +208,7 @@ uses
   zObjInspTypes in '..\..\components\zcontrols\Source\zObjInspTypes.pas',
   DDuce.Factories.VirtualTrees in '..\..\libraries\dduce\Source\Factories\DDuce.Factories.VirtualTrees.pas',
   DDuce.Factories.zObjInspector in '..\..\libraries\dduce\Source\Factories\DDuce.Factories.zObjInspector.pas',
-  DataGrabber.Data.FireDAC in 'DataGrabber.Data.FireDAC.pas' {dmDataFireDAC: TDataModule},
+  DataGrabber.Data in 'DataGrabber.Data.pas' {dmDataFireDAC: TDataModule},
   DataGrabber.ConnectionSettings in 'DataGrabber.ConnectionSettings.pas';
 
 {$R *.res}
@@ -219,6 +219,5 @@ begin
   Application.Title := 'DataGrabber 2';
   RegisterServices;
   Application.CreateForm(TfrmMain, frmMain);
-  frmMain.Font.Name := 'Segoe UI';
   Application.Run;
 end.

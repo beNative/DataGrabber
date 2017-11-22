@@ -123,6 +123,8 @@ type
     Inspect1: TMenuItem;
     N4: TMenuItem;
     actAddConnectionView: TAction;
+    actInspectFDManager: TAction;
+    Inspectconnectionmanager1: TMenuItem;
     {$ENDREGION}
 
     {$REGION 'action handlers'}
@@ -163,6 +165,7 @@ type
     procedure actPrintExecute(Sender: TObject);
     procedure actSettingsExecute(Sender: TObject);
     procedure actAddConnectionViewExecute(Sender: TObject);
+    procedure actInspectFDManagerExecute(Sender: TObject);
     {$ENDREGION}
 
   private
@@ -233,7 +236,9 @@ uses
   DDuce.ObjectInspector.zObjectInspector,
 
   DataGrabber.Settings.Dialog, DataGrabber.ConnectionView,
-  DataGrabber.Data.FireDac,
+  DataGrabber.Data,
+
+  FireDAC.Comp.Client,
 
   Spring.Container;
 
@@ -400,6 +405,11 @@ begin
   ShowMessage('Not supported yet.');
 end;
 
+procedure TdmConnectionViewManager.actInspectFDManagerExecute(Sender: TObject);
+begin
+  InspectComponent(FDManager);
+end;
+
 procedure TdmConnectionViewManager.actInspectFieldsExecute(Sender: TObject);
 begin
   FFieldInspector.Data := ActiveData;
@@ -463,7 +473,6 @@ end;
 
 procedure TdmConnectionViewManager.actExecuteExecute(Sender: TObject);
 begin
-  ActiveData.MaxRecords := 0;
   Execute(ActiveConnectionView.EditorView.Text);
 end;
 
@@ -480,7 +489,6 @@ end;
 
 procedure TdmConnectionViewManager.actExecuteLimitedExecute(Sender: TObject);
 begin
-  ActiveData.MaxRecords := 100;
   Execute(ActiveConnectionView.EditorView.Text);
 end;
 

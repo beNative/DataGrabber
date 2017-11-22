@@ -179,9 +179,9 @@ end;
 
 procedure TfrmConnectionView.BeforeDestruction;
 begin
-  FEditorView := nil;
+  FEditorView     := nil;
   FActiveDataView := nil;
-  FActiveData := nil;
+  FActiveData     := nil;
   inherited BeforeDestruction;
 end;
 {$ENDREGION}

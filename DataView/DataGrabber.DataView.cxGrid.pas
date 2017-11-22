@@ -62,10 +62,10 @@ type
       var ADone    : Boolean
     );
     procedure tvwMainCustomDrawCell(
-      Sender   : TcxCustomGridTableView;
-      ACanvas  : TcxCanvas;
-      AViewInfo: TcxGridTableDataCellViewInfo;
-      var ADone: Boolean
+      Sender    : TcxCustomGridTableView;
+      ACanvas   : TcxCanvas;
+      AViewInfo : TcxGridTableDataCellViewInfo;
+      var ADone : Boolean
     );
 
   private
@@ -97,8 +97,8 @@ type
     procedure ApplyGridSettings;
 
     procedure CopySelectionToClipboard(
-      AController   : TcxGridTableController;
-      AIncludeHeader: Boolean = False
+      AController    : TcxGridTableController;
+      AIncludeHeader : Boolean = False
     );
     function SelectionToDelimitedTable(
       AController    : TcxGridTableController;
