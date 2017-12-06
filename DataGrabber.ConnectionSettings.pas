@@ -20,6 +20,8 @@ unit DataGrabber.ConnectionSettings;
 interface
 
 {
+  Application-level connection parameters.
+
   FireDAC connection parameters
 
   Name      := 'MSSQL_Connection';
@@ -61,6 +63,7 @@ type
     FAutoReconnect    : Boolean;
     FOSAuthent        : Boolean;
     FConnectionString : string;
+    FDisconnectedMode : Boolean;
 
     {$REGION 'property access methods'}
     function GetCatalog: string;
@@ -92,6 +95,8 @@ type
     procedure SetAutoReconnect(const Value: Boolean);
     function GetOSAuthent: Boolean;
     procedure SetOSAuthent(const Value: Boolean);
+    function GetDisconnectedMode: Boolean;
+    procedure SetDisconnectedMode(const Value: Boolean);
     {$ENDREGION}
 
   protected
@@ -143,7 +148,11 @@ type
     property PacketRecords: Integer
       read GetPacketRecords write SetPacketRecords;
 
-    property OSAuthent: Boolean read GetOSAuthent write SetOSAuthent;
+    property OSAuthent: Boolean
+      read GetOSAuthent write SetOSAuthent;
+
+    property DisconnectedMode: Boolean
+      read GetDisconnectedMode write SetDisconnectedMode;
 
     property OnChanged: IEvent<TNotifyEvent>
       read GetOnChanged;
@@ -205,6 +214,20 @@ end;
 function TConnectionSettings.GetDatabase: string;
 begin
   Result := FDatabase;
+end;
+
+function TConnectionSettings.GetDisconnectedMode: Boolean;
+begin
+  Result := FDisconnectedMode;
+end;
+
+procedure TConnectionSettings.SetDisconnectedMode(const Value: Boolean);
+begin
+  if Value <> DisconnectedMode then
+  begin
+    FDisconnectedMode := Value;
+    Changed;
+  end;
 end;
 
 procedure TConnectionSettings.SetDatabase(const Value: string);
@@ -391,6 +414,7 @@ begin
     FConnectionString := CS.ConnectionString;
     FMaxRecords       := CS.MaxRecords;
     FAutoReconnect    := CS.AutoReconnect;
+    FOSAuthent        := CS.OSAuthent;
     Changed;
   end
   else

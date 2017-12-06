@@ -74,8 +74,6 @@ begin
   AddButton('actAutoSizeCols');
   AddButton('actToggleFullScreen');
   AddButton('actSettings');
-
-  //AddButton('actAddConnectionView');
   AddButton('actExecute');
 end;
 

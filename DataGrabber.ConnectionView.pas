@@ -82,10 +82,13 @@ type
       Column             : TColumnIndex;
       TextType           : TVSTTextType
     );
-
-    procedure tlbGridCustomDraw(
-      Sender          : TToolBar;
-      const ARect     : TRect;
+    procedure FVSTProfilesDrawText(
+      Sender          : TBaseVirtualTree;
+      TargetCanvas    : TCanvas;
+      Node            : PVirtualNode;
+      Column          : TColumnIndex;
+      const Text      : string;
+      const CellRect  : TRect;
       var DefaultDraw : Boolean
     );
 
@@ -99,12 +102,14 @@ type
     FVSTProfiles    : TVirtualStringTree;
     FDefaultNode    : PVirtualNode;
 
+    {$REGION 'property access methods'}
     function GetManager: IConnectionViewManager;
     function GetForm: TForm;
     function GetActiveData: IData;
     function GetActiveDataView: IDataView;
     function GetEditorView: IEditorView;
     function GetActiveConnectionProfile: TConnectionProfile;
+    {$ENDREGION}
 
   protected
     procedure InitializeEditorView;
@@ -115,13 +120,13 @@ type
 
   public
     procedure AfterConstruction; override;
+    procedure BeforeDestruction; override;
     constructor Create(
       AOwner      : TComponent;
       AEditorView : IEditorView;
       ADataView   : IDataView;
       AData       : IData
     ); reintroduce; virtual;
-    procedure BeforeDestruction; override;
 
     property Form: TForm
       read GetForm;
@@ -149,7 +154,7 @@ uses
 
   Spring,
 
-  DDuce.Factories,
+  DDuce.Factories, DDuce.ObjectInspector.zObjectInspector,
 
   DataGrabber.Utils;
 
@@ -206,6 +211,20 @@ begin
   end;
 end;
 
+procedure TfrmConnectionView.FVSTProfilesDrawText(Sender: TBaseVirtualTree;
+  TargetCanvas: TCanvas; Node: PVirtualNode; Column: TColumnIndex;
+  const Text: string; const CellRect: TRect; var DefaultDraw: Boolean);
+//var
+//  S : string;
+//  R : TRect;
+begin
+//  R := CellRect;
+//  S := Text;
+//  TargetCanvas.TextRect(R, S, [tfCenter, tfVerticalCenter]);
+//  DefaultDraw := False;
+  DefaultDraw := True;
+end;
+
 procedure TfrmConnectionView.FVSTProfilesFocusChanged(Sender: TBaseVirtualTree;
   Node: PVirtualNode; Column: TColumnIndex);
 begin
@@ -256,12 +275,6 @@ begin
   end;
   EditorView.SetFocus;
 end;
-
-procedure TfrmConnectionView.tlbGridCustomDraw(Sender: TToolBar;
-  const ARect: TRect; var DefaultDraw: Boolean);
-begin
-  Sender.Canvas.FillRect(ARect);
-end;
 {$ENDREGION}
 
 {$REGION 'property access methods'}
@@ -309,6 +322,7 @@ begin
   FVSTProfiles.OnGetText         := FVSTProfilesGetText;
   FVSTProfiles.OnFocusChanged    := FVSTProfilesFocusChanged;
   FVSTProfiles.OnPaintText       := FVSTProfilesPaintText;
+  FVSTProfiles.OnDrawText        := FVSTProfilesDrawText;
   FVSTProfiles.Header.Options    := FVSTProfiles.Header.Options - [hoVisible];
   FVSTProfiles.TreeOptions.PaintOptions :=
     FVSTProfiles.TreeOptions.PaintOptions - [toHideSelection];
@@ -343,7 +357,6 @@ begin
     ];
     Application.Title := CP.Name;
     Caption := CP.Name;
-//    FActiveData.ConnectionSettings.Assign(CP.ConnectionSettings);
   end;
 end;
 

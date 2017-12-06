@@ -37,45 +37,38 @@ uses
   TODO:
     - autosize form (to data)
     - testing !!!
-    - query tree (using gaSQLParser)
     - multiple statements => multiple resultsets
     - log executed statements to a local database
     - Use bindings in settings
     - Select <selected fields?> Where in
-    - Presenter for vertical grid
-    - Multiselect in vertical grid? => selection delimited quoted text fieldnames
-    - Datainspector -> group by table?
-    - Store executed sql’s
-    - Multiple sessions
     - Smart grouping (detect common field prefixes/suffixes (vb. Date, ...Id,)
     - Working set of tables (cache meta info and links and make them
       customizable as a profile setting)
-    - Statement builder
-    - Smart joining
+    - Statement builder, smart joining
     - Profile color for tab backgrounds
 }
 
 type
   TfrmMain = class(TForm)
     {$REGION 'designer controls'}
-    aclMain                       : TActionList;
-    actAddConnectionView          : TAction;
-    actInspectChromeTab           : TAction;
-    ctMain                        : TChromeTabs;
-    imlSpinner                    : TImageList;
-    pnlConnectionStatus           : TPanel;
-    pnlConnectionViews            : TPanel;
-    pnlConstantFieldsCount        : TPanel;
-    pnlEditMode                   : TPanel;
-    pnlElapsedTime                : TPanel;
-    pnlEmptyFieldsCount           : TPanel;
-    pnlFieldCount                 : TPanel;
-    pnlGridType                   : TPanel;
-    pnlRecordCount                : TPanel;
-    pnlStatus                     : TPanel;
-    pnlStatusBar                  : TPanel;
-    tlbMain                       : TToolBar;
-    pnlHiddenFieldsCount: TPanel;
+    aclMain                : TActionList;
+    actAddConnectionView   : TAction;
+    actInspectChromeTab    : TAction;
+    ctMain                 : TChromeTabs;
+    imlSpinner             : TImageList;
+    pnlConnectionStatus    : TPanel;
+    pnlConnectionViews     : TPanel;
+    pnlConstantFieldsCount : TPanel;
+    pnlEditMode            : TPanel;
+    pnlElapsedTime         : TPanel;
+    pnlEmptyFieldsCount    : TPanel;
+    pnlFieldCount          : TPanel;
+    pnlGridType            : TPanel;
+    pnlRecordCount         : TPanel;
+    pnlStatus              : TPanel;
+    pnlStatusBar           : TPanel;
+    tlbMain                : TToolBar;
+    pnlHiddenFieldsCount   : TPanel;
     {$ENDREGION}
 
     {$REGION 'action handlers'}
@@ -122,8 +115,8 @@ type
     {$ENDREGION}
 
   private
-    FManager     : IConnectionViewManager;
-    FSettings    : ISettings;
+    FManager  : IConnectionViewManager;
+    FSettings : ISettings;
 
   protected
     function GetActiveConnectionView: IConnectionView;
@@ -188,11 +181,11 @@ begin
   Logger.Clear;
   FManager  := GlobalContainer.Resolve<IConnectionViewManager>;
   FSettings := GlobalContainer.Resolve<ISettings>;
+  FSettings.FormSettings.AssignTo(Self);
   AddConnectionView;
   tlbMain.Images := FManager.ActionList.Images;
   InitializeActions;
   pnlStatus.Caption := SReady;
-  FManager.ActiveConnectionView.EditorView.Text := EXAMPLE_QUERY;
 end;
 
 procedure TfrmMain.BeforeDestruction;
@@ -426,7 +419,7 @@ end;
 {$REGION 'public methods'}
 procedure TfrmMain.UpdateStatusBar;
 var
-  S: string;
+  S : string;
 begin
   if Assigned(Data) and Assigned(Data.DataSet) and Data.DataSet.Active then
   begin

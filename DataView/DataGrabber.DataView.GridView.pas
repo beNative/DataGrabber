@@ -38,9 +38,9 @@ type
     procedure dscMainDataChange(Sender: TObject; Field: TField);
 
   strict private
-    FSettings               : IDataViewSettings;
-    FData                   : IData;
-    FGrid                   : TDBGridView;
+    FSettings : IDataViewSettings;
+    FData     : IData;
+    FGrid     : TDBGridView;
 
     {$REGION 'property access methods'}
     function GetName: string;
@@ -80,7 +80,7 @@ type
       Row        : Integer;
       var Select : Boolean
     );
-    procedure FGridClearMultiSelect(Sender : TObject);
+    procedure FGridClearMultiSelect(Sender: TObject);
     procedure FGridCheckClick(
       Sender : TObject;
       Cell   : TGridCell
@@ -223,6 +223,7 @@ begin
   FGrid.Rows.AutoHeight          := True;
   FGrid.GridStyle                := [gsVertLine, gsHorzLine];
   FGrid.CursorKeys := [gkArrows, gkTabs, gkReturn, gkMouse, gkMouseWheel];
+
   FGrid.OnCellAcceptCursor  := FGridCellAcceptCursor;
   FGrid.OnGetCellReadOnly   := FGridGetCellReadOnly;
   FGrid.OnGetCellColors     := FGridGetCellColors;
@@ -432,7 +433,7 @@ end;
 procedure TfrmGridView.FGridGetCellReadOnly(Sender: TObject; Cell: TGridCell;
   var CellReadOnly: Boolean);
 begin
-  CellReadOnly := CellReadOnly and IsCellReadOnly(Cell);
+  //CellReadOnly := CellReadOnly and IsCellReadOnly(Cell);
 end;
 
 procedure TfrmGridView.FGridGetCellText(Sender: TObject; Cell: TGridCell;

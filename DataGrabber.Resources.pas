@@ -23,7 +23,8 @@ const
 //  SFieldItem     = '\color{clRed}field\column{}\color{clBlack}%s';
 //  SProcedureItem = '\color{clPurple}procedure\column{}\color{clBlack}%s';
 
-  EXAMPLE_QUERY =
+  CHINOOK_EXAMPLE_QUERY =
+    '/* Chinook database example query */'    + #13#10 +
     'select'                                  + #13#10 +
     '  *'                                     + #13#10 +
     'from'                                    + #13#10 +
@@ -57,6 +58,7 @@ resourcestring
   SReadOnly           = 'ReadOnly';
   SConnected          = 'Connected';
   SDisconnected       = 'Disconnected';
+  SOpenSettingsFileLocation = 'Open settings file location (%s)';
 
 
 implementation

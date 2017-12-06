@@ -1,14 +1,14 @@
 object dmDataFireDAC: TdmDataFireDAC
   OldCreateOrder = False
-  Height = 338
-  Width = 429
+  Height = 88
+  Width = 294
   object conMain: TFDConnection
-    Left = 48
-    Top = 40
+    Left = 40
+    Top = 16
   end
   object qryMain: TFDQuery
     Connection = conMain
-    Left = 152
-    Top = 40
+    Left = 120
+    Top = 16
   end
 end

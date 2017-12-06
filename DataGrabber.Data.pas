@@ -22,6 +22,15 @@ unit DataGrabber.Data;
   We decided not to share connections between IData instances, so if many
   connectionviews are created of a given connectionprofile, they both will
   have their own private connection.
+
+  By default FireDAC searches for the driver configuration file (FDDrivers.ini)
+  in the application EXE folder.
+  If this file is not found, it looks for the file specified in the registry key
+  HKCU\Software\Embarcadero\FireDAC\DriverFile.
+
+  For ODBC based drivers, if the ODBCDriver is specified, FireDAC uses the
+  specified driver. If it is not specified, a default driver name is used.
+
 }
 
 interface
@@ -53,11 +62,20 @@ uses
 
   DataGrabber.ConnectionSettings, DataGrabber.Interfaces;
 
+  {
+    Connection.OnLost, OnRecover
+  }
+
 type
-  TdmDataFireDAC = class(TDataModule, IData, IDataEvents, IFieldLists,
-    IFieldVisiblity)
-    conMain    : TFDConnection;
-    qryMain    : TFDQuery;
+  TdmDataFireDAC = class(
+    TDataModule,
+    IData,
+    IDataEvents,
+    IFieldLists,
+    IFieldVisiblity
+  )
+    conMain : TFDConnection;
+    qryMain : TFDQuery;
 
   private
     FConstantFields         : IList<TField>;
@@ -157,8 +175,19 @@ type
     procedure AfterConstruction; override;
     procedure BeforeDestruction; override;
 
-    function ShowAllFields: Boolean;
     procedure InitField(AField: TField);
+
+    {$REGION 'IDataPersistable'}
+    procedure SaveToFile(
+      const AFileName : string = '';
+      AFormat         : TFDStorageFormat = sfAuto
+    );
+
+    procedure LoadFromFile(
+      const AFileName : string = '';
+      AFormat         : TFDStorageFormat = sfAuto
+    );
+    {$ENDREGION}
 
     {$REGION 'IFieldLists'}
     property ConstantFields: IList<TField>
@@ -172,6 +201,8 @@ type
     {$ENDREGION}
 
     {$REGION 'IFieldVisibility'}
+    function ShowAllFields: Boolean;
+
     property ConstantFieldsVisible: Boolean
       read GetConstantFieldsVisible write SetConstantFieldsVisible;
 
@@ -193,6 +224,8 @@ implementation
 {$R *.dfm}
 
 uses
+  System.StrUtils,
+
   DDuce.Logger;
 
 {$REGION 'construction and destruction'}
@@ -412,37 +445,46 @@ begin
     InitField(Field);
 end;
 
+{ Assigns application level connection settings (TConnectionSettings object) to
+  the FireDAC connection component. }
+
 procedure TdmDataFireDAC.InitializeConnection;
 begin
   Logger.Track('InitializeConnection');
-  Logger.Send('ConnectionString', Connection.ConnectionString);
+//  Logger.Send('ConnectionString', Connection.ConnectionString);
+
+  Logger.Send('DriverName', ConnectionSettings.DriverName);
+
   Connection.FetchOptions.RowsetSize := ConnectionSettings.PacketRecords;
   if ConnectionSettings.FetchOnDemand then
+  begin
     Connection.FetchOptions.Mode := fmOnDemand
+  end
   else
+  begin
     Connection.FetchOptions.Mode := fmAll;
-  Connection.ConnectionString := ConnectionSettings.ConnectionString;
+  end;
+//  Connection.ConnectionString := ConnectionSettings.ConnectionString;
   Connection.DriverName       := ConnectionSettings.DriverName;
 
   if ConnectionSettings.DriverName <> '' then
   begin
     Connected := False;
     Connection.DriverName := ConnectionSettings.DriverName;
-    //Connection.Offlined := ConnectionSettings.DisconnectedMode;
+    Connection.Offlined   := ConnectionSettings.DisconnectedMode;
     with Connection.Params do
     begin
       Values['Server']    := ConnectionSettings.HostName;
       Values['Database']  := ConnectionSettings.Database;
       Values['User_Name'] := ConnectionSettings.UserName;
       Values['Password']  := ConnectionSettings.Password;
-      Values['OSAuthent']
-      //Values['OSAuthent'] := ConnectionSettings.OSAuthent;
+      Values['OSAuthent'] := IfThen(ConnectionSettings.OSAuthent, 'Yes', 'No');
     end;
     Logger.Send('ConnectionString', Connection.ConnectionString);
     Connection.LoginPrompt := False;
     // Set this to prevent issues with FireDac's need for a cursor object﻿
     Connection.ResourceOptions.SilentMode := True;
-    //Connection.ResourceOptions.AutoReconnect := True;
+    Connection.ResourceOptions.AutoReconnect := ConnectionSettings.AutoReconnect;
     Logger.Send('ConnectionString', Connection.ConnectionString);
   end;
 end;
@@ -525,6 +567,20 @@ begin
     OnAfterExecute.Invoke(Self);
   FExecuted := True;
 end;
+
+{$REGION 'IDataPersistable'}
+procedure TdmDataFireDAC.LoadFromFile(const AFileName: string;
+  AFormat: TFDStorageFormat);
+begin
+  FDQuery.LoadFromFile(AFileName, AFormat);
+end;
+
+procedure TdmDataFireDAC.SaveToFile(const AFileName: string;
+  AFormat: TFDStorageFormat);
+begin
+  FDQuery.SaveToFile(AFileName, AFormat);
+end;
+{$ENDREGION}
 {$ENDREGION}
 
 end.

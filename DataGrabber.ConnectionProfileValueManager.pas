@@ -42,7 +42,10 @@ type
     function HasDialog(const PItem: PPropItem): Boolean; override;
 
     function GetDialog(const PItem: PPropItem): TComponentClass; override;
-    function DialogResultValue(const PItem: PPropItem; Dialog: TComponent): TValue; override;
+    function DialogResultValue(
+      const PItem : PPropItem;
+      Dialog      : TComponent
+    ): TValue; override;
 
     procedure GetListItems(
       const PItem : PPropItem;

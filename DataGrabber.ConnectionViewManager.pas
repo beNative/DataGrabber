@@ -50,7 +50,6 @@ type
     actHideEmptyColumns           : TAction;
     actShowAllColumns             : TAction;
     actToggleStayOnTop            : TAction;
-    actExecuteLimited             : TAction;
     actHideSelectedColumns        : TAction;
     actHideConstantColumns        : TAction;
     actSelectionAsWiki            : TAction;
@@ -65,21 +64,13 @@ type
     actSelectionAsQuotedCommaText : TAction;
     actMergeCells                 : TAction;
     actSelectionAsTextTable       : TAction;
-    actStartTransaction           : TAction;
-    actCommitTransaction          : TAction;
-    actRollbackTransaction        : TAction;
     actInspect                    : TAction;
     actDataInspector              : TAction;
-    actcxGrid                     : TAction;
-    actGridView                   : TAction;
-    actKGrid                      : TAction;
     actSettings                   : TAction;
     actInspectDataSet             : TAction;
     actInspectConnection          : TAction;
     actInspectGrid                : TAction;
     actInspectFields              : TAction;
-    actToggleRepositoryTree       : TAction;
-    actSyncEditorWithRepository   : TAction;
     actPreview                    : TAction;
     actDesigner                   : TAction;
     actPrint                      : TAction;
@@ -89,7 +80,6 @@ type
     actFavoriteFieldsOnly         : TAction;
     actRtti                       : TAction;
     actSelectionAsWhereIn         : TAction;
-    actCreateModel                : TAction;
     ppmConnectionView             : TPopupMenu;
     mniGroupBySelection           : TMenuItem;
     mniHideSelectedColumns        : TMenuItem;
@@ -125,47 +115,42 @@ type
     actAddConnectionView: TAction;
     actInspectFDManager: TAction;
     Inspectconnectionmanager1: TMenuItem;
+    actChinookExampleQuery: TAction;
     {$ENDREGION}
 
     {$REGION 'action handlers'}
-    procedure actExecuteExecute(Sender: TObject);
-    procedure actExecuteLimitedExecute(Sender: TObject);
-    procedure actStartTransactionExecute(Sender: TObject);
-    procedure actCommitTransactionExecute(Sender: TObject);
-    procedure actRollbackTransactionExecute(Sender: TObject);
-    procedure actAutoSizeColsExecute(Sender: TObject);
-    procedure actShowAllColumnsExecute(Sender: TObject);
-    procedure actHideSelectedColumnsExecute(Sender: TObject);
-    procedure actHideConstantColumnsExecute(Sender: TObject);
-    procedure actSelectionAsWikiExecute(Sender: TObject);
-    procedure actSelectionAsTextExecute(Sender: TObject);
-    procedure actMergeAllColumnCellsExecute(Sender: TObject);
-    procedure actCopyExecute(Sender: TObject);
-    procedure actGroupBySelectionExecute(Sender: TObject);
-    procedure actSelectionAsCommaTextExecute(Sender: TObject);
-    procedure actSelectionAsQuotedCommaTextExecute(Sender: TObject);
-    procedure actMergeCellsExecute(Sender: TObject);
-    procedure actSelectionAsTextTableExecute(Sender: TObject);
-    procedure actcxGridExecute(Sender: TObject);
-    procedure actGridViewExecute(Sender: TObject);
-    procedure actKGridExecute(Sender: TObject);
-    procedure actSelectionAsFieldsExecute(Sender: TObject);
-    procedure actFavoriteFieldsOnlyExecute(Sender: TObject);
-    procedure actSelectionAsWhereInExecute(Sender: TObject);
-    procedure actHideEmptyColumnsExecute(Sender: TObject);
-    procedure actSelectionAsQuotedFieldsExecute(Sender: TObject);
-    procedure actInspectExecute(Sender: TObject);
-    procedure actDataInspectorExecute(Sender: TObject);
-    procedure actInspectDataSetExecute(Sender: TObject);
-    procedure actInspectConnectionExecute(Sender: TObject);
-    procedure actInspectGridExecute(Sender: TObject);
-    procedure actInspectFieldsExecute(Sender: TObject);
-    procedure actPreviewExecute(Sender: TObject);
-    procedure actDesignerExecute(Sender: TObject);
-    procedure actPrintExecute(Sender: TObject);
-    procedure actSettingsExecute(Sender: TObject);
     procedure actAddConnectionViewExecute(Sender: TObject);
+    procedure actAutoSizeColsExecute(Sender: TObject);
+    procedure actCopyExecute(Sender: TObject);
+    procedure actDataInspectorExecute(Sender: TObject);
+    procedure actDesignerExecute(Sender: TObject);
+    procedure actExecuteExecute(Sender: TObject);
+    procedure actFavoriteFieldsOnlyExecute(Sender: TObject);
+    procedure actGroupBySelectionExecute(Sender: TObject);
+    procedure actHideConstantColumnsExecute(Sender: TObject);
+    procedure actHideEmptyColumnsExecute(Sender: TObject);
+    procedure actHideSelectedColumnsExecute(Sender: TObject);
+    procedure actInspectConnectionExecute(Sender: TObject);
+    procedure actInspectDataSetExecute(Sender: TObject);
+    procedure actInspectExecute(Sender: TObject);
     procedure actInspectFDManagerExecute(Sender: TObject);
+    procedure actInspectFieldsExecute(Sender: TObject);
+    procedure actInspectGridExecute(Sender: TObject);
+    procedure actMergeAllColumnCellsExecute(Sender: TObject);
+    procedure actMergeCellsExecute(Sender: TObject);
+    procedure actPreviewExecute(Sender: TObject);
+    procedure actPrintExecute(Sender: TObject);
+    procedure actSelectionAsCommaTextExecute(Sender: TObject);
+    procedure actSelectionAsFieldsExecute(Sender: TObject);
+    procedure actSelectionAsQuotedCommaTextExecute(Sender: TObject);
+    procedure actSelectionAsQuotedFieldsExecute(Sender: TObject);
+    procedure actSelectionAsTextExecute(Sender: TObject);
+    procedure actSelectionAsTextTableExecute(Sender: TObject);
+    procedure actSelectionAsWhereInExecute(Sender: TObject);
+    procedure actSelectionAsWikiExecute(Sender: TObject);
+    procedure actSettingsExecute(Sender: TObject);
+    procedure actShowAllColumnsExecute(Sender: TObject);
+    procedure actChinookExampleQueryExecute(Sender: TObject);
     {$ENDREGION}
 
   private
@@ -195,9 +180,9 @@ type
     procedure UpdateConnectionViewCaptions;
 
   public
-    constructor Create(ASettings: ISettings); reintroduce; virtual;
     procedure AfterConstruction; override;
     procedure BeforeDestruction; override;
+    constructor Create(ASettings: ISettings); reintroduce; virtual;
 
     function AddConnectionView: IConnectionView;
 
@@ -236,7 +221,7 @@ uses
   DDuce.ObjectInspector.zObjectInspector,
 
   DataGrabber.Settings.Dialog, DataGrabber.ConnectionView,
-  DataGrabber.Data,
+  DataGrabber.Data, DataGrabber.Resources,
 
   FireDAC.Comp.Client,
 
@@ -258,20 +243,19 @@ begin
   FFieldInspector     := TfrmFieldInspector.Create(Self);
 
   // disable actions that are not fully implemented yet
-  actSyncEditorWithRepository.Visible := False;
-  actToggleRepositoryTree.Visible     := False;
-  actCreateModel.Visible              := False;
-  actPreview.Visible                  := False;
-  actPrint.Visible                    := False;
-  actDesigner.Visible                 := False;
-  actFavoriteFieldsOnly.Visible       := False;
-  actRtti.Visible                     := False;
-  actToggleFullScreen.Visible         := False;
-  actDataInspector.Visible            := False;
+  actPreview.Visible            := False;
+  actPrint.Visible              := False;
+  actDesigner.Visible           := False;
+  actFavoriteFieldsOnly.Visible := False;
+  actRtti.Visible               := False;
+  actToggleFullScreen.Visible   := False;
+  actDataInspector.Visible      := False;
 end;
 
 procedure TdmConnectionViewManager.BeforeDestruction;
 begin
+  FSettings.FormSettings.Assign(Application.MainForm);
+  FSettings.Save;
   FreeAndNil(FDataInspector);
   FreeAndNil(FConnectionViewList);
   inherited BeforeDestruction;
@@ -304,13 +288,6 @@ begin
   (ActiveData as IFieldVisiblity).ShowFavoriteFieldsOnly :=
     not actFavoriteFieldsOnly.Checked;
   ActiveDataView.UpdateView;
-end;
-
-
-procedure TdmConnectionViewManager.actGridViewExecute(Sender: TObject);
-begin
-  FSettings.GridType := 'GridView';
-  ApplySettings;
 end;
 
 procedure TdmConnectionViewManager.actGroupBySelectionExecute(Sender: TObject);
@@ -421,12 +398,6 @@ begin
   ActiveDataView.Inspect;
 end;
 
-procedure TdmConnectionViewManager.actKGridExecute(Sender: TObject);
-begin
-  FSettings.GridType := 'KGrid';
-  ApplySettings;
-end;
-
 procedure TdmConnectionViewManager.actMergeAllColumnCellsExecute(
   Sender: TObject);
 begin
@@ -448,12 +419,6 @@ procedure TdmConnectionViewManager.actAutoSizeColsExecute(Sender: TObject);
 begin
   ActiveDataView.AutoSizeColumns;
 end;
-
-procedure TdmConnectionViewManager.actcxGridExecute(Sender: TObject);
-begin
-  FSettings.GridType := 'cxGrid';
-  ApplySettings;
-end;
 {$ENDREGION}
 
 // data
@@ -466,28 +431,12 @@ begin
     FDataInspector.Show;
 end;
 
-procedure TdmConnectionViewManager.actCommitTransactionExecute(Sender: TObject);
+procedure TdmConnectionViewManager.actChinookExampleQueryExecute(Sender: TObject);
 begin
-  ShowMessage('Not supported yet.');
+  ActiveConnectionView.EditorView.Text := CHINOOK_EXAMPLE_QUERY;
 end;
 
 procedure TdmConnectionViewManager.actExecuteExecute(Sender: TObject);
-begin
-  Execute(ActiveConnectionView.EditorView.Text);
-end;
-
-procedure TdmConnectionViewManager.actRollbackTransactionExecute(
-  Sender: TObject);
-begin
-  ShowMessage('Not supported yet.');
-end;
-
-procedure TdmConnectionViewManager.actStartTransactionExecute(Sender: TObject);
-begin
-  ShowMessage('Not supported yet.');
-end;
-
-procedure TdmConnectionViewManager.actExecuteLimitedExecute(Sender: TObject);
 begin
   Execute(ActiveConnectionView.EditorView.Text);
 end;
@@ -608,12 +557,8 @@ var
 begin
   if Assigned(FSettings) then
   begin
-    actSyncEditorWithRepository.Visible := actToggleRepositoryTree.Checked;
-    actSyncEditorWithRepository.Enabled := actToggleRepositoryTree.Checked;
-
     actToggleStayOnTop.Checked := FSettings.FormSettings.FormStyle = fsStayOnTop;
-    actToggleRepositoryTree.Checked := FSettings.RepositoryVisible;
-    actDataInspector.Checked        := FSettings.DataInspectorVisible;
+    actDataInspector.Checked   := FSettings.DataInspectorVisible;
   end;
 
   if Assigned(ActiveData) and Assigned(ActiveDataView) then
@@ -633,10 +578,13 @@ begin
     actPreview.Enabled             := B;
     actPrint.Enabled               := B;
     actDesigner.Enabled            := B;
-    actHideEmptyColumns.Checked    := not (ActiveData as IFieldVisiblity).EmptyFieldsVisible;
-    actHideConstantColumns.Checked := not (ActiveData as IFieldVisiblity).ConstantFieldsVisible;
+    actHideEmptyColumns.Checked    :=
+      not (ActiveData as IFieldVisiblity).EmptyFieldsVisible;
+    actHideConstantColumns.Checked :=
+      not (ActiveData as IFieldVisiblity).ConstantFieldsVisible;
     actFavoriteFieldsOnly.Checked  :=
       (ActiveData as IFieldVisiblity).ShowFavoriteFieldsOnly;
+
     Logger.Watch('RecordCount', ActiveDataView.RecordCount);
   end;
 end;

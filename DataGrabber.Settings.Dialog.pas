@@ -129,6 +129,16 @@ type
     tsSettings                     : TTabSheet;
     actTestConnection: TAction;
     btnTestConnection: TButton;
+    grp1: TGroupBox;
+    chkOSAuthent: TCheckBox;
+    pnlLogin: TGridPanel;
+    edtUserName: TEdit;
+    lblPassword: TLabel;
+    edtPassword: TEdit;
+    lblUserName: TLabel;
+    actOpenSettingsFileLocation: TAction;
+    btnOpenSettingsFileLocation: TButton;
+    chkAutoReconnect: TCheckBox;
     {$ENDREGION}
 
     {$REGION 'action handlers'}
@@ -193,6 +203,11 @@ type
     procedure chkGridCellColoringEnabledClick(Sender: TObject);
     procedure actGridlinesBothExecute(Sender: TObject);
     procedure actTestConnectionExecute(Sender: TObject);
+    procedure actOpenSettingsFileLocationExecute(Sender: TObject);
+    procedure edtUserNameChange(Sender: TObject);
+    procedure edtPasswordChange(Sender: TObject);
+    procedure edtPacketRecordsChange(Sender: TObject);
+    procedure chkAutoReconnectClick(Sender: TObject);
     {$ENDREGION}
 
   private
@@ -252,8 +267,7 @@ uses
 
   DDuce.Factories, DDuce.Logger,
 
-  DataGrabber.Utils, DataGrabber.ConnectionSettings;
-
+  DataGrabber.Utils, DataGrabber.ConnectionSettings, DataGrabber.Resources;
 
 {$REGION 'interfaced routines'}
 procedure ExecuteSettingsDialog(ASettings: ISettings;
@@ -272,8 +286,7 @@ end;
 {$ENDREGION}
 
 {$REGION 'construction and destruction'}
-constructor TfrmSettingsDialog.Create(AOwner: TComponent;
-  ASettings: ISettings);
+constructor TfrmSettingsDialog.Create(AOwner: TComponent; ASettings: ISettings);
 begin
   inherited Create(AOwner);
   FSettings := ASettings;
@@ -348,10 +361,10 @@ begin
     nil
   );
   CD := FDManager.ConnectionDefs.AddConnectionDef;
-  CD.Params.DriverID := CS .DriverName;
-  CD.Params.Database := CS .Database;
-  CD.Params.UserName := CS .UserName;
-  CD.Params.Password := CS .Password;
+  CD.Params.DriverID := CS.DriverName;
+  CD.Params.Database := CS.Database;
+  CD.Params.UserName := CS.UserName;
+  CD.Params.Password := CS.Password;
   OC.FetchOptions.RecsMax := CS.MaxRecords;
   if CS .FetchOnDemand then
     OC.FetchOptions.Mode := fmOnDemand
@@ -447,11 +460,17 @@ begin
   FVSTProfiles.Refresh;
   SelectNode(FVSTProfiles, N - 1);
 end;
-procedure TfrmSettingsDialog.actTestConnectionExecute(Sender: TObject);
+
+procedure TfrmSettingsDialog.actOpenSettingsFileLocationExecute(
+  Sender: TObject);
 begin
-  //
+//
 end;
 
+procedure TfrmSettingsDialog.actTestConnectionExecute(Sender: TObject);
+begin
+  ShowMessage('Not implemented yet.');
+end;
 {$ENDREGION}
 
 {$REGION 'property access methods'}
@@ -527,6 +546,11 @@ begin
   Changed;
 end;
 
+procedure TfrmSettingsDialog.chkAutoReconnectClick(Sender: TObject);
+begin
+  Changed;
+end;
+
 procedure TfrmSettingsDialog.chkFetchOnDemandClick(Sender: TObject);
 begin
   Changed;
@@ -537,8 +561,9 @@ var
   CI : TCollectionItem;
 begin
   for CI in pnlGridTypeColoring.ControlCollection do
-    with TControlItem(CI) do
-      Control.Enabled := (Sender as TCheckBox).Checked;
+  begin
+    TControlItem(CI).Control.Enabled := (Sender as TCheckBox).Checked;
+  end;
 end;
 
 procedure TfrmSettingsDialog.chkProviderModeClick(Sender: TObject);
@@ -578,6 +603,16 @@ begin
     edtDatabase.Text := dlgOpenFile.FileName;
 end;
 
+procedure TfrmSettingsDialog.edtPacketRecordsChange(Sender: TObject);
+begin
+  Changed;
+end;
+
+procedure TfrmSettingsDialog.edtPasswordChange(Sender: TObject);
+begin
+  Changed;
+end;
+
 procedure TfrmSettingsDialog.edtProfileNameChange(Sender: TObject);
 begin
   if Assigned(SelectedProfile) then
@@ -585,6 +620,11 @@ begin
     SelectedProfile.Name := edtProfileName.Text;
     Changed;
   end;
+end;
+
+procedure TfrmSettingsDialog.edtUserNameChange(Sender: TObject);
+begin
+  Changed;
 end;
 
 procedure TfrmSettingsDialog.tsSettingsEnter(Sender: TObject);
@@ -609,6 +649,10 @@ begin
   ACP.ConnectionSettings.Catalog       := edtCatalog.Text;
   ACP.ConnectionSettings.FetchOnDemand := chkFetchOnDemand.Checked;
   ACP.ConnectionSettings.PacketRecords := StrToIntDef(edtPacketRecords.Text, 0);
+  ACP.ConnectionSettings.OSAuthent     := chkOSAuthent.Checked;
+  ACP.ConnectionSettings.UserName      := edtUserName.Text;
+  ACP.ConnectionSettings.Password      := edtPassword.Text;
+  ACP.ConnectionSettings.AutoReconnect := chkAutoReconnect.Checked;
   FModified := False;
 end;
 
@@ -647,6 +691,14 @@ var
   I : Integer;
   S : string;
 begin
+  actOpenSettingsFileLocation.Caption :=
+    Format(SOpenSettingsFileLocation, [
+    ExpandFileName(
+      ExtractFileDir(Application.ExeName)
+        + '\'
+        + FSettings.FileName
+      )
+    ]);
   btnBooleanColor.DlgColor  := FSettings.DataTypeColors[dtBoolean];
   btnDateColor.DlgColor     := FSettings.DataTypeColors[dtDate];
   btnDateTimeColor.DlgColor := FSettings.DataTypeColors[dtDateTime];
@@ -730,6 +782,12 @@ begin
   actMoveDown.Enabled := B
     and (FVSTProfiles.FocusedNode.Index < FVSTProfiles.RootNodeCount - 1);
   actDelete.Enabled := B;
+
+  B := chkOSAuthent.Checked;
+  edtUserName.Enabled := not B;
+  lblUserName.Enabled := not B;
+  edtPassword.Enabled := not B;
+  lblPassword.Enabled := not B;
 end;
 
 procedure TfrmSettingsDialog.UpdateConnectionProfileControls(
@@ -740,10 +798,14 @@ begin
   chkSetAsDefault.Checked  := ACP.Name = FSettings.DefaultConnectionProfile;
   edtPacketRecords.Text    := ACP.ConnectionSettings.PacketRecords.ToString;
   chkFetchOnDemand.Checked := ACP.ConnectionSettings.FetchOnDemand;
+  cbxDrivers.Text          := ACP.ConnectionSettings.DriverName;
+  edtDatabase.Text         := ACP.ConnectionSettings.Database;
+  edtCatalog.Text          := ACP.ConnectionSettings.Catalog;
+  edtUserName.Text         := ACP.ConnectionSettings.UserName;
+  edtPassword.Text         := ACP.ConnectionSettings.Password;
+  chkOSAuthent.Checked     := ACP.ConnectionSettings.OSAuthent;
+  chkAutoReconnect.Checked := ACP.ConnectionSettings.AutoReconnect;
   FDManager.GetDriverNames(cbxDrivers.Items);
-  cbxDrivers.Text  := ACP.ConnectionSettings.DriverName;
-  edtDatabase.Text := ACP.ConnectionSettings.Database;
-  edtCatalog.Text  := ACP.ConnectionSettings.Catalog;
 end;
 {$ENDREGION}
 

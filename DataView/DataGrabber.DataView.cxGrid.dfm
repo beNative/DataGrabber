@@ -44,7 +44,6 @@ object frmcxGrid: TfrmcxGrid
       FindPanel.MRUItemsListDropDownCount = 20
       FindPanel.Position = fppBottom
       OnCustomDrawCell = tvwMainCustomDrawCell
-      DataController.DataModeController.GridMode = True
       DataController.DataSource = dscMain
       DataController.MultiThreadedOptions.Filtering = bTrue
       DataController.Options = [dcoAssignGroupingValues, dcoAssignMasterDetailKeys, dcoSaveExpanding, dcoSortByDisplayText, dcoFocusTopRowAfterSorting, dcoImmediatePost, dcoInsertOnNewItemRowFocusing]

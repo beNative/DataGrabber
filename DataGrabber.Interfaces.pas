@@ -22,7 +22,7 @@ uses
   System.Classes,
   Vcl.Graphics, Vcl.Controls, Vcl.Menus, Vcl.Forms, Vcl.ActnList,
   Data.DB,
-  FireDAC.Comp.Client,
+  FireDAC.Comp.Client, FireDAC.Stan.Intf,
 
   Spring, Spring.Collections,
 
@@ -103,6 +103,19 @@ type
     property ConnectionSettings: TConnectionSettings
       read GetConnectionSettings;
 
+  end;
+
+  IDataPersistable = interface
+  ['{18B39929-7F40-4ED0-BF93-C6191CCCFF1E}']
+    procedure SaveToFile(
+      const AFileName : string = '';
+      AFormat         : TFDStorageFormat = sfAuto
+    );
+
+    procedure LoadFromFile(
+      const AFileName : string = '';
+      AFormat         : TFDStorageFormat = sfAuto
+    );
   end;
 
   IDataViewSettings = interface

@@ -1,9 +1,10 @@
 object frmSettingsDialog: TfrmSettingsDialog
   Left = 0
   Top = 0
+  ActiveControl = pgcMain
   Caption = 'Settings'
   ClientHeight = 437
-  ClientWidth = 721
+  ClientWidth = 705
   Color = clBtnFace
   Constraints.MinHeight = 476
   Constraints.MinWidth = 396
@@ -14,11 +15,12 @@ object frmSettingsDialog: TfrmSettingsDialog
   Font.Name = 'Tahoma'
   Font.Style = []
   GlassFrame.Enabled = True
+  KeyPreview = True
   OldCreateOrder = False
   Position = poMainFormCenter
   ShowHint = True
   DesignSize = (
-    721
+    705
     437)
   PixelsPerInch = 96
   TextHeight = 13
@@ -26,7 +28,7 @@ object frmSettingsDialog: TfrmSettingsDialog
     AlignWithMargins = True
     Left = 3
     Top = 3
-    Width = 715
+    Width = 699
     Height = 394
     ActivePage = tsConnectionProfiles
     Align = alTop
@@ -37,7 +39,7 @@ object frmSettingsDialog: TfrmSettingsDialog
       Caption = 'Connection &profiles'
       ImageIndex = 9
       object splVertical: TSplitter
-        Left = 137
+        Left = 163
         Top = 0
         Width = 7
         Height = 365
@@ -47,9 +49,9 @@ object frmSettingsDialog: TfrmSettingsDialog
         ExplicitHeight = 377
       end
       object pnlConnectionProfileDetail: TPanel
-        Left = 144
+        Left = 170
         Top = 0
-        Width = 563
+        Width = 521
         Height = 365
         Align = alClient
         BevelOuter = bvNone
@@ -57,30 +59,31 @@ object frmSettingsDialog: TfrmSettingsDialog
         object pgcConnectionProfile: TPageControl
           Left = 0
           Top = 0
-          Width = 563
+          Width = 521
           Height = 365
           ActivePage = tsBasic
           Align = alClient
           TabOrder = 0
           object tsBasic: TTabSheet
-            Caption = 'Basic'
+            Caption = '&Basic'
             DesignSize = (
-              555
+              513
               337)
             object grpClientSettings: TGroupBox
               Left = 3
-              Top = 188
-              Width = 549
-              Height = 146
+              Top = 239
+              Width = 507
+              Height = 95
               Anchors = [akLeft, akTop, akRight]
               Caption = 'Client settings'
-              TabOrder = 0
+              TabOrder = 2
+              TabStop = True
               object lblPacketrecords: TLabel
                 Left = 136
                 Top = 28
                 Width = 75
                 Height = 13
-                Caption = 'Packet records:'
+                Caption = 'Packet &records:'
                 FocusControl = edtPacketRecords
               end
               object edtPacketRecords: TEdit
@@ -91,13 +94,14 @@ object frmSettingsDialog: TfrmSettingsDialog
                 Alignment = taCenter
                 TabOrder = 0
                 Text = '100'
+                OnChange = edtPacketRecordsChange
               end
               object chkFetchOnDemand: TCheckBox
                 Left = 16
                 Top = 27
                 Width = 100
                 Height = 17
-                Caption = 'Fetch on demand'
+                Caption = '&Fetch on demand'
                 Checked = True
                 DoubleBuffered = False
                 ParentDoubleBuffered = False
@@ -105,24 +109,38 @@ object frmSettingsDialog: TfrmSettingsDialog
                 TabOrder = 1
                 OnClick = chkFetchOnDemandClick
               end
+              object chkAutoReconnect: TCheckBox
+                Left = 16
+                Top = 53
+                Width = 337
+                Height = 17
+                Hint = 
+                  'When enabled, the automatic connection recovery will detect when' +
+                  ' a '#13#10'connection has been lost and will try to recover from this ' +
+                  'situation.'
+                Caption = 'Automatically restore database connection after connection loss.'
+                TabOrder = 2
+                OnClick = chkAutoReconnectClick
+              end
             end
             object grpConnectionSettings: TGroupBox
               Left = 3
-              Top = 41
-              Width = 550
-              Height = 145
+              Top = 39
+              Width = 508
+              Height = 194
               Anchors = [akLeft, akTop, akRight]
-              Caption = 'Connection settings'
+              Caption = 'Database connection &settings'
               TabOrder = 1
+              TabStop = True
               DesignSize = (
-                550
-                145)
+                508
+                194)
               object lblDriver: TLabel
                 Left = 10
                 Top = 19
                 Width = 33
                 Height = 13
-                Caption = 'Driver:'
+                Caption = '&Driver:'
                 FocusControl = cbxDrivers
               end
               object lblDatabase: TLabel
@@ -130,7 +148,7 @@ object frmSettingsDialog: TfrmSettingsDialog
                 Top = 45
                 Width = 50
                 Height = 13
-                Caption = 'Database:'
+                Caption = 'Data&base:'
                 FocusControl = edtDatabase
               end
               object lblCatalog: TLabel
@@ -138,13 +156,13 @@ object frmSettingsDialog: TfrmSettingsDialog
                 Top = 72
                 Width = 41
                 Height = 13
-                Caption = 'Catalog:'
+                Caption = '&Catalog:'
                 FocusControl = edtCatalog
               end
               object cbxDrivers: TComboBox
                 Left = 76
                 Top = 16
-                Width = 163
+                Width = 121
                 Height = 21
                 Anchors = [akLeft, akTop, akRight]
                 DropDownCount = 30
@@ -152,72 +170,218 @@ object frmSettingsDialog: TfrmSettingsDialog
                 OnChange = cbxDriversChange
               end
               object btnConnectionString: TButton
-                Left = 245
+                Left = 203
                 Top = 13
                 Width = 150
                 Height = 26
+                Hint = 
+                  'Create a detailed connection string using the FireDAC connection' +
+                  ' dialog.'
                 Action = actConnectionString
                 Anchors = [akTop, akRight]
+                Caption = '&Build connectionstring'
                 Images = imlMain
                 TabOrder = 1
               end
               object edtDatabase: TButtonedEdit
                 Left = 76
                 Top = 42
-                Width = 471
+                Width = 429
                 Height = 21
+                Hint = 'Database (server or path).'
                 Anchors = [akLeft, akTop, akRight]
                 Images = imlMain
                 RightButton.ImageIndex = 10
                 RightButton.Visible = True
-                TabOrder = 2
+                TabOrder = 3
                 OnChange = edtDatabaseChange
                 OnRightButtonClick = edtDatabaseRightButtonClick
               end
               object edtCatalog: TButtonedEdit
                 Left = 76
                 Top = 69
-                Width = 471
+                Width = 429
                 Height = 21
                 Anchors = [akLeft, akTop, akRight]
                 Images = imlMain
                 RightButton.Enabled = False
                 RightButton.ImageIndex = 10
-                TabOrder = 3
+                TabOrder = 4
                 OnChange = edtCatalogChange
               end
               object btnTestConnection: TButton
-                Left = 397
+                Left = 357
                 Top = 13
-                Width = 150
+                Width = 149
                 Height = 26
                 Action = actTestConnection
                 Anchors = [akTop, akRight]
-                TabOrder = 4
+                Caption = '&Test connection'
+                Images = imlMain
+                TabOrder = 2
+              end
+              object grp1: TGroupBox
+                Left = 10
+                Top = 95
+                Width = 491
+                Height = 47
+                Anchors = [akLeft, akTop, akRight]
+                Caption = 'DBMS user &login'
+                TabOrder = 5
+                DesignSize = (
+                  491
+                  47)
+                object chkOSAuthent: TCheckBox
+                  Left = 13
+                  Top = 21
+                  Width = 130
+                  Height = 17
+                  Hint = 
+                    'Enable this use Windows authentication. If not checked, DBMS aut' +
+                    'hentication is used.'
+                  Caption = 'Use &OS authentication'
+                  TabOrder = 0
+                end
+                object pnlLogin: TGridPanel
+                  Left = 155
+                  Top = 17
+                  Width = 331
+                  Height = 23
+                  Anchors = [akLeft, akTop, akRight]
+                  BevelOuter = bvNone
+                  Caption = 'pnlLogin'
+                  Color = clWindow
+                  ColumnCollection = <
+                    item
+                      SizeStyle = ssAbsolute
+                      Value = 65.000000000000000000
+                    end
+                    item
+                      Value = 54.248366013071890000
+                    end
+                    item
+                      SizeStyle = ssAbsolute
+                      Value = 60.000000000000000000
+                    end
+                    item
+                      Value = 45.751633986928110000
+                    end>
+                  ControlCollection = <
+                    item
+                      Column = 1
+                      Control = edtUserName
+                      Row = 0
+                    end
+                    item
+                      Column = 2
+                      Control = lblPassword
+                      Row = 0
+                    end
+                    item
+                      Column = 3
+                      Control = edtPassword
+                      Row = 0
+                    end
+                    item
+                      Column = 0
+                      Control = lblUserName
+                      Row = 0
+                    end>
+                  ParentBackground = False
+                  RowCollection = <
+                    item
+                      Value = 100.000000000000000000
+                    end
+                    item
+                      SizeStyle = ssAuto
+                    end>
+                  ShowCaption = False
+                  TabOrder = 1
+                  object edtUserName: TEdit
+                    AlignWithMargins = True
+                    Left = 66
+                    Top = 1
+                    Width = 109
+                    Height = 21
+                    Hint = 'The DBMS server login name.'
+                    Margins.Left = 1
+                    Margins.Top = 1
+                    Margins.Right = 1
+                    Margins.Bottom = 1
+                    Align = alClient
+                    TabOrder = 0
+                    OnChange = edtUserNameChange
+                  end
+                  object lblPassword: TLabel
+                    AlignWithMargins = True
+                    Left = 178
+                    Top = 2
+                    Width = 56
+                    Height = 19
+                    Margins.Left = 2
+                    Margins.Top = 2
+                    Margins.Right = 2
+                    Margins.Bottom = 2
+                    Align = alClient
+                    AutoSize = False
+                    Caption = '&Password:'
+                    Layout = tlCenter
+                    ExplicitLeft = 184
+                    ExplicitTop = -1
+                    ExplicitWidth = 64
+                  end
+                  object edtPassword: TEdit
+                    AlignWithMargins = True
+                    Left = 237
+                    Top = 1
+                    Width = 93
+                    Height = 21
+                    Hint = 'The DBMS server login password.'
+                    Margins.Left = 1
+                    Margins.Top = 1
+                    Margins.Right = 1
+                    Margins.Bottom = 1
+                    Align = alClient
+                    TabOrder = 1
+                    OnChange = edtPasswordChange
+                  end
+                  object lblUserName: TLabel
+                    Left = 0
+                    Top = 0
+                    Width = 65
+                    Height = 23
+                    Align = alClient
+                    Caption = '&Username:'
+                    Layout = tlCenter
+                    ExplicitWidth = 52
+                    ExplicitHeight = 13
+                  end
+                end
               end
             end
             object grpProfileSettings: TGroupBox
               Left = 3
               Top = 3
-              Width = 549
+              Width = 507
               Height = 36
               Anchors = [akLeft, akTop, akRight]
-              TabOrder = 2
+              TabOrder = 0
+              TabStop = True
               DesignSize = (
-                549
+                507
                 36)
               object lblProfileColor: TLabel
-                Left = 274
+                Left = 232
                 Top = 10
                 Width = 60
                 Height = 13
                 Anchors = [akTop, akRight]
-                Caption = 'Profile color:'
+                Caption = 'Profile c&olor:'
                 FocusControl = btnProfileColor
                 ExplicitLeft = 220
               end
               object btnProfileColor: TKColorButton
-                Left = 340
+                Left = 298
                 Top = 5
                 Width = 104
                 Height = 25
@@ -229,19 +393,19 @@ object frmSettingsDialog: TfrmSettingsDialog
                 Font.Name = 'Tahoma'
                 Font.Style = []
                 ParentFont = False
-                TabOrder = 0
+                TabOrder = 1
                 OnClick = btnProfileColorClick
                 ColorDlgOptions = [cdAnyColor]
               end
               object edtProfileName: TLabeledEdit
                 Left = 76
                 Top = 7
-                Width = 191
+                Width = 149
                 Height = 21
                 Anchors = [akLeft, akTop, akRight]
                 EditLabel.Width = 63
                 EditLabel.Height = 13
-                EditLabel.Caption = 'Profile name:'
+                EditLabel.Caption = 'Profile &name:'
                 Font.Charset = DEFAULT_CHARSET
                 Font.Color = clWindowText
                 Font.Height = -11
@@ -249,23 +413,26 @@ object frmSettingsDialog: TfrmSettingsDialog
                 Font.Style = [fsBold]
                 LabelPosition = lpLeft
                 ParentFont = False
-                TabOrder = 1
+                TabOrder = 0
                 OnChange = edtProfileNameChange
               end
               object chkSetAsDefault: TCheckBox
-                Left = 450
+                Left = 408
                 Top = 9
                 Width = 97
                 Height = 17
+                Hint = 
+                  'Make this connection profile the default one when the applicatio' +
+                  'n is started.'
                 Anchors = [akTop, akRight]
-                Caption = 'Set as default'
+                Caption = 'Set as d&efault'
                 TabOrder = 2
                 OnClick = chkSetAsDefaultClick
               end
             end
           end
           object tsAdvanced: TTabSheet
-            Caption = 'Advanced'
+            Caption = '&Advanced'
             ImageIndex = 1
           end
         end
@@ -273,7 +440,7 @@ object frmSettingsDialog: TfrmSettingsDialog
       object pnlConnectionProfilesList: TPanel
         Left = 0
         Top = 0
-        Width = 137
+        Width = 163
         Height = 365
         Align = alLeft
         BevelOuter = bvNone
@@ -281,7 +448,7 @@ object frmSettingsDialog: TfrmSettingsDialog
         object tlbConnectionProfiles: TToolBar
           Left = 0
           Top = 0
-          Width = 137
+          Width = 163
           Height = 25
           Caption = 'tlbConnectionProfiles'
           Images = imlMain
@@ -334,7 +501,7 @@ object frmSettingsDialog: TfrmSettingsDialog
       Caption = '&Resultgrid display settings'
       ImageIndex = 5
       DesignSize = (
-        707
+        691
         365)
       object grpCellBackgroundColoring: TGroupBox
         Left = 2
@@ -342,7 +509,7 @@ object frmSettingsDialog: TfrmSettingsDialog
         Width = 166
         Height = 302
         Caption = 'Grid cell background coloring'
-        TabOrder = 0
+        TabOrder = 1
         object chkGridCellColoringEnabled: TCheckBox
           Left = 19
           Top = 23
@@ -785,12 +952,12 @@ object frmSettingsDialog: TfrmSettingsDialog
       object rgpGridTypes: TRadioGroup
         Left = 3
         Top = 1
-        Width = 701
+        Width = 685
         Height = 49
         Anchors = [akLeft, akTop, akRight]
         Caption = 'Grid type'
         Columns = 4
-        TabOrder = 1
+        TabOrder = 0
       end
       object grpGridLines: TGroupBox
         Left = 175
@@ -843,10 +1010,20 @@ object frmSettingsDialog: TfrmSettingsDialog
       Caption = 'Settings file'
       ImageIndex = 11
       OnEnter = tsSettingsEnter
+      object btnOpenSettingsFileLocation: TButton
+        AlignWithMargins = True
+        Left = 3
+        Top = 3
+        Width = 685
+        Height = 25
+        Action = actOpenSettingsFileLocation
+        Align = alTop
+        TabOrder = 0
+      end
     end
   end
   object btnApply: TButton
-    Left = 251
+    Left = 235
     Top = 403
     Width = 150
     Height = 26
@@ -859,7 +1036,7 @@ object frmSettingsDialog: TfrmSettingsDialog
     TabOrder = 1
   end
   object btnClose: TButton
-    Left = 563
+    Left = 547
     Top = 403
     Width = 150
     Height = 26
@@ -869,10 +1046,10 @@ object frmSettingsDialog: TfrmSettingsDialog
     ImageMargins.Right = 4
     Images = imlMain
     ModalResult = 11
-    TabOrder = 2
+    TabOrder = 3
   end
   object btnCancel: TButton
-    Left = 407
+    Left = 391
     Top = 403
     Width = 150
     Height = 26
@@ -884,12 +1061,12 @@ object frmSettingsDialog: TfrmSettingsDialog
     ImageMargins.Right = 4
     Images = imlMain
     ModalResult = 2
-    TabOrder = 3
+    TabOrder = 2
   end
   object aclMain: TActionList
     Images = imlMain
-    Left = 600
-    Top = 296
+    Left = 64
+    Top = 56
     object actApply: TAction
       Caption = '&Apply'
       Hint = 'Apply settings immediately'
@@ -984,21 +1161,27 @@ object frmSettingsDialog: TfrmSettingsDialog
     object actTestConnection: TAction
       Caption = 'Test connection'
       Enabled = False
+      ImageIndex = 18
       OnExecute = actTestConnectionExecute
+    end
+    object actOpenSettingsFileLocation: TAction
+      Caption = 'Open settings file location'
+      OnExecute = actOpenSettingsFileLocationExecute
     end
   end
   object imlMain: TImageList
     ColorDepth = cd32Bit
     DrawingStyle = dsTransparent
-    Left = 560
-    Top = 248
+    Left = 112
+    Top = 56
     Bitmap = {
-      494C010112001500040010001000FFFFFFFF2110FFFFFFFFFFFFFFFF424D3600
+      494C010113001500040010001000FFFFFFFF2110FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000005000000001002000000000000050
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000000000FB00000058000000000000
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
@@ -1006,8 +1189,7 @@ object frmSettingsDialog: TfrmSettingsDialog
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
+      00000000000000000000000000000000000000000056000000F3000000550000
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
@@ -1015,97 +1197,97 @@ object frmSettingsDialog: TfrmSettingsDialog
       00E6000000E6000000E6000000E6000000E6000000E6000000E6000000E60000
       00E6000000E6000000AC000000000000000000000000000000AC000000150000
       00A400000015000000A400000015000000E600000015000000A4000000150000
-      00A400000015000000AC00000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
+      00A400000015000000AC00000000000000000000000000000053000000EA0000
+      005200000052000000EA00000052000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000014000000000000
       0000000000000000000000000000000000130000000000000000000000000000
       00000000000000000013000000000000000000000000000000D9000000000000
       0000000000000000000000000000000000D90000000000000000000000000000
-      000000000000000000D900000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000D900000000000000000000000000000000000000510000
+      00E5000000E5655959FF000000E5000000500000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000089000000000000
       0000000000000000000000000000000000890000000000000000000000000000
       00000000000000000089000000000000000000000000000000CC000000000000
       0000000000000000000000000000000000CC0000000000000000000000000000
-      000000000000000000CC00000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000CC000000000000000000000000000000000000004F0000
+      00E2625959FF544747FF5C5252FF000000E2000000E2000000E20000004F0000
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000011000000000000
       0000000000000000000000000000000000110000000000000000000000000000
       00000000000000000011000000000000000000000000000000C7000000000000
       0000000000000000000000000000000000C70000000000000000000000000000
-      000000000000000000C700000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000C700000000000000000000000000000000000000E0605B
+      5BFF4C4343FF463B3BFF463B3BFF4B4242FF4C4343FF4C4242FF0000002D0000
+      004F000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000080000000000000
       0000000000000000000000000000000000800000000000000000000000000000
       00000000000000000080000000000000000000000000000000C4000000000000
       0000000000000000000000000000000000C40000000000000000000000000000
-      000000000000000000C400000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000C4000000000000000000000000000000000000004E0000
+      00DD5A5656FF403939FF372F2FFF3D3535FF474141FF0000002C3F3838FF0000
+      00DD000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000010000000000000
       0000000000000000000000000000000000100000000000000000000000000000
       00000000000000000010000000000000000000000000000000C0000000000000
       0000000000000000000000000000000000C00000000000000000000000000000
       000000000000000000C000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
+      004D000000DB3F3B3BFF322D2DFF474444FF000000583C3838FF322E2EFF0000
+      00DB000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
       00000000000000000000000000000000000000000000000000BC000000BC0000
       00BC000000BC000000BC000000BC000000BC000000BC000000BC000000BC0000
       00BC000000BC000000BC000000000000000000000000000000BC0000000F0000
       00780000000F000000780000000F000000BC0000000F000000780000000F0000
       00780000000F000000BC00000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000D94C4B4BFF4D4D4DFF000000573F3E3EFF222121FF262424FF0000
+      00D90000004C0000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
       000000000000000000000000000000000000000000000000000F000000000000
       00000000000000000000000000000000000F0000000000000000000000000000
       0000000000000000000F000000000000000000000000000000B9000000000000
       0000000000000000000000000000000000B90000000000000000000000000000
       000000000000000000B900000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000D7696969FF0000002B555555FF2C2B2BFF181818FF141313FF2C2C
+      2CFF000000D70000004C00000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000071000000000000
       0000000000000000000000000000000000710000000000000000000000000000
       00000000000000000071000000000000000000000000000000B6000000000000
       0000000000000000000000000000000000B60000000000000000000000000000
       000000000000000000B600000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
+      00000000004A0000002A6B6B6BFF616161FF555555FF4C4C4CFF444444FF4343
+      43FF505050FF000000D400000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
       000000000000000000000000000000000000000000000000000E000000000000
       00000000000000000000000000000000000E0000000000000000000000000000
       0000000000000000000E000000000000000000000000000000B3000000000000
       0000000000000000000000000000000000B30000000000000000000000000000
       000000000000000000B300000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000004A000000D3000000D3000000D3666666FF525252FF5B5B
+      5BFF000000D30000004A00000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
       000000000000000000000000000000000000000000000000006B000000000000
       00000000000000000000000000000000006B0000000000000000000000000000
       0000000000000000006B000000000000000000000000000000B0000000000000
       0000000000000000000000000000000000B00000000000000000000000000000
       000000000000000000B000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000004A000000D16A6A6AFF0000
+      00D1000000D10000004900000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
       000000000000000000000000000000000000000000000000000E000000000000
       00000000000000000000000000000000000D0000000000000000000000000000
       0000000000000000000D000000000000000000000000000000AE000000000000
       0000000000000000000000000000000000AE0000000000000000000000000000
       000000000000000000AE00000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000049000000CF0000
+      004900000049000000CF00000049000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000081000000AC0000
       00AC000000AC000000AC000000AC000000AC000000AC000000AC000000AC0000
@@ -1113,6 +1295,7 @@ object frmSettingsDialog: TfrmSettingsDialog
       00670000000D000000670000000D000000AC0000000D000000670000000D0000
       00670000000D0000008100000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
+      00000000000000000049000000CE000000480000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
@@ -1120,8 +1303,7 @@ object frmSettingsDialog: TfrmSettingsDialog
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000048000000CD0000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
       00000000000000000000000000000000000000000000151616162E323539404B
@@ -1661,7 +1843,7 @@ object frmSettingsDialog: TfrmSettingsDialog
       000000000000}
   end
   object dlgOpenFile: TOpenDialog
-    Left = 544
-    Top = 296
+    Left = 16
+    Top = 56
   end
 end
