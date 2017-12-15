@@ -44,6 +44,7 @@ type
   private
     FData     : IData;
     FSettings : IDataViewSettings;
+    FDataSet  : TDataSet;
 
     function GetDataSet: TDataSet;
     function GetRecordCount: Integer;
@@ -58,6 +59,7 @@ type
     function GetName: string;
 
     procedure DataAfterExecute(Sender: TObject);
+    procedure SetDataSet(const Value: TDataSet);
 
   protected
     procedure SetPopupMenu(const Value: TPopupMenu);
@@ -91,7 +93,7 @@ type
     procedure Inspect;
 
     property DataSet: TDataSet
-      read GetDataSet;
+      read GetDataSet write SetDataSet;
 
     property Data: IData
       read GetData write SetData;
@@ -127,8 +129,8 @@ end;
 
 procedure TfrmKGrid.BeforeDestruction;
 begin
-  if Assigned(FData) then
-    (FData as IDataEvents).OnAfterExecute.Remove(DataAfterExecute);
+  if Assigned(Data) then
+    Data.OnAfterExecute.Remove(DataAfterExecute);
   inherited BeforeDestruction;
 end;
 {$ENDREGION}
@@ -158,18 +160,29 @@ procedure TfrmKGrid.SetData(const Value: IData);
 begin
   if Value <> Data then
   begin
-    if Data <> nil then
-     (Data as IDataEvents).OnAfterExecute.Remove(DataAfterExecute);
+    if Assigned(Data) then
+    begin
+      Data.OnAfterExecute.Remove(DataAfterExecute);
+    end;
     FData := Value;
-    (Data as IDataEvents).OnAfterExecute.Add(DataAfterExecute);
-    dscMain.DataSet := DataSet;
+      Data.OnAfterExecute.Add(DataAfterExecute);
     UpdateView;
   end;
 end;
 
 function TfrmKGrid.GetDataSet: TDataSet;
 begin
-  Result := Data.DataSet;
+  Result := FDataSet;
+end;
+
+procedure TfrmKGrid.SetDataSet(const Value: TDataSet);
+begin
+  if Value <> DataSet then
+  begin
+    FDataSet := Value;
+    dscMain.DataSet := FDataSet;
+    UpdateView;
+  end;
 end;
 
 function TfrmKGrid.GetRecordCount: Integer;

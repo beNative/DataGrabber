@@ -64,7 +64,13 @@ type
 
 implementation
 
+uses
+  System.UITypes;
+
 {$R *.dfm}
+
+type
+  TScrollStyle = System.UITypes.TScrollStyle;
 
 {$REGION 'construction and destruction'}
 constructor TfrmEditorView.Create;
@@ -123,6 +129,7 @@ begin
   FEditor.Highlighter.Colors.LoadFromFile('tsColors' + '.json');
   FEditor.CodeFolding.Visible := True;
   FEditor.Font.Name := 'Consolas';
+  FEditor.Scroll.Bars := TScrollStyle.ssVertical;
 end;
 {$ENDREGION}
 

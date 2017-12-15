@@ -18,6 +18,9 @@ unit DataGrabber.DataView.cxGrid;
 
 interface
 
+{$I DataGrabber.inc}
+
+{$IFDEF DEVEXPRESS}
 uses
   Winapi.Windows, Winapi.Messages,
   System.SysUtils, System.Variants, System.Classes, System.Generics.Collections,
@@ -35,14 +38,6 @@ uses
   Spring.Collections,
 
   DataGrabber.Interfaces;
-
-{
-  TODO: DataShaper
-
-  - filter out selection from cells
-  - quote and delimit
-
-}
 
 type
   TfrmcxGrid = class(TForm, IDataView, IGroupable, IMergable)
@@ -73,10 +68,12 @@ type
     FMergeColumnCells : Boolean;
     FAutoSizeCols     : Boolean;
     FData             : IData;
+    FDataSet          : TDataSet;
 
     {$REGION 'property access methods'}
     function GetName: string;
     function GetDataSet: TDataSet;
+    procedure SetDataSet(const Value: TDataSet);
     function GetRecordCount: Integer;
     function GetMergeColumnCells: Boolean;
     procedure SetMergeColumnCells(const Value: Boolean);
@@ -156,7 +153,7 @@ type
     ): string; overload;
 
     property DataSet: TDataSet
-      read GetDataSet;
+      read GetDataSet write SetDataSet;
 
     property Data: IData
       read GetData write SetData;
@@ -179,11 +176,13 @@ type
     property GridType: string
       read GetGridType;
   end;
+{$ENDIF}
 
 implementation
 
 {$R *.dfm}
 
+{$IFDEF DEVEXPRESS}
 uses
   System.StrUtils,
   Vcl.Clipbrd,
@@ -241,8 +240,8 @@ end;
 
 procedure TfrmcxGrid.BeforeDestruction;
 begin
-  if Assigned(FData) then
-    (FData as IDataEvents).OnAfterExecute.Remove(DataAfterExecute);
+  if Assigned(Data) then
+    Data.OnAfterExecute.Remove(DataAfterExecute);
   inherited BeforeDestruction;
 end;
 {$ENDREGION}
@@ -257,18 +256,26 @@ procedure TfrmcxGrid.SetData(const Value: IData);
 begin
   if Value <> Data then
   begin
-    if Data <> nil then
-     (Data as IDataEvents).OnAfterExecute.Remove(DataAfterExecute);
+    if Assigned(Data) then
+    begin
+      Data.OnAfterExecute.Remove(DataAfterExecute);
+    end;
     FData := Value;
-    (Data as IDataEvents).OnAfterExecute.Add(DataAfterExecute);
-    dscMain.DataSet := DataSet;
+    Data.OnAfterExecute.Add(DataAfterExecute);
     UpdateView;
   end;
 end;
 
 function TfrmcxGrid.GetDataSet: TDataSet;
 begin
-  Result := Data.DataSet;
+  Result := FDataSet;
+end;
+
+procedure TfrmcxGrid.SetDataSet(const Value: TDataSet);
+begin
+  FDataSet := Value;
+  dscMain.DataSet := FDataSet;
+  UpdateView;
 end;
 
 function TfrmcxGrid.GetRecordCount: Integer;
@@ -827,5 +834,7 @@ begin
   tvwMain.OptionsView.GridLines := GL;
 end;
 {$ENDREGION}
+
+{$ENDIF}
 
 end.

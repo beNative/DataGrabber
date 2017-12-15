@@ -14,8 +14,7 @@ External dependencies and references:
 * [Chinook database](http://github.com/lerocha/chinook-database)
 * [SQLite](https://www.sqlite.org/)
 * [TBCEditor]
-* [TChromeTabs](http://github.com/norgepaul/TChromeTabs) 
-* [DSharp](http://bitbucket.org/sglienke/dsharp)
+* [TChromeTabs](http://github.com/norgepaul/TChromeTabs)
 
 Commercial components (optional):
 - FastReport

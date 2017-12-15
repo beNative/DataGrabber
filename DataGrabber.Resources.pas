@@ -44,6 +44,36 @@ const
     '  inner join Genre g'                    + #13#10 +
     '    on (g.GenreId = t.GenreId)';
 
+  CHINOOK_EXAMPLE_QUERY1 =
+    'select'                                  + #13#10 +
+    '  al.*,'                                 + #13#10 +
+    '  ar.*,'                                 + #13#10 +
+    '  t.*,'                                  + #13#10 +
+    '  mt.*,'                                 + #13#10 +
+    '  g.*'                                   + #13#10 +
+    'from'                                    + #13#10 +
+    '  Album al'                              + #13#10 +
+    '  inner join Artist ar'                  + #13#10 +
+    '    on (al.ArtistId = ar.ArtistId)'      + #13#10 +
+    '  inner join Track t'                    + #13#10 +
+    '    on (t.AlbumId = al.AlbumId)'         + #13#10 +
+    '  inner join MediaType mt'               + #13#10 +
+    '    on (mt.MediaTypeId = t.MediaTypeId)' + #13#10 +
+    '  inner join Genre g'                    + #13#10 +
+    '    on (g.GenreId = t.GenreId)';
+
+    CHINOOK_EXAMPLE_QUERY2 =
+    'select '#13#10 +
+    '  * '#13#10 +
+    'from '#13#10 +
+    '  Customer c '#13#10 +
+    '; '#13#10 +
+    'select '#13#10 +
+    '  * '#13#10 +
+    'from '#13#10 +
+    '  Employee e ';
+
+
   SETTINGS_FILE = 'settings.json';
 
 resourcestring

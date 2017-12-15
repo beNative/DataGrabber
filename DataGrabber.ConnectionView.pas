@@ -24,9 +24,11 @@ uses
   Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ComCtrls,
   Vcl.ActnList, Vcl.ExtCtrls,
 
+  Spring.Collections,
+
   VirtualTrees,
 
-  DataGrabber.Interfaces, DataGrabber.ConnectionProfiles;
+  DataGrabber.Interfaces, DataGrabber.ConnectionProfiles, OMultiPanel;
 
 {
    A IConnectionView instance consists of
@@ -44,14 +46,9 @@ uses
 
 type
   TfrmConnectionView = class(TForm, IConnectionView)
-    {$REGION 'designer controls'}
-    pnlBottom     : TPanel;
-    pnlEditor     : TPanel;
-    pnlGrid       : TPanel;
-    pnlProfiles   : TPanel;
-    pnlTop        : TPanel;
-    splHorizontal : TSplitter;
-    splVertical   : TSplitter;
+    pnlMain: TOMultiPanel;
+    pnlBottom: TOMultiPanel;
+    pnlTop: TOMultiPanel;
     {$ENDREGION}
 
     procedure FVSTProfilesBeforeCellPaint(
@@ -101,6 +98,8 @@ type
     FActiveData     : IData;
     FVSTProfiles    : TVirtualStringTree;
     FDefaultNode    : PVirtualNode;
+    FDataViewList   : IList<IDataView>;
+    FPageControl    : TPageControl;
 
     {$REGION 'property access methods'}
     function GetManager: IConnectionViewManager;
@@ -110,6 +109,8 @@ type
     function GetEditorView: IEditorView;
     function GetActiveConnectionProfile: TConnectionProfile;
     {$ENDREGION}
+
+    procedure DataAfterExecute(Sender: TObject);
 
   protected
     procedure InitializeEditorView;
@@ -124,15 +125,11 @@ type
     constructor Create(
       AOwner      : TComponent;
       AEditorView : IEditorView;
-      ADataView   : IDataView;
       AData       : IData
     ); reintroduce; virtual;
 
     property Form: TForm
       read GetForm;
-
-    property ActiveDataView: IDataView
-      read GetActiveDataView;
 
     property ActiveData: IData
       read GetActiveData;
@@ -143,6 +140,9 @@ type
     property EditorView: IEditorView
       read GetEditorView;
 
+    property ActiveDataView: IDataView
+      read GetActiveDataView;
+
     property Manager: IConnectionViewManager
       read GetManager;
   end;
@@ -151,10 +151,11 @@ implementation
 
 uses
   System.UITypes,
+  Data.DB,
 
-  Spring,
+  Spring, Spring.Container,
 
-  DDuce.Factories, DDuce.ObjectInspector.zObjectInspector,
+  DDuce.Logger, DDuce.Factories, DDuce.ObjectInspector.zObjectInspector,
 
   DataGrabber.Utils;
 
@@ -162,36 +163,92 @@ uses
 
 {$REGION 'construction and destruction'}
 constructor TfrmConnectionView.Create(AOwner: TComponent;
-  AEditorView: IEditorView; ADataView: IDataView; AData: IData);
+  AEditorView: IEditorView; AData: IData);
 begin
   inherited Create(AOwner);
   Guard.CheckNotNull(AEditorView, 'AEditorView');
-  Guard.CheckNotNull(ADataView, 'ADataView');
   Guard.CheckNotNull(AData, 'AData');
   FEditorView     := AEditorView;
-  FActiveDataView := ADataView;
   FActiveData     := AData;
-  ActiveDataView.AssignParent(pnlBottom);
 end;
 
 procedure TfrmConnectionView.AfterConstruction;
 begin
   inherited AfterConstruction;
-  InitializeEditorView;
+  ActiveData.OnAfterExecute.Add(DataAfterExecute);
+  FDataViewList := TCollections.CreateInterfaceList<IDataView>;
   InitializeConnectionProfilesView;
+  InitializeEditorView;
+  pnlTop.PanelCollection[0].Position := 0.2;
+
   ApplySettings;
+//  pnlTop.Align   := alClient;
+//  pnlBottom.Align := alBottom;
+//    pnlBottom.Height     := 0;
+//  splHorizontal.Visible := False;
 end;
 
 procedure TfrmConnectionView.BeforeDestruction;
 begin
+  if Assigned(ActiveData) then
+    ActiveData.OnAfterExecute.Remove(DataAfterExecute);
   FEditorView     := nil;
   FActiveDataView := nil;
   FActiveData     := nil;
+  FDataViewList   := nil;
   inherited BeforeDestruction;
 end;
 {$ENDREGION}
 
 {$REGION 'event handlers'}
+{$REGION 'Data'}
+procedure TfrmConnectionView.DataAfterExecute(Sender: TObject);
+var
+  DS : TDataSet;
+  I  : Integer;
+  TS : TTabSheet;
+  DV : IDataView;
+begin
+  if Assigned(FPageControl) then
+    FreeAndNil(FPageControl);
+
+//  FPageControl := TPageControl.Create(Self);
+//  FPageControl.Parent := pnlGrid;
+//  FPageControl.Align := alClient;
+
+  for I := 0 to ActiveData.DataSetCount - 1 do
+  begin
+    //TS := TTabSheet.Create(FPageControl);
+
+//    TS.PageControl := FPageControl;
+
+
+    DV := GlobalContainer.Resolve<IDataView>(Manager.Settings.GridType);
+    DV.Settings := Manager.Settings as IDataViewSettings;
+  //  DV.AssignParent(TS);
+    DV.AssignParent(pnlBottom);
+    DV.DataSet := ActiveData.Items[I];
+  end;
+//  pnlTop.Align := alTop;
+//  pnlBottom.Align := alClient;
+//  pnlBottom.Height     := Height div 2;
+//  splHorizontal.Visible := True;
+//  splHorizontal.Align := alBottom;
+
+
+
+
+
+
+
+
+//  create dataviews here
+//  FActiveDataView := ADataView;
+//  ActiveDataView.AssignParent(pnlBottom);
+  Logger.Track('TfrmConnectionView.DataAfterExecute');
+end;
+{$ENDREGION}
+
 {$REGION 'FVSTProfiles'}
 procedure TfrmConnectionView.FVSTProfilesBeforeCellPaint(
   Sender: TBaseVirtualTree; TargetCanvas: TCanvas; Node: PVirtualNode;
@@ -315,7 +372,7 @@ end;
 {$REGION 'protected methods'}
 procedure TfrmConnectionView.InitializeConnectionProfilesView;
 begin
-  FVSTProfiles := TFactories.CreateVirtualStringTree(Self, pnlProfiles);
+  FVSTProfiles := TFactories.CreateVirtualStringTree(Self, pnlTop);
   FVSTProfiles.AlignWithMargins  := False;
   FVSTProfiles.RootNodeCount     := Manager.Settings.ConnectionProfiles.Count;
   FVSTProfiles.OnBeforeCellPaint := FVSTProfilesBeforeCellPaint;
@@ -329,6 +386,8 @@ begin
   FVSTProfiles.Colors.FocusedSelectionColor := clBtnHighlight;
   FVSTProfiles.Margins.Right := 0;
   FVSTProfiles.Indent        := 0;
+  FVSTProfiles.Constraints.MinWidth := 150;
+  FVSTProfiles.Constraints.MaxWidth := 300;
 end;
 
 procedure TfrmConnectionView.InitializeEditorView;
@@ -357,6 +416,7 @@ begin
     ];
     Application.Title := CP.Name;
     Caption := CP.Name;
+    FActiveData.ConnectionSettings.Assign(CP.ConnectionSettings);
   end;
 end;
 

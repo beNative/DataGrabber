@@ -142,15 +142,21 @@ type
     {$ENDREGION}
 
     {$REGION 'action handlers'}
-    procedure actApplyExecute(Sender: TObject);
-    procedure actCloseExecute(Sender: TObject);
-    procedure actCancelExecute(Sender: TObject);
     procedure actAddExecute(Sender: TObject);
-    procedure actDeleteExecute(Sender: TObject);
-    procedure actMoveUpExecute(Sender: TObject);
-    procedure actMoveDownExecute(Sender: TObject);
-    procedure actDuplicateExecute(Sender: TObject);
+    procedure actApplyExecute(Sender: TObject);
+    procedure actCancelExecute(Sender: TObject);
+    procedure actCloseExecute(Sender: TObject);
     procedure actConnectionStringExecute(Sender: TObject);
+    procedure actDeleteExecute(Sender: TObject);
+    procedure actDuplicateExecute(Sender: TObject);
+    procedure actGridlinesBothExecute(Sender: TObject);
+    procedure actGridlinesHorizontalExecute(Sender: TObject);
+    procedure actGridlinesNoneExecute(Sender: TObject);
+    procedure actGridlinesVerticalExecute(Sender: TObject);
+    procedure actMoveDownExecute(Sender: TObject);
+    procedure actMoveUpExecute(Sender: TObject);
+    procedure actOpenSettingsFileLocationExecute(Sender: TObject);
+    procedure actTestConnectionExecute(Sender: TObject);
     {$ENDREGION}
 
     {$REGION 'event handlers'}
@@ -189,27 +195,20 @@ type
     );
     procedure btnProfileColorClick(Sender: TObject);
     procedure cbxDriversChange(Sender: TObject);
+    procedure chkAutoReconnectClick(Sender: TObject);
     procedure chkFetchOnDemandClick(Sender: TObject);
+    procedure chkGridCellColoringEnabledClick(Sender: TObject);
     procedure chkProviderModeClick(Sender: TObject);
+    procedure chkSetAsDefaultClick(Sender: TObject);
     procedure edtCatalogChange(Sender: TObject);
     procedure edtDatabaseChange(Sender: TObject);
     procedure edtDatabaseRightButtonClick(Sender: TObject);
-    procedure edtProfileNameChange(Sender: TObject);
-    procedure tsSettingsEnter(Sender: TObject);
-    procedure chkSetAsDefaultClick(Sender: TObject);
-    procedure actGridlinesHorizontalExecute(Sender: TObject);
-    procedure actGridlinesVerticalExecute(Sender: TObject);
-    procedure actGridlinesNoneExecute(Sender: TObject);
-    procedure chkGridCellColoringEnabledClick(Sender: TObject);
-    procedure actGridlinesBothExecute(Sender: TObject);
-    procedure actTestConnectionExecute(Sender: TObject);
-    procedure actOpenSettingsFileLocationExecute(Sender: TObject);
-    procedure edtUserNameChange(Sender: TObject);
-    procedure edtPasswordChange(Sender: TObject);
     procedure edtPacketRecordsChange(Sender: TObject);
-    procedure chkAutoReconnectClick(Sender: TObject);
+    procedure edtPasswordChange(Sender: TObject);
+    procedure edtProfileNameChange(Sender: TObject);
+    procedure edtUserNameChange(Sender: TObject);
+    procedure tsSettingsEnter(Sender: TObject);
     {$ENDREGION}
-
   private
     FEditorSettings      : IEditorSettings;
     FEditor              : IEditorView;

@@ -57,15 +57,15 @@ procedure AddToolbarButtons(AToolBar: TToolbar; AManager: IConnectionViewManager
 
   procedure AddButton(const AActionName: string);
   begin
-    AddActionButton(AToolBar, AManager[AActionName]);
+    AddActionButton(AToolBar, AManager.Actions[AActionName]);
   end;
 
 begin
   //AddButton('actFavoriteFieldsOnly');
-  AddButton('actDataInspector');
   AddButton('actPreview');
   AddButton('actDesigner');
   AddButton('actPrint');
+  AddButton('actDataInspector');
   AddButton('actMergeAllColumnCells');
   AddButton('actShowAllColumns');
   AddButton('actHideSelectedColumns');

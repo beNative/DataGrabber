@@ -30,7 +30,7 @@ object frmSettingsDialog: TfrmSettingsDialog
     Top = 3
     Width = 699
     Height = 394
-    ActivePage = tsConnectionProfiles
+    ActivePage = tsDisplay
     Align = alTop
     Anchors = [akLeft, akTop, akRight, akBottom]
     Images = imlMain
@@ -257,14 +257,14 @@ object frmSettingsDialog: TfrmSettingsDialog
                       Value = 65.000000000000000000
                     end
                     item
-                      Value = 54.248366013071890000
+                      Value = 54.248366013071900000
                     end
                     item
                       SizeStyle = ssAbsolute
                       Value = 60.000000000000000000
                     end
                     item
-                      Value = 45.751633986928110000
+                      Value = 45.751633986928120000
                     end>
                   ControlCollection = <
                     item
@@ -498,7 +498,7 @@ object frmSettingsDialog: TfrmSettingsDialog
       end
     end
     object tsDisplay: TTabSheet
-      Caption = '&Resultgrid display settings'
+      Caption = '&Display settings'
       ImageIndex = 5
       DesignSize = (
         691
@@ -1172,10 +1172,10 @@ object frmSettingsDialog: TfrmSettingsDialog
   object imlMain: TImageList
     ColorDepth = cd32Bit
     DrawingStyle = dsTransparent
-    Left = 112
+    Left = 104
     Top = 56
     Bitmap = {
-      494C010113001500040010001000FFFFFFFF2110FFFFFFFFFFFFFFFF424D3600
+      494C0101130015000C0010001000FFFFFFFF2110FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000005000000001002000000000000050
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000

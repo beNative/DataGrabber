@@ -280,7 +280,12 @@ end;
 procedure TfrmMain.ctMainButtonCloseTabClick(Sender: TObject; ATab: TChromeTab;
   var Close: Boolean);
 begin
-//
+  if Manager.Count > 1 then
+  begin
+    Close := Manager.DeleteConnectionView(IConnectionView(ATab.Data));
+  end
+  else
+    Close := False;
 end;
 
 procedure TfrmMain.ctMainNeedDragImageControl(Sender: TObject; ATab: TChromeTab;

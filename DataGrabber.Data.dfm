@@ -7,7 +7,18 @@ object dmDataFireDAC: TdmDataFireDAC
     Top = 16
   end
   object qryMain: TFDQuery
+    AfterOpen = qryMainAfterOpen
+    AfterRefresh = qryMainAfterRefresh
+    BeforeApplyUpdates = qryMainBeforeApplyUpdates
+    AfterApplyUpdates = qryMainAfterApplyUpdates
+    AfterGetRecords = qryMainAfterGetRecords
+    BeforeRowRequest = qryMainBeforeRowRequest
+    AfterRowRequest = qryMainAfterRowRequest
+    OnMasterSetValues = qryMainMasterSetValues
     Connection = conMain
+    OnError = qryMainError
+    OnExecuteError = qryMainExecuteError
+    OnCommandChanged = qryMainCommandChanged
     Left = 120
     Top = 16
   end

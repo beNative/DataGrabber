@@ -2,74 +2,64 @@ object frmConnectionView: TfrmConnectionView
   AlignWithMargins = True
   Left = 0
   Top = 0
-  ClientHeight = 612
-  ClientWidth = 829
+  ClientHeight = 465
+  ClientWidth = 906
   Color = clBtnFace
   DoubleBuffered = True
   ParentFont = True
   OldCreateOrder = False
+  ShowHint = True
   OnShortCut = FormShortCut
   OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 13
-  object splHorizontal: TSplitter
-    Left = 0
-    Top = 249
-    Width = 829
-    Height = 8
-    Cursor = crVSplit
-    Align = alTop
-  end
-  object pnlTop: TPanel
+  object pnlMain: TOMultiPanel
     Left = 0
     Top = 0
-    Width = 829
-    Height = 249
-    Align = alTop
-    BevelOuter = bvNone
+    Width = 906
+    Height = 465
+    PanelType = ptVertical
+    PanelCollection = <
+      item
+        Control = pnlTop
+        Position = 0.500000000000000000
+        Visible = True
+        Index = 0
+      end
+      item
+        Control = pnlBottom
+        Position = 1.000000000000000000
+        Visible = True
+        Index = 1
+      end>
+    MinPosition = 0.020000000000000000
+    SplitterSize = 8
+    Align = alClient
     TabOrder = 0
-    object splVertical: TSplitter
-      Left = 193
-      Top = 0
-      Width = 8
-      Height = 249
-      ExplicitLeft = 209
-    end
-    object pnlProfiles: TPanel
+    ExplicitWidth = 845
+    ExplicitHeight = 612
+    object pnlBottom: TOMultiPanel
       Left = 0
-      Top = 0
-      Width = 193
-      Height = 249
-      Align = alLeft
-      BevelOuter = bvNone
-      TabOrder = 0
-    end
-    object pnlEditor: TPanel
-      Left = 201
-      Top = 0
-      Width = 628
-      Height = 249
+      Top = 240
+      Width = 906
+      Height = 225
+      PanelType = ptVertical
+      PanelCollection = <>
+      MinPosition = 0.020000000000000000
+      SplitterSize = 8
       Align = alClient
-      BevelOuter = bvNone
+      ParentBackground = False
       TabOrder = 1
     end
-  end
-  object pnlBottom: TPanel
-    Left = 0
-    Top = 257
-    Width = 829
-    Height = 355
-    Align = alClient
-    BevelOuter = bvNone
-    ParentColor = True
-    TabOrder = 1
-    object pnlGrid: TPanel
+    object pnlTop: TOMultiPanel
       Left = 0
       Top = 0
-      Width = 829
-      Height = 355
+      Width = 906
+      Height = 232
+      PanelCollection = <>
+      MinPosition = 0.020000000000000000
+      SplitterSize = 8
       Align = alClient
-      BevelOuter = bvNone
       TabOrder = 0
     end
   end

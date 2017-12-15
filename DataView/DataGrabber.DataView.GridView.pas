@@ -37,14 +37,16 @@ type
     procedure dscMainStateChange(Sender: TObject);
     procedure dscMainDataChange(Sender: TObject; Field: TField);
 
-  strict private
+  private
     FSettings : IDataViewSettings;
     FData     : IData;
     FGrid     : TDBGridView;
+    FDataSet  : TDataSet;
 
     {$REGION 'property access methods'}
     function GetName: string;
     function GetDataSet: TDataSet;
+    procedure SetDataSet(const Value: TDataSet);
     function GetRecordCount: Integer;
     function GetData: IData;
     procedure SetData(const Value: IData);
@@ -52,6 +54,7 @@ type
     procedure SetSettings(const Value: IDataViewSettings);
     function GetPopupMenu: TPopupMenu; reintroduce;
     procedure SetPopupMenu(const Value: TPopupMenu);
+    function GetGridType: string;
     {$ENDREGION}
 
     procedure DataAfterExecute(Sender: TObject);
@@ -128,9 +131,6 @@ type
       var Handled : Boolean
     );
 
-  private
-    function GetGridType: string;
-
   public
     constructor Create; reintroduce;
     procedure AfterConstruction; override;
@@ -165,7 +165,7 @@ type
     procedure UpdateView;
 
     property DataSet: TDataSet
-       read GetDataSet;
+       read GetDataSet write SetDataSet;
 
     property Data: IData
       read GetData write SetData;
@@ -248,7 +248,7 @@ procedure TfrmGridView.BeforeDestruction;
 begin
   inherited BeforeDestruction;
   if Assigned(FData) then
-    (FData as IDataEvents).OnAfterExecute.Remove(DataAfterExecute);
+    FData.OnAfterExecute.Remove(DataAfterExecute);
 end;
 {$ENDREGION}
 
@@ -292,7 +292,17 @@ end;
 
 function TfrmGridView.GetDataSet: TDataSet;
 begin
-  Result := Data.DataSet;
+  Result := FDataSet;
+end;
+
+procedure TfrmGridView.SetDataSet(const Value: TDataSet);
+begin
+  if Value <> DataSet then
+  begin
+    FDataSet := Value;
+    dscMain.DataSet := FDataSet;
+    UpdateView;
+  end;
 end;
 
 function TfrmGridView.GetData: IData;
@@ -304,11 +314,12 @@ procedure TfrmGridView.SetData(const Value: IData);
 begin
   if Value <> Data then
   begin
-    if Data <> nil then
-     (Data as IDataEvents).OnAfterExecute.Remove(DataAfterExecute);
+    if Assigned(Data) then
+    begin
+      Data.OnAfterExecute.Remove(DataAfterExecute);
+    end;
     FData := Value;
-    (Data as IDataEvents).OnAfterExecute.Add(DataAfterExecute);
-    dscMain.DataSet := DataSet;
+    Data.OnAfterExecute.Add(DataAfterExecute);
     UpdateView;
   end;
 end;
@@ -652,7 +663,6 @@ procedure TfrmGridView.UpdateView;
 begin
   BeginUpdate;
   try
-    dscMain.DataSet := Data.DataSet;
     if Assigned(DataSet) and DataSet.Active then
     begin
       ApplyGridSettings;

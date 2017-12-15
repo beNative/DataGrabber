@@ -59,7 +59,6 @@ const
   WHERE_IN = 'where' + #13#10 + '  %s in (%s)';
 
 type
-  TConnectionViewList = TInterfaceList;
   IEditorView = interface;
 
   IData = interface
@@ -75,6 +74,9 @@ type
     function GetCanModify: Boolean;
     function GetConnectionSettings: TConnectionSettings;
     function GetConnection: TFDConnection;
+    function GetItem(AIndex: Integer): TFDMemTable;
+    function GetDataSetCount: Integer;
+    function GetOnAfterExecute: IEvent<TNotifyEvent>;
     {$ENDREGION}
 
     procedure Execute;
@@ -87,6 +89,9 @@ type
 
     property Connection: TFDConnection
       read GetConnection;
+
+    property Items[AIndex: Integer]: TFDMemTable
+      read GetItem; default;
 
     property Active: Boolean
       read GetActive;
@@ -103,6 +108,11 @@ type
     property ConnectionSettings: TConnectionSettings
       read GetConnectionSettings;
 
+    property DataSetCount: Integer
+      read GetDataSetCount;
+
+    property OnAfterExecute: IEvent<TNotifyEvent>
+      read GetOnAfterExecute;
   end;
 
   IDataPersistable = interface
@@ -155,12 +165,13 @@ type
     function GetGridType: string;
     function GetSettings: IDataViewSettings;
     procedure SetSettings(const Value: IDataViewSettings);
-
     function GetData: IData;
     procedure SetData(const Value: IData);
     function GetRecordCount: Integer;
     function GetPopupMenu: TPopupMenu;
     procedure SetPopupMenu(const Value: TPopupMenu);
+    function GetDataSet: TDataSet;
+    procedure SetDataSet(const Value: TDataSet);
     {$ENDREGION}
 
     procedure UpdateView;
@@ -190,6 +201,9 @@ type
     procedure Inspect;
 
     procedure AssignParent(AParent: TWinControl);
+
+    property DataSet: TDataSet
+      read GetDataSet write SetDataSet;
 
     property Data: IData
       read GetData write SetData;
@@ -295,10 +309,6 @@ type
       read GetShowVerticalGridLines write SetShowVerticalGridLines;
   end;
 
-  IConnectionViews = interface
-  ['{23BCBF9F-640E-415E-A305-317A049443E4}']
-  end;
-
   IConnectionView = interface
   ['{52F9CB1D-68C8-4E74-B3B7-0A9DDF93A818}']
     procedure Copy;
@@ -335,12 +345,16 @@ type
     function GetActiveDataView: IDataView;
     function GetActiveData: IData;
     function GetActionList: TActionList;
-    function GetItem(AName: string): TCustomAction;
+    function GetAction(AName: string): TCustomAction;
     function GetConnectionViewPopupMenu: TPopupMenu;
     function GetDefaultConnectionProfile: TConnectionProfile;
+    function GetItem(AIndex: Integer): IConnectionView;
+    function GetCount: Integer;
     {$ENDREGION}
 
     function AddConnectionView: IConnectionView;
+    function DeleteConnectionView(AIndex: Integer): Boolean; overload;
+    function DeleteConnectionView(AConnectionView: IConnectionView): Boolean; overload;
     procedure UpdateActions;
 
     property ActiveConnectionView: IConnectionView
@@ -361,12 +375,17 @@ type
     property DefaultConnectionProfile: TConnectionProfile
       read GetDefaultConnectionProfile;
 
-    property Items[AName: string]: TCustomAction
+    property Actions[AName: string]: TCustomAction
+      read GetAction;
+
+    property Items[AIndex: Integer]: IConnectionView
       read GetItem; default;
 
     property ConnectionViewPopupMenu: TPopupMenu
       read GetConnectionViewPopupMenu;
 
+    property Count: Integer
+      read GetCount;
   end;
 
   IEditorView = interface
@@ -453,14 +472,6 @@ type
 
     property ShowFavoriteFieldsOnly: Boolean
       read GetShowFavoriteFieldsOnly write SetShowFavoriteFieldsOnly;
-  end;
-
-  IDataEvents = interface
-  ['{D5F40BC1-DD0A-4396-873A-DF70D97245A6}']
-    function GetOnAfterExecute: IEvent<TNotifyEvent>;
-
-    property OnAfterExecute: IEvent<TNotifyEvent>
-      read GetOnAfterExecute;
   end;
 
 implementation

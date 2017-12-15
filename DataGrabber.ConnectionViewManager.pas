@@ -23,6 +23,8 @@ uses
   System.ImageList,
   Vcl.ActnList, Vcl.Menus, Vcl.ImgList, Vcl.Controls,
 
+  Spring.Collections,
+
   DataGrabber.DataInspector, DataGrabber.FieldInspector,
 
   DataGrabber.Interfaces, DataGrabber.ConnectionProfiles,
@@ -116,6 +118,8 @@ type
     actInspectFDManager: TAction;
     Inspectconnectionmanager1: TMenuItem;
     actChinookExampleQuery: TAction;
+    N5: TMenuItem;
+    mniExecute: TMenuItem;
     {$ENDREGION}
 
     {$REGION 'action handlers'}
@@ -155,7 +159,7 @@ type
 
   private
     FSettings             : ISettings;
-    FConnectionViewList   : TConnectionViewList;
+    FConnectionViewList   : IList<IConnectionView>;
     FActiveConnectionView : IConnectionView;
     FStopWatch            : TStopwatch;
     FDataInspector        : TfrmDataInspector;
@@ -168,9 +172,11 @@ type
     function GetActiveDataView: IDataView;
     function GetActiveData: IData;
     function GetActionList: TActionList;
-    function GetItem(AName: string): TCustomAction;
+    function GetAction(AName: string): TCustomAction;
     function GetConnectionViewPopupMenu: TPopupMenu;
     function GetDefaultConnectionProfile: TConnectionProfile;
+    function GetItem(AIndex: Integer): IConnectionView;
+    function GetCount: Integer;
     {$ENDREGION}
 
   protected
@@ -185,6 +191,8 @@ type
     constructor Create(ASettings: ISettings); reintroduce; virtual;
 
     function AddConnectionView: IConnectionView;
+    function DeleteConnectionView(AIndex: Integer): Boolean; overload;
+    function DeleteConnectionView(AConnectionView: IConnectionView): Boolean; overload;
 
     property ActiveConnectionView: IConnectionView
       read GetActiveConnectionView write SetActiveConnectionView;
@@ -201,8 +209,14 @@ type
     property ActionList: TActionList
       read GetActionList;
 
-    property Items[AName: string]: TCustomAction
+    property Items[AIndex: Integer]: IConnectionView
       read GetItem; default;
+
+    property Count: Integer
+      read GetCount;
+
+    property Actions[AName: string]: TCustomAction
+      read GetAction;
 
     property ConnectionViewPopupMenu: TPopupMenu
       read GetConnectionViewPopupMenu;
@@ -225,7 +239,7 @@ uses
 
   FireDAC.Comp.Client,
 
-  Spring.Container;
+  Spring, Spring.Container;
 
 {$REGION 'construction and destruction'}
 constructor TdmConnectionViewManager.Create(ASettings: ISettings);
@@ -238,7 +252,7 @@ procedure TdmConnectionViewManager.AfterConstruction;
 begin
   inherited AfterConstruction;
   FSettings.Load;
-  FConnectionViewList := TConnectionViewList.Create;
+  FConnectionViewList := TCollections.CreateInterfaceList<IConnectionView>;
   FDataInspector      := TfrmDataInspector.Create(Self);
   FFieldInspector     := TfrmFieldInspector.Create(Self);
 
@@ -256,8 +270,8 @@ procedure TdmConnectionViewManager.BeforeDestruction;
 begin
   FSettings.FormSettings.Assign(Application.MainForm);
   FSettings.Save;
+  FConnectionViewList := nil;
   FreeAndNil(FDataInspector);
-  FreeAndNil(FConnectionViewList);
   inherited BeforeDestruction;
 end;
 {$ENDREGION}
@@ -433,7 +447,7 @@ end;
 
 procedure TdmConnectionViewManager.actChinookExampleQueryExecute(Sender: TObject);
 begin
-  ActiveConnectionView.EditorView.Text := CHINOOK_EXAMPLE_QUERY;
+  ActiveConnectionView.EditorView.Text := CHINOOK_EXAMPLE_QUERY2
 end;
 
 procedure TdmConnectionViewManager.actExecuteExecute(Sender: TObject);
@@ -498,12 +512,22 @@ begin
   Result := ppmConnectionView;
 end;
 
+function TdmConnectionViewManager.GetCount: Integer;
+begin
+  Result := FConnectionViewList.Count;
+end;
+
 function TdmConnectionViewManager.GetDefaultConnectionProfile: TConnectionProfile;
 begin
   Result := FSettings.ConnectionProfiles.Find(FSettings.DefaultConnectionProfile);
 end;
 
-function TdmConnectionViewManager.GetItem(AName: string): TCustomAction;
+function TdmConnectionViewManager.GetItem(AIndex: Integer): IConnectionView;
+begin
+  Result := FConnectionViewList[AIndex];
+end;
+
+function TdmConnectionViewManager.GetAction(AName: string): TCustomAction;
 var
   I: Integer;
 begin
@@ -526,6 +550,34 @@ end;
 procedure TdmConnectionViewManager.ApplySettings;
 begin
   ActiveConnectionView.ApplySettings;
+end;
+
+function TdmConnectionViewManager.DeleteConnectionView(
+  AIndex: Integer): Boolean;
+begin
+  if AIndex < Count then
+  begin
+    FConnectionViewList.Delete(AIndex);
+    Result := True;
+  end
+  else
+    Result := False;
+end;
+
+function TdmConnectionViewManager.DeleteConnectionView(
+  AConnectionView: IConnectionView): Boolean;
+var
+  N : Integer;
+begin
+  Guard.CheckNotNull(AConnectionView, 'AConnectionView');
+  N := FConnectionViewList.IndexOf(AConnectionView);
+  if N <> -1 then
+  begin
+    FConnectionViewList.Delete(N);
+    Result := True;
+  end
+  else
+    Result := False;
 end;
 
 procedure TdmConnectionViewManager.Execute(const ASQL: string);
@@ -560,9 +612,12 @@ begin
     actToggleStayOnTop.Checked := FSettings.FormSettings.FormStyle = fsStayOnTop;
     actDataInspector.Checked   := FSettings.DataInspectorVisible;
   end;
+  actExecute.Enabled := not FSettings.DataInspectorVisible;
 
-  if Assigned(ActiveData) and Assigned(ActiveDataView) then
+  if Assigned(ActiveData) and Assigned(ActiveDataView)
+    and Assigned(ActiveConnectionView) then
   begin
+    actExecute.Enabled := not ActiveConnectionView.EditorView.Text.Trim.IsEmpty;
     B := ActiveData.Active;
     actMergeCells.Visible          := Supports(ActiveDataView, IMergable);
     actMergeCells.Enabled          := B and Supports(ActiveDataView, IMergable);
@@ -584,7 +639,6 @@ begin
       not (ActiveData as IFieldVisiblity).ConstantFieldsVisible;
     actFavoriteFieldsOnly.Checked  :=
       (ActiveData as IFieldVisiblity).ShowFavoriteFieldsOnly;
-
     Logger.Watch('RecordCount', ActiveDataView.RecordCount);
   end;
 end;
@@ -608,14 +662,14 @@ function TdmConnectionViewManager.AddConnectionView: IConnectionView;
 var
   CV : IConnectionView;
   EV : IEditorView;
-  DV : IDataView;
+//  DV : IDataView;
   D  : IData;
   CP : TConnectionProfile;
 begin
   EV := GlobalContainer.Resolve<IEditorView>;
-  DV := GlobalContainer.Resolve<IDataView>(Settings.GridType);
-  DV.Settings := FSettings as IDataViewSettings;
-  DV.PopupMenu := ConnectionViewPopupMenu;
+  //DV := GlobalContainer.Resolve<IDataView>(Settings.GridType);
+//  DV.Settings := FSettings as IDataViewSettings;
+//  DV.PopupMenu := ConnectionViewPopupMenu;
   if Assigned(FActiveConnectionView) then
   begin
     CP := FActiveConnectionView.ActiveConnectionProfile;
@@ -625,8 +679,8 @@ begin
     CP := DefaultConnectionProfile;
   end;
   D := TdmDataFireDAC.Create(Self, CP.ConnectionSettings);
-  DV.Data := D;
-  CV := TfrmConnectionView.Create(Self, EV, DV, D);
+//  DV.Data := D;
+  CV := TfrmConnectionView.Create(Self, EV, D);
   FConnectionViewList.Add(CV);
   ActiveConnectionView := CV;
   UpdateConnectionViewCaptions;

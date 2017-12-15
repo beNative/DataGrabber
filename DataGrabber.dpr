@@ -216,7 +216,8 @@ uses
   BCEditor.Search.Wildcard in '..\..\components\TBCEditor\Source\BCEditor.Search.Wildcard.pas',
   BCEditor.StyleHooks in '..\..\components\TBCEditor\Source\BCEditor.StyleHooks.pas',
   BCEditor.Types in '..\..\components\TBCEditor\Source\BCEditor.Types.pas',
-  BCEditor.Utils in '..\..\components\TBCEditor\Source\BCEditor.Utils.pas';
+  BCEditor.Utils in '..\..\components\TBCEditor\Source\BCEditor.Utils.pas',
+  DataGrabber.DataView.cxGrid in 'DataView\DataGrabber.DataView.cxGrid.pas' {frmcxGrid};
 
 {$R *.res}
 
