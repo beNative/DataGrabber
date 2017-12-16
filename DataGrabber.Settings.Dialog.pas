@@ -120,7 +120,7 @@ type
     pnlGridTypeColoring            : TGridPanel;
     rgpGridTypes                   : TRadioGroup;
     splVertical                    : TSplitter;
-    tlb1                           : TToolBar;
+    tlbGridlines: TToolBar;
     tlbConnectionProfiles          : TToolBar;
     tsAdvanced                     : TTabSheet;
     tsBasic                        : TTabSheet;
@@ -139,6 +139,17 @@ type
     actOpenSettingsFileLocation: TAction;
     btnOpenSettingsFileLocation: TButton;
     chkAutoReconnect: TCheckBox;
+    chkMultipleResultSets: TCheckBox;
+    chkReadOnlyResultSets: TCheckBox;
+    chkDisconnectedMode: TCheckBox;
+    grpResultSetDisplay: TGroupBox;
+    tlbDisplayMultipleResultSets: TToolBar;
+    btnactCnPrefixWizard: TToolButton;
+    btnactCnPrefixWizard1: TToolButton;
+    btnactCnPrefixWizard2: TToolButton;
+    actMRSOnSeperatePages: TAction;
+    actMRSStackedHorizontally: TAction;
+    actMRSStackedVertically: TAction;
     {$ENDREGION}
 
     {$REGION 'action handlers'}
@@ -208,6 +219,11 @@ type
     procedure edtProfileNameChange(Sender: TObject);
     procedure edtUserNameChange(Sender: TObject);
     procedure tsSettingsEnter(Sender: TObject);
+    procedure chkMultipleResultSetsClick(Sender: TObject);
+    procedure chkDisconnectedModeClick(Sender: TObject);
+    procedure actMRSOnSeperatePagesExecute(Sender: TObject);
+    procedure actMRSStackedHorizontallyExecute(Sender: TObject);
+    procedure actMRSStackedVerticallyExecute(Sender: TObject);
     {$ENDREGION}
   private
     FEditorSettings      : IEditorSettings;
@@ -460,10 +476,25 @@ begin
   SelectNode(FVSTProfiles, N - 1);
 end;
 
+procedure TfrmSettingsDialog.actMRSOnSeperatePagesExecute(Sender: TObject);
+begin
+  FSettings.ResultDisplayLayout := TResultDisplayLayout.Tabbed;
+end;
+
+procedure TfrmSettingsDialog.actMRSStackedHorizontallyExecute(Sender: TObject);
+begin
+  FSettings.ResultDisplayLayout := TResultDisplayLayout.Horizontal;
+end;
+
+procedure TfrmSettingsDialog.actMRSStackedVerticallyExecute(Sender: TObject);
+begin
+  FSettings.ResultDisplayLayout := TResultDisplayLayout.Vertical;
+end;
+
 procedure TfrmSettingsDialog.actOpenSettingsFileLocationExecute(
   Sender: TObject);
 begin
-//
+  ShowMessage('Not implemented yet.');
 end;
 
 procedure TfrmSettingsDialog.actTestConnectionExecute(Sender: TObject);
@@ -550,6 +581,11 @@ begin
   Changed;
 end;
 
+procedure TfrmSettingsDialog.chkDisconnectedModeClick(Sender: TObject);
+begin
+  Changed;
+end;
+
 procedure TfrmSettingsDialog.chkFetchOnDemandClick(Sender: TObject);
 begin
   Changed;
@@ -563,6 +599,13 @@ begin
   begin
     TControlItem(CI).Control.Enabled := (Sender as TCheckBox).Checked;
   end;
+end;
+
+procedure TfrmSettingsDialog.chkMultipleResultSetsClick(Sender: TObject);
+begin
+  if (Sender as TCheckBox).Checked then
+    chkReadOnlyResultSets.Checked := True;
+  Changed;
 end;
 
 procedure TfrmSettingsDialog.chkProviderModeClick(Sender: TObject);
@@ -652,6 +695,9 @@ begin
   ACP.ConnectionSettings.UserName      := edtUserName.Text;
   ACP.ConnectionSettings.Password      := edtPassword.Text;
   ACP.ConnectionSettings.AutoReconnect := chkAutoReconnect.Checked;
+  ACP.ConnectionSettings.ReadOnly      := chkReadOnlyResultSets.Checked;
+  ACP.ConnectionSettings.MultipleResultSets := chkMultipleResultSets.Checked;
+  ACP.ConnectionSettings.DisconnectedMode   := chkDisconnectedMode.Checked;
   FModified := False;
 end;
 
@@ -720,6 +766,12 @@ begin
     else
       actGridlinesNone.Checked := True;
   end;
+
+  case FSettings.ResultDisplayLayout of
+    TResultDisplayLayout.Tabbed     : actMRSOnSeperatePages.Checked     := True;
+    TResultDisplayLayout.Horizontal : actMRSStackedHorizontally.Checked := True;
+    TResultDisplayLayout.Vertical   : actMRSStackedVertically.Checked   := True;
+  end;
   chkGridCellColoringEnabled.Checked := FSettings.GridCellColoring;
 
   FVSTProfiles := TFactories.CreateVirtualStringTree(
@@ -781,6 +833,7 @@ begin
   actMoveDown.Enabled := B
     and (FVSTProfiles.FocusedNode.Index < FVSTProfiles.RootNodeCount - 1);
   actDelete.Enabled := B;
+  chkReadOnlyResultSets.Enabled := not chkMultipleResultSets.Checked;
 
   B := chkOSAuthent.Checked;
   edtUserName.Enabled := not B;
@@ -804,6 +857,9 @@ begin
   edtPassword.Text         := ACP.ConnectionSettings.Password;
   chkOSAuthent.Checked     := ACP.ConnectionSettings.OSAuthent;
   chkAutoReconnect.Checked := ACP.ConnectionSettings.AutoReconnect;
+  chkMultipleResultSets.Checked := ACP.ConnectionSettings.MultipleResultSets;
+  chkReadOnlyResultSets.Checked := ACP.ConnectionSettings.ReadOnly;
+  chkDisconnectedMode.Checked   := ACP.ConnectionSettings.DisconnectedMode;
   FDManager.GetDriverNames(cbxDrivers.Items);
 end;
 {$ENDREGION}

@@ -48,22 +48,23 @@ uses
 type
   TConnectionSettings = class(TPersistent)
   private
-    FUserName         : string;
-    FDriverName       : string;
-    FPort             : Integer;
-    FPassword         : string;
-    FHostName         : string;
-    FDatabase         : string;
-    FCatalog          : string;
-    FReadOnly         : Boolean;
-    FOnChanged        : Event<TNotifyEvent>;
-    FFetchOnDemand    : Boolean;
-    FPacketRecords    : Integer;
-    FMaxRecords       : Integer;
-    FAutoReconnect    : Boolean;
-    FOSAuthent        : Boolean;
-    FConnectionString : string;
-    FDisconnectedMode : Boolean;
+    FUserName          : string;
+    FDriverName        : string;
+    FPort              : Integer;
+    FPassword          : string;
+    FHostName          : string;
+    FDatabase          : string;
+    FCatalog           : string;
+    FReadOnly          : Boolean;
+    FOnChanged         : Event<TNotifyEvent>;
+    FFetchOnDemand     : Boolean;
+    FPacketRecords     : Integer;
+    FMaxRecords        : Integer;
+    FAutoReconnect     : Boolean;
+    FOSAuthent         : Boolean;
+    FConnectionString  : string;
+    FDisconnectedMode  : Boolean;
+    FMultipleResultSets: Boolean;
 
     {$REGION 'property access methods'}
     function GetCatalog: string;
@@ -97,6 +98,8 @@ type
     procedure SetOSAuthent(const Value: Boolean);
     function GetDisconnectedMode: Boolean;
     procedure SetDisconnectedMode(const Value: Boolean);
+    function GetMultipleResultSets: Boolean;
+    procedure SetMultipleResultSets(const Value: Boolean);
     {$ENDREGION}
 
   protected
@@ -153,6 +156,8 @@ type
 
     property DisconnectedMode: Boolean
       read GetDisconnectedMode write SetDisconnectedMode;
+
+    property MultipleResultSets: Boolean read GetMultipleResultSets write SetMultipleResultSets;
 
     property OnChanged: IEvent<TNotifyEvent>
       read GetOnChanged;
@@ -281,6 +286,20 @@ begin
   end;
 end;
 
+function TConnectionSettings.GetMultipleResultSets: Boolean;
+begin
+  Result := FMultipleResultSets;
+end;
+
+procedure TConnectionSettings.SetMultipleResultSets(const Value: Boolean);
+begin
+  if Value <> MultipleResultSets then
+  begin
+    FMultipleResultSets := Value;
+    Changed;
+  end;
+end;
+
 function TConnectionSettings.GetOSAuthent: Boolean;
 begin
   Result := FOSAuthent;
@@ -401,20 +420,21 @@ begin
   if (Source <> Self) and (Source is TConnectionSettings) then
   begin
     CS := TConnectionSettings(Source);
-    FDriverName       := CS.DriverName;
-    FPassword         := CS.Password;
-    FCatalog          := CS.Catalog;
-    FHostName         := CS.HostName;
-    FUserName         := CS.UserName;
-    FPort             := CS.Port;
-    FDatabase         := CS.Database;
-    FFetchOnDemand    := CS.FetchOnDemand;
-    FPacketRecords    := CS.PacketRecords;
-    FReadOnly         := CS.ReadOnly;
-    FConnectionString := CS.ConnectionString;
-    FMaxRecords       := CS.MaxRecords;
-    FAutoReconnect    := CS.AutoReconnect;
-    FOSAuthent        := CS.OSAuthent;
+    FDriverName         := CS.DriverName;
+    FPassword           := CS.Password;
+    FCatalog            := CS.Catalog;
+    FHostName           := CS.HostName;
+    FUserName           := CS.UserName;
+    FPort               := CS.Port;
+    FDatabase           := CS.Database;
+    FFetchOnDemand      := CS.FetchOnDemand;
+    FPacketRecords      := CS.PacketRecords;
+    FReadOnly           := CS.ReadOnly;
+    FConnectionString   := CS.ConnectionString;
+    FMaxRecords         := CS.MaxRecords;
+    FAutoReconnect      := CS.AutoReconnect;
+    FOSAuthent          := CS.OSAuthent;
+    FMultipleResultSets := CS.MultipleResultSets;
     Changed;
   end
   else

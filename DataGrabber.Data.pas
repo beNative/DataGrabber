@@ -33,6 +33,14 @@ unit DataGrabber.Data;
 
 }
 
+{
+  TODO
+    - support for cached updates on (multiple) resultsets that are assigned to
+      TFDMemTable objects.
+    - support for local SQL on TFDMemTable objects.
+
+}
+
 interface
 
 uses
@@ -62,10 +70,6 @@ uses
 
   DataGrabber.ConnectionSettings, DataGrabber.Interfaces;
 
-  {
-    Connection.OnLost, OnRecover
-  }
-
 type
   TdmDataFireDAC = class(
     TDataModule,
@@ -76,6 +80,7 @@ type
     conMain : TFDConnection;
     qryMain : TFDQuery;
 
+    {$REGION 'event handlers'}
     procedure qryMainAfterGetRecords(DataSet: TFDDataSet);
     procedure qryMainAfterOpen(DataSet: TDataSet);
     procedure qryMainAfterRefresh(DataSet: TDataSet);
@@ -89,6 +94,26 @@ type
       AError: EFDDBEngineException; var AAction: TFDErrorAction);
     procedure qryMainMasterSetValues(DataSet: TFDDataSet);
     procedure qryMainAfterApplyUpdates(DataSet: TFDDataSet; AErrors: Integer);
+    procedure conMainLost(Sender: TObject);
+    procedure conMainRecover(ASender, AInitiator: TObject;
+      AException: Exception; var AAction: TFDPhysConnectionRecoverAction);
+    procedure conMainRestored(Sender: TObject);
+    procedure conMainError(ASender, AInitiator: TObject;
+      var AException: Exception);
+    procedure qryMainAfterExecute(DataSet: TFDDataSet);
+    procedure qryMainBeforeClose(DataSet: TDataSet);
+    procedure qryMainBeforeExecute(DataSet: TFDDataSet);
+    procedure qryMainBeforeGetRecords(DataSet: TFDDataSet);
+    procedure qryMainBeforeRefresh(DataSet: TDataSet);
+    procedure qryMainBeforeOpen(DataSet: TDataSet);
+    procedure qryMainAfterClose(DataSet: TDataSet);
+    procedure conMainAfterConnect(Sender: TObject);
+    procedure conMainAfterDisconnect(Sender: TObject);
+    procedure conMainBeforeConnect(Sender: TObject);
+    procedure conMainBeforeDisconnect(Sender: TObject);
+    procedure conMainBeforeStartTransaction(Sender: TObject);
+    procedure conMainAfterStartTransaction(Sender: TObject);
+    {$ENDREGION}
 
   private
     FConstantFields         : IList<TField>;
@@ -99,14 +124,13 @@ type
     FEmptyFieldsVisible     : Boolean;
     FShowFavoriteFieldsOnly : Boolean;
     FExecuted               : Boolean;
-    FFetchOnDemand          : Boolean;
-    FPacketRecords          : Integer;
     FSQL                    : string;
     FConnectionSettings     : TConnectionSettings;
-    FMaxRecords             : Integer;
     FDriverNames            : TStrings;
     FOnAfterExecute         : Event<TNotifyEvent>;
+    FOnBeforeExecute        : Event<TNotifyEvent>;
     FDataSets               : IList<TFDMemTable>;
+    FMultipleResultSets     : Boolean;
 
     {$REGION 'property access methods'}
     function GetConstantFields: IList<TField>;
@@ -135,10 +159,12 @@ type
     function GetConnection: TFDConnection;
     function GetItem(AIndex: Integer): TFDMemTable;
     function GetDataSetCount: Integer;
+    function GetOnBeforeExecute: IEvent<TNotifyEvent>;
+    function GetMultipleResultSets: Boolean;
+    procedure SetMultipleResultSets(const Value: Boolean);
     {$ENDREGION}
 
     procedure FConnectionSettingsChanged(Sender: TObject);
-
 
   protected
     procedure Execute;
@@ -188,6 +214,9 @@ type
 
     property DataSetCount: Integer
       read GetDataSetCount;
+
+    property MultipleResultSets: Boolean
+      read GetMultipleResultSets write SetMultipleResultSets;
     {$ENDREGION}
 
   public
@@ -202,6 +231,9 @@ type
 
     property OnAfterExecute: IEvent<TNotifyEvent>
       read GetOnAfterExecute;
+
+    property OnBeforeExecute: IEvent<TNotifyEvent>
+      read GetOnBeforeExecute;
 
     {$REGION 'IDataPersistable'}
     procedure SaveToFile(
@@ -362,6 +394,19 @@ begin
   Result := FDataSets[AIndex];
 end;
 
+function TdmDataFireDAC.GetMultipleResultSets: Boolean;
+begin
+  Result := FMultipleResultSets;
+end;
+
+procedure TdmDataFireDAC.SetMultipleResultSets(const Value: Boolean);
+begin
+  if Value <> MultipleResultSets then
+  begin
+    FMultipleResultSets := Value;
+  end;
+end;
+
 function TdmDataFireDAC.GetExecuted: Boolean;
 begin
   Result := FExecuted;
@@ -405,7 +450,7 @@ end;
 
 function TdmDataFireDAC.GetCanModify: Boolean;
 begin
-  Result := True;
+  Result := not FDQuery.UpdateOptions.ReadOnly;
 end;
 
 function TdmDataFireDAC.GetConnected: Boolean;
@@ -429,6 +474,11 @@ end;
 function TdmDataFireDAC.GetConnectionSettings: TConnectionSettings;
 begin
   Result := FConnectionSettings;
+end;
+
+function TdmDataFireDAC.GetOnBeforeExecute: IEvent<TNotifyEvent>;
+begin
+  Result := FOnBeforeExecute;
 end;
 
 function TdmDataFireDAC.GetOnAfterExecute: IEvent<TNotifyEvent>;
@@ -455,6 +505,155 @@ procedure TdmDataFireDAC.FConnectionSettingsChanged(Sender: TObject);
 begin
   InitializeConnection;
 end;
+
+{$REGION 'conMain'}
+procedure TdmDataFireDAC.conMainAfterConnect(Sender: TObject);
+begin
+  Logger.Track('TdmDataFireDAC.conMainAfterConnect');
+end;
+
+procedure TdmDataFireDAC.conMainAfterDisconnect(Sender: TObject);
+begin
+  Logger.Track('TdmDataFireDAC.conMainAfterDisconnect');
+end;
+
+procedure TdmDataFireDAC.conMainAfterStartTransaction(Sender: TObject);
+begin
+  Logger.Track('TdmDataFireDAC.conMainAfterStartTransaction');
+end;
+
+procedure TdmDataFireDAC.conMainBeforeConnect(Sender: TObject);
+begin
+  Logger.Track('TdmDataFireDAC.conMainBeforeConnect');
+end;
+
+procedure TdmDataFireDAC.conMainBeforeDisconnect(Sender: TObject);
+begin
+  Logger.Track('TdmDataFireDAC.conMainBeforeDisconnect');
+end;
+
+procedure TdmDataFireDAC.conMainBeforeStartTransaction(Sender: TObject);
+begin
+  Logger.Track('TdmDataFireDAC.conMainBeforeStartTransaction');
+end;
+
+procedure TdmDataFireDAC.conMainError(ASender, AInitiator: TObject;
+  var AException: Exception);
+begin
+  Logger.Track('TdmDataFireDAC.conMainError');
+end;
+
+procedure TdmDataFireDAC.conMainLost(Sender: TObject);
+begin
+  Logger.Track('TdmDataFireDAC.conMainLost');
+end;
+
+procedure TdmDataFireDAC.conMainRecover(ASender, AInitiator: TObject;
+  AException: Exception; var AAction: TFDPhysConnectionRecoverAction);
+begin
+  Logger.Track('TdmDataFireDAC.conMainRecover');
+end;
+
+procedure TdmDataFireDAC.conMainRestored(Sender: TObject);
+begin
+  Logger.Track('TdmDataFireDAC.conMainRestored');
+end;
+{$ENDREGION}
+
+{$REGION 'qryMain'}
+procedure TdmDataFireDAC.qryMainAfterApplyUpdates(DataSet: TFDDataSet;
+  AErrors: Integer);
+begin
+  Logger.Track('TdmDataFireDAC.qryMainAfterApplyUpdates');
+end;
+
+procedure TdmDataFireDAC.qryMainAfterClose(DataSet: TDataSet);
+begin
+  Logger.Track('TdmDataFireDAC.qryMainAfterClose');
+end;
+
+procedure TdmDataFireDAC.qryMainAfterExecute(DataSet: TFDDataSet);
+begin
+  Logger.Track('TdmDataFireDAC.qryMainAfterExecute');
+end;
+
+procedure TdmDataFireDAC.qryMainAfterGetRecords(DataSet: TFDDataSet);
+begin
+  Logger.Track('TdmDataFireDAC.qryMainAfterGetRecords');
+end;
+
+procedure TdmDataFireDAC.qryMainAfterOpen(DataSet: TDataSet);
+begin
+  Logger.Track('TdmDataFireDAC.qryMainAfterOpen');
+end;
+
+procedure TdmDataFireDAC.qryMainAfterRefresh(DataSet: TDataSet);
+begin
+  Logger.Track('TdmDataFireDAC.qryMainAfterRefresh');
+end;
+
+procedure TdmDataFireDAC.qryMainAfterRowRequest(DataSet: TFDDataSet);
+begin
+  Logger.Track('TdmDataFireDAC.qryMainAfterRowRequest');
+end;
+
+procedure TdmDataFireDAC.qryMainBeforeApplyUpdates(DataSet: TFDDataSet);
+begin
+  Logger.Track('TdmDataFireDAC.qryMainBeforeApplyUpdates');
+end;
+
+procedure TdmDataFireDAC.qryMainBeforeClose(DataSet: TDataSet);
+begin
+  Logger.Track('TdmDataFireDAC.qryMainBeforeClose');
+end;
+
+procedure TdmDataFireDAC.qryMainBeforeExecute(DataSet: TFDDataSet);
+begin
+  Logger.Track('TdmDataFireDAC.qryMainBeforeExecute');
+end;
+
+procedure TdmDataFireDAC.qryMainBeforeGetRecords(DataSet: TFDDataSet);
+begin
+  Logger.Track('TdmDataFireDAC.qryMainBeforeGetRecords');
+end;
+
+procedure TdmDataFireDAC.qryMainBeforeOpen(DataSet: TDataSet);
+begin
+  Logger.Track('TdmDataFireDAC.qryMainBeforeOpen');
+end;
+
+procedure TdmDataFireDAC.qryMainBeforeRefresh(DataSet: TDataSet);
+begin
+  Logger.Track('TdmDataFireDAC.qryMainBeforeRefresh');
+end;
+
+procedure TdmDataFireDAC.qryMainBeforeRowRequest(DataSet: TFDDataSet);
+begin
+  Logger.Track('TdmDataFireDAC.qryMainBeforeRowRequest');
+end;
+
+procedure TdmDataFireDAC.qryMainCommandChanged(Sender: TObject);
+begin
+  Logger.Track('TdmDataFireDAC.qryMainCommandChanged');
+end;
+
+procedure TdmDataFireDAC.qryMainError(ASender, AInitiator: TObject;
+  var AException: Exception);
+begin
+  Logger.Track('TdmDataFireDAC.qryMainError');
+end;
+
+procedure TdmDataFireDAC.qryMainExecuteError(ASender: TObject; ATimes,
+  AOffset: Integer; AError: EFDDBEngineException; var AAction: TFDErrorAction);
+begin
+  Logger.Track('TdmDataFireDAC.qryMainExecuteError');
+end;
+
+procedure TdmDataFireDAC.qryMainMasterSetValues(DataSet: TFDDataSet);
+begin
+  Logger.Track('TdmDataFireDAC.qryMainMasterSetValues');
+end;
+{$ENDREGION}
 {$ENDREGION}
 
 {$REGION 'protected methods'}
@@ -490,7 +689,7 @@ begin
 //  Logger.Send('ConnectionString', Connection.ConnectionString);
 
   Logger.Send('DriverName', ConnectionSettings.DriverName);
-
+  MultipleResultSets := FConnectionSettings.MultipleResultSets;
   Connection.FetchOptions.RowsetSize := ConnectionSettings.PacketRecords;
   if ConnectionSettings.FetchOnDemand then
   begin
@@ -502,8 +701,15 @@ begin
   end;
 //  Connection.ConnectionString := ConnectionSettings.ConnectionString;
   Connection.DriverName       := ConnectionSettings.DriverName;
-  Connection.FetchOptions.AutoClose := False; // required to support multiple resultsets
-
+  if MultipleResultSets then
+  begin
+    Connection.FetchOptions.AutoClose := False; // required to support multiple resultsets
+  end
+  else
+  begin
+    Connection.FetchOptions.AutoClose := True;
+  end;
+  conMain.UpdateOptions.ReadOnly := ConnectionSettings.ReadOnly;
   if ConnectionSettings.DriverName <> '' then
   begin
     Connected := False;
@@ -536,25 +742,26 @@ begin
     FDataSets.Clear;
     FDQuery.Close;
     FDQuery.Open(ACommandText);
-    LMemTable := TFDMemTable.Create(nil);
-    FDQuery.FetchAll;
-    LMemTable.Data := FDQuery.Data;
-    FDataSets.Add(LMemTable);
-    B := FDQuery.Active;
-    while B do
+
+    if MultipleResultSets then
     begin
-      FDQuery.NextRecordSet;
-      //FDQuery.FetchAll;
-      if FDQuery.Active then
+      LMemTable := TFDMemTable.Create(nil);
+      LMemTable.Data := FDQuery.Data;
+      FDataSets.Add(LMemTable);
+      B := FDQuery.Active;
+      while B do
       begin
-        LMemTable := TFDMemTable.Create(nil);
-        FDQuery.FetchAll;
-        LMemTable.Data := FDQuery.Data;
-        FDataSets.Add(LMemTable);
-      end
-      else
-      begin
-        B := False;
+        FDQuery.NextRecordSet;
+        if FDQuery.Active then
+        begin
+          LMemTable := TFDMemTable.Create(nil);
+          LMemTable.Data := FDQuery.Data;
+          FDataSets.Add(LMemTable);
+        end
+        else
+        begin
+          B := False;
+        end;
       end;
     end;
   end;
@@ -621,7 +828,7 @@ end;
 
 procedure TdmDataFireDAC.Execute;
 begin
-  DataSet.Active := False;
+//  DataSet.Active := False;
   InitializeConnection;
   InternalExecute(SQL);
   UpdateFieldLists;
@@ -635,65 +842,6 @@ procedure TdmDataFireDAC.LoadFromFile(const AFileName: string;
   AFormat: TFDStorageFormat);
 begin
   FDQuery.LoadFromFile(AFileName, AFormat);
-end;
-
-
-procedure TdmDataFireDAC.qryMainAfterApplyUpdates(DataSet: TFDDataSet;
-  AErrors: Integer);
-begin
-  Logger.Track('TdmDataFireDAC.qryMainAfterApplyUpdates');
-end;
-
-procedure TdmDataFireDAC.qryMainAfterGetRecords(DataSet: TFDDataSet);
-begin
-  Logger.Track('TdmDataFireDAC.qryMainAfterGetRecords');
-end;
-
-procedure TdmDataFireDAC.qryMainAfterOpen(DataSet: TDataSet);
-begin
-  Logger.Track('TdmDataFireDAC.qryMainAfterOpen');
-end;
-
-procedure TdmDataFireDAC.qryMainAfterRefresh(DataSet: TDataSet);
-begin
-  Logger.Track('TdmDataFireDAC.qryMainAfterRefresh');
-end;
-
-procedure TdmDataFireDAC.qryMainAfterRowRequest(DataSet: TFDDataSet);
-begin
-  Logger.Track('TdmDataFireDAC.qryMainAfterRowRequest');
-end;
-
-procedure TdmDataFireDAC.qryMainBeforeApplyUpdates(DataSet: TFDDataSet);
-begin
-  Logger.Track('TdmDataFireDAC.qryMainBeforeApplyUpdates');
-end;
-
-procedure TdmDataFireDAC.qryMainBeforeRowRequest(DataSet: TFDDataSet);
-begin
-  Logger.Track('TdmDataFireDAC.qryMainBeforeRowRequest');
-end;
-
-procedure TdmDataFireDAC.qryMainCommandChanged(Sender: TObject);
-begin
-  Logger.Track('TdmDataFireDAC.qryMainCommandChanged');
-end;
-
-procedure TdmDataFireDAC.qryMainError(ASender, AInitiator: TObject;
-  var AException: Exception);
-begin
-  Logger.Track('TdmDataFireDAC.qryMainError');
-end;
-
-procedure TdmDataFireDAC.qryMainExecuteError(ASender: TObject; ATimes,
-  AOffset: Integer; AError: EFDDBEngineException; var AAction: TFDErrorAction);
-begin
-  Logger.Track('TdmDataFireDAC.qryMainExecuteError');
-end;
-
-procedure TdmDataFireDAC.qryMainMasterSetValues(DataSet: TFDDataSet);
-begin
-  Logger.Track('TdmDataFireDAC.qryMainMasterSetValues');
 end;
 
 procedure TdmDataFireDAC.SaveToFile(const AFileName: string;

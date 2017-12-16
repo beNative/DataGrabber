@@ -28,7 +28,9 @@ uses
 
   VirtualTrees,
 
-  DataGrabber.Interfaces, DataGrabber.ConnectionProfiles, OMultiPanel;
+  OMultiPanel,
+
+  DataGrabber.Interfaces, DataGrabber.ConnectionProfiles;
 
 {
    A IConnectionView instance consists of
@@ -46,10 +48,9 @@ uses
 
 type
   TfrmConnectionView = class(TForm, IConnectionView)
-    pnlMain: TOMultiPanel;
-    pnlBottom: TOMultiPanel;
-    pnlTop: TOMultiPanel;
-    {$ENDREGION}
+    pnlMain   : TOMultiPanel;
+    pnlBottom : TOMultiPanel;
+    pnlTop    : TOMultiPanel;
 
     procedure FVSTProfilesBeforeCellPaint(
       Sender          : TBaseVirtualTree;
@@ -182,10 +183,9 @@ begin
   pnlTop.PanelCollection[0].Position := 0.2;
 
   ApplySettings;
-//  pnlTop.Align   := alClient;
-//  pnlBottom.Align := alBottom;
-//    pnlBottom.Height     := 0;
-//  splHorizontal.Visible := False;
+  pnlMain.MinPosition                 := 0;
+  pnlMain.PanelCollection[0].Position := 1;
+  pnlMain.SplitterSize                := 0;
 end;
 
 procedure TfrmConnectionView.BeforeDestruction;
@@ -208,43 +208,54 @@ var
   I  : Integer;
   TS : TTabSheet;
   DV : IDataView;
+  B  : Boolean;
 begin
-  if Assigned(FPageControl) then
-    FreeAndNil(FPageControl);
-
-//  FPageControl := TPageControl.Create(Self);
-//  FPageControl.Parent := pnlGrid;
-//  FPageControl.Align := alClient;
-
-  for I := 0 to ActiveData.DataSetCount - 1 do
+  pnlBottom.PanelCollection.Clear;
+  B := Manager.Settings.ResultDisplayLayout = TResultDisplayLayout.Tabbed;
+  if B then
   begin
-    //TS := TTabSheet.Create(FPageControl);
-
-//    TS.PageControl := FPageControl;
-
-
+    if Assigned(FPageControl) then
+      FreeAndNil(FPageControl);
+    FPageControl := TPageControl.Create(Self);
+    FPageControl.Parent      := pnlBottom;
+    FPageControl.Align       := alClient;
+    FPageControl.TabPosition := tpBottom;
+  end;
+  FDataViewList.Clear;
+  if ActiveData.MultipleResultSets then
+  begin
+    for I := 0 to ActiveData.DataSetCount - 1 do
+    begin
+      DV := GlobalContainer.Resolve<IDataView>(Manager.Settings.GridType);
+      DV.Settings := Manager.Settings as IDataViewSettings;
+      DV.PopupMenu := Manager.ConnectionViewPopupMenu;
+      DV.Data    := ActiveData;
+      DV.DataSet := ActiveData.Items[I];
+      FActiveDataView := DV;
+      if B then
+      begin
+        TS := TTabSheet.Create(FPageControl);
+        TS.Caption := Format('[%d]', [I]);
+        TS.PageControl := FPageControl;
+        DV.AssignParent(TS);
+      end
+      else
+        DV.AssignParent(pnlBottom);
+      FDataViewList.Add(DV);
+    end;
+  end
+  else
+  begin
     DV := GlobalContainer.Resolve<IDataView>(Manager.Settings.GridType);
     DV.Settings := Manager.Settings as IDataViewSettings;
-  //  DV.AssignParent(TS);
+    DV.PopupMenu := Manager.ConnectionViewPopupMenu;
     DV.AssignParent(pnlBottom);
-    DV.DataSet := ActiveData.Items[I];
+    DV.Data    := ActiveData;
+    DV.DataSet := ActiveData.DataSet;
+    FActiveDataView := DV;
   end;
-//  pnlTop.Align := alTop;
-//  pnlBottom.Align := alClient;
-//  pnlBottom.Height     := Height div 2;
-//  splHorizontal.Visible := True;
-//  splHorizontal.Align := alBottom;
-
-
-
-
-
-
-
-
-//  create dataviews here
-//  FActiveDataView := ADataView;
-//  ActiveDataView.AssignParent(pnlBottom);
+  pnlMain.SplitterSize                := 8;
+  pnlMain.PanelCollection[0].Position := 0.2;
   Logger.Track('TfrmConnectionView.DataAfterExecute');
 end;
 {$ENDREGION}
@@ -386,8 +397,9 @@ begin
   FVSTProfiles.Colors.FocusedSelectionColor := clBtnHighlight;
   FVSTProfiles.Margins.Right := 0;
   FVSTProfiles.Indent        := 0;
-  FVSTProfiles.Constraints.MinWidth := 150;
-  FVSTProfiles.Constraints.MaxWidth := 300;
+  FVSTProfiles.Constraints.MinWidth  := 150;
+  FVSTProfiles.Constraints.MinHeight := 100;
+  FVSTProfiles.Constraints.MaxWidth  := 300;
 end;
 
 procedure TfrmConnectionView.InitializeEditorView;
@@ -410,7 +422,6 @@ begin
   begin
     FVSTProfiles.RootNodeCount := Manager.Settings.ConnectionProfiles.Count;
     FVSTProfiles.Refresh;
-
     CP := Manager.Settings.ConnectionProfiles.Items[
       FVSTProfiles.FocusedNode.Index
     ];

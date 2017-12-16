@@ -19,8 +19,7 @@ unit DataGrabber.DataView.cxGrid;
 interface
 
 {$I DataGrabber.inc}
-
-{$IFDEF DEVEXPRESS}
+//{$IFDEF DEVEXPRESS}
 uses
   Winapi.Windows, Winapi.Messages,
   System.SysUtils, System.Variants, System.Classes, System.Generics.Collections,
@@ -176,60 +175,22 @@ type
     property GridType: string
       read GetGridType;
   end;
-{$ENDIF}
+//{$ENDIF}
 
 implementation
 
 {$R *.dfm}
 
-{$IFDEF DEVEXPRESS}
+//{$IFDEF DEVEXPRESS}
 uses
   System.StrUtils,
   Vcl.Clipbrd,
 
   cxGridDBDataDefinitions, cxGridCommon,
 
-  DDuce.ObjectInspector.zObjectInspector;
+  DDuce.ObjectInspector.zObjectInspector,
 
-{$REGION 'non-interfaced routines'}
-function GetTextWidth(const AText: string): Integer;
-var
-  SL      : TStringList;
-  I, W, R : Integer;
-begin
-  SL := TStringList.Create;
-  try
-    SL.Text := AText;
-    R := 0;
-    for I := 0 to SL.Count - 1 do
-    begin
-      W := Length(SL[I]);
-      if W > R then
-        R := W;
-    end;
-    Result := R;
-  finally
-    SL.Free;
-  end;
-end;
-
-function GetMaxTextWidth(AStrings: TStrings): Integer;
-var
-  I : Integer;
-  N : Integer;
-begin
-  Result := 0;
-  if Assigned(AStrings) then
-  begin
-    for I := 0 to AStrings.Count - 1 do
-    begin
-      N := GetTextWidth(AStrings[I]);
-      if N > Result then
-        Result := N;
-    end;
-  end;
-end;
-{$ENDREGION}
+  DataGrabber.Utils;
 
 {$REGION 'construction and destruction'}
 procedure TfrmcxGrid.AfterConstruction;
@@ -273,9 +234,12 @@ end;
 
 procedure TfrmcxGrid.SetDataSet(const Value: TDataSet);
 begin
-  FDataSet := Value;
-  dscMain.DataSet := FDataSet;
-  UpdateView;
+  if Value <> DataSet then
+  begin
+    FDataSet := Value;
+    dscMain.DataSet := FDataSet;
+    UpdateView;
+  end;
 end;
 
 function TfrmcxGrid.GetRecordCount: Integer;
@@ -659,7 +623,6 @@ end;
 {$REGION 'public methods'}
 procedure TfrmcxGrid.UpdateView;
 begin
-  dscMain.DataSet := DataSet;
   if Assigned(DataSet) and DataSet.Active then
   begin
     tvwMain.ClearItems;
@@ -835,6 +798,6 @@ begin
 end;
 {$ENDREGION}
 
-{$ENDIF}
+//{$ENDIF}
 
 end.

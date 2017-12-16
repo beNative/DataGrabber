@@ -37,10 +37,10 @@ type
     FGridType                 : string;
     FDefaultConnectionProfile : string;
     FConnectionSettings       : TConnectionSettings;
-    FRepositoryVisible        : Boolean;
     FDataInspectorVisible     : Boolean;
     FShowVerticalGridLines    : Boolean;
     FShowHorizontalGridLines  : Boolean;
+    FResultDisplayLayout      : TResultDisplayLayout;
 
     {$REGION 'property access methods'}
     function GetGridCellColoring: Boolean;
@@ -55,11 +55,9 @@ type
     function GetConnectionSettings: TConnectionSettings;
     function GetDataInspectorVisible: Boolean;
     function GetDefaultConnectionProfile: string;
-    function GetRepositoryVisible: Boolean;
     procedure SetConnectionSettings(const Value: TConnectionSettings);
     procedure SetDataInspectorVisible(const Value: Boolean);
     procedure SetDefaultConnectionProfile(const Value: string);
-    procedure SetRepositoryVisible(const Value: Boolean);
     function GetGridType: string;
     procedure SetGridType(const Value: string);
     function GetFileName: string;
@@ -68,6 +66,8 @@ type
     function GetShowVerticalGridLines: Boolean;
     procedure SetShowHorizontalGridLines(const Value: Boolean);
     procedure SetShowVerticalGridLines(const Value: Boolean);
+    function GetResultDisplayLayout: TResultDisplayLayout;
+    procedure SetResultDisplayLayout(const Value: TResultDisplayLayout);
     {$ENDREGION}
 
   public
@@ -113,11 +113,13 @@ type
     property DefaultConnectionProfile: string
       read GetDefaultConnectionProfile write SetDefaultConnectionProfile;
 
-    property RepositoryVisible: Boolean
-      read GetRepositoryVisible write SetRepositoryVisible;
-
     property DataInspectorVisible: Boolean
       read GetDataInspectorVisible write SetDataInspectorVisible;
+
+    property ResultDisplayLayout: TResultDisplayLayout
+      read GetResultDisplayLayout
+      write SetResultDisplayLayout
+      default TResultDisplayLayout.Horizontal;
   end;
 
 implementation
@@ -155,6 +157,7 @@ begin
   FConnectionProfiles := TConnectionProfiles.Create(Self);
   FFileName := SETTINGS_FILE;
   FGridCellColoring := True;
+  FResultDisplayLayout := TResultDisplayLayout.Horizontal;
 end;
 
 procedure TSettings.BeforeDestruction;
@@ -234,9 +237,9 @@ begin
   FConnectionProfiles := Value;
 end;
 
-function TSettings.GetRepositoryVisible: Boolean;
+function TSettings.GetResultDisplayLayout: TResultDisplayLayout;
 begin
-  Result := FRepositoryVisible;
+  Result := FResultDisplayLayout;
 end;
 
 function TSettings.GetShowHorizontalGridLines: Boolean;
@@ -259,9 +262,9 @@ begin
   FShowVerticalGridLines := Value;
 end;
 
-procedure TSettings.SetRepositoryVisible(const Value: Boolean);
+procedure TSettings.SetResultDisplayLayout(const Value: TResultDisplayLayout);
 begin
-  FRepositoryVisible := Value;
+  FResultDisplayLayout := Value;
 end;
 
 function TSettings.GetConnectionSettings: TConnectionSettings;

@@ -30,7 +30,7 @@ object frmcxGrid: TfrmcxGrid
     TabOrder = 0
     LevelTabs.Slants.Positions = []
     LevelTabs.Style = 6
-    LookAndFeel.Kind = lfUltraFlat
+    LookAndFeel.Kind = lfStandard
     LookAndFeel.NativeStyle = True
     object tvwMain: TcxGridDBTableView
       Navigator.Buttons.ConfirmDelete = True
@@ -65,24 +65,25 @@ object frmcxGrid: TfrmcxGrid
       OptionsBehavior.FocusCellOnTab = True
       OptionsBehavior.FocusFirstCellOnNewRecord = True
       OptionsBehavior.GoToNextCellOnEnter = True
-      OptionsBehavior.ImmediateEditor = False
       OptionsBehavior.IncSearch = True
       OptionsBehavior.NavigatorHints = True
       OptionsBehavior.BestFitMaxRecordCount = 100
+      OptionsBehavior.ImmediateEditor = False
       OptionsBehavior.PullFocusing = True
       OptionsCustomize.ColumnHiding = True
       OptionsCustomize.ColumnsQuickCustomization = True
       OptionsCustomize.DataRowSizing = True
       OptionsCustomize.GroupRowSizing = True
       OptionsData.Appending = True
-      OptionsSelection.InvertSelect = False
       OptionsSelection.MultiSelect = True
       OptionsSelection.CellMultiSelect = True
+      OptionsSelection.InvertSelect = False
       OptionsView.CellEndEllipsis = True
       OptionsView.FocusRect = False
       OptionsView.ExpandButtonsForEmptyDetails = False
       OptionsView.GridLineColor = clSilver
       OptionsView.HeaderEndEllipsis = True
+      OptionsView.Indicator = True
       OnCustomDrawGroupSummaryCell = tvwMainCustomDrawGroupSummaryCell
     end
     object grlGrid1Level1: TcxGridLevel

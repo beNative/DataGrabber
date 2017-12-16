@@ -45,6 +45,12 @@ type
     dtNULL
   );
 
+  TResultDisplayLayout = (
+    Tabbed,
+    Horizontal,
+    Vertical
+  );
+
 const
   DEFAULT_DATATYPE_COLORS : array [TDataType] of TColor = (
     $00DFDFDF,
@@ -77,6 +83,9 @@ type
     function GetItem(AIndex: Integer): TFDMemTable;
     function GetDataSetCount: Integer;
     function GetOnAfterExecute: IEvent<TNotifyEvent>;
+    function GetOnBeforeExecute: IEvent<TNotifyEvent>;
+    function GetMultipleResultSets: Boolean;
+    procedure SetMultipleResultSets(const Value: Boolean);
     {$ENDREGION}
 
     procedure Execute;
@@ -111,8 +120,14 @@ type
     property DataSetCount: Integer
       read GetDataSetCount;
 
+    property MultipleResultSets: Boolean
+      read GetMultipleResultSets write SetMultipleResultSets;
+
     property OnAfterExecute: IEvent<TNotifyEvent>
       read GetOnAfterExecute;
+
+    property OnBeforeExecute: IEvent<TNotifyEvent>
+      read GetOnBeforeExecute;
   end;
 
   IDataPersistable = interface
@@ -251,11 +266,9 @@ type
     function GetConnectionSettings: TConnectionSettings;
     function GetDataInspectorVisible: Boolean;
     function GetDefaultConnectionProfile: string;
-    function GetRepositoryVisible: Boolean;
     procedure SetConnectionSettings(const Value: TConnectionSettings);
     procedure SetDataInspectorVisible(const Value: Boolean);
     procedure SetDefaultConnectionProfile(const Value: string);
-    procedure SetRepositoryVisible(const Value: Boolean);
     function GetGridType: string;
     procedure SetGridType(const Value: string);
     function GetFileName: string;
@@ -264,6 +277,8 @@ type
     function GetShowVerticalGridLines: Boolean;
     procedure SetShowHorizontalGridLines(const Value: Boolean);
     procedure SetShowVerticalGridLines(const Value: Boolean);
+    function GetResultDisplayLayout: TResultDisplayLayout;
+    procedure SetResultDisplayLayout(const Value: TResultDisplayLayout);
     {$ENDREGION}
 
     procedure Load;
@@ -290,9 +305,6 @@ type
     property DefaultConnectionProfile: string
       read GetDefaultConnectionProfile write SetDefaultConnectionProfile;
 
-    property RepositoryVisible: Boolean
-      read GetRepositoryVisible write SetRepositoryVisible;
-
     property DataInspectorVisible: Boolean
       read GetDataInspectorVisible write SetDataInspectorVisible;
 
@@ -307,6 +319,9 @@ type
 
     property ShowVerticalGridLines: Boolean
       read GetShowVerticalGridLines write SetShowVerticalGridLines;
+
+    property ResultDisplayLayout: TResultDisplayLayout
+      read GetResultDisplayLayout write SetResultDisplayLayout;
   end;
 
   IConnectionView = interface

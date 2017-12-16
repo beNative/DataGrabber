@@ -36,8 +36,6 @@ object frmConnectionView: TfrmConnectionView
     SplitterSize = 8
     Align = alClient
     TabOrder = 0
-    ExplicitWidth = 845
-    ExplicitHeight = 612
     object pnlBottom: TOMultiPanel
       Left = 0
       Top = 240
