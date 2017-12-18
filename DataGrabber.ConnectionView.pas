@@ -34,23 +34,25 @@ uses
 
 {
    A IConnectionView instance consists of
-     - one editorview
+     - one editorview (IEditorView)
      - one or more dataviews corresponding to the user input in the editor as
-       multiple datasets can be returned as a result of one statement.
+       multiple datasets can be returned as a result of one statement
+       (IDataView).
 
      - a list of connectionprofiles (those defined in the settings)
 
      - an active connection profile (of the available profiles in
         FSettings.ConnectionProfiles)
-
-     - The owner of a ConnectionView is always a IConnectionViewManager instance
 }
 
 type
   TfrmConnectionView = class(TForm, IConnectionView)
     pnlMain   : TOMultiPanel;
+    pnlTop    : TPanel;
     pnlBottom : TOMultiPanel;
-    pnlTop    : TOMultiPanel;
+    pnlVST: TPanel;
+    splVertical: TSplitter;
+    pnlTopRight: TPanel;
 
     procedure FVSTProfilesBeforeCellPaint(
       Sender          : TBaseVirtualTree;
@@ -96,44 +98,46 @@ type
   private
     FEditorView     : IEditorView;
     FActiveDataView : IDataView;
-    FActiveData     : IData;
+    FData           : IData;
     FVSTProfiles    : TVirtualStringTree;
     FDefaultNode    : PVirtualNode;
     FDataViewList   : IList<IDataView>;
     FPageControl    : TPageControl;
+    FManager        : IConnectionViewManager;
 
     {$REGION 'property access methods'}
     function GetManager: IConnectionViewManager;
     function GetForm: TForm;
-    function GetActiveData: IData;
+    function GetData: IData;
     function GetActiveDataView: IDataView;
     function GetEditorView: IEditorView;
     function GetActiveConnectionProfile: TConnectionProfile;
     {$ENDREGION}
 
     procedure DataAfterExecute(Sender: TObject);
+    function GetDataView(AIndex: Integer): IDataView;
 
   protected
-    procedure InitializeEditorView;
     procedure InitializeConnectionProfilesView;
     procedure Copy;
     procedure UpdateActions; override;
     procedure ApplySettings;
+    procedure UpdateActiveDataView;
 
   public
     procedure AfterConstruction; override;
     procedure BeforeDestruction; override;
     constructor Create(
-      AOwner      : TComponent;
-      AEditorView : IEditorView;
-      AData       : IData
+      AOwner   : TComponent;
+      AManager : IConnectionViewManager;
+      AData    : IData
     ); reintroduce; virtual;
 
     property Form: TForm
       read GetForm;
 
-    property ActiveData: IData
-      read GetActiveData;
+    property Data: IData
+      read GetData;
 
     property ActiveConnectionProfile: TConnectionProfile
       read GetActiveConnectionProfile;
@@ -143,6 +147,9 @@ type
 
     property ActiveDataView: IDataView
       read GetActiveDataView;
+
+    property DataViews[AIndex: Integer]: IDataView
+      read GetDataView;
 
     property Manager: IConnectionViewManager
       read GetManager;
@@ -158,30 +165,29 @@ uses
 
   DDuce.Logger, DDuce.Factories, DDuce.ObjectInspector.zObjectInspector,
 
-  DataGrabber.Utils;
+  DataGrabber.Utils, DataGrabber.Factories;
 
 {$R *.dfm}
 
 {$REGION 'construction and destruction'}
 constructor TfrmConnectionView.Create(AOwner: TComponent;
-  AEditorView: IEditorView; AData: IData);
+  AManager: IConnectionViewManager; AData: IData);
 begin
   inherited Create(AOwner);
-  Guard.CheckNotNull(AEditorView, 'AEditorView');
+  Guard.CheckNotNull(AManager, 'AManager');
   Guard.CheckNotNull(AData, 'AData');
-  FEditorView     := AEditorView;
-  FActiveData     := AData;
+  FManager := AManager;
+  FData    := AData;
 end;
 
 procedure TfrmConnectionView.AfterConstruction;
 begin
   inherited AfterConstruction;
-  ActiveData.OnAfterExecute.Add(DataAfterExecute);
+  Data.OnAfterExecute.Add(DataAfterExecute);
   FDataViewList := TCollections.CreateInterfaceList<IDataView>;
   InitializeConnectionProfilesView;
-  InitializeEditorView;
-  pnlTop.PanelCollection[0].Position := 0.2;
-
+  FEditorView := TDataGrabberFactories.CreateEditorView(Self, Manager);
+  FEditorView.AssignParent(pnlTopRight);
   ApplySettings;
   pnlMain.MinPosition                 := 0;
   pnlMain.PanelCollection[0].Position := 1;
@@ -190,11 +196,11 @@ end;
 
 procedure TfrmConnectionView.BeforeDestruction;
 begin
-  if Assigned(ActiveData) then
-    ActiveData.OnAfterExecute.Remove(DataAfterExecute);
+  if Assigned(Data) then
+    Data.OnAfterExecute.Remove(DataAfterExecute);
   FEditorView     := nil;
   FActiveDataView := nil;
-  FActiveData     := nil;
+  FData           := nil;
   FDataViewList   := nil;
   inherited BeforeDestruction;
 end;
@@ -204,33 +210,54 @@ end;
 {$REGION 'Data'}
 procedure TfrmConnectionView.DataAfterExecute(Sender: TObject);
 var
-  DS : TDataSet;
   I  : Integer;
   TS : TTabSheet;
   DV : IDataView;
   B  : Boolean;
 begin
   pnlBottom.PanelCollection.Clear;
+  for DV in FDataViewList do
+  begin
+    DV.Close;
+  end;
+  FDataViewList.Clear;
+  if Assigned(FPageControl) then
+  begin
+    FreeAndNil(FPageControl);
+  end;
+
   B := Manager.Settings.ResultDisplayLayout = TResultDisplayLayout.Tabbed;
   if B then
   begin
-    if Assigned(FPageControl) then
-      FreeAndNil(FPageControl);
     FPageControl := TPageControl.Create(Self);
     FPageControl.Parent      := pnlBottom;
     FPageControl.Align       := alClient;
     FPageControl.TabPosition := tpBottom;
-  end;
-  FDataViewList.Clear;
-  if ActiveData.MultipleResultSets then
+  end
+  else
   begin
-    for I := 0 to ActiveData.DataSetCount - 1 do
+    if Manager.Settings.ResultDisplayLayout = TResultDisplayLayout.Vertical then
     begin
-      DV := GlobalContainer.Resolve<IDataView>(Manager.Settings.GridType);
-      DV.Settings := Manager.Settings as IDataViewSettings;
+      pnlBottom.PanelType := ptHorizontal;
+    end
+    else
+    begin
+      pnlBottom.PanelType := ptVertical;
+    end;
+  end;
+
+  if Data.MultipleResultSets then
+  begin
+    for I := 0 to Data.DataSetCount - 1 do
+    begin
+      DV := TDataGrabberFactories.CreateDataView(
+        Self,
+        Manager.Settings as IDataViewSettings,
+        Manager.Settings.GridType,
+        Data,
+        Data.Items[I]
+      );
       DV.PopupMenu := Manager.ConnectionViewPopupMenu;
-      DV.Data    := ActiveData;
-      DV.DataSet := ActiveData.Items[I];
       FActiveDataView := DV;
       if B then
       begin
@@ -246,17 +273,18 @@ begin
   end
   else
   begin
-    DV := GlobalContainer.Resolve<IDataView>(Manager.Settings.GridType);
-    DV.Settings := Manager.Settings as IDataViewSettings;
+    DV := TDataGrabberFactories.CreateDataView(
+      Self,
+      Manager.Settings as IDataViewSettings,
+      Manager.Settings.GridType,
+      Data
+    );
     DV.PopupMenu := Manager.ConnectionViewPopupMenu;
     DV.AssignParent(pnlBottom);
-    DV.Data    := ActiveData;
-    DV.DataSet := ActiveData.DataSet;
     FActiveDataView := DV;
   end;
   pnlMain.SplitterSize                := 8;
   pnlMain.PanelCollection[0].Position := 0.2;
-  Logger.Track('TfrmConnectionView.DataAfterExecute');
 end;
 {$ENDREGION}
 
@@ -354,9 +382,15 @@ begin
     Exit(nil);
 end;
 
-function TfrmConnectionView.GetActiveData: IData;
+function TfrmConnectionView.GetData: IData;
 begin
-  Result := FActiveData;
+  Result := FData;
+end;
+
+function TfrmConnectionView.GetDataView(AIndex: Integer): IDataView;
+begin
+  Guard.CheckIndex(FDataViewList.Count, AIndex);
+  Result := FDataViewList[AIndex];
 end;
 
 function TfrmConnectionView.GetActiveDataView: IDataView;
@@ -366,7 +400,7 @@ end;
 
 function TfrmConnectionView.GetManager: IConnectionViewManager;
 begin
-  Result := Owner as IConnectionViewManager;
+  Result := FManager;
 end;
 
 function TfrmConnectionView.GetEditorView: IEditorView;
@@ -383,7 +417,7 @@ end;
 {$REGION 'protected methods'}
 procedure TfrmConnectionView.InitializeConnectionProfilesView;
 begin
-  FVSTProfiles := TFactories.CreateVirtualStringTree(Self, pnlTop);
+  FVSTProfiles := TFactories.CreateVirtualStringTree(Self, pnlVST);
   FVSTProfiles.AlignWithMargins  := False;
   FVSTProfiles.RootNodeCount     := Manager.Settings.ConnectionProfiles.Count;
   FVSTProfiles.OnBeforeCellPaint := FVSTProfilesBeforeCellPaint;
@@ -402,18 +436,6 @@ begin
   FVSTProfiles.Constraints.MaxWidth  := 300;
 end;
 
-procedure TfrmConnectionView.InitializeEditorView;
-var
-  F: TForm;
-begin
-  F := FEditorView as TForm;
-  F.PopupMenu   := Manager.ConnectionViewPopupMenu;
-  F.BorderStyle := bsNone;
-  F.Parent      := pnlTop;
-  F.Align       := alClient;
-  F.Visible     := True;
-end;
-
 procedure TfrmConnectionView.ApplySettings;
 var
   CP: TConnectionProfile;
@@ -427,7 +449,8 @@ begin
     ];
     Application.Title := CP.Name;
     Caption := CP.Name;
-    FActiveData.ConnectionSettings.Assign(CP.ConnectionSettings);
+    FEditorView.Color := CP.ProfileColor;
+    Data.ConnectionSettings.Assign(CP.ConnectionSettings);
   end;
 end;
 
@@ -450,6 +473,21 @@ begin
       EditorView.SetFocus;
     end;
     Manager.UpdateActions;
+    if Assigned(FActiveDataView) and not FActiveDataView.IsActiveDataView then
+      UpdateActiveDataView;
+  end;
+  if Assigned(FActiveDataView) then
+    Logger.Watch('ActiveDatView', FActiveDataView.Name);
+end;
+
+procedure TfrmConnectionView.UpdateActiveDataView;
+var
+  DV : IDataView;
+begin
+  for DV in FDataViewList do
+  begin
+    if DV.IsActiveDataView then
+      FActiveDataView := DV;
   end;
 end;
 {$ENDREGION}

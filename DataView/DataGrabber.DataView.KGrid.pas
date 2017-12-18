@@ -40,31 +40,36 @@ type
       R      : TRect;
       State  : TKGridDrawState
     );
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
 
   private
     FData     : IData;
-    FSettings : IDataViewSettings;
     FDataSet  : TDataSet;
+    FSettings : IDataViewSettings;
 
     function GetDataSet: TDataSet;
     function GetRecordCount: Integer;
     function GetSettings: IDataViewSettings;
-    procedure SetSettings(const Value: IDataViewSettings);
 
     procedure NormalizeRect(var SR: TKGridRect);
     function GetData: IData;
-    procedure SetData(const Value: IData);
 
     function GetGridType: string;
     function GetName: string;
 
     procedure DataAfterExecute(Sender: TObject);
-    procedure SetDataSet(const Value: TDataSet);
 
   protected
     procedure SetPopupMenu(const Value: TPopupMenu);
+    function IsActiveDataView: Boolean;
 
   public
+    constructor Create(
+      AOwner    : TComponent;
+      ASettings : IDataViewSettings;
+      AData     : IData;
+      ADataSet  : TDataSet = nil
+    ); reintroduce; virtual;
     procedure AfterConstruction; override;
     procedure BeforeDestruction; override;
 
@@ -93,13 +98,13 @@ type
     procedure Inspect;
 
     property DataSet: TDataSet
-      read GetDataSet write SetDataSet;
+      read GetDataSet;
 
     property Data: IData
-      read GetData write SetData;
+      read GetData;
 
     property Settings: IDataViewSettings
-      read GetSettings write SetSettings;
+      read GetSettings;
 
     property RecordCount: Integer
       read GetRecordCount;
@@ -110,7 +115,7 @@ implementation
 {$R *.dfm}
 
 uses
-  System.StrUtils, System.Math,
+  System.StrUtils, System.Math, System.UITypes,
   Vcl.Clipbrd,
 
   DDuce.ObjectInspector.zObjectInspector,
@@ -125,6 +130,7 @@ begin
   inherited AfterConstruction;
   grdMain.Font.Name                := 'Callibri';
   grdMain.Colors.FocusedRangeBkGnd := clGray;
+  UpdateView;
 end;
 
 procedure TfrmKGrid.BeforeDestruction;
@@ -156,33 +162,9 @@ begin
   Result := FData;
 end;
 
-procedure TfrmKGrid.SetData(const Value: IData);
-begin
-  if Value <> Data then
-  begin
-    if Assigned(Data) then
-    begin
-      Data.OnAfterExecute.Remove(DataAfterExecute);
-    end;
-    FData := Value;
-      Data.OnAfterExecute.Add(DataAfterExecute);
-    UpdateView;
-  end;
-end;
-
 function TfrmKGrid.GetDataSet: TDataSet;
 begin
   Result := FDataSet;
-end;
-
-procedure TfrmKGrid.SetDataSet(const Value: TDataSet);
-begin
-  if Value <> DataSet then
-  begin
-    FDataSet := Value;
-    dscMain.DataSet := FDataSet;
-    UpdateView;
-  end;
 end;
 
 function TfrmKGrid.GetRecordCount: Integer;
@@ -193,11 +175,6 @@ end;
 function TfrmKGrid.GetSettings: IDataViewSettings;
 begin
   Result := FSettings;
-end;
-
-procedure TfrmKGrid.SetSettings(const Value: IDataViewSettings);
-begin
-  FSettings := Value;
 end;
 {$ENDREGION}
 
@@ -317,6 +294,19 @@ begin
   Clipboard.AsText := Trim(SelectionToDelimitedTable(#9, False));
 end;
 
+constructor TfrmKGrid.Create(AOwner: TComponent; ASettings: IDataViewSettings;
+  AData: IData; ADataSet: TDataSet);
+begin
+  inherited Create(AOwner);
+  FSettings := ASettings;
+  FData     := AData;
+  if Assigned(ADataSet) then
+    FDataSet := ADataSet
+  else
+    FDataSet := FData.DataSet;
+  dscMain.DataSet := FDataSet;
+end;
+
 procedure TfrmKGrid.DataAfterExecute(Sender: TObject);
 begin
   UpdateView;
@@ -343,6 +333,11 @@ end;
 procedure TfrmKGrid.Inspect;
 begin
   InspectComponent(grdMain);
+end;
+
+function TfrmKGrid.IsActiveDataView: Boolean;
+begin
+  Result := ContainsFocus(Self);
 end;
 
 procedure TfrmKGrid.MergeAllColumnCells(AActive: Boolean);
@@ -528,6 +523,11 @@ procedure TfrmKGrid.EndUpdate;
 begin
   grdMain.UnlockSortMode;
   grdMain.UnlockUpdate;
+end;
+
+procedure TfrmKGrid.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+  Action := caFree;
 end;
 
 procedure TfrmKGrid.BeginUpdate;

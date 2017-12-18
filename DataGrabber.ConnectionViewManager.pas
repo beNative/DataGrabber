@@ -188,7 +188,10 @@ type
   public
     procedure AfterConstruction; override;
     procedure BeforeDestruction; override;
-    constructor Create(ASettings: ISettings); reintroduce; virtual;
+    constructor Create(
+      AOwner    : TComponent;
+      ASettings : ISettings
+    ); reintroduce; virtual;
 
     function AddConnectionView: IConnectionView;
     function DeleteConnectionView(AIndex: Integer): Boolean; overload;
@@ -231,20 +234,19 @@ implementation
 
 uses
   Vcl.Forms, Vcl.Clipbrd, Vcl.Dialogs,
+  FireDAC.Comp.Client,
+
+  Spring,
 
   DDuce.ObjectInspector.zObjectInspector,
 
-  DataGrabber.Settings.Dialog, DataGrabber.ConnectionView,
-  DataGrabber.Data, DataGrabber.Resources,
-
-  FireDAC.Comp.Client,
-
-  Spring, Spring.Container;
+  DataGrabber.Settings.Dialog, DataGrabber.Factories, DataGrabber.Resources;
 
 {$REGION 'construction and destruction'}
-constructor TdmConnectionViewManager.Create(ASettings: ISettings);
+constructor TdmConnectionViewManager.Create(AOwner: TComponent;
+  ASettings: ISettings);
 begin
-  inherited Create(Application);
+  inherited Create(AOwner);
   FSettings := ASettings;
 end;
 
@@ -268,7 +270,6 @@ end;
 
 procedure TdmConnectionViewManager.BeforeDestruction;
 begin
-  FSettings.FormSettings.Assign(Application.MainForm);
   FSettings.Save;
   FConnectionViewList := nil;
   FreeAndNil(FDataInspector);
@@ -388,7 +389,7 @@ end;
 
 procedure TdmConnectionViewManager.actInspectDataSetExecute(Sender: TObject);
 begin
-  InspectComponent(ActiveData.DataSet);
+  InspectComponent(ActiveDataView.DataSet);
 end;
 
 procedure TdmConnectionViewManager.actInspectExecute(Sender: TObject);
@@ -403,7 +404,7 @@ end;
 
 procedure TdmConnectionViewManager.actInspectFieldsExecute(Sender: TObject);
 begin
-  FFieldInspector.Data := ActiveData;
+  FFieldInspector.DataSet := ActiveDataView.DataSet;
   FFieldInspector.Show;
 end;
 
@@ -494,7 +495,7 @@ end;
 function TdmConnectionViewManager.GetActiveData: IData;
 begin
   if Assigned(FActiveConnectionView) then
-    Result := FActiveConnectionView.ActiveData
+    Result := FActiveConnectionView.Data
   else
     Result := nil;
 end;
@@ -595,7 +596,7 @@ begin
     end;
     if FFieldInspector.Visible then
     begin
-      FFieldInspector.Data := ActiveData;
+      FFieldInspector.DataSet := ActiveDataView.DataSet;
     end;
   finally
     Screen.Cursor := crDefault;
@@ -639,7 +640,6 @@ begin
       not (ActiveData as IFieldVisiblity).ConstantFieldsVisible;
     actFavoriteFieldsOnly.Checked  :=
       (ActiveData as IFieldVisiblity).ShowFavoriteFieldsOnly;
-    Logger.Watch('RecordCount', ActiveDataView.RecordCount);
   end;
 end;
 
@@ -660,27 +660,16 @@ end;
 {$REGION 'public methods'}
 function TdmConnectionViewManager.AddConnectionView: IConnectionView;
 var
-  CV : IConnectionView;
-  EV : IEditorView;
-//  DV : IDataView;
-  D  : IData;
   CP : TConnectionProfile;
+  CV : IConnectionView;
+  D  : IData;
 begin
-  EV := GlobalContainer.Resolve<IEditorView>;
-  //DV := GlobalContainer.Resolve<IDataView>(Settings.GridType);
-//  DV.Settings := FSettings as IDataViewSettings;
-//  DV.PopupMenu := ConnectionViewPopupMenu;
   if Assigned(FActiveConnectionView) then
-  begin
-    CP := FActiveConnectionView.ActiveConnectionProfile;
-  end
+    CP := FActiveConnectionView.ActiveConnectionProfile
   else
-  begin
     CP := DefaultConnectionProfile;
-  end;
-  D := TdmDataFireDAC.Create(Self, CP.ConnectionSettings);
-//  DV.Data := D;
-  CV := TfrmConnectionView.Create(Self, EV, D);
+  D  := TDataGrabberFactories.CreateData(Self, CP.ConnectionSettings);
+  CV := TDataGrabberFactories.CreateConnectionView(Self, Self, D);
   FConnectionViewList.Add(CV);
   ActiveConnectionView := CV;
   UpdateConnectionViewCaptions;

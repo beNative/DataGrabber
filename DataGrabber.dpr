@@ -11,7 +11,6 @@ uses
   DataGrabber.Settings.Dialog in 'DataGrabber.Settings.Dialog.pas' {frmSettingsDialog},
   DataGrabber.FieldInspector in 'DataGrabber.FieldInspector.pas' {frmFieldInspector},
   DataGrabber.DataView.GridView in 'DataView\DataGrabber.DataView.GridView.pas' {frmGridView},
-  DataGrabber.RegisterServices in 'DataGrabber.RegisterServices.pas',
   DataGrabber.ConnectionProfiles in 'DataGrabber.ConnectionProfiles.pas',
   DataGrabber.ConnectionView in 'DataGrabber.ConnectionView.pas' {frmConnectionView},
   DataGrabber.ConnectionViewManager in 'DataGrabber.ConnectionViewManager.pas' {dmConnectionViewManager: TDataModule},
@@ -102,7 +101,7 @@ uses
   zObjInspTypes in '..\..\components\zcontrols\Source\zObjInspTypes.pas',
   DDuce.Factories.VirtualTrees in '..\..\libraries\dduce\Source\Factories\DDuce.Factories.VirtualTrees.pas',
   DDuce.Factories.zObjInspector in '..\..\libraries\dduce\Source\Factories\DDuce.Factories.zObjInspector.pas',
-  DataGrabber.Data in 'DataGrabber.Data.pas' {dmDataFireDAC: TDataModule},
+  DataGrabber.Data in 'DataGrabber.Data.pas' {dmData: TDataModule},
   DataGrabber.ConnectionSettings in 'DataGrabber.ConnectionSettings.pas',
   Vcl.Themes,
   Vcl.Styles,
@@ -225,7 +224,6 @@ begin
   ReportMemoryLeaksOnShutdown := True;
   Application.Initialize;
   Application.Title := 'DataGrabber 2';
-  RegisterServices;
   Application.CreateForm(TfrmMain, frmMain);
   Application.Run;
 end.

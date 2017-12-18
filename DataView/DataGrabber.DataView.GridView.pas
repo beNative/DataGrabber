@@ -36,22 +36,20 @@ type
 
     procedure dscMainStateChange(Sender: TObject);
     procedure dscMainDataChange(Sender: TObject; Field: TField);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
 
   private
-    FSettings : IDataViewSettings;
     FData     : IData;
     FGrid     : TDBGridView;
     FDataSet  : TDataSet;
+    FSettings : IDataViewSettings;
 
     {$REGION 'property access methods'}
     function GetName: string;
     function GetDataSet: TDataSet;
-    procedure SetDataSet(const Value: TDataSet);
     function GetRecordCount: Integer;
     function GetData: IData;
-    procedure SetData(const Value: IData);
     function GetSettings: IDataViewSettings;
-    procedure SetSettings(const Value: IDataViewSettings);
     function GetPopupMenu: TPopupMenu; reintroduce;
     procedure SetPopupMenu(const Value: TPopupMenu);
     function GetGridType: string;
@@ -132,7 +130,12 @@ type
     );
 
   public
-    constructor Create; reintroduce;
+    constructor Create(
+      AOwner    : TComponent;
+      ASettings : IDataViewSettings;
+      AData     : IData;
+      ADataSet  : TDataSet = nil
+    ); reintroduce; virtual;
     procedure AfterConstruction; override;
     procedure BeforeDestruction; override;
 
@@ -144,6 +147,7 @@ type
     procedure AutoSizeColumns;
     procedure Copy;
     procedure Inspect;
+    function IsActiveDataView: Boolean;
 
     function SelectionToCommaText(
       AQuoteItems: Boolean = True
@@ -165,13 +169,13 @@ type
     procedure UpdateView;
 
     property DataSet: TDataSet
-       read GetDataSet write SetDataSet;
+       read GetDataSet;
 
     property Data: IData
-      read GetData write SetData;
+      read GetData;
 
     property Settings: IDataViewSettings
-      read GetSettings write SetSettings;
+      read GetSettings;
 
     property RecordCount: Integer
        read GetRecordCount;
@@ -188,9 +192,11 @@ implementation
 {$R *.dfm}
 
 uses
-  System.Math,
+  System.Math, System.UITypes,
 
-  DDuce.ObjectInspector.zObjectInspector, DDuce.Logger;
+  DDuce.ObjectInspector.zObjectInspector, DDuce.Logger,
+
+  DataGrabber.Utils;
 
 {$REGION 'construction and destruction'}
 procedure TfrmGridView.AfterConstruction;
@@ -237,12 +243,9 @@ begin
   FGrid.OnMouseWheelDown    := FGridMouseWheelDown;
   FGrid.OnRowMultiSelect    := FGridRowMultiSelect;
   FGrid.OnClearMultiSelect  := FGridClearMultiSelect;
+  UpdateView;
 end;
 
-constructor TfrmGridView.Create;
-begin
-  inherited Create(Application);
-end;
 
 procedure TfrmGridView.BeforeDestruction;
 begin
@@ -285,43 +288,14 @@ begin
   Result := FSettings;
 end;
 
-procedure TfrmGridView.SetSettings(const Value: IDataViewSettings);
-begin
-  FSettings := Value;
-end;
-
 function TfrmGridView.GetDataSet: TDataSet;
 begin
   Result := FDataSet;
 end;
 
-procedure TfrmGridView.SetDataSet(const Value: TDataSet);
-begin
-  if Value <> DataSet then
-  begin
-    FDataSet := Value;
-    dscMain.DataSet := FDataSet;
-    UpdateView;
-  end;
-end;
-
 function TfrmGridView.GetData: IData;
 begin
   Result := FData;
-end;
-
-procedure TfrmGridView.SetData(const Value: IData);
-begin
-  if Value <> Data then
-  begin
-    if Assigned(Data) then
-    begin
-      Data.OnAfterExecute.Remove(DataAfterExecute);
-    end;
-    FData := Value;
-    Data.OnAfterExecute.Add(DataAfterExecute);
-    UpdateView;
-  end;
 end;
 
 function TfrmGridView.GetRecordCount: Integer;
@@ -530,9 +504,19 @@ begin
 //    Abort;
 //  end;
 end;
+procedure TfrmGridView.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+  Action := caFree;
+end;
+
 {$ENDREGION}
 
 {$REGION 'private methods'}
+function TfrmGridView.IsActiveDataView: Boolean;
+begin
+  Result := ContainsFocus(Self);
+end;
+
 function TfrmGridView.IsCellReadOnly(const ACell: TGridCell): Boolean;
 begin
   Result := False;
@@ -606,11 +590,25 @@ end;
 procedure TfrmGridView.AutoSizeColumns;
 begin
   FGrid.AutoSizeCols;
+  FGrid.Invalidate;
 end;
 
 procedure TfrmGridView.Copy;
 begin
 // TODO
+end;
+
+constructor TfrmGridView.Create(AOwner: TComponent;
+  ASettings: IDataViewSettings; AData: IData; ADataSet: TDataSet);
+begin
+  inherited Create(AOwner);
+  FSettings := ASettings;
+  FData     := AData;
+  if Assigned(ADataSet) then
+    FDataSet := ADataSet
+  else
+    FDataSet := FData.DataSet;
+  dscMain.DataSet := FDataSet;
 end;
 
 procedure TfrmGridView.BeginUpdate;

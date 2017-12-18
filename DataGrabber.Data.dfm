@@ -1,4 +1,4 @@
-object dmDataFireDAC: TdmDataFireDAC
+object dmData: TdmData
   OldCreateOrder = False
   Height = 88
   Width = 294

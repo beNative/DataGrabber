@@ -45,111 +45,111 @@ type
 type
   TfrmSettingsDialog = class(TForm)
     {$REGION 'designer controls'}
-    aclMain                        : TActionList;
-    actAdd                         : TAction;
-    actApply                       : TAction;
-    actCancel                      : TAction;
-    actClose                       : TAction;
-    actConnectionString            : TAction;
-    actDelete                      : TAction;
-    actDuplicate                   : TAction;
-    actGridlinesBoth               : TAction;
-    actGridlinesHorizontal         : TAction;
-    actGridlinesNone               : TAction;
-    actGridlinesVertical           : TAction;
-    actMoveDown                    : TAction;
-    actMoveUp                      : TAction;
-    btn1                           : TToolButton;
-    btn2                           : TToolButton;
-    btnAdd                         : TToolButton;
-    btnApply                       : TButton;
-    btnBooleanColor                : TKColorButton;
-    btnCancel                      : TButton;
-    btnClose                       : TButton;
-    btnConnectionString            : TButton;
-    btnDateColor                   : TKColorButton;
-    btnDateTimeColor               : TKColorButton;
-    btnDelete                      : TToolButton;
-    btnDuplicate                   : TToolButton;
-    btnFloatColor                  : TKColorButton;
-    btnGridlinesAll                : TToolButton;
-    btnGridlinesHorizontal         : TToolButton;
-    btnGridlinesNone               : TToolButton;
-    btnGridlinesVertical           : TToolButton;
-    btnIntegerColor                : TKColorButton;
-    btnMemoColor                   : TKColorButton;
-    btnMoveDown                    : TToolButton;
-    btnMoveUp                      : TToolButton;
-    btnNullColor                   : TKColorButton;
-    btnProfileColor                : TKColorButton;
-    btnStringColor                 : TKColorButton;
-    btnTimeColor                   : TKColorButton;
-    cbxDrivers                     : TComboBox;
-    chkFetchOnDemand               : TCheckBox;
-    chkGridCellColoringEnabled     : TCheckBox;
-    chkSetAsDefault                : TCheckBox;
-    dlgOpenFile                    : TOpenDialog;
-    edtCatalog                     : TButtonedEdit;
-    edtDatabase                    : TButtonedEdit;
-    edtPacketRecords               : TEdit;
-    edtProfileName                 : TLabeledEdit;
-    grpCellBackgroundColoring      : TGroupBox;
-    grpClientSettings              : TGroupBox;
-    grpConnectionSettings          : TGroupBox;
-    grpGridLines                   : TGroupBox;
-    grpProfileSettings             : TGroupBox;
-    imlMain                        : TImageList;
-    lblBoolean                     : TLabel;
-    lblCatalog                     : TLabel;
-    lblDatabase                    : TLabel;
-    lblDates                       : TLabel;
-    lblDateTimes                   : TLabel;
-    lblDriver                      : TLabel;
-    lblFloats                      : TLabel;
-    lblIntegers                    : TLabel;
-    lblMemo                        : TLabel;
-    lblNULL                        : TLabel;
-    lblPacketrecords               : TLabel;
-    lblProfileColor                : TLabel;
-    lblString                      : TLabel;
-    lblTimes                       : TLabel;
-    pgcConnectionProfile           : TPageControl;
-    pgcMain                        : TPageControl;
-    pnlConnectionProfileDetail     : TPanel;
-    pnlConnectionProfilesList      : TPanel;
-    pnlGridTypeColoring            : TGridPanel;
-    rgpGridTypes                   : TRadioGroup;
-    splVertical                    : TSplitter;
-    tlbGridlines: TToolBar;
-    tlbConnectionProfiles          : TToolBar;
-    tsAdvanced                     : TTabSheet;
-    tsBasic                        : TTabSheet;
-    tsConnectionProfiles           : TTabSheet;
-    tsDisplay                      : TTabSheet;
-    tsSettings                     : TTabSheet;
-    actTestConnection: TAction;
-    btnTestConnection: TButton;
-    grp1: TGroupBox;
-    chkOSAuthent: TCheckBox;
-    pnlLogin: TGridPanel;
-    edtUserName: TEdit;
-    lblPassword: TLabel;
-    edtPassword: TEdit;
-    lblUserName: TLabel;
-    actOpenSettingsFileLocation: TAction;
-    btnOpenSettingsFileLocation: TButton;
-    chkAutoReconnect: TCheckBox;
-    chkMultipleResultSets: TCheckBox;
-    chkReadOnlyResultSets: TCheckBox;
-    chkDisconnectedMode: TCheckBox;
-    grpResultSetDisplay: TGroupBox;
-    tlbDisplayMultipleResultSets: TToolBar;
-    btnactCnPrefixWizard: TToolButton;
-    btnactCnPrefixWizard1: TToolButton;
-    btnactCnPrefixWizard2: TToolButton;
-    actMRSOnSeperatePages: TAction;
-    actMRSStackedHorizontally: TAction;
-    actMRSStackedVertically: TAction;
+    aclMain                      : TActionList;
+    actAdd                       : TAction;
+    actApply                     : TAction;
+    actCancel                    : TAction;
+    actClose                     : TAction;
+    actConnectionString          : TAction;
+    actDelete                    : TAction;
+    actDuplicate                 : TAction;
+    actGridlinesBoth             : TAction;
+    actGridlinesHorizontal       : TAction;
+    actGridlinesNone             : TAction;
+    actGridlinesVertical         : TAction;
+    actMoveDown                  : TAction;
+    actMoveUp                    : TAction;
+    btn1                         : TToolButton;
+    btn2                         : TToolButton;
+    btnAdd                       : TToolButton;
+    btnApply                     : TButton;
+    btnBooleanColor              : TKColorButton;
+    btnCancel                    : TButton;
+    btnClose                     : TButton;
+    btnConnectionString          : TButton;
+    btnDateColor                 : TKColorButton;
+    btnDateTimeColor             : TKColorButton;
+    btnDelete                    : TToolButton;
+    btnDuplicate                 : TToolButton;
+    btnFloatColor                : TKColorButton;
+    btnGridlinesAll              : TToolButton;
+    btnGridlinesHorizontal       : TToolButton;
+    btnGridlinesNone             : TToolButton;
+    btnGridlinesVertical         : TToolButton;
+    btnIntegerColor              : TKColorButton;
+    btnMemoColor                 : TKColorButton;
+    btnMoveDown                  : TToolButton;
+    btnMoveUp                    : TToolButton;
+    btnNullColor                 : TKColorButton;
+    btnProfileColor              : TKColorButton;
+    btnStringColor               : TKColorButton;
+    btnTimeColor                 : TKColorButton;
+    cbxDrivers                   : TComboBox;
+    chkFetchOnDemand             : TCheckBox;
+    chkGridCellColoringEnabled   : TCheckBox;
+    chkSetAsDefault              : TCheckBox;
+    dlgOpenFile                  : TOpenDialog;
+    edtCatalog                   : TButtonedEdit;
+    edtDatabase                  : TButtonedEdit;
+    edtPacketRecords             : TEdit;
+    edtProfileName               : TLabeledEdit;
+    grpCellBackgroundColoring    : TGroupBox;
+    grpClientSettings            : TGroupBox;
+    grpConnectionSettings        : TGroupBox;
+    grpGridLines                 : TGroupBox;
+    grpProfileSettings           : TGroupBox;
+    imlMain                      : TImageList;
+    lblBoolean                   : TLabel;
+    lblCatalog                   : TLabel;
+    lblDatabase                  : TLabel;
+    lblDates                     : TLabel;
+    lblDateTimes                 : TLabel;
+    lblDriver                    : TLabel;
+    lblFloats                    : TLabel;
+    lblIntegers                  : TLabel;
+    lblMemo                      : TLabel;
+    lblNULL                      : TLabel;
+    lblPacketrecords             : TLabel;
+    lblProfileColor              : TLabel;
+    lblString                    : TLabel;
+    lblTimes                     : TLabel;
+    pgcConnectionProfile         : TPageControl;
+    pgcMain                      : TPageControl;
+    pnlConnectionProfileDetail   : TPanel;
+    pnlConnectionProfilesList    : TPanel;
+    pnlGridTypeColoring          : TGridPanel;
+    rgpGridTypes                 : TRadioGroup;
+    splVertical                  : TSplitter;
+    tlbGridlines                 : TToolBar;
+    tlbConnectionProfiles        : TToolBar;
+    tsAdvanced                   : TTabSheet;
+    tsBasic                      : TTabSheet;
+    tsConnectionProfiles         : TTabSheet;
+    tsDisplay                    : TTabSheet;
+    tsSettings                   : TTabSheet;
+    actTestConnection            : TAction;
+    btnTestConnection            : TButton;
+    grp1                         : TGroupBox;
+    chkOSAuthent                 : TCheckBox;
+    pnlLogin                     : TGridPanel;
+    edtUserName                  : TEdit;
+    lblPassword                  : TLabel;
+    edtPassword                  : TEdit;
+    lblUserName                  : TLabel;
+    actOpenSettingsFileLocation  : TAction;
+    btnOpenSettingsFileLocation  : TButton;
+    chkAutoReconnect             : TCheckBox;
+    chkMultipleResultSets        : TCheckBox;
+    chkReadOnlyResultSets        : TCheckBox;
+    chkDisconnectedMode          : TCheckBox;
+    grpResultSetDisplay          : TGroupBox;
+    tlbDisplayMultipleResultSets : TToolBar;
+    btnMRSAsMultipleTabs         : TToolButton;
+    btnMRSHorizontally           : TToolButton;
+    btnMRSVertically             : TToolButton;
+    actMRSAsMultipleTabs         : TAction;
+    actMRSHorizontally           : TAction;
+    actMRSVertically             : TAction;
     {$ENDREGION}
 
     {$REGION 'action handlers'}
@@ -168,6 +168,9 @@ type
     procedure actMoveUpExecute(Sender: TObject);
     procedure actOpenSettingsFileLocationExecute(Sender: TObject);
     procedure actTestConnectionExecute(Sender: TObject);
+    procedure actMRSAsMultipleTabsExecute(Sender: TObject);
+    procedure actMRSHorizontallyExecute(Sender: TObject);
+    procedure actMRSVerticallyExecute(Sender: TObject);
     {$ENDREGION}
 
     {$REGION 'event handlers'}
@@ -221,10 +224,8 @@ type
     procedure tsSettingsEnter(Sender: TObject);
     procedure chkMultipleResultSetsClick(Sender: TObject);
     procedure chkDisconnectedModeClick(Sender: TObject);
-    procedure actMRSOnSeperatePagesExecute(Sender: TObject);
-    procedure actMRSStackedHorizontallyExecute(Sender: TObject);
-    procedure actMRSStackedVerticallyExecute(Sender: TObject);
     {$ENDREGION}
+
   private
     FEditorSettings      : IEditorSettings;
     FEditor              : IEditorView;
@@ -303,6 +304,7 @@ end;
 {$REGION 'construction and destruction'}
 constructor TfrmSettingsDialog.Create(AOwner: TComponent; ASettings: ISettings);
 begin
+  Guard.CheckNotNull(ASettings, 'ASettings');
   inherited Create(AOwner);
   FSettings := ASettings;
 end;
@@ -476,17 +478,17 @@ begin
   SelectNode(FVSTProfiles, N - 1);
 end;
 
-procedure TfrmSettingsDialog.actMRSOnSeperatePagesExecute(Sender: TObject);
+procedure TfrmSettingsDialog.actMRSAsMultipleTabsExecute(Sender: TObject);
 begin
   FSettings.ResultDisplayLayout := TResultDisplayLayout.Tabbed;
 end;
 
-procedure TfrmSettingsDialog.actMRSStackedHorizontallyExecute(Sender: TObject);
+procedure TfrmSettingsDialog.actMRSHorizontallyExecute(Sender: TObject);
 begin
   FSettings.ResultDisplayLayout := TResultDisplayLayout.Horizontal;
 end;
 
-procedure TfrmSettingsDialog.actMRSStackedVerticallyExecute(Sender: TObject);
+procedure TfrmSettingsDialog.actMRSVerticallyExecute(Sender: TObject);
 begin
   FSettings.ResultDisplayLayout := TResultDisplayLayout.Vertical;
 end;
@@ -752,6 +754,7 @@ begin
   btnStringColor.DlgColor   := FSettings.DataTypeColors[dtString];
   btnNULLColor.DlgColor     := FSettings.DataTypeColors[dtNULL];
   btnTimeColor.DlgColor     := FSettings.DataTypeColors[dtTime];
+
   if FSettings.ShowHorizontalGridLines then
   begin
     if FSettings.ShowVerticalGridLines then
@@ -768,9 +771,12 @@ begin
   end;
 
   case FSettings.ResultDisplayLayout of
-    TResultDisplayLayout.Tabbed     : actMRSOnSeperatePages.Checked     := True;
-    TResultDisplayLayout.Horizontal : actMRSStackedHorizontally.Checked := True;
-    TResultDisplayLayout.Vertical   : actMRSStackedVertically.Checked   := True;
+    TResultDisplayLayout.Tabbed:
+      actMRSAsMultipleTabs.Checked := True;
+    TResultDisplayLayout.Horizontal:
+      actMRSHorizontally.Checked   := True;
+    TResultDisplayLayout.Vertical:
+      actMRSVertically.Checked     := True;
   end;
   chkGridCellColoringEnabled.Checked := FSettings.GridCellColoring;
 

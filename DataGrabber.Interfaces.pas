@@ -26,9 +26,7 @@ uses
 
   Spring, Spring.Collections,
 
-  BCEditor.Editor.Base,
-
-  DDuce.DynamicRecord,
+//  DDuce.DynamicRecord,
 
   DataGrabber.ConnectionProfiles, DataGrabber.FormSettings,
   DataGrabber.ConnectionSettings;
@@ -62,6 +60,7 @@ const
     $00FFEBD7,
     clSilver
   );
+
   WHERE_IN = 'where' + #13#10 + '  %s in (%s)';
 
 type
@@ -72,9 +71,7 @@ type
     {$REGION 'property access methods'}
     function GetDataSet : TDataSet;
     function GetRecordCount : Integer;
-    function GetExecuted: Boolean;
     function GetActive: Boolean;
-    procedure SetExecuted(const Value: Boolean);
     function GetSQL: string;
     procedure SetSQL(const Value: string);
     function GetCanModify: Boolean;
@@ -90,6 +87,16 @@ type
 
     procedure Execute;
 
+    procedure SaveToFile(
+      const AFileName : string = '';
+      AFormat         : TFDStorageFormat = sfAuto
+    );
+
+    procedure LoadFromFile(
+      const AFileName : string = '';
+      AFormat         : TFDStorageFormat = sfAuto
+    );
+
     property SQL: string
       read GetSQL write SetSQL;
 
@@ -99,23 +106,20 @@ type
     property Connection: TFDConnection
       read GetConnection;
 
-    property Items[AIndex: Integer]: TFDMemTable
-      read GetItem; default;
-
     property Active: Boolean
       read GetActive;
 
     property CanModify: Boolean
       read GetCanModify;
 
-    property Executed: Boolean
-      read GetExecuted write SetExecuted;
-
     property RecordCount: Integer
       read GetRecordCount;
 
     property ConnectionSettings: TConnectionSettings
       read GetConnectionSettings;
+
+    property Items[AIndex: Integer]: TFDMemTable
+      read GetItem; default;
 
     property DataSetCount: Integer
       read GetDataSetCount;
@@ -128,19 +132,6 @@ type
 
     property OnBeforeExecute: IEvent<TNotifyEvent>
       read GetOnBeforeExecute;
-  end;
-
-  IDataPersistable = interface
-  ['{18B39929-7F40-4ED0-BF93-C6191CCCFF1E}']
-    procedure SaveToFile(
-      const AFileName : string = '';
-      AFormat         : TFDStorageFormat = sfAuto
-    );
-
-    procedure LoadFromFile(
-      const AFileName : string = '';
-      AFormat         : TFDStorageFormat = sfAuto
-    );
   end;
 
   IDataViewSettings = interface
@@ -179,23 +170,24 @@ type
     function GetName: string;
     function GetGridType: string;
     function GetSettings: IDataViewSettings;
-    procedure SetSettings(const Value: IDataViewSettings);
     function GetData: IData;
-    procedure SetData(const Value: IData);
     function GetRecordCount: Integer;
     function GetPopupMenu: TPopupMenu;
     procedure SetPopupMenu(const Value: TPopupMenu);
     function GetDataSet: TDataSet;
-    procedure SetDataSet(const Value: TDataSet);
     {$ENDREGION}
 
+    procedure AssignParent(AParent: TWinControl);
     procedure UpdateView;
+    procedure HideSelectedColumns;
+    function IsActiveDataView: Boolean;
+    procedure Inspect;
+    procedure AutoSizeColumns;
+    procedure Copy;
+    procedure Close;
 
-    property Name: string
-      read GetName;
-
-    property GridType: string
-      read GetGridType;
+    procedure BeginUpdate;
+    procedure EndUpdate;
 
     function SelectionToCommaText(AQuoteItems: Boolean = True): string;
     function SelectionToDelimitedTable(
@@ -205,51 +197,46 @@ type
     function SelectionToTextTable(AIncludeHeader: Boolean = False): string;
     function SelectionToWikiTable(AIncludeHeader: Boolean = False): string;
     function SelectionToFields(AQuoteItems: Boolean = True): string;
-    procedure AutoSizeColumns;
-    procedure Copy;
 
-    procedure HideSelectedColumns;
+    property Name: string
+      read GetName;
 
-    procedure BeginUpdate;
-    procedure EndUpdate;
-
-    procedure Inspect;
-
-    procedure AssignParent(AParent: TWinControl);
+    property GridType: string
+      read GetGridType;
 
     property DataSet: TDataSet
-      read GetDataSet write SetDataSet;
+      read GetDataSet;
 
     property Data: IData
-      read GetData write SetData;
+      read GetData;
 
     property RecordCount: Integer
       read GetRecordCount;
 
     property Settings: IDataViewSettings
-      read GetSettings write SetSettings;
+      read GetSettings;
 
     property PopupMenu: TPopupMenu
       read GetPopupMenu write SetPopupMenu;
   end;
 
-  IDisplayData = interface
-  ['{8BC40D7C-00EC-469D-B8A1-675A52A8F2BF}']
-    {$REGION 'property access methods'}
-    function GetDisplayValues : IDynamicRecord;
-    function GetDisplayLabels : IDynamicRecord;
-    {$ENDREGION}
-
-    function IsLookupField(const AFieldName: string): Boolean;
-    function IsCheckBoxField(const AFieldName: string): Boolean;
-    function IsRequiredField(const AFieldName: string): Boolean;
-
-    property DisplayLabels: IDynamicRecord
-      read GetDisplayLabels;
-
-    property DisplayValues: IDynamicRecord
-      read GetDisplayValues;
-  end;
+//  IDisplayData = interface
+//  ['{8BC40D7C-00EC-469D-B8A1-675A52A8F2BF}']
+//    {$REGION 'property access methods'}
+//    function GetDisplayValues : IDynamicRecord;
+//    function GetDisplayLabels : IDynamicRecord;
+//    {$ENDREGION}
+//
+//    function IsLookupField(const AFieldName: string): Boolean;
+//    function IsCheckBoxField(const AFieldName: string): Boolean;
+//    function IsRequiredField(const AFieldName: string): Boolean;
+//
+//    property DisplayLabels: IDynamicRecord
+//      read GetDisplayLabels;
+//
+//    property DisplayValues: IDynamicRecord
+//      read GetDisplayValues;
+//  end;
 
   ISettings = interface
   ['{C6E48393-6FBA-451B-A565-921F11E433F0}']
@@ -326,20 +313,22 @@ type
 
   IConnectionView = interface
   ['{52F9CB1D-68C8-4E74-B3B7-0A9DDF93A818}']
-    procedure Copy;
-    procedure ApplySettings;
-
+    {$REGION 'property access methods'}
     function GetForm: TForm;
     function GetActiveConnectionProfile: TConnectionProfile;
     function GetActiveDataView: IDataView;
     function GetEditorView: IEditorView;
-    function GetActiveData: IData;
+    function GetData: IData;
+    {$ENDREGION}
+
+    procedure Copy;
+    procedure ApplySettings;
 
     property ActiveDataView: IDataView
       read GetActiveDataView;
 
-    property ActiveData: IData
-      read GetActiveData;
+    property Data: IData
+      read GetData;
 
     property EditorView: IEditorView
       read GetEditorView;
@@ -370,6 +359,7 @@ type
     function AddConnectionView: IConnectionView;
     function DeleteConnectionView(AIndex: Integer): Boolean; overload;
     function DeleteConnectionView(AConnectionView: IConnectionView): Boolean; overload;
+
     procedure UpdateActions;
 
     property ActiveConnectionView: IConnectionView
@@ -411,11 +401,17 @@ type
     function GetColor: TColor;
     procedure SetColor(const Value: TColor);
     function GetEditorFocused: Boolean;
+    function GetPopupMenu: TPopupMenu;
+    procedure SetPopupMenu(const Value: TPopupMenu);
     {$ENDREGION}
 
+    procedure AssignParent(AParent: TWinControl);
     procedure FillCompletionLists(ATables, AAttributes : TStrings);
     procedure CopyToClipboard;
     procedure SetFocus;
+
+    property PopupMenu: TPopupMenu
+      read GetPopupMenu write SetPopupMenu;
 
     property EditorFocused: Boolean
       read GetEditorFocused;
@@ -425,10 +421,6 @@ type
 
     property Text: string
       read GetText write SetText;
-  end;
-
-  ISelection = interface
-  ['{121A5480-7187-4A0C-BCDD-019C6FC635A4}']
   end;
 
   IGroupable = interface

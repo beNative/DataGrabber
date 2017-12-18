@@ -35,13 +35,10 @@ uses
 
 {
   TODO:
-    - autosize form (to data)
-    - testing !!!
-    - multiple statements => multiple resultsets
     - log executed statements to a local database
     - Use bindings in settings
     - Select <selected fields?> Where in
-    - Smart grouping (detect common field prefixes/suffixes (vb. Date, ...Id,)
+    - Smart grouping (detect common field prefixes/suffixes (eg. Date, ...Id,)
     - Working set of tables (cache meta info and links and make them
       customizable as a profile setting)
     - Statement builder, smart joining
@@ -179,8 +176,10 @@ begin
   inherited AfterConstruction;
   Logger.Channels.Add(TLoggerFactories.CreateWinIPCChannel);
   Logger.Clear;
-  FManager  := GlobalContainer.Resolve<IConnectionViewManager>;
-  FSettings := GlobalContainer.Resolve<ISettings>;
+//  FManager  := GlobalContainer.Resolve<IConnectionViewManager>;
+//  FSettings := GlobalContainer.Resolve<ISettings>;
+  FSettings := TDataGrabberFactories.CreateSettings(Self);
+  FManager  := TDataGrabberFactories.CreateManager(Self, FSettings);
   FSettings.FormSettings.AssignTo(Self);
   AddConnectionView;
   tlbMain.Images := FManager.ActionList.Images;
@@ -190,6 +189,7 @@ end;
 
 procedure TfrmMain.BeforeDestruction;
 begin
+  FSettings.FormSettings.Assign(Self);
   FManager  := nil;
   FSettings := nil;
   inherited BeforeDestruction;
@@ -365,7 +365,7 @@ end;
 
 procedure TfrmMain.InitializeActions;
 begin
-  AddToolbarButtons(tlbMain, Manager);
+  TDataGrabberFactories.AddToolbarButtons(tlbMain, Manager);
 end;
 {$ENDREGION}
 

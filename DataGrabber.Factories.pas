@@ -19,41 +19,86 @@ unit DataGrabber.Factories;
 interface
 
 uses
-  System.Classes, Vcl.ComCtrls, Vcl.Controls,
+  System.Classes,
+  Vcl.ComCtrls, Vcl.Controls,
+  Data.DB,
 
-  DDuce.Components.PropertyInspector,
+  DataGrabber.Interfaces, DataGrabber.ConnectionSettings;
 
-  DataGrabber.Interfaces;
+type
+  TDataGrabberFactories = class
+  public
+    class function CreateSettings(
+      AOwner : TComponent
+    ): ISettings;
 
-procedure AddToolbarButtons(
-  AToolBar : TToolbar;
-  AManager : IConnectionViewManager
-);
+    class function CreateManager(
+      AOwner    : TComponent;
+      ASettings : ISettings = nil
+     ): IConnectionViewManager;
 
-function CreateInspector(
-  AOwner  : TComponent;
-  AParent : TWinControl;
-  AObject : TPersistent = nil
-): TPropertyInspector;
+    class function CreateData(
+      AOwner    : TComponent;
+      ASettings : TConnectionSettings
+    ): IData;
+
+    class function CreateConnectionView(
+      AOwner   : TComponent;
+      AManager : IConnectionViewManager;
+      AData    : IData
+    ): IConnectionView;
+
+    class function CreateEditorView(
+      AOwner   : TComponent;
+      AManager : IConnectionViewManager
+    ): IEditorView;
+
+    class function CreateDataView(
+      AOwner          : TComponent;
+      ASettings       : IDataViewSettings;
+      const AGridType : string;
+      AData           : IData;
+      ADataSet        : TDataSet = nil
+    ): IDataView;
+
+    class procedure AddToolbarButtons(
+      AToolBar : TToolbar;
+      AManager : IConnectionViewManager
+    );
+  end;
+
+
 
 implementation
 
 uses
-  Vcl.Forms;
+  Vcl.Forms,
 
-procedure AddActionButton(AParent: TToolBar; AAction: TBasicAction);
-var
-  TB: TToolButton;
+  DataGrabber.ConnectionViewManager, DataGrabber.Settings,
+  DataGrabber.EditorView, DataGrabber.Data, DataGrabber.ConnectionView,
+  DataGrabber.DataView.cxGrid, DataGrabber.DataView.GridView,
+  DataGrabber.DataView.KGrid;
+
+{$REGION 'TDataGrabberFactories'}
+class function TDataGrabberFactories.CreateSettings(AOwner: TComponent): ISettings;
 begin
-  TB := TToolButton.Create(AParent.Owner);
-  TB.Parent := AParent;
-  if not Assigned(AAction) then
-    TB.Style := tbsSeparator
-  else
-    TB.Action := AAction;
+  Result := TSettings.Create(AOwner);
 end;
 
-procedure AddToolbarButtons(AToolBar: TToolbar; AManager: IConnectionViewManager);
+class procedure TDataGrabberFactories.AddToolbarButtons(AToolBar: TToolbar;
+  AManager: IConnectionViewManager);
+
+  procedure AddActionButton(AParent: TToolBar; AAction: TBasicAction);
+  var
+    TB: TToolButton;
+  begin
+    TB := TToolButton.Create(AParent.Owner);
+    TB.Parent := AParent;
+    if not Assigned(AAction) then
+      TB.Style := tbsSeparator
+    else
+      TB.Action := AAction;
+  end;
 
   procedure AddButton(const AActionName: string);
   begin
@@ -77,24 +122,46 @@ begin
   AddButton('actExecute');
 end;
 
-function CreateInspector(AOwner : TComponent; AParent : TWinControl;
-  AObject : TPersistent): TPropertyInspector;
-var
-  PI : TPropertyInspector;
+class function TDataGrabberFactories.CreateConnectionView(AOwner: TComponent;
+  AManager: IConnectionViewManager; AData: IData): IConnectionView;
 begin
-  PI                  := TPropertyInspector.Create(AOwner);
-  PI.AlignWithMargins := True;
-  PI.Parent           := AParent;
-  PI.BorderStyle      := bsSingle;
-  PI.PropKinds        := PI.PropKinds + [pkReadOnly];
-  PI.Align            := alClient;
-  PI.Splitter         := PI.Width div 2;
-  if Assigned(AObject) then
-  begin
-    PI.Add(AObject);
-    PI.UpdateItems;
-  end;
-  Result := PI;
+  Result := TfrmConnectionView.Create(AOwner, AManager, AData);
 end;
 
+class function TDataGrabberFactories.CreateData(AOwner: TComponent;
+  ASettings: TConnectionSettings): IData;
+begin
+  Result := TdmData.Create(AOwner, ASettings);
+end;
+
+class function TDataGrabberFactories.CreateDataView(AOwner: TComponent;
+  ASettings: IDataViewSettings; const AGridType: string; AData: IData;
+  ADataSet: TDataSet): IDataView;
+begin
+  if AGridType = 'cxGrid' then
+  begin
+    Result := TfrmcxGrid.Create(AOwner, ASettings, AData, ADataSet);
+  end
+  else if AGridType = 'KGrid' then
+  begin
+    Result := TfrmKGrid.Create(AOwner, ASettings, AData, ADataSet);
+  end
+  else
+  begin
+    Result := TfrmGridView.Create(AOwner, ASettings, AData, ADataSet);
+  end;
+end;
+
+class function TDataGrabberFactories.CreateEditorView(AOwner: TComponent;
+  AManager: IConnectionViewManager): IEditorView;
+begin
+  Result := TfrmEditorView.Create(AOwner, AManager);
+end;
+
+class function TDataGrabberFactories.CreateManager(AOwner: TComponent;
+  ASettings: ISettings): IConnectionViewManager;
+begin
+  Result := TdmConnectionViewManager.Create(AOwner, ASettings);
+end;
+{$ENDREGION}
 end.

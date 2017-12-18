@@ -19,7 +19,7 @@ unit DataGrabber.DataView.cxGrid;
 interface
 
 {$I DataGrabber.inc}
-//{$IFDEF DEVEXPRESS}
+
 uses
   Winapi.Windows, Winapi.Messages,
   System.SysUtils, System.Variants, System.Classes, System.Generics.Collections,
@@ -61,6 +61,10 @@ type
       AViewInfo : TcxGridTableDataCellViewInfo;
       var ADone : Boolean
     );
+    procedure FormClose(
+      Sender     : TObject;
+      var Action : TCloseAction
+    );
 
   private
     FSettings         : IDataViewSettings;
@@ -91,6 +95,7 @@ type
 
   protected
     procedure ApplyGridSettings;
+    function IsActiveDataView: Boolean;
 
     procedure CopySelectionToClipboard(
       AController    : TcxGridTableController;
@@ -119,6 +124,12 @@ type
     ): string; overload;
 
   public
+    constructor Create(
+      AOwner    : TComponent;
+      ASettings : IDataViewSettings;
+      AData     : IData;
+      ADataSet  : TDataSet = nil
+    ); reintroduce; virtual;
     procedure AfterConstruction; override;
     procedure BeforeDestruction; override;
 
@@ -175,20 +186,18 @@ type
     property GridType: string
       read GetGridType;
   end;
-//{$ENDIF}
 
 implementation
 
 {$R *.dfm}
 
-//{$IFDEF DEVEXPRESS}
 uses
-  System.StrUtils,
+  System.StrUtils, System.UITypes,
   Vcl.Clipbrd,
 
   cxGridDBDataDefinitions, cxGridCommon,
 
-  DDuce.ObjectInspector.zObjectInspector,
+  DDuce.ObjectInspector.zObjectInspector, DDuce.Logger,
 
   DataGrabber.Utils;
 
@@ -311,6 +320,11 @@ end;
 {$ENDREGION}
 
 {$REGION 'event handlers'}
+procedure TfrmcxGrid.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+  Action := caFree;
+end;
+
 procedure TfrmcxGrid.DataAfterExecute(Sender: TObject);
 begin
   UpdateView;
@@ -419,6 +433,20 @@ begin
   finally
     FreeAndNil(SL);
   end;
+end;
+
+constructor TfrmcxGrid.Create(AOwner: TComponent; ASettings: IDataViewSettings;
+  AData: IData; ADataSet: TDataSet);
+begin
+  inherited Create(AOwner);
+  FSettings := ASettings;
+  FData     := AData;
+  if Assigned(ADataSet) then
+    FDataSet := ADataSet
+  else
+    FDataSet := FData.DataSet;
+  dscMain.DataSet := FDataSet;
+  UpdateView;
 end;
 
 procedure TfrmcxGrid.EndUpdate;
@@ -674,7 +702,12 @@ end;
 
 procedure TfrmcxGrid.Inspect;
 begin
-  InspectComponent(tvwMain);
+  InspectObject(tvwMain);
+end;
+
+function TfrmcxGrid.IsActiveDataView: Boolean;
+begin
+  Result := ContainsFocus(Self);
 end;
 
 procedure TfrmcxGrid.MergeAllColumnCells(AActive: Boolean);
@@ -782,22 +815,23 @@ procedure TfrmcxGrid.ApplyGridSettings;
 var
   GL: TcxGridLines;
 begin
-  GL := glNone;
-  if FSettings.ShowHorizontalGridLines then
+  if Assigned(Settings) then
   begin
-    if FSettings.ShowVerticalGridLines then
-      GL := glBoth
-    else
-      GL := glHorizontal;
-  end
-  else if FSettings.ShowVerticalGridLines then
-  begin
-    GL := glVertical;
+    GL := glNone;
+    if FSettings.ShowHorizontalGridLines then
+    begin
+      if FSettings.ShowVerticalGridLines then
+        GL := glBoth
+      else
+        GL := glHorizontal;
+    end
+    else if FSettings.ShowVerticalGridLines then
+    begin
+      GL := glVertical;
+    end;
+    tvwMain.OptionsView.GridLines := GL;
   end;
-  tvwMain.OptionsView.GridLines := GL;
 end;
 {$ENDREGION}
-
-//{$ENDIF}
 
 end.

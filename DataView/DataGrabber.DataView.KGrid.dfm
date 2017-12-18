@@ -11,6 +11,7 @@ object frmKGrid: TfrmKGrid
   Font.Style = []
   OldCreateOrder = False
   ShowHint = True
+  OnClose = FormClose
   PixelsPerInch = 96
   TextHeight = 13
   object grdMain: TKDBGrid
@@ -19,6 +20,7 @@ object frmKGrid: TfrmKGrid
     Width = 430
     Height = 257
     Align = alClient
+    BorderStyle = bsNone
     DBOptions = [dboAutoMoveRecord, dboAutoSizeBooleanCells, dboColNamesToHeader, dboEntireTable, dboIndicateActiveRecord]
     ColCount = 1
     Columns = <

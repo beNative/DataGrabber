@@ -16,41 +16,58 @@
 
 unit DataGrabber.EditorView;
 
-{ Simple BCEditor-based SQL editor. }
+{ Simple TSynEdit based SQL editor. }
 
 interface
 
 uses
   Winapi.Windows, Winapi.Messages,
   System.SysUtils, System.Variants, System.Classes,
-  Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs,
+  Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.Menus,
 
-  BCEditor.Editor.Base, BCEditor.Editor,
+  SynEdit, SynEditHighlighter, SynHighlighterSQL, SynCompletionProposal,
+  SynEditMiscClasses,
 
   DataGrabber.Interfaces;
 
 type
   TfrmEditorView = class(TForm, IEditorView)
-  private
-    FEditor : TBCEditor;
+    synSQL  : TSynSQLSyn;
+    scpMain : TSynCompletionProposal;
 
+  private
+    FEditor  : TSynEdit;
+    FManager : IConnectionViewManager;
+
+  protected
+    {$REGION 'property access methods'}
     function GetText: string;
     procedure SetText(const Value: string);
     function GetColor: TColor;
     procedure SetColor(const Value: TColor);
     function GetEditorFocused: Boolean;
+    function GetPopupMenu: TPopupMenu; reintroduce;
+    procedure SetPopupMenu(const Value: TPopupMenu);
+    {$ENDREGION}
 
-  protected
     procedure CreateEditor;
 
   public
     procedure AfterConstruction; override;
-    constructor Create; reintroduce; virtual;
+    procedure BeforeDestruction; override;
+    constructor Create(
+      AOwner   : TComponent;
+      AManager : IConnectionViewManager
+    ); reintroduce; virtual;
 
+    procedure AssignParent(AParent: TWinControl);
     procedure CopyToClipboard;
     procedure FillCompletionLists(ATables, AAttributes : TStrings);
 
     procedure SetFocus; override;
+
+    property PopupMenu: TPopupMenu
+      read GetPopupMenu write SetPopupMenu;
 
     property EditorFocused: Boolean
       read GetEditorFocused;
@@ -65,7 +82,9 @@ type
 implementation
 
 uses
-  System.UITypes;
+  System.UITypes,
+
+  DDuce.ObjectInspector.zObjectInspector;
 
 {$R *.dfm}
 
@@ -73,9 +92,11 @@ type
   TScrollStyle = System.UITypes.TScrollStyle;
 
 {$REGION 'construction and destruction'}
-constructor TfrmEditorView.Create;
+constructor TfrmEditorView.Create(AOwner: TComponent;
+  AManager: IConnectionViewManager);
 begin
-  inherited Create(Application);
+  inherited Create(AOwner);
+  FManager := AManager;
 end;
 
 procedure TfrmEditorView.AfterConstruction;
@@ -83,22 +104,38 @@ begin
   inherited AfterConstruction;
   CreateEditor;
 end;
+
+procedure TfrmEditorView.BeforeDestruction;
+begin
+  FManager := nil;
+  inherited BeforeDestruction;
+end;
 {$ENDREGION}
 
 {$REGION 'property access methods'}
 function TfrmEditorView.GetColor: TColor;
 begin
-  Result := FEditor.BackgroundColor;
+  Result := FEditor.Color;
 end;
 
 procedure TfrmEditorView.SetColor(const Value: TColor);
 begin
-  FEditor.BackgroundColor := Value;
+  FEditor.Color := Value;
 end;
 
 function TfrmEditorView.GetEditorFocused: Boolean;
 begin
   Result := FEditor.Focused;
+end;
+
+function TfrmEditorView.GetPopupMenu: TPopupMenu;
+begin
+  Result := FEditor.PopupMenu;
+end;
+
+procedure TfrmEditorView.SetPopupMenu(const Value: TPopupMenu);
+begin
+  FEditor.PopupMenu := Value;
 end;
 
 function TfrmEditorView.GetText: string;
@@ -116,20 +153,44 @@ end;
 {$ENDREGION}
 
 {$REGION 'protected methods'}
+procedure TfrmEditorView.AssignParent(AParent: TWinControl);
+begin
+  Parent      := AParent;
+  BorderStyle := bsNone;
+  Align       := alClient;
+  Visible     := True;
+end;
+
 procedure TfrmEditorView.CreateEditor;
 begin
-  FEditor := TBCEditor.Create(Self);
-  FEditor.Parent := Self;
-  FEditor.Align := alClient;
+  FEditor := TSynEdit.Create(Self);
+  FEditor.Parent           := Self;
+  FEditor.Align            := alClient;
   FEditor.AlignWithMargins := False;
-  FEditor.BorderStyle := bsSingle;
-  FEditor.Directories.Colors := 'Colors';
-  FEditor.Directories.Highlighters := 'Highlighters';
-  FEditor.Highlighter.LoadFromFile('SQL - Standard' + '.json');
-  FEditor.Highlighter.Colors.LoadFromFile('tsColors' + '.json');
-  FEditor.CodeFolding.Visible := True;
-  FEditor.Font.Name := 'Consolas';
-  FEditor.Scroll.Bars := TScrollStyle.ssVertical;
+  FEditor.BorderStyle      := bsSingle;
+  FEditor.Font.Name        := 'Consolas';
+  FEditor.Highlighter      := synSQL;
+  FEditor.Options := [
+    eoAltSetsColumnMode,
+    eoAutoIndent,
+    eoDragDropEditing,
+    eoDropFiles,
+    eoEnhanceHomeKey,
+    eoEnhanceEndKey,
+    eoGroupUndo,
+    eoScrollPastEol,
+    eoShowScrollHint,
+    eoSmartTabDelete,
+    eoSmartTabs,
+    eoSpecialLineDefaultFg,
+    eoTabIndent,
+    eoTabsToSpaces,
+    eoTrimTrailingSpaces
+  ];
+  FEditor.ActiveLineColor := clYellow;
+  FEditor.WordWrap := True;
+  scpMain.Editor := FEditor;
+  //InspectComponent(FEditor);
 end;
 {$ENDREGION}
 

@@ -1,7 +1,7 @@
 object frmMain: TfrmMain
   Left = 731
   Top = 411
-  Caption = 'DataGrabber'
+  Caption = 'DataGrabber two'
   ClientHeight = 593
   ClientWidth = 1082
   Color = clBtnFace
@@ -243,7 +243,7 @@ object frmMain: TfrmMain
       Options.Display.AddButton.Offsets.Vertical = 10
       Options.Display.AddButton.Offsets.Horizontal = 2
       Options.Display.AddButton.Height = 14
-      Options.Display.AddButton.Width = 31
+      Options.Display.AddButton.Width = 40
       Options.Display.AddButton.ShowPlusSign = True
       Options.Display.AddButton.Visibility = avRightFloating
       Options.Display.AddButton.HorizontalOffsetFloating = -3
@@ -308,7 +308,7 @@ object frmMain: TfrmMain
       Options.Display.TabSpinners.Download.SweepAngle = 135
       Options.Display.TabSpinners.AnimationUpdateMS = 50
       Options.Display.TabSpinners.HideImagesWhenSpinnerVisible = True
-      Options.DragDrop.DragType = dtBetweenContainers
+      Options.DragDrop.DragType = dtWithinContainer
       Options.DragDrop.DragOutsideImageAlpha = 220
       Options.DragDrop.DragOutsideDistancePixels = 30
       Options.DragDrop.DragStartPixels = 2
@@ -337,10 +337,10 @@ object frmMain: TfrmMain
       Options.Animation.MovementAnimations.TabMove.EaseType = ttEaseOutExpo
       Options.Animation.MovementAnimations.TabMove.AnimationTimeMS = 500
       Options.Behaviour.BackgroundDblClickMaximiseRestoreForm = True
-      Options.Behaviour.BackgroundDragMovesForm = True
+      Options.Behaviour.BackgroundDragMovesForm = False
       Options.Behaviour.TabSmartDeleteResizing = True
       Options.Behaviour.TabSmartDeleteResizeCancelDelay = 700
-      Options.Behaviour.UseBuiltInPopupMenu = True
+      Options.Behaviour.UseBuiltInPopupMenu = False
       Options.Behaviour.TabRightClickSelect = True
       Options.Behaviour.ActivateNewTab = True
       Options.Behaviour.DebugMode = False
@@ -572,7 +572,7 @@ object frmMain: TfrmMain
     Left = 32
     Top = 72
     Bitmap = {
-      494C01010B000D00140010001000FFFFFFFF2110FFFFFFFFFFFFFFFF424D3600
+      494C01010B000D00200010001000FFFFFFFF2110FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000003000000001002000000000000030
       0000000000000000000000000000000000000000000000000000000000000000
       000000000000000000000B0B0B0C000000000000000000000000000000000000

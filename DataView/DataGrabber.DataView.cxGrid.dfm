@@ -11,6 +11,7 @@ object frmcxGrid: TfrmcxGrid
   Font.Name = 'Se'
   Font.Style = []
   OldCreateOrder = False
+  OnClose = FormClose
   PixelsPerInch = 96
   TextHeight = 14
   object grdMain: TcxGrid
@@ -21,6 +22,7 @@ object frmcxGrid: TfrmcxGrid
     Align = alClient
     BevelInner = bvNone
     BevelOuter = bvNone
+    BorderStyle = cxcbsNone
     Font.Charset = ANSI_CHARSET
     Font.Color = clWindowText
     Font.Height = -11

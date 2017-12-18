@@ -36,6 +36,46 @@ object frmConnectionView: TfrmConnectionView
     SplitterSize = 8
     Align = alClient
     TabOrder = 0
+    object pnlTop: TPanel
+      Left = 0
+      Top = 0
+      Width = 906
+      Height = 232
+      Align = alClient
+      BevelOuter = bvNone
+      TabOrder = 0
+      object splVertical: TSplitter
+        Left = 185
+        Top = 0
+        Width = 8
+        Height = 232
+      end
+      object pnlVST: TPanel
+        Left = 0
+        Top = 0
+        Width = 185
+        Height = 232
+        Align = alLeft
+        BevelOuter = bvNone
+        TabOrder = 0
+        ExplicitLeft = 88
+        ExplicitTop = 95
+        ExplicitHeight = 41
+      end
+      object pnlTopRight: TPanel
+        Left = 193
+        Top = 0
+        Width = 713
+        Height = 232
+        Align = alClient
+        BevelOuter = bvNone
+        TabOrder = 1
+        ExplicitLeft = 360
+        ExplicitTop = 96
+        ExplicitWidth = 185
+        ExplicitHeight = 41
+      end
+    end
     object pnlBottom: TOMultiPanel
       Left = 0
       Top = 240
@@ -48,17 +88,6 @@ object frmConnectionView: TfrmConnectionView
       Align = alClient
       ParentBackground = False
       TabOrder = 1
-    end
-    object pnlTop: TOMultiPanel
-      Left = 0
-      Top = 0
-      Width = 906
-      Height = 232
-      PanelCollection = <>
-      MinPosition = 0.020000000000000000
-      SplitterSize = 8
-      Align = alClient
-      TabOrder = 0
     end
   end
 end

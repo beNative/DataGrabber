@@ -1033,10 +1033,10 @@ object frmSettingsDialog: TfrmSettingsDialog
         end
       end
       object grpResultSetDisplay: TGroupBox
-        Left = 180
-        Top = 181
+        Left = 271
+        Top = 56
         Width = 147
-        Height = 90
+        Height = 91
         Caption = 'Display multiple resultsets'
         TabOrder = 3
         object tlbDisplayMultipleResultSets: TToolBar
@@ -1044,30 +1044,29 @@ object frmSettingsDialog: TfrmSettingsDialog
           Left = 5
           Top = 18
           Width = 137
-          Height = 67
+          Height = 68
           Align = alClient
           ButtonWidth = 122
           Images = imlMain
           List = True
           ShowCaptions = True
           TabOrder = 0
-          ExplicitWidth = 123
-          object btnactCnPrefixWizard: TToolButton
+          object btnMRSAsMultipleTabs: TToolButton
             Left = 0
             Top = 0
-            Action = actMRSOnSeperatePages
+            Action = actMRSAsMultipleTabs
             Wrap = True
           end
-          object btnactCnPrefixWizard1: TToolButton
+          object btnMRSHorizontally: TToolButton
             Left = 0
             Top = 22
-            Action = actMRSStackedHorizontally
+            Action = actMRSHorizontally
             Wrap = True
           end
-          object btnactCnPrefixWizard2: TToolButton
+          object btnMRSVertically: TToolButton
             Left = 0
             Top = 44
-            Action = actMRSStackedVertically
+            Action = actMRSVertically
             Wrap = True
           end
         end
@@ -1235,29 +1234,29 @@ object frmSettingsDialog: TfrmSettingsDialog
       Caption = 'Open settings file location'
       OnExecute = actOpenSettingsFileLocationExecute
     end
-    object actMRSOnSeperatePages: TAction
+    object actMRSAsMultipleTabs: TAction
       Category = 'DisplayMultipleResultsets'
       AutoCheck = True
       Caption = 'as multiple tabs'
       GroupIndex = 2
       ImageIndex = 21
-      OnExecute = actMRSOnSeperatePagesExecute
+      OnExecute = actMRSAsMultipleTabsExecute
     end
-    object actMRSStackedHorizontally: TAction
+    object actMRSHorizontally: TAction
       Category = 'DisplayMultipleResultsets'
       AutoCheck = True
       Caption = 'stacked horizontally'
       GroupIndex = 2
       ImageIndex = 20
-      OnExecute = actMRSStackedHorizontallyExecute
+      OnExecute = actMRSHorizontallyExecute
     end
-    object actMRSStackedVertically: TAction
+    object actMRSVertically: TAction
       Category = 'DisplayMultipleResultsets'
       AutoCheck = True
       Caption = 'stacked vertically'
       GroupIndex = 2
       ImageIndex = 19
-      OnExecute = actMRSStackedVerticallyExecute
+      OnExecute = actMRSVerticallyExecute
     end
   end
   object imlMain: TImageList
@@ -1266,7 +1265,7 @@ object frmSettingsDialog: TfrmSettingsDialog
     Left = 104
     Top = 56
     Bitmap = {
-      494C010116003000240010001000FFFFFFFF2110FFFFFFFFFFFFFFFF424D3600
+      494C010116003000280010001000FFFFFFFF2110FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000006000000001002000000000000060
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
