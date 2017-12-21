@@ -52,7 +52,7 @@ object frmKGrid: TfrmKGrid
       0)
   end
   object dscMain: TDataSource
-    Left = 40
-    Top = 8
+    Left = 96
+    Top = 16
   end
 end

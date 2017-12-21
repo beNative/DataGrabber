@@ -14,8 +14,6 @@ object frmGridView: TfrmGridView
   PixelsPerInch = 96
   TextHeight = 13
   object dscMain: TDataSource
-    OnStateChange = dscMainStateChange
-    OnDataChange = dscMainDataChange
     Left = 176
     Top = 8
   end

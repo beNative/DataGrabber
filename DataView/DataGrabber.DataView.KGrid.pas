@@ -20,7 +20,7 @@ interface
 
 uses
   Winapi.Windows, Winapi.Messages,
-  System.SysUtils, System.Variants, System.Classes, System.Generics.Collections,
+  System.SysUtils, System.Variants, System.Classes,
   Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Menus, Vcl.Dialogs,
   Data.DB,
 
@@ -58,6 +58,7 @@ type
     function GetName: string;
 
     procedure DataAfterExecute(Sender: TObject);
+    procedure SettingsChanged(Sender: TObject);
 
   protected
     procedure SetPopupMenu(const Value: TPopupMenu);
@@ -219,6 +220,11 @@ begin
   C.FillRect(R);
   grdMain.CellPainter.DefaultDraw;
 end;
+
+procedure TfrmKGrid.SettingsChanged(Sender: TObject);
+begin
+  ApplyGridSettings;
+end;
 {$ENDREGION}
 
 {$REGION 'private methods'}
@@ -299,6 +305,7 @@ constructor TfrmKGrid.Create(AOwner: TComponent; ASettings: IDataViewSettings;
 begin
   inherited Create(AOwner);
   FSettings := ASettings;
+  FSettings.OnChanged.Add(SettingsChanged);
   FData     := AData;
   if Assigned(ADataSet) then
     FDataSet := ADataSet

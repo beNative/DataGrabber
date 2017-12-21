@@ -20,10 +20,10 @@ interface
 
 uses
   Winapi.Windows, Winapi.Messages,
-  System.ImageList, System.Actions, System.SysUtils, System.Variants,
+  System.ImageList, System.Actions, System.SysUtils,
   System.Classes, System.TypInfo,
-  Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, Vcl.ToolWin,
-  Vcl.StdCtrls, Vcl.ComCtrls, Vcl.ActnList, Vcl.Buttons, Vcl.ImgList,
+  Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls,
+  Vcl.StdCtrls, Vcl.ComCtrls, Vcl.ActnList, Vcl.ImgList,
   FireDAC.Stan.Intf,
 
   VirtualTrees,
@@ -32,12 +32,13 @@ uses
 
   kcontrols, kbuttons, kedits,
 
+  SynEditHighlighter, SynHighlighterJScript, SynEdit,
+  SynHighlighterJSON,
+
   DataGrabber.Interfaces,
 
-  DDuce.Editor.Factories, DDuce.Editor.Interfaces,
-
   DataGrabber.Settings, DataGrabber.ConnectionProfiles,
-  DataGrabber.ConnectionProfileValueManager;
+  DataGrabber.ConnectionProfileValueManager, SynEditCodeFolding, Vcl.ToolWin;
 
 type
   TApplySettingsMethod = reference to procedure;
@@ -59,6 +60,11 @@ type
     actGridlinesVertical         : TAction;
     actMoveDown                  : TAction;
     actMoveUp                    : TAction;
+    actMRSAsMultipleTabs         : TAction;
+    actMRSHorizontally           : TAction;
+    actMRSVertically             : TAction;
+    actOpenSettingsFileLocation  : TAction;
+    actTestConnection            : TAction;
     btn1                         : TToolButton;
     btn2                         : TToolButton;
     btnAdd                       : TToolButton;
@@ -80,24 +86,39 @@ type
     btnMemoColor                 : TKColorButton;
     btnMoveDown                  : TToolButton;
     btnMoveUp                    : TToolButton;
+    btnMRSAsMultipleTabs         : TToolButton;
+    btnMRSHorizontally           : TToolButton;
+    btnMRSVertically             : TToolButton;
     btnNullColor                 : TKColorButton;
+    btnOpenSettingsFileLocation  : TButton;
     btnProfileColor              : TKColorButton;
     btnStringColor               : TKColorButton;
+    btnTestConnection            : TButton;
     btnTimeColor                 : TKColorButton;
     cbxDrivers                   : TComboBox;
+    chkAutoReconnect             : TCheckBox;
+    chkDisconnectedMode          : TCheckBox;
     chkFetchOnDemand             : TCheckBox;
     chkGridCellColoringEnabled   : TCheckBox;
+    chkMultipleResultSets        : TCheckBox;
+    chkOSAuthent                 : TCheckBox;
+    chkReadOnlyResultSets        : TCheckBox;
     chkSetAsDefault              : TCheckBox;
     dlgOpenFile                  : TOpenDialog;
     edtCatalog                   : TButtonedEdit;
     edtDatabase                  : TButtonedEdit;
     edtPacketRecords             : TEdit;
+    edtPassword                  : TEdit;
     edtProfileName               : TLabeledEdit;
+    edtUserName                  : TEdit;
+    grp1                         : TGroupBox;
     grpCellBackgroundColoring    : TGroupBox;
     grpClientSettings            : TGroupBox;
     grpConnectionSettings        : TGroupBox;
+    grpEditorSettings            : TGroupBox;
     grpGridLines                 : TGroupBox;
     grpProfileSettings           : TGroupBox;
+    grpResultSetDisplay          : TGroupBox;
     imlMain                      : TImageList;
     lblBoolean                   : TLabel;
     lblCatalog                   : TLabel;
@@ -110,46 +131,29 @@ type
     lblMemo                      : TLabel;
     lblNULL                      : TLabel;
     lblPacketrecords             : TLabel;
+    lblPassword                  : TLabel;
     lblProfileColor              : TLabel;
     lblString                    : TLabel;
     lblTimes                     : TLabel;
+    lblUserName                  : TLabel;
     pgcConnectionProfile         : TPageControl;
     pgcMain                      : TPageControl;
     pnlConnectionProfileDetail   : TPanel;
     pnlConnectionProfilesList    : TPanel;
     pnlGridTypeColoring          : TGridPanel;
+    pnlLogin                     : TGridPanel;
     rgpGridTypes                 : TRadioGroup;
     splVertical                  : TSplitter;
-    tlbGridlines                 : TToolBar;
     tlbConnectionProfiles        : TToolBar;
+    tlbDisplayMultipleResultSets : TToolBar;
+    tlbGridlines                 : TToolBar;
     tsAdvanced                   : TTabSheet;
     tsBasic                      : TTabSheet;
     tsConnectionProfiles         : TTabSheet;
     tsDisplay                    : TTabSheet;
     tsSettings                   : TTabSheet;
-    actTestConnection            : TAction;
-    btnTestConnection            : TButton;
-    grp1                         : TGroupBox;
-    chkOSAuthent                 : TCheckBox;
-    pnlLogin                     : TGridPanel;
-    edtUserName                  : TEdit;
-    lblPassword                  : TLabel;
-    edtPassword                  : TEdit;
-    lblUserName                  : TLabel;
-    actOpenSettingsFileLocation  : TAction;
-    btnOpenSettingsFileLocation  : TButton;
-    chkAutoReconnect             : TCheckBox;
-    chkMultipleResultSets        : TCheckBox;
-    chkReadOnlyResultSets        : TCheckBox;
-    chkDisconnectedMode          : TCheckBox;
-    grpResultSetDisplay          : TGroupBox;
-    tlbDisplayMultipleResultSets : TToolBar;
-    btnMRSAsMultipleTabs         : TToolButton;
-    btnMRSHorizontally           : TToolButton;
-    btnMRSVertically             : TToolButton;
-    actMRSAsMultipleTabs         : TAction;
-    actMRSHorizontally           : TAction;
-    actMRSVertically             : TAction;
+    seSettings                   : TSynEdit;
+    synJScript                   : TSynJScriptSyn;
     {$ENDREGION}
 
     {$REGION 'action handlers'}
@@ -210,8 +214,10 @@ type
     procedure btnProfileColorClick(Sender: TObject);
     procedure cbxDriversChange(Sender: TObject);
     procedure chkAutoReconnectClick(Sender: TObject);
+    procedure chkDisconnectedModeClick(Sender: TObject);
     procedure chkFetchOnDemandClick(Sender: TObject);
     procedure chkGridCellColoringEnabledClick(Sender: TObject);
+    procedure chkMultipleResultSetsClick(Sender: TObject);
     procedure chkProviderModeClick(Sender: TObject);
     procedure chkSetAsDefaultClick(Sender: TObject);
     procedure edtCatalogChange(Sender: TObject);
@@ -222,14 +228,9 @@ type
     procedure edtProfileNameChange(Sender: TObject);
     procedure edtUserNameChange(Sender: TObject);
     procedure tsSettingsEnter(Sender: TObject);
-    procedure chkMultipleResultSetsClick(Sender: TObject);
-    procedure chkDisconnectedModeClick(Sender: TObject);
     {$ENDREGION}
 
   private
-    FEditorSettings      : IEditorSettings;
-    FEditor              : IEditorView;
-    FManager             : IEditorManager;
     FSettings            : ISettings;
     FApplySettingsMethod : TApplySettingsMethod;
     FObjectInspector     : TzObjectInspector;
@@ -279,9 +280,9 @@ uses
 
   FireDAC.VCLUI.ConnEdit, FireDAC.Comp.Client, FireDAC.Stan.Option,
 
-  Spring, Spring.Container,  Spring.Helpers, Spring.Reflection,
+  Spring,
 
-  DDuce.Factories, DDuce.Logger,
+  DDuce.Factories.VirtualTrees, DDuce.Factories.zObjInspector, DDuce.Logger,
 
   DataGrabber.Utils, DataGrabber.ConnectionSettings, DataGrabber.Resources;
 
@@ -314,18 +315,12 @@ begin
   inherited AfterConstruction;
   FValueManager := TConnectionProfileValueManager.Create;
   FObjectInspector :=
-    TFactories.CreatezObjectInspector(Self, tsAdvanced, nil, FValueManager);
+    TzObjectInspectorFactory.Create(Self, tsAdvanced, nil, FValueManager);
   FObjectInspector.SplitterPos     := FObjectInspector.Width div 4;
   FObjectInspector.SortByCategory  := False;
   FObjectInspector.OnBeforeAddItem := FObjectInspectorBeforeAddItem;
 
-  FEditorSettings := TEditorFactories.CreateSettings(Self);
-  FManager        := TEditorFactories.CreateManager(Self, FEditorSettings);
-  FEditor         := TEditorFactories.CreateView(tsSettings, FManager);
-  FEditor.Form.BorderStyle      := bsNone;
-  FEditor.Form.AlignWithMargins := True;
-  FEditor.HighlighterName       := 'JSON';
-  FEditor.Load(FSettings.FileName);
+  seSettings.Lines.LoadFromFile(FSettings.FileName);
   InitializeControls;
 end;
 
@@ -659,7 +654,7 @@ end;
 
 procedure TfrmSettingsDialog.edtProfileNameChange(Sender: TObject);
 begin
-  if Assigned(SelectedProfile) then
+  if Assigned(SelectedProfile) and (SelectedProfile.Name <> edtProfileName.Text) then
   begin
     SelectedProfile.Name := edtProfileName.Text;
     Changed;
@@ -673,7 +668,7 @@ end;
 
 procedure TfrmSettingsDialog.tsSettingsEnter(Sender: TObject);
 begin
-  FEditor.Load(FSettings.FileName);
+  seSettings.Lines.LoadFromFile(FSettings.FileName);
 end;
 {$ENDREGION}
 
@@ -730,7 +725,8 @@ begin
   if Assigned(ApplySettingsMethod) then
     ApplySettingsMethod;
   Save;
-  FEditor.Load(FSettings.FileName);
+  seSettings.Lines.LoadFromFile(FSettings.FileName);
+  FVSTProfiles.Invalidate;
 end;
 
 procedure TfrmSettingsDialog.InitializeControls;
@@ -780,7 +776,7 @@ begin
   end;
   chkGridCellColoringEnabled.Checked := FSettings.GridCellColoring;
 
-  FVSTProfiles := TFactories.CreateVirtualStringTree(
+  FVSTProfiles := TVirtualStringTreeFactory.CreateGrid(
     Self,
     pnlConnectionProfilesList
   );

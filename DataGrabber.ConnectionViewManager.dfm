@@ -100,13 +100,13 @@ object dmConnectionViewManager: TdmConnectionViewManager
     end
     object actSelectionAsCommaText: TAction
       Category = 'Grid'
-      Caption = '... as commatext'
-      ImageIndex = 26
+      Caption = '... as comma seperated text'
+      ImageIndex = 25
       OnExecute = actSelectionAsCommaTextExecute
     end
     object actSelectionAsQuotedCommaText: TAction
       Category = 'Grid'
-      Caption = '... as quoted commatext'
+      Caption = '... as quoted comma seperated text'
       ImageIndex = 6
       OnExecute = actSelectionAsQuotedCommaTextExecute
     end
@@ -126,7 +126,7 @@ object dmConnectionViewManager: TdmConnectionViewManager
     object actInspect: TAction
       Category = 'Inspect'
       Caption = 'Inspect'
-      ImageIndex = 32
+      ImageIndex = 63
       ShortCut = 16496
       OnExecute = actInspectExecute
     end
@@ -192,12 +192,13 @@ object dmConnectionViewManager: TdmConnectionViewManager
     object actSelectionAsFields: TAction
       Category = 'Grid'
       Caption = 'Selection as fields'
+      ImageIndex = 25
       OnExecute = actSelectionAsFieldsExecute
     end
     object actSelectionAsQuotedFields: TAction
       Category = 'Grid'
       Caption = 'Selection as quoted fields'
-      ImageIndex = 28
+      ImageIndex = 6
       OnExecute = actSelectionAsQuotedFieldsExecute
     end
     object actFavoriteFieldsOnly: TAction
@@ -209,6 +210,7 @@ object dmConnectionViewManager: TdmConnectionViewManager
     end
     object actRtti: TAction
       Caption = 'RTT-Eye'
+      ImageIndex = 58
     end
     object actSelectionAsWhereIn: TAction
       Category = 'Grid'
@@ -224,12 +226,19 @@ object dmConnectionViewManager: TdmConnectionViewManager
     object actInspectFDManager: TAction
       Category = 'Inspect'
       Caption = 'Inspect connection manager'
+      ImageIndex = 34
       OnExecute = actInspectFDManagerExecute
     end
     object actChinookExampleQuery: TAction
       Caption = 'Chinook Example query'
       ShortCut = 112
       OnExecute = actChinookExampleQueryExecute
+    end
+    object actGroupByBoxVisible: TAction
+      Category = 'Grid'
+      AutoCheck = True
+      Caption = 'Group by box visible'
+      OnExecute = actGroupByBoxVisibleExecute
     end
   end
   object ppmConnectionView: TPopupMenu
@@ -351,7 +360,7 @@ object dmConnectionViewManager: TdmConnectionViewManager
     Left = 24
     Top = 80
     Bitmap = {
-      494C01014F005100C00010001000FFFFFFFF2110FFFFFFFFFFFFFFFF424D3600
+      494C01014F005100D00010001000FFFFFFFF2110FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000004001000001002000000000000040
       010000000000000000000000000000000000458EE7FF458EE7FF458EE7FF458E
       E7FF458EE7FF458EE7FF458EE7FF458EE7FF458EE7FF458EE7FF458EE7FF458E

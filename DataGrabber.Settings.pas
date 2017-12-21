@@ -23,6 +23,8 @@ uses
   Vcl.Graphics,
   Data.DB,
 
+  Spring,
+
   DataGrabber.Interfaces, DataGrabber.FormSettings,
   DataGrabber.ConnectionSettings, DataGrabber.ConnectionProfiles;
 
@@ -41,6 +43,9 @@ type
     FShowVerticalGridLines    : Boolean;
     FShowHorizontalGridLines  : Boolean;
     FResultDisplayLayout      : TResultDisplayLayout;
+    FGroupByBoxVisible        : Boolean;
+    FUpdateLock               : Integer;
+    FOnChanged                : Event<TNotifyEvent>;
 
     {$REGION 'property access methods'}
     function GetGridCellColoring: Boolean;
@@ -68,7 +73,15 @@ type
     procedure SetShowVerticalGridLines(const Value: Boolean);
     function GetResultDisplayLayout: TResultDisplayLayout;
     procedure SetResultDisplayLayout(const Value: TResultDisplayLayout);
+    function GetGroupByBoxVisible: Boolean;
+    procedure SetGroupByBoxVisible(const Value: Boolean);
+    function GetOnChanged: IEvent<TNotifyEvent>;
     {$ENDREGION}
+
+  protected
+    procedure BeginUpdate;
+    procedure EndUpdate;
+    procedure Changed;
 
   public
     constructor Create(AOwner: TComponent); override;
@@ -88,7 +101,13 @@ type
     property FileName: string
       read GetFileName write SetFileName;
 
+    property OnChanged: IEvent<TNotifyEvent>
+      read GetOnChanged;
+
   published
+    property GroupByBoxVisible: Boolean
+      read GetGroupByBoxVisible write SetGroupByBoxVisible default True;
+
     property GridCellColoring: Boolean
       read GetGridCellColoring write SetGridCellColoring default True;
 
@@ -126,13 +145,18 @@ implementation
 
 uses
   System.SysUtils,
-  Vcl.Forms, Vcl.GraphUtil, Vcl.Dialogs,
+  Vcl.Forms, Vcl.GraphUtil,
 
   JsonDataObjects,
 
   DataGrabber.Resources;
 
 {$REGION 'construction and destruction'}
+procedure TSettings.Changed;
+begin
+  OnChanged.Invoke(Self);
+end;
+
 constructor TSettings.Create(AOwner: TComponent);
 begin
   if not Assigned(AOwner) then
@@ -157,6 +181,7 @@ begin
   FConnectionProfiles := TConnectionProfiles.Create(Self);
   FFileName := SETTINGS_FILE;
   FGridCellColoring := True;
+  FGroupByBoxVisible := True;
   FResultDisplayLayout := TResultDisplayLayout.Horizontal;
 end;
 
@@ -214,7 +239,11 @@ end;
 
 procedure TSettings.SetGridCellColoring(const Value: Boolean);
 begin
-  FGridCellColoring := Value;
+  if Value <> GridCellColoring then
+  begin
+    FGridCellColoring := Value;
+    Changed;
+  end;
 end;
 
 function TSettings.GetGridType: string;
@@ -224,7 +253,30 @@ end;
 
 procedure TSettings.SetGridType(const Value: string);
 begin
-  FGridType := Value;
+  if Value <> GridType then
+  begin
+    FGridType := Value;
+    Changed;
+  end;
+end;
+
+function TSettings.GetGroupByBoxVisible: Boolean;
+begin
+  Result := FGroupByBoxVisible;
+end;
+
+procedure TSettings.SetGroupByBoxVisible(const Value: Boolean);
+begin
+  if Value <> GroupByBoxVisible then
+  begin
+    FGroupByBoxVisible := Value;
+    Changed;
+  end;
+end;
+
+function TSettings.GetOnChanged: IEvent<TNotifyEvent>;
+begin
+  Result := FOnChanged;
 end;
 
 function TSettings.GetConnectionProfiles: TConnectionProfiles;
@@ -234,12 +286,22 @@ end;
 
 procedure TSettings.SetConnectionProfiles(const Value: TConnectionProfiles);
 begin
-  FConnectionProfiles := Value;
+  FConnectionProfiles.Assign(Value);
+  Changed;
 end;
 
 function TSettings.GetResultDisplayLayout: TResultDisplayLayout;
 begin
   Result := FResultDisplayLayout;
+end;
+
+procedure TSettings.SetResultDisplayLayout(const Value: TResultDisplayLayout);
+begin
+  if Value <> ResultDisplayLayout then
+  begin
+    FResultDisplayLayout := Value;
+    Changed;
+  end;
 end;
 
 function TSettings.GetShowHorizontalGridLines: Boolean;
@@ -249,7 +311,11 @@ end;
 
 procedure TSettings.SetShowHorizontalGridLines(const Value: Boolean);
 begin
-  FShowHorizontalGridLines := Value;
+  if Value <> ShowHorizontalGridLines then
+  begin
+    FShowHorizontalGridLines := Value;
+    Changed;
+  end;
 end;
 
 function TSettings.GetShowVerticalGridLines: Boolean;
@@ -259,12 +325,11 @@ end;
 
 procedure TSettings.SetShowVerticalGridLines(const Value: Boolean);
 begin
-  FShowVerticalGridLines := Value;
-end;
-
-procedure TSettings.SetResultDisplayLayout(const Value: TResultDisplayLayout);
-begin
-  FResultDisplayLayout := Value;
+  if Value <> ShowVerticalGridLines then
+  begin
+    FShowVerticalGridLines := Value;
+    Changed;
+  end;
 end;
 
 function TSettings.GetConnectionSettings: TConnectionSettings;
@@ -274,7 +339,8 @@ end;
 
 procedure TSettings.SetConnectionSettings(const Value: TConnectionSettings);
 begin
-  FConnectionSettings := Value;
+  FConnectionSettings.Assign(Value);
+  Changed;
 end;
 
 function TSettings.GetDataTypeColor(Index: TDataType): TColor;
@@ -284,7 +350,11 @@ end;
 
 procedure TSettings.SetDataTypeColor(Index: TDataType; const Value: TColor);
 begin
-  FDataTypeColors[Index] := Value;
+  if FDataTypeColors[Index] <> Value then
+  begin
+    FDataTypeColors[Index] := Value;
+    Changed;
+  end;
 end;
 
 function TSettings.GetDefaultConnectionProfile: string;
@@ -294,7 +364,10 @@ end;
 
 procedure TSettings.SetDefaultConnectionProfile(const Value: string);
 begin
-  FDefaultConnectionProfile := Value;
+  if Value <> DefaultConnectionProfile then
+  begin
+    FDefaultConnectionProfile := Value;
+  end;
 end;
 
 function TSettings.GetDataInspectorVisible: Boolean;
@@ -304,7 +377,11 @@ end;
 
 procedure TSettings.SetDataInspectorVisible(const Value: Boolean);
 begin
-  FDataInspectorVisible := Value;
+  if Value <> DataInspectorVisible then
+  begin
+    FDataInspectorVisible := Value;
+    Changed;
+  end;
 end;
 
 function TSettings.GetFileName: string;
@@ -317,6 +394,7 @@ begin
   if Value <> FileName then
   begin
     FFileName := Value;
+    Changed;
   end;
 end;
 
@@ -327,7 +405,25 @@ end;
 
 procedure TSettings.SetFormSettings(const Value: TFormSettings);
 begin
-  FFormSettings := Value;
+  FFormSettings.Assign(Value);
+  Changed;
+end;
+{$ENDREGION}
+
+{$REGION 'protected methods'}
+procedure TSettings.BeginUpdate;
+begin
+  Inc(FUpdateLock);
+end;
+
+procedure TSettings.EndUpdate;
+begin
+  if FUpdateLock > 0 then
+  begin
+    Dec(FUpdateLock);
+    if FUpdateLock = 0 then
+      Changed;
+  end;
 end;
 {$ENDREGION}
 

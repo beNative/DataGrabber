@@ -378,6 +378,7 @@ function TfrmDataInspector.IsCellCheckBox(const ACell: TGridCell): Boolean;
 begin
 //  Result := (ACell.Col = 1) and (ACell.Row < FieldCount)
 //    and (Data as IDisplayData).IsCheckBoxField(FieldOf(ACell).FieldName);
+  Result := False;
 end;
 
 function TfrmDataInspector.IsCellReadOnly(const ACell: TGridCell): Boolean;

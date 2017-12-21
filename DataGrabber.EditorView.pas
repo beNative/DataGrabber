@@ -82,9 +82,7 @@ type
 implementation
 
 uses
-  System.UITypes,
-
-  DDuce.ObjectInspector.zObjectInspector;
+  System.UITypes;
 
 {$R *.dfm}
 
@@ -120,7 +118,11 @@ end;
 
 procedure TfrmEditorView.SetColor(const Value: TColor);
 begin
-  FEditor.Color := Value;
+  if Value <> Color then
+  begin
+    FEditor.Color := Value;
+    FEditor.Gutter.GradientEndColor := Value;
+  end;
 end;
 
 function TfrmEditorView.GetEditorFocused: Boolean;
@@ -189,8 +191,20 @@ begin
   ];
   FEditor.ActiveLineColor := clYellow;
   FEditor.WordWrap := True;
+  FEditor.Gutter.AutoSize             := True;
+  FEditor.Gutter.ShowLineNumbers      := True;
+  FEditor.Gutter.Font.Name            := 'Consolas';
+  FEditor.Gutter.Font.Color           := clSilver;
+  FEditor.Gutter.Gradient             := True;
+  FEditor.Gutter.GradientStartColor   := clWhite;
+  FEditor.Gutter.GradientEndColor     := clWhite;
+  FEditor.Gutter.ModificationBarWidth := 0;
+  FEditor.Gutter.LeftOffset           := 0;
+  FEditor.Gutter.RightOffset          := 0;
+  FEditor.Gutter.RightMargin          := 2;
+  FEditor.Gutter.Color                := cl3DLight;
+  FEditor.RightEdgeColor              := cl3DLight;
   scpMain.Editor := FEditor;
-  //InspectComponent(FEditor);
 end;
 {$ENDREGION}
 

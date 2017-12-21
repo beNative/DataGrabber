@@ -120,6 +120,7 @@ type
     actChinookExampleQuery: TAction;
     N5: TMenuItem;
     mniExecute: TMenuItem;
+    actGroupByBoxVisible: TAction;
     {$ENDREGION}
 
     {$REGION 'action handlers'}
@@ -155,6 +156,7 @@ type
     procedure actSettingsExecute(Sender: TObject);
     procedure actShowAllColumnsExecute(Sender: TObject);
     procedure actChinookExampleQueryExecute(Sender: TObject);
+    procedure actGroupByBoxVisibleExecute(Sender: TObject);
     {$ENDREGION}
 
   private
@@ -303,6 +305,11 @@ begin
   (ActiveData as IFieldVisiblity).ShowFavoriteFieldsOnly :=
     not actFavoriteFieldsOnly.Checked;
   ActiveDataView.UpdateView;
+end;
+
+procedure TdmConnectionViewManager.actGroupByBoxVisibleExecute(Sender: TObject);
+begin
+  FSettings.GroupByBoxVisible := (Sender as TAction).Checked;
 end;
 
 procedure TdmConnectionViewManager.actGroupBySelectionExecute(Sender: TObject);
@@ -624,6 +631,7 @@ begin
     actMergeCells.Enabled          := B and Supports(ActiveDataView, IMergable);
     actGroupBySelection.Visible    := Supports(ActiveDataView, IGroupable);
     actGroupBySelection.Enabled    := B and Supports(ActiveDataView, IGroupable);
+    actGroupByBoxVisible.Visible   := Supports(ActiveDataView, IGroupable);
     actMergeAllColumnCells.Visible := actMergeCells.Visible;
     actMergeAllColumnCells.Enabled := actMergeCells.Enabled;
     actFavoriteFieldsOnly.Enabled  := B;

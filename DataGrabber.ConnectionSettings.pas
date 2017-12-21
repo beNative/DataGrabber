@@ -152,12 +152,13 @@ type
       read GetPacketRecords write SetPacketRecords;
 
     property OSAuthent: Boolean
-      read GetOSAuthent write SetOSAuthent;
+      read GetOSAuthent write SetOSAuthent default True;
 
     property DisconnectedMode: Boolean
       read GetDisconnectedMode write SetDisconnectedMode;
 
-    property MultipleResultSets: Boolean read GetMultipleResultSets write SetMultipleResultSets;
+    property MultipleResultSets: Boolean
+      read GetMultipleResultSets write SetMultipleResultSets;
 
     property OnChanged: IEvent<TNotifyEvent>
       read GetOnChanged;
@@ -169,6 +170,7 @@ implementation
 procedure TConnectionSettings.AfterConstruction;
 begin
   inherited AfterConstruction;
+  FOSAuthent     := True;
   FAutoReconnect := True;
 end;
 {$ENDREGION}

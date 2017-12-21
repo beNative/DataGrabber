@@ -27,6 +27,23 @@ object frmEditorView: TfrmEditorView
     Top = 40
   end
   object scpMain: TSynCompletionProposal
+    Options = [scoLimitToMatchedText, scoUsePrettyText, scoEndCharCompletion, scoCompleteWithTab, scoCompleteWithEnter]
+    ItemList.Strings = (
+      'select,keyword'
+      'from'
+      'where'
+      'group by'
+      'order by'
+      'inner join'
+      'left outer join')
+    InsertList.Strings = (
+      'select'
+      'from'
+      'where'
+      'group by'
+      'order by'
+      'inner join'
+      'left outer join')
     EndOfTokenChr = '()[]. '
     TriggerChars = '.'
     Font.Charset = DEFAULT_CHARSET

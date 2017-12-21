@@ -22,7 +22,7 @@ interface
 
 uses
   Winapi.Windows, Winapi.Messages,
-  System.SysUtils, System.Variants, System.Classes, System.Generics.Collections,
+  System.SysUtils, System.Variants, System.Classes,
   Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, Vcl.Menus,
   Vcl.ActnList,
   Data.DB,
@@ -30,21 +30,21 @@ uses
   cxStyles, cxCustomData, cxGraphics, cxDataStorage, cxEdit,
   cxDBData, cxGridLevel, cxClasses, cxControls, cxGridCustomView, cxGrid,
   cxGridCustomTableView, cxGridTableView, cxGridDBTableView, cxInplaceContainer,
-  cxVGrid, cxOI, cxGridExportLink, cxGridCustomPopupMenu, cxGridPopupMenu,
+  cxVGrid, cxOI, cxGridCustomPopupMenu, cxGridPopupMenu,
   cxLookAndFeels, cxLookAndFeelPainters, cxGridCardView, cxGridBandedTableView,
-  cxGridDBCardView, cxGridDBBandedTableView, cxNavigator, cxFilter, cxData,
+  cxGridDBCardView, cxGridDBBandedTableView, cxNavigator,
 
-  Spring.Collections,
 
-  DataGrabber.Interfaces;
+
+  DataGrabber.Interfaces, cxFilter, cxData;
 
 type
   TfrmcxGrid = class(TForm, IDataView, IGroupable, IMergable)
-    dscMain        : TDataSource;
-    grdMain        : TcxGrid;
-    grlGrid1Level1 : TcxGridLevel;
-    ppmMain        : TcxGridPopupMenu;
-    tvwMain        : TcxGridDBTableView;
+    dscMain : TDataSource;
+    grdMain : TcxGrid;
+    grlMain : TcxGridLevel;
+    ppmMain : TcxGridPopupMenu;
+    tvwMain : TcxGridDBTableView;
 
     procedure tvwMainCustomDrawGroupSummaryCell(
       Sender       : TObject;
@@ -92,6 +92,7 @@ type
     {$ENDREGION}
 
     procedure DataAfterExecute(Sender: TObject);
+    procedure SettingsChanged(Sender: TObject);
 
   protected
     procedure ApplyGridSettings;
@@ -212,6 +213,8 @@ procedure TfrmcxGrid.BeforeDestruction;
 begin
   if Assigned(Data) then
     Data.OnAfterExecute.Remove(DataAfterExecute);
+  if Assigned(Settings) then
+    Settings.OnChanged.Remove(SettingsChanged);
   inherited BeforeDestruction;
 end;
 {$ENDREGION}
@@ -330,6 +333,11 @@ begin
   UpdateView;
 end;
 
+procedure TfrmcxGrid.SettingsChanged(Sender: TObject);
+begin
+  ApplyGridSettings;
+end;
+
 procedure TfrmcxGrid.tvwMainCustomDrawCell(Sender: TcxCustomGridTableView;
   ACanvas: TcxCanvas; AViewInfo: TcxGridTableDataCellViewInfo;
   var ADone: Boolean);
@@ -440,6 +448,7 @@ constructor TfrmcxGrid.Create(AOwner: TComponent; ASettings: IDataViewSettings;
 begin
   inherited Create(AOwner);
   FSettings := ASettings;
+  FSettings.OnChanged.Add(SettingsChanged);
   FData     := AData;
   if Assigned(ADataSet) then
     FDataSet := ADataSet
@@ -830,6 +839,7 @@ begin
       GL := glVertical;
     end;
     tvwMain.OptionsView.GridLines := GL;
+    tvwMain.OptionsView.GroupByBox := FSettings.GroupByBoxVisible;
   end;
 end;
 {$ENDREGION}

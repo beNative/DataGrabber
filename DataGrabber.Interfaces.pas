@@ -22,7 +22,7 @@ uses
   System.Classes,
   Vcl.Graphics, Vcl.Controls, Vcl.Menus, Vcl.Forms, Vcl.ActnList,
   Data.DB,
-  FireDAC.Comp.Client, FireDAC.Stan.Intf,
+  FireDAC.Comp.Client, FireDAC.Stan.Intf, FireDAC.Comp.DataSet,
 
   Spring, Spring.Collections,
 
@@ -69,7 +69,7 @@ type
   IData = interface
   ['{0E8958C3-CECD-4E3F-A990-B73635E50F26}']
     {$REGION 'property access methods'}
-    function GetDataSet : TDataSet;
+    function GetDataSet : TFDDataSet;
     function GetRecordCount : Integer;
     function GetActive: Boolean;
     function GetSQL: string;
@@ -90,17 +90,38 @@ type
     procedure SaveToFile(
       const AFileName : string = '';
       AFormat         : TFDStorageFormat = sfAuto
-    );
+    ); overload;
+    procedure SaveToFile(
+      ADataSet        : TDataSet;
+      const AFileName : string = '';
+      AFormat         : TFDStorageFormat = sfAuto
+    ); overload;
 
     procedure LoadFromFile(
       const AFileName : string = '';
       AFormat         : TFDStorageFormat = sfAuto
-    );
+    ); overload;
+    procedure LoadFromFile(
+      ADataSet        : TDataSet;
+      const AFileName : string = '';
+      AFormat         : TFDStorageFormat = sfAuto
+    ); overload;
+
+    procedure Sort(
+      const AFieldName : string;
+      ADescending      : Boolean = False
+    ); overload;
+
+    procedure Sort(
+      ADataSet         : TDataSet;
+      const AFieldName : string;
+      ADescending      : Boolean = False
+    ); overload;
 
     property SQL: string
       read GetSQL write SetSQL;
 
-    property DataSet: TDataSet
+    property DataSet: TFDDataSet
       read GetDataSet;
 
     property Connection: TFDConnection
@@ -146,6 +167,9 @@ type
     function GetShowVerticalGridLines: Boolean;
     procedure SetShowHorizontalGridLines(const Value: Boolean);
     procedure SetShowVerticalGridLines(const Value: Boolean);
+    function GetGroupByBoxVisible: Boolean;
+    procedure SetGroupByBoxVisible(const Value: Boolean);
+    function GetOnChanged: IEvent<TNotifyEvent>;
     {$ENDREGION}
 
     property DataTypeColors[Index: TDataType]: TColor
@@ -162,6 +186,12 @@ type
 
     property ShowVerticalGridLines: Boolean
       read GetShowVerticalGridLines write SetShowVerticalGridLines;
+
+    property GroupByBoxVisible: Boolean
+      read GetGroupByBoxVisible write SetGroupByBoxVisible;
+
+    property OnChanged: IEvent<TNotifyEvent>
+      read GetOnChanged;
   end;
 
   IDataView = interface
@@ -220,24 +250,6 @@ type
       read GetPopupMenu write SetPopupMenu;
   end;
 
-//  IDisplayData = interface
-//  ['{8BC40D7C-00EC-469D-B8A1-675A52A8F2BF}']
-//    {$REGION 'property access methods'}
-//    function GetDisplayValues : IDynamicRecord;
-//    function GetDisplayLabels : IDynamicRecord;
-//    {$ENDREGION}
-//
-//    function IsLookupField(const AFieldName: string): Boolean;
-//    function IsCheckBoxField(const AFieldName: string): Boolean;
-//    function IsRequiredField(const AFieldName: string): Boolean;
-//
-//    property DisplayLabels: IDynamicRecord
-//      read GetDisplayLabels;
-//
-//    property DisplayValues: IDynamicRecord
-//      read GetDisplayValues;
-//  end;
-
   ISettings = interface
   ['{C6E48393-6FBA-451B-A565-921F11E433F0}']
     {$REGION 'property access methods'}
@@ -266,6 +278,9 @@ type
     procedure SetShowVerticalGridLines(const Value: Boolean);
     function GetResultDisplayLayout: TResultDisplayLayout;
     procedure SetResultDisplayLayout(const Value: TResultDisplayLayout);
+    function GetGroupByBoxVisible: Boolean;
+    procedure SetGroupByBoxVisible(const Value: Boolean);
+    function GetOnChanged: IEvent<TNotifyEvent>;
     {$ENDREGION}
 
     procedure Load;
@@ -301,6 +316,9 @@ type
     property DataTypeColors[Index: TDataType]: TColor
       read GetDataTypeColor write SetDataTypeColor;
 
+    property GroupByBoxVisible: Boolean
+      read GetGroupByBoxVisible write SetGroupByBoxVisible;
+
     property ShowHorizontalGridLines: Boolean
       read GetShowHorizontalGridLines write SetShowHorizontalGridLines;
 
@@ -309,6 +327,9 @@ type
 
     property ResultDisplayLayout: TResultDisplayLayout
       read GetResultDisplayLayout write SetResultDisplayLayout;
+
+    property OnChanged: IEvent<TNotifyEvent>
+      read GetOnChanged;
   end;
 
   IConnectionView = interface

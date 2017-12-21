@@ -47,12 +47,12 @@ uses
 
 type
   TfrmConnectionView = class(TForm, IConnectionView)
-    pnlMain   : TOMultiPanel;
-    pnlTop    : TPanel;
-    pnlBottom : TOMultiPanel;
-    pnlVST: TPanel;
-    splVertical: TSplitter;
-    pnlTopRight: TPanel;
+    pnlMain     : TOMultiPanel;
+    pnlTop      : TPanel;
+    pnlBottom   : TOMultiPanel;
+    pnlVST      : TPanel;
+    splVertical : TSplitter;
+    pnlTopRight : TPanel;
 
     procedure FVSTProfilesBeforeCellPaint(
       Sender          : TBaseVirtualTree;
@@ -82,18 +82,10 @@ type
       Column             : TColumnIndex;
       TextType           : TVSTTextType
     );
-    procedure FVSTProfilesDrawText(
-      Sender          : TBaseVirtualTree;
-      TargetCanvas    : TCanvas;
-      Node            : PVirtualNode;
-      Column          : TColumnIndex;
-      const Text      : string;
-      const CellRect  : TRect;
-      var DefaultDraw : Boolean
-    );
 
     procedure FormShortCut(var Msg: TWMKey; var Handled: Boolean);
     procedure FormShow(Sender: TObject);
+    procedure splVerticalMoved(Sender: TObject);
 
   private
     FEditorView     : IEditorView;
@@ -159,11 +151,12 @@ implementation
 
 uses
   System.UITypes,
+  Vcl.GraphUtil,
   Data.DB,
 
   Spring, Spring.Container,
 
-  DDuce.Logger, DDuce.Factories, DDuce.ObjectInspector.zObjectInspector,
+  DDuce.Logger, DDuce.Factories.VirtualTrees,
 
   DataGrabber.Utils, DataGrabber.Factories;
 
@@ -307,20 +300,6 @@ begin
   end;
 end;
 
-procedure TfrmConnectionView.FVSTProfilesDrawText(Sender: TBaseVirtualTree;
-  TargetCanvas: TCanvas; Node: PVirtualNode; Column: TColumnIndex;
-  const Text: string; const CellRect: TRect; var DefaultDraw: Boolean);
-//var
-//  S : string;
-//  R : TRect;
-begin
-//  R := CellRect;
-//  S := Text;
-//  TargetCanvas.TextRect(R, S, [tfCenter, tfVerticalCenter]);
-//  DefaultDraw := False;
-  DefaultDraw := True;
-end;
-
 procedure TfrmConnectionView.FVSTProfilesFocusChanged(Sender: TBaseVirtualTree;
   Node: PVirtualNode; Column: TColumnIndex);
 begin
@@ -417,14 +396,13 @@ end;
 {$REGION 'protected methods'}
 procedure TfrmConnectionView.InitializeConnectionProfilesView;
 begin
-  FVSTProfiles := TFactories.CreateVirtualStringTree(Self, pnlVST);
+  FVSTProfiles := TVirtualStringTreeFactory.CreateGrid(Self, pnlVST);
   FVSTProfiles.AlignWithMargins  := False;
   FVSTProfiles.RootNodeCount     := Manager.Settings.ConnectionProfiles.Count;
   FVSTProfiles.OnBeforeCellPaint := FVSTProfilesBeforeCellPaint;
   FVSTProfiles.OnGetText         := FVSTProfilesGetText;
   FVSTProfiles.OnFocusChanged    := FVSTProfilesFocusChanged;
   FVSTProfiles.OnPaintText       := FVSTProfilesPaintText;
-  FVSTProfiles.OnDrawText        := FVSTProfilesDrawText;
   FVSTProfiles.Header.Options    := FVSTProfiles.Header.Options - [hoVisible];
   FVSTProfiles.TreeOptions.PaintOptions :=
     FVSTProfiles.TreeOptions.PaintOptions - [toHideSelection];
@@ -434,6 +412,11 @@ begin
   FVSTProfiles.Constraints.MinWidth  := 150;
   FVSTProfiles.Constraints.MinHeight := 100;
   FVSTProfiles.Constraints.MaxWidth  := 300;
+end;
+
+procedure TfrmConnectionView.splVerticalMoved(Sender: TObject);
+begin
+  FVSTProfiles.Invalidate;
 end;
 
 procedure TfrmConnectionView.ApplySettings;
@@ -449,7 +432,7 @@ begin
     ];
     Application.Title := CP.Name;
     Caption := CP.Name;
-    FEditorView.Color := CP.ProfileColor;
+    FEditorView.Color := ColorAdjustLuma(CP.ProfileColor, 25, True);
     Data.ConnectionSettings.Assign(CP.ConnectionSettings);
   end;
 end;

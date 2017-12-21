@@ -67,8 +67,6 @@ type
     );
   end;
 
-
-
 implementation
 
 uses
@@ -112,6 +110,7 @@ begin
   AddButton('actPrint');
   AddButton('actDataInspector');
   AddButton('actMergeAllColumnCells');
+  AddButton('actGroupByBoxVisible');
   AddButton('actShowAllColumns');
   AddButton('actHideSelectedColumns');
   AddButton('actHideConstantColumns');

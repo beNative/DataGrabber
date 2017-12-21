@@ -28,9 +28,7 @@ uses
 
   zObjInspector,
 
-  VirtualTrees,
-
-  DataGrabber.Interfaces;
+  VirtualTrees;
 
 type
   TfrmFieldInspector = class(TForm)
@@ -86,7 +84,7 @@ uses
 
   Spring,
 
-  DDuce.Factories, DDuce.Components.Factories,
+  DDuce.Factories.VirtualTrees, DDuce.Factories.zObjInspector,
 
   DDuce.ObjectInspector.zObjectInspector;
 
@@ -97,8 +95,8 @@ var
 begin
   inherited Create(AOwner);
   FDataSet := ADataSet;
-  FOIField   := TFactories.CreatezObjectInspector(Self, pnlRight);
-  FVSTFields := TFactories.CreateVirtualStringTree(Self, pnlLeft);
+  FOIField   := TzObjectInspectorFactory.Create(Self, pnlRight);
+  FVSTFields := TVirtualStringTreeFactory.CreateGrid(Self, pnlLeft);
     // cell in first column is fully selected
   FVSTFields.TreeOptions.MiscOptions :=
     FVSTFields.TreeOptions.MiscOptions + [toGridExtensions];

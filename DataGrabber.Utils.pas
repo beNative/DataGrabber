@@ -74,7 +74,7 @@ implementation
 
 uses
   Winapi.ShellAPI, Winapi.Messages,
-  System.Math, System.Character, System.SysUtils,
+  System.SysUtils,
   Vcl.Forms;
 
 {

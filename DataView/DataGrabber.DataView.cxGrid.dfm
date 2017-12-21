@@ -88,7 +88,7 @@ object frmcxGrid: TfrmcxGrid
       OptionsView.Indicator = True
       OnCustomDrawGroupSummaryCell = tvwMainCustomDrawGroupSummaryCell
     end
-    object grlGrid1Level1: TcxGridLevel
+    object grlMain: TcxGridLevel
       GridView = tvwMain
       Options.TabsForEmptyDetails = False
     end

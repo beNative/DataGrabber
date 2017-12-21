@@ -1071,6 +1071,15 @@ object frmSettingsDialog: TfrmSettingsDialog
           end
         end
       end
+      object grpEditorSettings: TGroupBox
+        Left = 175
+        Top = 176
+        Width = 492
+        Height = 182
+        Anchors = [akLeft, akTop, akRight, akBottom]
+        Caption = 'Editor settings'
+        TabOrder = 4
+      end
     end
     object tsSettings: TTabSheet
       Caption = 'Settings file'
@@ -1085,6 +1094,50 @@ object frmSettingsDialog: TfrmSettingsDialog
         Action = actOpenSettingsFileLocation
         Align = alTop
         TabOrder = 0
+      end
+      object seSettings: TSynEdit
+        AlignWithMargins = True
+        Left = 3
+        Top = 34
+        Width = 664
+        Height = 328
+        Align = alClient
+        ActiveLineColor = clYellow
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -13
+        Font.Name = 'Consolas'
+        Font.Style = []
+        TabOrder = 1
+        CodeFolding.GutterShapeSize = 11
+        CodeFolding.CollapsedLineColor = clGrayText
+        CodeFolding.FolderBarLinesColor = clGrayText
+        CodeFolding.IndentGuidesColor = clGray
+        CodeFolding.IndentGuides = True
+        CodeFolding.ShowCollapsedLine = False
+        CodeFolding.ShowHintMark = True
+        UseCodeFolding = False
+        Gutter.AutoSize = True
+        Gutter.Color = cl3DLight
+        Gutter.Font.Charset = ANSI_CHARSET
+        Gutter.Font.Color = clSilver
+        Gutter.Font.Height = -11
+        Gutter.Font.Name = 'Consolas'
+        Gutter.Font.Style = []
+        Gutter.LeftOffset = 0
+        Gutter.RightOffset = 0
+        Gutter.ShowLineNumbers = True
+        Gutter.ShowModification = True
+        Gutter.Width = 15
+        Gutter.Gradient = True
+        Gutter.GradientStartColor = clWhite
+        Gutter.GradientEndColor = clWhite
+        Highlighter = synJScript
+        Options = [eoAltSetsColumnMode, eoAutoIndent, eoDragDropEditing, eoEnhanceHomeKey, eoEnhanceEndKey, eoGroupUndo, eoScrollPastEol, eoShowScrollHint, eoSmartTabDelete, eoSmartTabs, eoTabsToSpaces]
+        RightEdgeColor = cl3DLight
+        TabWidth = 2
+        WordWrap = True
+        FontSmoothing = fsmNone
       end
     end
   end
@@ -1131,8 +1184,8 @@ object frmSettingsDialog: TfrmSettingsDialog
   end
   object aclMain: TActionList
     Images = imlMain
-    Left = 64
-    Top = 56
+    Left = 192
+    Top = 32
     object actApply: TAction
       Caption = '&Apply'
       Hint = 'Apply settings immediately'
@@ -1262,10 +1315,10 @@ object frmSettingsDialog: TfrmSettingsDialog
   object imlMain: TImageList
     ColorDepth = cd32Bit
     DrawingStyle = dsTransparent
-    Left = 104
-    Top = 56
+    Left = 248
+    Top = 32
     Bitmap = {
-      494C010116003000280010001000FFFFFFFF2110FFFFFFFFFFFFFFFF424D3600
+      494C010116003000340010001000FFFFFFFF2110FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000006000000001002000000000000060
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
@@ -2065,7 +2118,22 @@ object frmSettingsDialog: TfrmSettingsDialog
       000000000000}
   end
   object dlgOpenFile: TOpenDialog
-    Left = 16
-    Top = 56
+    Left = 136
+    Top = 32
+  end
+  object synJScript: TSynJScriptSyn
+    Options.AutoDetectEnabled = False
+    Options.AutoDetectLineLimit = 0
+    Options.Visible = False
+    CommentAttri.Foreground = clMedGray
+    KeyAttri.Foreground = clBlue
+    NumberAttri.Foreground = clRed
+    NumberAttri.Style = [fsBold, fsItalic]
+    StringAttri.Foreground = clGreen
+    StringAttri.Style = [fsBold, fsItalic]
+    SymbolAttri.Foreground = clRed
+    SymbolAttri.Style = [fsBold]
+    Left = 455
+    Top = 236
   end
 end

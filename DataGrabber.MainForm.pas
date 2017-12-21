@@ -21,7 +21,7 @@ interface
 uses
   Winapi.Windows, Winapi.Messages, Winapi.GDIPOBJ,
   System.SysUtils, System.Variants, System.Classes, System.Actions,
-  System.Threading, System.ImageList,
+  System.ImageList,
   Vcl.Menus, Vcl.ActnList, Vcl.Controls, Vcl.Forms, Vcl.ToolWin, Vcl.ExtCtrls,
   Vcl.Graphics, Vcl.Dialogs, Vcl.ComCtrls, Vcl.ImgList,
   Data.DB, Data.Win.ADODB,
@@ -161,7 +161,7 @@ implementation
 {$R *.dfm}
 
 uses
-  Winapi.ActiveX,
+
   Vcl.Clipbrd,
 
   Spring.Container,

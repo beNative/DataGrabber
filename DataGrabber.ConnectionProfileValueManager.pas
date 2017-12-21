@@ -25,7 +25,7 @@ uses
   System.Classes, System.Rtti, System.Types,
   Vcl.Graphics,
 
-  zObjInspector, zObjInspTypes, zValueManager,
+  zObjInspTypes, zValueManager,
 
   DataGrabber.ConnectionProfiles;
 
@@ -61,7 +61,7 @@ uses
 
   Spring.Container,
 
-  DataGrabber.Interfaces,
+
 
   DDuce.Logger;
 

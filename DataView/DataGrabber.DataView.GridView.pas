@@ -24,7 +24,7 @@ uses
   Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.Menus,
   Data.DB,
 
-  Spring.Collections,
+
 
   DDuce.Components.GridView, DDuce.Components.DBGridView,
 
@@ -32,17 +32,19 @@ uses
 
 type
   TfrmGridView = class(TForm, IDataView)
-    dscMain: TDataSource;
+    dscMain : TDataSource;
 
-    procedure dscMainStateChange(Sender: TObject);
-    procedure dscMainDataChange(Sender: TObject; Field: TField);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
 
   private
-    FData     : IData;
-    FGrid     : TDBGridView;
-    FDataSet  : TDataSet;
-    FSettings : IDataViewSettings;
+    FData            : IData;
+    FGrid            : TDBGridView;
+    FDataSet         : TDataSet;
+    FSettings        : IDataViewSettings;
+    FSortedFieldName : string;
+    FSortDirection   : TGridSortDirection;
+    FUpSortImage     : TBitmap;
+    FDownSortImage   : TBitmap;
 
     {$REGION 'property access methods'}
     function GetName: string;
@@ -56,6 +58,7 @@ type
     {$ENDREGION}
 
     procedure DataAfterExecute(Sender: TObject);
+    procedure SettingsChanged(Sender: TObject);
 
     procedure InitializeGridColumns;
     procedure InitializeGridColumn(AGridColumn: TDBGridColumn);
@@ -127,6 +130,20 @@ type
       Shift       : TShiftState;
       MousePos    : TPoint;
       var Handled : Boolean
+    );
+    procedure FGridHeaderClick(
+      Sender  : TObject;
+      Section : TGridHeaderSection
+    );
+    procedure FGridGetSortDirection(
+      Sender            : TObject;
+      Section           : TGridHeaderSection;
+      var SortDirection : TGridSortDirection
+    );
+    procedure FGridGetSortImage(
+      Sender    : TObject;
+      Section   : TGridHeaderSection;
+      SortImage : TBitmap
     );
 
   public
@@ -226,6 +243,7 @@ begin
   FGrid.Header.GridColor         := True;
   FGrid.Header.AutoHeight        := True;
   FGrid.Header.Flat              := True;
+  FGrid.ThemingEnabled           := False;
   FGrid.Rows.AutoHeight          := True;
   FGrid.GridStyle                := [gsVertLine, gsHorzLine];
   FGrid.CursorKeys := [gkArrows, gkTabs, gkReturn, gkMouse, gkMouseWheel];
@@ -243,15 +261,40 @@ begin
   FGrid.OnMouseWheelDown    := FGridMouseWheelDown;
   FGrid.OnRowMultiSelect    := FGridRowMultiSelect;
   FGrid.OnClearMultiSelect  := FGridClearMultiSelect;
+  FGrid.OnHeaderClick       := FGridHeaderClick;
+  FGrid.OnGetSortDirection  := FGridGetSortDirection;
+  FGrid.OnGetSortImage      := FGridGetSortImage;
+
+  FDownSortImage := TBitmap.Create;
+  FDownSortImage.SetSize(16, 16);
+  FDownSortImage.Transparent := True;
+  FDownSortImage.Canvas.Pen.Color := clGray;
+  FDownSortImage.Canvas.Pen.Width := 2;
+  FDownSortImage.Canvas.MoveTo(2, 4);
+  FDownSortImage.Canvas.LineTo(8, 10);
+  FDownSortImage.Canvas.LineTo(14, 4);
+
+  FUpSortImage := TBitmap.Create;
+  FUpSortImage.SetSize(16, 16);
+  FUpSortImage.Transparent := True;
+  FUpSortImage.Canvas.Pen.Color := clGray;
+  FUpSortImage.Canvas.Pen.Width := 2;
+  FUpSortImage.Canvas.MoveTo(2, 10);
+  FUpSortImage.Canvas.LineTo(8, 4);
+  FUpSortImage.Canvas.LineTo(14, 10);
+
+  FSortDirection := gsNone;
   UpdateView;
 end;
 
 
 procedure TfrmGridView.BeforeDestruction;
 begin
-  inherited BeforeDestruction;
+  FUpSortImage.Free;
+  FDownSortImage.Free;
   if Assigned(FData) then
     FData.OnAfterExecute.Remove(DataAfterExecute);
+  inherited BeforeDestruction;
 end;
 {$ENDREGION}
 
@@ -305,23 +348,7 @@ end;
 {$ENDREGION}
 
 {$REGION 'event handlers'}
-procedure TfrmGridView.dscMainDataChange(Sender: TObject; Field: TField);
-begin
-//  if Assigned(dscMain.DataSet) and Assigned(Field) and
-//     (dscMain.DataSet.State in dsEditModes) and
-//     FGrid.MultiSelect and (FGrid.SelectedRows.Count > 0) then
-//  begin
-//    UpdateMultiSelection(Field.FieldName, Field.Value);
-//  end;
-//  FGrid.Refresh;
-end;
-
-procedure TfrmGridView.dscMainStateChange(Sender: TObject);
-begin
-//  FGridSort.SortedFieldName := '';
-//  FGridSort.SortDirection := gsNone;
-end;
-
+{$REGION 'FGrid event handlers'}
 procedure TfrmGridView.FGridCellAcceptCursor(Sender: TObject; Cell: TGridCell;
   var Accept: Boolean);
 begin
@@ -446,6 +473,61 @@ begin
     CheckState := cbUnchecked;
 end;
 
+procedure TfrmGridView.FGridGetSortDirection(Sender: TObject;
+  Section: TGridHeaderSection; var SortDirection: TGridSortDirection);
+var
+  Field : TField;
+begin
+  if Section.ColumnIndex < FGrid.Columns.Count then
+  begin
+    Field := FGrid.Columns[Section.ColumnIndex].Field;
+    if Assigned(Field) then
+    begin
+      if Field.FieldName = FSortedFieldName then
+        SortDirection := FSortDirection;
+    end;
+  end;
+end;
+
+procedure TfrmGridView.FGridGetSortImage(Sender: TObject;
+  Section: TGridHeaderSection; SortImage: TBitmap);
+begin
+  if FSortDirection = gsAscending then
+    SortImage.Assign(FUpSortImage)
+  else
+  begin
+    SortImage.Assign(FDownSortImage)
+  end;
+end;
+
+procedure TfrmGridView.FGridHeaderClick(Sender: TObject;
+  Section: TGridHeaderSection);
+var
+  Field : TField;
+begin
+  Field := FGrid.Columns[Section.ColumnIndex].Field;
+  if Assigned(Field) and (Field.FieldKind = fkData) then
+  begin
+    case FSortDirection of
+      gsNone, gsDescending:
+        FSortDirection := gsAscending;
+      gsAscending:
+      begin
+        if Field.FieldName = FSortedFieldName then
+          FSortDirection := gsDescending
+      end;
+    end;
+    FSortedFieldName := Field.FieldName;
+    Data.Sort(DataSet, Field.FieldName, FSortDirection = gsDescending);
+    DataSet.First;
+  end
+  else
+  begin
+    FSortDirection   := gsNone;
+    FSortedFieldName := '';
+  end;
+end;
+
 procedure TfrmGridView.FGridKeyPress(Sender: TObject; var Key: Char);
 var
   GV   : TDBGridView;
@@ -504,11 +586,17 @@ begin
 //    Abort;
 //  end;
 end;
+{$ENDREGION}
+
+procedure TfrmGridView.SettingsChanged(Sender: TObject);
+begin
+  ApplyGridSettings;
+end;
+
 procedure TfrmGridView.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
   Action := caFree;
 end;
-
 {$ENDREGION}
 
 {$REGION 'private methods'}
@@ -603,6 +691,7 @@ constructor TfrmGridView.Create(AOwner: TComponent;
 begin
   inherited Create(AOwner);
   FSettings := ASettings;
+  FSettings.OnChanged.Add(SettingsChanged);
   FData     := AData;
   if Assigned(ADataSet) then
     FDataSet := ADataSet

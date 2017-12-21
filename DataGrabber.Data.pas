@@ -30,14 +30,12 @@ unit DataGrabber.Data;
 
   For ODBC based drivers, if the ODBCDriver is specified, FireDAC uses the
   specified driver. If it is not specified, a default driver name is used.
-
 }
 
 {
   TODO
     - Fieldlists are only built based on the primary (first) resultset if
       multiple resultsets are returned.
-
     - support for cached updates on (multiple) resultsets that are assigned to
       TFDMemTable objects.
     - support for local SQL on TFDMemTable objects.
@@ -58,19 +56,19 @@ uses
   FireDAC.Phys.DB2, FireDAC.Phys.DS, FireDAC.Phys.FB, FireDAC.Phys.IB,
   FireDAC.Phys.Infx, FireDAC.Phys.MongoDB, FireDAC.Phys.MSAcc,
   FireDAC.Phys.MySQL, FireDAC.Phys.ODBC, FireDAC.Phys.PG, FireDAC.Phys.SQLite,
-  FireDAC.Phys.TData, FireDAC.Phys.TDBX,
+  FireDAC.Phys.TData,
 
   FireDAC.VCLUI.Async,
-  FireDAC.Comp.UI,
 
-  FireDAC.DApt.Intf, FireDAC.DApt,
+
+  FireDAC.DApt,
   FireDAC.DatS,
   FireDAC.Comp.DataSet, FireDAC.Comp.Client,
   FireDAC.VCLUI.Wait,
 
   Spring, Spring.Collections,
 
-  DataGrabber.ConnectionSettings, DataGrabber.Interfaces;
+  DataGrabber.ConnectionSettings, DataGrabber.Interfaces, FireDAC.DApt.Intf;
 
 type
   TdmData = class(
@@ -148,13 +146,12 @@ type
     procedure SetConnected(const Value: Boolean);
     function GetDriverNames: TStrings;
     function GetConnectionSettings: TConnectionSettings;
-    function GetDataSet : TDataSet;
+    function GetDataSet : TFDDataSet;
     function GetRecordCount : Integer;
     function GetActive: Boolean;
     function GetSQL: string;
     procedure SetSQL(const Value: string);
     function GetCanModify: Boolean;
-    function GetFDQuery: TFDQuery;
     function GetOnAfterExecute: IEvent<TNotifyEvent>;
     function GetConnection: TFDConnection;
     function GetItem(AIndex: Integer): TFDMemTable;
@@ -175,18 +172,36 @@ type
     procedure InitField(AField: TField);
 
     procedure UpdateFieldLists;
+
+    procedure SaveToFile(
+      ADataSet        : TDataSet;
+      const AFileName : string = '';
+      AFormat         : TFDStorageFormat = sfAuto
+    ); overload;
+    procedure LoadFromFile(
+      ADataSet        : TDataSet;
+      const AFileName : string = '';
+      AFormat         : TFDStorageFormat = sfAuto
+    ); overload;
     procedure SaveToFile(
       const AFileName : string = '';
       AFormat         : TFDStorageFormat = sfAuto
-    );
-
+    ); overload;
     procedure LoadFromFile(
       const AFileName : string = '';
       AFormat         : TFDStorageFormat = sfAuto
-    );
+    ); overload;
 
-    property FDQuery: TFDQuery
-      read GetFDQuery;
+    procedure Sort(
+      const AFieldName : string;
+      ADescending      : Boolean = False
+    ); overload;
+
+    procedure Sort(
+      ADataSet         : TDataSet;
+      const AFieldName : string;
+      ADescending      : Boolean = False
+    ); overload;
 
     property Connection: TFDConnection
       read GetConnection;
@@ -200,11 +215,10 @@ type
     property DriverNames: TStrings
       read GetDriverNames;
 
-    {$REGION 'IData'}
     property SQL: string
       read GetSQL write SetSQL;
 
-    property DataSet: TDataSet
+    property DataSet: TFDDataSet
       read GetDataSet;
 
     property Items[AIndex: Integer]: TFDMemTable
@@ -376,11 +390,6 @@ begin
 end;
 {$ENDREGION}
 
-function TdmData.GetFDQuery: TFDQuery;
-begin
-  Result := qryMain;
-end;
-
 function TdmData.GetItem(AIndex: Integer): TFDMemTable;
 begin
   Result := FDataSets[AIndex];
@@ -409,7 +418,7 @@ begin
   Result := DataSet.RecordCount;
 end;
 
-function TdmData.GetDataSet: TDataSet;
+function TdmData.GetDataSet: TFDDataSet;
 begin
   if FDataSets.Any then
     Result := FDataSets.First
@@ -429,7 +438,7 @@ end;
 
 function TdmData.GetCanModify: Boolean;
 begin
-  Result := not FDQuery.UpdateOptions.ReadOnly;
+  Result := not qryMain.UpdateOptions.ReadOnly;
 end;
 
 function TdmData.GetConnected: Boolean;
@@ -719,22 +728,21 @@ begin
   if Trim(ACommandText) <> '' then
   begin
     FDataSets.Clear;
-    FDQuery.Close;
-    FDQuery.Open(ACommandText);
-
+    qryMain.Close;
+    qryMain.Open(ACommandText);
     if MultipleResultSets then
     begin
       LMemTable := TFDMemTable.Create(nil);
-      LMemTable.Data := FDQuery.Data;
+      LMemTable.Data := qryMain.Data;
       FDataSets.Add(LMemTable);
-      B := FDQuery.Active;
+      B := qryMain.Active;
       while B do
       begin
-        FDQuery.NextRecordSet;
-        if FDQuery.Active then
+        qryMain.NextRecordSet;
+        if qryMain.Active then
         begin
           LMemTable := TFDMemTable.Create(nil);
-          LMemTable.Data := FDQuery.Data;
+          LMemTable.Data := qryMain.Data;
           FDataSets.Add(LMemTable);
         end
         else
@@ -761,6 +769,23 @@ begin
       Result := True;
     end;
   end;
+end;
+
+procedure TdmData.Sort(const AFieldName: string; ADescending: Boolean);
+begin
+  Sort(DataSet, AFieldName, ADescending);
+end;
+
+procedure TdmData.Sort(ADataSet: TDataSet; const AFieldName: string;
+  ADescending: Boolean);
+var
+  C : Char;
+begin
+  if ADescending then
+    C := 'D'
+  else
+    C := 'A';
+  (ADataSet as TFDDataSet).IndexFieldNames := Format('%s:%s', [AFieldName, C]);
 end;
 
 procedure TdmData.UpdateFieldLists;
@@ -814,17 +839,30 @@ begin
   FExecuted := True;
 end;
 
+procedure TdmData.LoadFromFile(ADataSet: TDataSet; const AFileName: string;
+  AFormat: TFDStorageFormat);
+begin
+  (ADataSet as TFDDataSet).LoadFromFile(AFileName, AFormat);
+end;
+
 procedure TdmData.LoadFromFile(const AFileName: string;
   AFormat: TFDStorageFormat);
 begin
-  FDQuery.LoadFromFile(AFileName, AFormat);
+  DataSet.LoadFromFile(AFileName, AFormat);
 end;
 
 procedure TdmData.SaveToFile(const AFileName: string;
   AFormat: TFDStorageFormat);
 begin
-  FDQuery.SaveToFile(AFileName, AFormat);
+  DataSet.SaveToFile(AFileName, AFormat);
 end;
+
+procedure TdmData.SaveToFile(ADataSet: TDataSet; const AFileName: string;
+  AFormat: TFDStorageFormat);
+begin
+  (ADataSet as TFDDataSet).SaveToFile(AFileName, AFormat);
+end;
+
 {$ENDREGION}
 
 end.

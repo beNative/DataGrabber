@@ -49,6 +49,7 @@ object frmConnectionView: TfrmConnectionView
         Top = 0
         Width = 8
         Height = 232
+        OnMoved = splVerticalMoved
       end
       object pnlVST: TPanel
         Left = 0
@@ -58,9 +59,6 @@ object frmConnectionView: TfrmConnectionView
         Align = alLeft
         BevelOuter = bvNone
         TabOrder = 0
-        ExplicitLeft = 88
-        ExplicitTop = 95
-        ExplicitHeight = 41
       end
       object pnlTopRight: TPanel
         Left = 193
@@ -70,10 +68,8 @@ object frmConnectionView: TfrmConnectionView
         Align = alClient
         BevelOuter = bvNone
         TabOrder = 1
-        ExplicitLeft = 360
-        ExplicitTop = 96
-        ExplicitWidth = 185
-        ExplicitHeight = 41
+        ExplicitLeft = 191
+        ExplicitTop = 2
       end
     end
     object pnlBottom: TOMultiPanel
