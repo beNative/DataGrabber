@@ -161,7 +161,6 @@ implementation
 {$R *.dfm}
 
 uses
-
   Vcl.Clipbrd,
 
   Spring.Container,

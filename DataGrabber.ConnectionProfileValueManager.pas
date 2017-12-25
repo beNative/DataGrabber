@@ -61,8 +61,6 @@ uses
 
   Spring.Container,
 
-
-
   DDuce.Logger;
 
 {$REGION 'protected methods'}
@@ -75,16 +73,13 @@ end;
 function TConnectionProfileValueManager.HasDialog(
   const PItem: PPropItem): Boolean;
 begin
-  if PItem.Name = 'ConnectionString' then
-    Result := True
-  else
-    Result := inherited HasDialog(PItem);
+  Result := inherited HasDialog(PItem);
 end;
 
 function TConnectionProfileValueManager.HasList(
   const PItem: PPropItem): Boolean;
 begin
-  if MatchStr(PItem.Name, ['Protocol']) then
+  if MatchStr(PItem.Name, ['DriverName', 'ConnectionDefName']) then
     Result := True
   else
   begin
@@ -100,34 +95,14 @@ end;
 
 function TConnectionProfileValueManager.GetDialog(
   const PItem: PPropItem): TComponentClass;
-var
-  S : string;
-  CP : TConnectionProfile;
 begin
-  if PItem.Name = 'ConnectionString' then
-  begin
-    S := PItem.Value.AsString;
-    TfrmFDGUIxFormsConnEdit.Execute(S, '');
-    CP := PItem.Component as TConnectionProfile;
-    CP.ConnectionSettings.ConnectionString := S;
-  end;
   Result := inherited GetDialog(PItem);
 end;
 
 function TConnectionProfileValueManager.DialogResultValue(
   const PItem: PPropItem; Dialog: TComponent): TValue;
-var
-  CP : TConnectionProfile;
 begin
-  if PItem.Name = 'ConnectionString' then
-  begin
-    CP := PItem.Component as TConnectionProfile;
-    Result := CP.ConnectionSettings.ConnectionString;
-  end
-  else
-  begin
-    Result := inherited DialogResultValue(PItem, Dialog);
-  end;
+  Result := inherited DialogResultValue(PItem, Dialog);
 end;
 
 procedure TConnectionProfileValueManager.GetListItems(
@@ -136,6 +111,10 @@ begin
   if PItem.Name = 'DriverName' then
   begin
     FDManager.GetDriverNames(Items);
+  end
+  else if PItem.Name = 'ConnectionDefName' then
+  begin
+    FDManager.GetConnectionDefNames(Items);
   end
   else
   begin

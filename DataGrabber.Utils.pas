@@ -77,48 +77,6 @@ uses
   System.SysUtils,
   Vcl.Forms;
 
-{
-function GetTextWidth(const AText: string): Integer;
-var
-  SL      : TStringList;
-  I, W, R : Integer;
-begin
-  SL := TStringList.Create;
-  try
-    SL.Text := AText;
-    R := 0;
-    for I := 0 to SL.Count - 1 do
-    begin
-      W := Length(SL[I]);
-      if W > R then
-        R := W;
-    end;
-    Result := R;
-  finally
-    SL.Free;
-  end;
-end;
-
-function GetMaxTextWidth(AStrings: TStrings): Integer;
-var
-  I : Integer;
-  N : Integer;
-begin
-  Result := 0;
-  if Assigned(AStrings) then
-  begin
-    for I := 0 to AStrings.Count - 1 do
-    begin
-      N := GetTextWidth(AStrings[I]);
-      if N > Result then
-        Result := N;
-    end;
-  end;
-end;
-
-}
-
-
 {$REGION 'interfaced routines'}
 function GetTextHeight(const AText: string; AFont: TFont): Integer;
 var

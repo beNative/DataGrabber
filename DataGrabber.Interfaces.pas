@@ -170,6 +170,8 @@ type
     function GetGroupByBoxVisible: Boolean;
     procedure SetGroupByBoxVisible(const Value: Boolean);
     function GetOnChanged: IEvent<TNotifyEvent>;
+    function GetMergeColumnCells: Boolean;
+    procedure SetMergeColumnCells(const Value: Boolean);
     {$ENDREGION}
 
     property DataTypeColors[Index: TDataType]: TColor
@@ -189,6 +191,9 @@ type
 
     property GroupByBoxVisible: Boolean
       read GetGroupByBoxVisible write SetGroupByBoxVisible;
+
+    property MergeColumnCells: Boolean
+      read GetMergeColumnCells write SetMergeColumnCells;
 
     property OnChanged: IEvent<TNotifyEvent>
       read GetOnChanged;
@@ -281,6 +286,8 @@ type
     function GetGroupByBoxVisible: Boolean;
     procedure SetGroupByBoxVisible(const Value: Boolean);
     function GetOnChanged: IEvent<TNotifyEvent>;
+    function GetMergeColumnCells: Boolean;
+    procedure SetMergeColumnCells(const Value: Boolean);
     {$ENDREGION}
 
     procedure Load;
@@ -318,6 +325,9 @@ type
 
     property GroupByBoxVisible: Boolean
       read GetGroupByBoxVisible write SetGroupByBoxVisible;
+
+    property MergeColumnCells: Boolean
+      read GetMergeColumnCells write SetMergeColumnCells;
 
     property ShowHorizontalGridLines: Boolean
       read GetShowHorizontalGridLines write SetShowHorizontalGridLines;
@@ -484,10 +494,8 @@ type
     {$REGION 'property access methods'}
     function GetConstantFieldsVisible: Boolean;
     function GetEmptyFieldsVisible: Boolean;
-    function GetShowFavoriteFieldsOnly: Boolean;
     procedure SetConstantFieldsVisible(const Value: Boolean);
     procedure SetEmptyFieldsVisible(const Value: Boolean);
-    procedure SetShowFavoriteFieldsOnly(const Value: Boolean);
     {$ENDREGION}
 
     function ShowAllFields: Boolean;
@@ -497,9 +505,6 @@ type
 
     property EmptyFieldsVisible: Boolean
       read GetEmptyFieldsVisible write SetEmptyFieldsVisible;
-
-    property ShowFavoriteFieldsOnly: Boolean
-      read GetShowFavoriteFieldsOnly write SetShowFavoriteFieldsOnly;
   end;
 
 implementation

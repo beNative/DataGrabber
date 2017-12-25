@@ -77,7 +77,9 @@ uses
   DataGrabber.ConnectionSettings in 'DataGrabber.ConnectionSettings.pas',
   Vcl.Themes,
   Vcl.Styles,
-  DataGrabber.DataView.cxGrid in 'DataView\DataGrabber.DataView.cxGrid.pas' {frmcxGrid};
+  DataGrabber.DataView.cxGrid in 'DataView\DataGrabber.DataView.cxGrid.pas' {frmcxGrid},
+  ZeroMQ.API in '..\..\libraries\dduce\Source\Dependencies\ZeroMQ\ZeroMQ.API.pas',
+  ZeroMQ in '..\..\libraries\dduce\Source\Dependencies\ZeroMQ\ZeroMQ.pas';
 
 {$R *.res}
 

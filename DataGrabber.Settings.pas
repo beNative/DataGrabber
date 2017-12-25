@@ -44,6 +44,7 @@ type
     FShowHorizontalGridLines  : Boolean;
     FResultDisplayLayout      : TResultDisplayLayout;
     FGroupByBoxVisible        : Boolean;
+    FMergeColumnCells         : Boolean;
     FUpdateLock               : Integer;
     FOnChanged                : Event<TNotifyEvent>;
 
@@ -76,6 +77,8 @@ type
     function GetGroupByBoxVisible: Boolean;
     procedure SetGroupByBoxVisible(const Value: Boolean);
     function GetOnChanged: IEvent<TNotifyEvent>;
+    function GetMergeColumnCells: Boolean;
+    procedure SetMergeColumnCells(const Value: Boolean);
     {$ENDREGION}
 
   protected
@@ -107,6 +110,9 @@ type
   published
     property GroupByBoxVisible: Boolean
       read GetGroupByBoxVisible write SetGroupByBoxVisible default True;
+
+    property MergeColumnCells: Boolean
+      read GetMergeColumnCells write SetMergeColumnCells default False;
 
     property GridCellColoring: Boolean
       read GetGridCellColoring write SetGridCellColoring default True;
@@ -263,6 +269,20 @@ end;
 function TSettings.GetGroupByBoxVisible: Boolean;
 begin
   Result := FGroupByBoxVisible;
+end;
+
+function TSettings.GetMergeColumnCells: Boolean;
+begin
+  Result := FMergeColumnCells;
+end;
+
+procedure TSettings.SetMergeColumnCells(const Value: Boolean);
+begin
+  if Value <> MergeColumnCells then
+  begin
+    FMergeColumnCells := Value;
+    Changed;
+  end;
 end;
 
 procedure TSettings.SetGroupByBoxVisible(const Value: Boolean);
@@ -481,8 +501,5 @@ begin
   end;
 end;
 {$ENDREGION}
-
-initialization
-  TSettings.ClassName;
 
 end.

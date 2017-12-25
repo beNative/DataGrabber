@@ -48,23 +48,23 @@ uses
 type
   TConnectionSettings = class(TPersistent)
   private
-    FUserName          : string;
-    FDriverName        : string;
-    FPort              : Integer;
-    FPassword          : string;
-    FHostName          : string;
-    FDatabase          : string;
-    FCatalog           : string;
-    FReadOnly          : Boolean;
-    FOnChanged         : Event<TNotifyEvent>;
-    FFetchOnDemand     : Boolean;
-    FPacketRecords     : Integer;
-    FMaxRecords        : Integer;
-    FAutoReconnect     : Boolean;
-    FOSAuthent         : Boolean;
-    FConnectionString  : string;
-    FDisconnectedMode  : Boolean;
-    FMultipleResultSets: Boolean;
+    FUserName           : string;
+    FDriverName         : string;
+    FPort               : Integer;
+    FPassword           : string;
+    FHostName           : string;
+    FDatabase           : string;
+    FCatalog            : string;
+    FReadOnly           : Boolean;
+    FOnChanged          : Event<TNotifyEvent>;
+    FFetchOnDemand      : Boolean;
+    FPacketRecords      : Integer;
+    FMaxRecords         : Integer;
+    FAutoReconnect      : Boolean;
+    FOSAuthent          : Boolean;
+    FDisconnectedMode   : Boolean;
+    FMultipleResultSets : Boolean;
+    FConnectionDefName  : string;
 
     {$REGION 'property access methods'}
     function GetCatalog: string;
@@ -87,8 +87,6 @@ type
     function GetPacketRecords: Integer;
     procedure SetFetchOnDemand(const Value: Boolean);
     procedure SetPacketRecords(const Value: Integer);
-    function GetConnectionString: string;
-    procedure SetConnectionString(const Value: string);
     function GetMaxRecords: Integer;
     procedure SetMaxRecords(const Value: Integer);
     function GetOnChanged: IEvent<TNotifyEvent>;
@@ -100,18 +98,16 @@ type
     procedure SetDisconnectedMode(const Value: Boolean);
     function GetMultipleResultSets: Boolean;
     procedure SetMultipleResultSets(const Value: Boolean);
+    function GetConnectionDefName: string;
+    procedure SetConnectionDefName(const Value: string);
     {$ENDREGION}
 
   protected
     procedure Changed;
 
   public
-
     procedure Assign(Source: TPersistent); override;
     procedure AfterConstruction; override;
-
-    property ConnectionString: string
-      read GetConnectionString write SetConnectionString;
 
   published
     property AutoReconnect: Boolean
@@ -138,6 +134,10 @@ type
 
     property Catalog: string
       read GetCatalog write SetCatalog;
+
+    { References the connection definition name in the FireDAC ini file. }
+    property ConnectionDefName: string
+      read GetConnectionDefName write SetConnectionDefName;
 
     property ReadOnly: Boolean
       read GetReadOnly write SetReadOnly;
@@ -204,16 +204,16 @@ begin
   end;
 end;
 
-function TConnectionSettings.GetConnectionString: string;
+function TConnectionSettings.GetConnectionDefName: string;
 begin
-  Result := FConnectionString;
+  Result := FConnectionDefName;
 end;
 
-procedure TConnectionSettings.SetConnectionString(const Value: string);
+procedure TConnectionSettings.SetConnectionDefName(const Value: string);
 begin
-  if Value <> ConnectionString then
+  if Value <> ConnectionDefName then
   begin
-    FConnectionString := Value;
+    FConnectionDefName := Value;
     Changed;
   end;
 end;
@@ -432,7 +432,7 @@ begin
     FFetchOnDemand      := CS.FetchOnDemand;
     FPacketRecords      := CS.PacketRecords;
     FReadOnly           := CS.ReadOnly;
-    FConnectionString   := CS.ConnectionString;
+    FConnectionDefName  := CS.ConnectionDefName;
     FMaxRecords         := CS.MaxRecords;
     FAutoReconnect      := CS.AutoReconnect;
     FOSAuthent          := CS.OSAuthent;

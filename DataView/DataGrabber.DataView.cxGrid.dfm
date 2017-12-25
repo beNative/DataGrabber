@@ -22,7 +22,6 @@ object frmcxGrid: TfrmcxGrid
     Align = alClient
     BevelInner = bvNone
     BevelOuter = bvNone
-    BorderStyle = cxcbsNone
     Font.Charset = ANSI_CHARSET
     Font.Color = clWindowText
     Font.Height = -11
@@ -84,8 +83,10 @@ object frmcxGrid: TfrmcxGrid
       OptionsView.FocusRect = False
       OptionsView.ExpandButtonsForEmptyDetails = False
       OptionsView.GridLineColor = clSilver
+      OptionsView.HeaderAutoHeight = True
       OptionsView.HeaderEndEllipsis = True
       OptionsView.Indicator = True
+      OnCustomDrawColumnHeader = tvwMainCustomDrawColumnHeader
       OnCustomDrawGroupSummaryCell = tvwMainCustomDrawGroupSummaryCell
     end
     object grlMain: TcxGridLevel

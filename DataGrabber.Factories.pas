@@ -26,7 +26,7 @@ uses
   DataGrabber.Interfaces, DataGrabber.ConnectionSettings;
 
 type
-  TDataGrabberFactories = class
+  TDataGrabberFactories = class sealed
   public
     class function CreateSettings(
       AOwner : TComponent
@@ -72,6 +72,8 @@ implementation
 uses
   Vcl.Forms,
 
+  Spring,
+
   DataGrabber.ConnectionViewManager, DataGrabber.Settings,
   DataGrabber.EditorView, DataGrabber.Data, DataGrabber.ConnectionView,
   DataGrabber.DataView.cxGrid, DataGrabber.DataView.GridView,
@@ -100,16 +102,16 @@ class procedure TDataGrabberFactories.AddToolbarButtons(AToolBar: TToolbar;
 
   procedure AddButton(const AActionName: string);
   begin
+    Guard.CheckNotNull(AManager.Actions[AActionName], AActionName);
     AddActionButton(AToolBar, AManager.Actions[AActionName]);
   end;
 
 begin
-  //AddButton('actFavoriteFieldsOnly');
   AddButton('actPreview');
   AddButton('actDesigner');
   AddButton('actPrint');
   AddButton('actDataInspector');
-  AddButton('actMergeAllColumnCells');
+  AddButton('actMergeColumnCells');
   AddButton('actGroupByBoxVisible');
   AddButton('actShowAllColumns');
   AddButton('actHideSelectedColumns');

@@ -73,23 +73,22 @@ const
     'from '#13#10 +
     '  Employee e ';
 
-
   SETTINGS_FILE = 'settings.json';
 
 resourcestring
-  SFetchingData       = 'Fetching data...';
-  SUpdatingView       = 'Updating view...';
-  SReady              = 'Ready';
-  SRecordCount        = '%d records';
-  SFieldCount         = '%d fields';
-  SConstantFieldCount = '%d constant fields';
-  SEmptyFieldCount    = '%d empty fields';
-  SUpdateable         = 'Updateable';
-  SReadOnly           = 'ReadOnly';
-  SConnected          = 'Connected';
-  SDisconnected       = 'Disconnected';
+  SFetchingData             = 'Fetching data...';
+  SUpdatingView             = 'Updating view...';
+  SReady                    = 'Ready';
+  SRecordCount              = '%d records';
+  SFieldCount               = '%d fields';
+  SConstantFieldCount       = '%d constant fields';
+  SEmptyFieldCount          = '%d empty fields';
+  SUpdateable               = 'Updateable';
+  SReadOnly                 = 'ReadOnly';
+  SConnected                = 'Connected';
+  SDisconnected             = 'Disconnected';
+  SAskSaveChanges           = 'Do you want to save changes?';
   SOpenSettingsFileLocation = 'Open settings file location (%s)';
-
 
 implementation
 

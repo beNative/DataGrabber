@@ -404,8 +404,8 @@ begin
   FVSTProfiles.OnFocusChanged    := FVSTProfilesFocusChanged;
   FVSTProfiles.OnPaintText       := FVSTProfilesPaintText;
   FVSTProfiles.Header.Options    := FVSTProfiles.Header.Options - [hoVisible];
-  FVSTProfiles.TreeOptions.PaintOptions :=
-    FVSTProfiles.TreeOptions.PaintOptions - [toHideSelection];
+  FVSTProfiles.TreeOptions.PaintOptions := FVSTProfiles.TreeOptions.PaintOptions
+    - [toHideSelection, toUseExplorerTheme, toHotTrack];
   FVSTProfiles.Colors.FocusedSelectionColor := clBtnHighlight;
   FVSTProfiles.Margins.Right := 0;
   FVSTProfiles.Indent        := 0;

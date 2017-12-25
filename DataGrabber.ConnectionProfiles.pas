@@ -31,18 +31,12 @@ type
   private
     FName               : string;
     FProfileColor       : TColor;
-    FVisibleItems       : TStrings;
-    FFavoriteFields     : TStrings;
     FConnectionSettings : TConnectionSettings;
 
   protected
     {$REGION 'property access methods'}
     procedure SetCollection(const Value: TConnectionProfiles); reintroduce;
     function GetCollection: TConnectionProfiles;
-    function GetVisibleItems: string;
-    procedure SetVisibleItems(const Value: string);
-    function GetFavoriteFields: string;
-    procedure SetFavoriteFields(const Value: string);
     procedure SetDisplayName(const Value: string); override;
     function GetDisplayName: string; override;
     {$ENDREGION}
@@ -68,12 +62,6 @@ type
 
     property ProfileColor: TColor
       read FProfileColor write FProfileColor default clWhite;
-
-    property VisibleItems: string
-      read GetVisibleItems write SetVisibleItems;
-
-    property FavoriteFields: string
-      read GetFavoriteFields write SetFavoriteFields;
 
     property ConnectionSettings: TConnectionSettings
       read FConnectionSettings write FConnectionSettings;
@@ -236,20 +224,11 @@ constructor TConnectionProfile.Create(Collection: TCollection);
 begin
   inherited Create(Collection);
   FConnectionSettings := TConnectionSettings.Create;
-  FVisibleItems := TStringList.Create;
-  TStringList(FVisibleItems).Sorted     := True;
-  TStringList(FVisibleItems).Duplicates := dupIgnore;
-  FFavoriteFields := TStringList.Create;
-  TStringList(FFavoriteFields).Sorted     := True;
-  TStringList(FFavoriteFields).Duplicates := dupIgnore;
-  FProfileColor                           := clWhite;
-  // Add your property storage initializations here.
+  FProfileColor       := clWhite;
 end;
 
 destructor TConnectionProfile.Destroy;
 begin
-  FreeAndNil(FVisibleItems);
-  FreeAndNil(FFavoriteFields);
   FreeAndNil(FConnectionSettings);
   inherited Destroy;
 end;
@@ -282,27 +261,7 @@ begin
     (TConnectionProfiles(Collection).IndexOf(Value) >= 0) then
       raise Exception.CreateFmt('Duplicate name [%s]!', [Value]);
   FName := Value;
-  inherited;
-end;
-
-function TConnectionProfile.GetFavoriteFields: string;
-begin
-  Result := FFavoriteFields.Text;
-end;
-
-procedure TConnectionProfile.SetFavoriteFields(const Value: string);
-begin
-  FFavoriteFields.Text := Value;
-end;
-
-function TConnectionProfile.GetVisibleItems: string;
-begin
-  Result := FVisibleItems.Text;
-end;
-
-procedure TConnectionProfile.SetVisibleItems(const Value: string);
-begin
-  FVisibleItems.Text := Value;
+  inherited SetDisplayName(Value);
 end;
 {$ENDREGION}
 
@@ -318,7 +277,6 @@ begin
      Collection.BeginUpdate;
    try
      ProfileColor     := CP.ProfileColor;
-     VisibleItems     := CP.VisibleItems;
      ConnectionSettings.Assign(CP.ConnectionSettings);
    finally
      if Assigned(Collection) then

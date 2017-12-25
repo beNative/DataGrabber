@@ -32,11 +32,9 @@ uses
   cxGridCustomTableView, cxGridTableView, cxGridDBTableView, cxInplaceContainer,
   cxVGrid, cxOI, cxGridCustomPopupMenu, cxGridPopupMenu,
   cxLookAndFeels, cxLookAndFeelPainters, cxGridCardView, cxGridBandedTableView,
-  cxGridDBCardView, cxGridDBBandedTableView, cxNavigator,
+  cxGridDBCardView, cxGridDBBandedTableView, cxNavigator, cxFilter, cxData,
 
-
-
-  DataGrabber.Interfaces, cxFilter, cxData;
+  DataGrabber.Interfaces;
 
 type
   TfrmcxGrid = class(TForm, IDataView, IGroupable, IMergable)
@@ -64,6 +62,12 @@ type
     procedure FormClose(
       Sender     : TObject;
       var Action : TCloseAction
+    );
+    procedure tvwMainCustomDrawColumnHeader(
+      Sender    : TcxGridTableView;
+      ACanvas   : TcxCanvas;
+      AViewInfo : TcxGridColumnHeaderViewInfo;
+      var ADone : Boolean
     );
 
   private
@@ -385,6 +389,13 @@ begin
       ACanvas.Font.Color := clWhite;
     end;
   end;
+end;
+
+procedure TfrmcxGrid.tvwMainCustomDrawColumnHeader(Sender: TcxGridTableView;
+  ACanvas: TcxCanvas; AViewInfo: TcxGridColumnHeaderViewInfo;
+  var ADone: Boolean);
+begin
+  ACanvas.Font.Style := ACanvas.Font.Style + [fsBold];
 end;
 
 procedure TfrmcxGrid.tvwMainCustomDrawGroupSummaryCell(Sender: TObject;
@@ -839,7 +850,8 @@ begin
       GL := glVertical;
     end;
     tvwMain.OptionsView.GridLines := GL;
-    tvwMain.OptionsView.GroupByBox := FSettings.GroupByBoxVisible;
+    tvwMain.OptionsView.GroupByBox := Settings.GroupByBoxVisible;
+    MergeColumnCells := Settings.MergeColumnCells;
   end;
 end;
 {$ENDREGION}

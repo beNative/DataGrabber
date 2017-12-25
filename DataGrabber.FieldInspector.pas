@@ -85,7 +85,6 @@ uses
   Spring,
 
   DDuce.Factories.VirtualTrees, DDuce.Factories.zObjInspector,
-
   DDuce.ObjectInspector.zObjectInspector;
 
 {$REGION 'construction and destruction'}
