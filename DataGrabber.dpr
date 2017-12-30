@@ -79,7 +79,8 @@ uses
   Vcl.Styles,
   DataGrabber.DataView.cxGrid in 'DataView\DataGrabber.DataView.cxGrid.pas' {frmcxGrid},
   ZeroMQ.API in '..\..\libraries\dduce\Source\Dependencies\ZeroMQ\ZeroMQ.API.pas',
-  ZeroMQ in '..\..\libraries\dduce\Source\Dependencies\ZeroMQ\ZeroMQ.pas';
+  ZeroMQ in '..\..\libraries\dduce\Source\Dependencies\ZeroMQ\ZeroMQ.pas',
+  DataGrabber.About.Dialog in 'DataGrabber.About.Dialog.pas' {Form1};
 
 {$R *.res}
 

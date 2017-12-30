@@ -81,6 +81,8 @@ type
     procedure SetMergeColumnCells(const Value: Boolean);
     {$ENDREGION}
 
+    procedure FormSettingsChanged(Sender: TObject);
+
   protected
     procedure BeginUpdate;
     procedure EndUpdate;
@@ -184,6 +186,7 @@ begin
   for I := Low(TDataType) to High(TDataType) do
     FDataTypeColors.Add(I, ColorAdjustLuma(DEFAULT_DATATYPE_COLORS[I], 6, False));
   FFormSettings := TFormSettings.Create;
+  FFormSettings.OnChanged.Add(FormSettingsChanged);
   FConnectionProfiles := TConnectionProfiles.Create(Self);
   FFileName := SETTINGS_FILE;
   FGridCellColoring := True;
@@ -194,6 +197,7 @@ end;
 procedure TSettings.BeforeDestruction;
 begin
   FreeAndNil(FConnectionProfiles);
+  FFormSettings.OnChanged.Remove(FormSettingsChanged);
   FreeAndNil(FFormSettings);
   FreeAndNil(FDataTypeColors);
   FreeAndNil(FConnectionSettings);
@@ -426,6 +430,13 @@ end;
 procedure TSettings.SetFormSettings(const Value: TFormSettings);
 begin
   FFormSettings.Assign(Value);
+  Changed;
+end;
+{$ENDREGION}
+
+{$REGION 'event handlers'}
+procedure TSettings.FormSettingsChanged(Sender: TObject);
+begin
   Changed;
 end;
 {$ENDREGION}

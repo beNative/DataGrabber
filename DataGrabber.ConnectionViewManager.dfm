@@ -9,7 +9,8 @@ object dmConnectionViewManager: TdmConnectionViewManager
     object actExecute: TAction
       Category = 'Data'
       Caption = 'Execute'
-      ImageIndex = 0
+      Hint = 'Execute SQL'
+      ImageIndex = 3
       SecondaryShortCuts.Strings = (
         'F5')
       ShortCut = 116
@@ -31,8 +32,10 @@ object dmConnectionViewManager: TdmConnectionViewManager
     object actToggleStayOnTop: TAction
       AutoCheck = True
       Caption = 'Stay on Top'
+      Hint = 'Toggle stay on top.'
       ImageIndex = 78
-      ShortCut = 16464
+      ShortCut = 49232
+      OnExecute = actToggleStayOnTopExecute
     end
     object actHideSelectedColumns: TAction
       Category = 'Grid'
@@ -82,8 +85,10 @@ object dmConnectionViewManager: TdmConnectionViewManager
     object actToggleFullScreen: TAction
       AutoCheck = True
       Caption = 'Toggle full screen'
+      Hint = 'Toggle full screen.'
       ImageIndex = 9
       ShortCut = 122
+      OnExecute = actToggleFullScreenExecute
     end
     object actCopy: TAction
       Category = 'Grid'
@@ -132,7 +137,9 @@ object dmConnectionViewManager: TdmConnectionViewManager
     end
     object actSettings: TAction
       Caption = 'Settings'
+      Hint = 'Open settings dialog.'
       ImageIndex = 77
+      ShortCut = 49235
       OnExecute = actSettingsExecute
     end
     object actInspectDataSet: TAction
@@ -225,6 +232,11 @@ object dmConnectionViewManager: TdmConnectionViewManager
       AutoCheck = True
       Caption = 'Group by box visible'
       OnExecute = actGroupByBoxVisibleExecute
+    end
+    object actFireDACInfo: TAction
+      Caption = 'FireDAC info'
+      ImageIndex = 33
+      OnExecute = actFireDACInfoExecute
     end
   end
   object ppmConnectionView: TPopupMenu
@@ -346,7 +358,7 @@ object dmConnectionViewManager: TdmConnectionViewManager
     Left = 24
     Top = 80
     Bitmap = {
-      494C01014F005100E40010001000FFFFFFFF2110FFFFFFFFFFFFFFFF424D3600
+      494C01014F005100EC0010001000FFFFFFFF2110FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000004001000001002000000000000040
       010000000000000000000000000000000000458EE7FF458EE7FF458EE7FF458E
       E7FF458EE7FF458EE7FF458EE7FF458EE7FF458EE7FF458EE7FF458EE7FF458E

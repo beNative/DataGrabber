@@ -56,19 +56,16 @@ uses
   FireDAC.Phys.DB2, FireDAC.Phys.DS, FireDAC.Phys.FB, FireDAC.Phys.IB,
   FireDAC.Phys.Infx, FireDAC.Phys.MongoDB, FireDAC.Phys.MSAcc,
   FireDAC.Phys.MySQL, FireDAC.Phys.ODBC, FireDAC.Phys.PG, FireDAC.Phys.SQLite,
-  FireDAC.Phys.TData,
-
-  FireDAC.VCLUI.Async,
-
-
-  FireDAC.DApt,
+  FireDAC.Phys.TData, FireDAC.Phys.DSDef, FireDAC.Phys.TDBXDef,
+  FireDAC.Phys.TDBX, FireDAC.Phys.TDBXBase,
+  FireDAC.VCLUI.Async, FireDAC.VCLUI.Wait,
+  FireDAC.DApt, FireDAC.DApt.Intf,
   FireDAC.DatS,
   FireDAC.Comp.DataSet, FireDAC.Comp.Client,
-  FireDAC.VCLUI.Wait,
 
   Spring, Spring.Collections,
 
-  DataGrabber.ConnectionSettings, DataGrabber.Interfaces, FireDAC.DApt.Intf;
+  DataGrabber.ConnectionSettings, DataGrabber.Interfaces;
 
 type
   TdmData = class(

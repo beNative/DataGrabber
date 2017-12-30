@@ -1,7 +1,7 @@
 object dmData: TdmData
   OldCreateOrder = False
   Height = 88
-  Width = 294
+  Width = 375
   object conMain: TFDConnection
     OnError = conMainError
     OnLost = conMainLost

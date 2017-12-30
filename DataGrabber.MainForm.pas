@@ -66,6 +66,8 @@ type
     pnlStatusBar           : TPanel;
     tlbMain                : TToolBar;
     pnlHiddenFieldsCount   : TPanel;
+    ppmCVTabs: TPopupMenu;
+    actCloseAllOtherTabs: TAction;
     {$ENDREGION}
 
     {$REGION 'action handlers'}
@@ -100,20 +102,17 @@ type
       ATab            : TChromeTab;
       var DragControl : TWinControl
     );
-    procedure ctMainBeforeDrawItem(
-      Sender       : TObject;
-      TargetCanvas : TGPGraphics;
-      ItemRect     : TRect;
-      ItemType     : TChromeTabItemType;
-      TabIndex     : Integer;
-      var Handled  : Boolean
-    );
+
     procedure actInspectChromeTabExecute(Sender : TObject);
+    procedure actCloseAllOtherTabsExecute(Sender: TObject);
     {$ENDREGION}
 
   private
     FManager  : IConnectionViewManager;
     FSettings : ISettings;
+
+    procedure SettingsChanged(Sender: TObject);
+    procedure UpdateTabs;
 
   protected
     function GetActiveConnectionView: IConnectionView;
@@ -175,9 +174,8 @@ begin
   inherited AfterConstruction;
   Logger.Channels.Add(TLoggerFactories.CreateWinIPCChannel);
   Logger.Clear;
-//  FManager  := GlobalContainer.Resolve<IConnectionViewManager>;
-//  FSettings := GlobalContainer.Resolve<ISettings>;
   FSettings := TDataGrabberFactories.CreateSettings(Self);
+  FSettings.OnChanged.Add(SettingsChanged);
   FManager  := TDataGrabberFactories.CreateManager(Self, FSettings);
   FSettings.FormSettings.AssignTo(Self);
   AddConnectionView;
@@ -199,6 +197,11 @@ end;
 procedure TfrmMain.actAddConnectionViewExecute(Sender: TObject);
 begin
   AddConnectionView;
+end;
+
+procedure TfrmMain.actCloseAllOtherTabsExecute(Sender: TObject);
+begin
+//
 end;
 
 procedure TfrmMain.actInspectChromeTabExecute(Sender: TObject);
@@ -235,38 +238,15 @@ begin
     CV.Form.Show;
     CV.Form.SetFocus;
     Manager.ActiveConnectionView := CV;
+    if Assigned(CV.ActiveConnectionProfile) then
+    begin
+//      ctMain.LookAndFeel.Tabs.Active.Style.StartColor := CV.ActiveConnectionProfile.ProfileColor;
+//      ctMain.LookAndFeel.Tabs.Active.Style.StopColor  := CV.ActiveConnectionProfile.ProfileColor;
+    end;
     ATab.Caption := Format('%s-%s', [
       CV.Form.Caption,
       CV.ActiveConnectionProfile.Name
     ]);
-  end;
-end;
-
-procedure TfrmMain.ctMainBeforeDrawItem(Sender: TObject;
-  TargetCanvas: TGPGraphics; ItemRect: TRect; ItemType: TChromeTabItemType;
-  TabIndex: Integer; var Handled: Boolean);
-var
-  CV : IConnectionView;
-begin
-
-  if (ItemType = itTab)  then
-  begin
-    CV := IConnectionView(ctMain.Tabs[TabIndex].Data);
-    if Assigned(CV) then
-    begin
-
-    //ctMain.LookAndFeel.Tabs.NotActive.Style.StartColor := CV.ActiveConnectionProfile.ProfileColor;
-    //ctMain.LookAndFeel.Tabs.NotActive.Style.StopColor  := CV.ActiveConnectionProfile.ProfileColor;
-
-//  if FBrush = nil then
-//    FBrush := TGPLinearGradientBrush.Create(MakePoint(0, ClientRect.Top),
-//                                            MakePoint(0, ClientRect.Bottom),
-//                                            MakeGDIPColor(StartColor, StartAlpha),
-//                                            MakeGDIPColor(StopColor, StopAlpha));
-
-        end;
-
-    //TargetCanvas.Brush.Color := CV.ActiveConnectionProfile.Color;
   end;
 end;
 
@@ -369,6 +349,11 @@ end;
 {$ENDREGION}
 
 {$REGION 'protected methods'}
+procedure TfrmMain.SettingsChanged(Sender: TObject);
+begin
+  Settings.FormSettings.AssignTo(Self);
+end;
+
 procedure TfrmMain.ShowToolWindow(AForm: TForm);
 begin
   if Assigned(AForm) then
@@ -402,20 +387,12 @@ begin
 end;
 
 procedure TfrmMain.UpdateActions;
-var
-  V: IConnectionView;
 begin
   inherited UpdateActions;
   UpdateStatusBar;
   if Assigned(Manager.ActiveConnectionView) then
   begin
-    V := Manager.ActiveConnectionView;
-    if Assigned(ctMain.ActiveTab) then
-    begin
-      ctMain.ActiveTab.Caption := Format('%s', [
-        V.Form.Caption
-      ]);
-    end;
+    UpdateTabs;
   end;
 end;
 {$ENDREGION}
@@ -468,6 +445,21 @@ begin
   OptimizeWidth(pnlElapsedTime);
   OptimizeWidth(pnlEditMode);
   OptimizeWidth(pnlGridType);
+end;
+
+procedure TfrmMain.UpdateTabs;
+var
+  V : IConnectionView;
+  C : Integer;
+begin
+  V := Manager.ActiveConnectionView;
+  if Assigned(ctMain.ActiveTab) and Assigned(V) then
+  begin
+    ctMain.ActiveTab.Caption := Format('%s', [V.Form.Caption]);
+    C := V.ActiveConnectionProfile.ProfileColor;
+    ctMain.LookAndFeel.Tabs.Active.Style.StartColor := C;
+    ctMain.LookAndFeel.Tabs.Active.Style.StopColor := C;
+  end;
 end;
 {$ENDREGION}
 

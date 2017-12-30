@@ -295,14 +295,14 @@ object frmSettingsDialog: TfrmSettingsDialog
                       Value = 65.000000000000000000
                     end
                     item
-                      Value = 54.248366013071900000
+                      Value = 54.248366013071890000
                     end
                     item
                       SizeStyle = ssAbsolute
                       Value = 60.000000000000000000
                     end
                     item
-                      Value = 45.751633986928120000
+                      Value = 45.751633986928110000
                     end>
                   ControlCollection = <
                     item
@@ -427,7 +427,6 @@ object frmSettingsDialog: TfrmSettingsDialog
                 Anchors = [akTop, akRight]
                 Caption = 'Profile c&olor:'
                 FocusControl = btnProfileColor
-                ExplicitLeft = 397
               end
               object btnProfileColor: TKColorButton
                 Left = 441
@@ -483,6 +482,10 @@ object frmSettingsDialog: TfrmSettingsDialog
           object tsAdvanced: TTabSheet
             Caption = '&Advanced'
             ImageIndex = 1
+            ExplicitLeft = 0
+            ExplicitTop = 0
+            ExplicitWidth = 0
+            ExplicitHeight = 0
           end
         end
       end
@@ -753,7 +756,7 @@ object frmSettingsDialog: TfrmSettingsDialog
             Left = 3
             Top = 31
             Width = 54
-            Height = 25
+            Height = 22
             Align = alClient
             Caption = 'Float'
             FocusControl = btnFloatColor
@@ -784,7 +787,7 @@ object frmSettingsDialog: TfrmSettingsDialog
             Left = 3
             Top = 59
             Width = 54
-            Height = 25
+            Height = 22
             Align = alClient
             Caption = 'String'
             FocusControl = btnStringColor
@@ -815,7 +818,7 @@ object frmSettingsDialog: TfrmSettingsDialog
             Left = 3
             Top = 87
             Width = 54
-            Height = 25
+            Height = 22
             Align = alClient
             Caption = 'Memo'
             FocusControl = btnMemoColor
@@ -846,7 +849,7 @@ object frmSettingsDialog: TfrmSettingsDialog
             Left = 3
             Top = 115
             Width = 54
-            Height = 25
+            Height = 22
             Align = alClient
             Caption = 'Date'
             FocusControl = btnDateColor
@@ -877,7 +880,7 @@ object frmSettingsDialog: TfrmSettingsDialog
             Left = 3
             Top = 143
             Width = 54
-            Height = 25
+            Height = 22
             Align = alClient
             Caption = 'Time'
             FocusControl = btnTimeColor
@@ -908,7 +911,7 @@ object frmSettingsDialog: TfrmSettingsDialog
             Left = 3
             Top = 171
             Width = 54
-            Height = 25
+            Height = 22
             Align = alClient
             Caption = 'DateTime'
             FocusControl = btnDateTimeColor
@@ -939,7 +942,7 @@ object frmSettingsDialog: TfrmSettingsDialog
             Left = 3
             Top = 199
             Width = 54
-            Height = 25
+            Height = 22
             Align = alClient
             Caption = 'NULL'
             FocusControl = btnNullColor
@@ -970,7 +973,7 @@ object frmSettingsDialog: TfrmSettingsDialog
             Left = 3
             Top = 227
             Width = 54
-            Height = 25
+            Height = 22
             Align = alClient
             Caption = 'Boolean'
             FocusControl = btnBooleanColor
@@ -1022,7 +1025,7 @@ object frmSettingsDialog: TfrmSettingsDialog
           Width = 80
           Height = 91
           Align = alClient
-          ButtonWidth = 75
+          ButtonWidth = 81
           Images = imlMain
           List = True
           ShowCaptions = True
@@ -1066,7 +1069,7 @@ object frmSettingsDialog: TfrmSettingsDialog
           Width = 137
           Height = 91
           Align = alClient
-          ButtonWidth = 122
+          ButtonWidth = 130
           Images = imlMain
           List = True
           ShowCaptions = True
@@ -1217,6 +1220,10 @@ object frmSettingsDialog: TfrmSettingsDialog
         object tsFDConnectionDefs: TTabSheet
           Caption = 'FDConnectionDefs.ini'
           ImageIndex = 1
+          ExplicitLeft = 0
+          ExplicitTop = 0
+          ExplicitWidth = 0
+          ExplicitHeight = 0
           object seFDConnectionDefs: TSynEdit
             AlignWithMargins = True
             Left = 3
@@ -1357,6 +1364,7 @@ object frmSettingsDialog: TfrmSettingsDialog
       Caption = 'Add'
       Hint = 'Add'
       ImageIndex = 3
+      ShortCut = 16429
       OnExecute = actAddExecute
     end
     object actDelete: TAction
@@ -1364,6 +1372,7 @@ object frmSettingsDialog: TfrmSettingsDialog
       Caption = 'Delete'
       Hint = 'Delete'
       ImageIndex = 4
+      ShortCut = 16430
       OnExecute = actDeleteExecute
     end
     object actMoveUp: TAction
@@ -1371,6 +1380,7 @@ object frmSettingsDialog: TfrmSettingsDialog
       Caption = 'Up'
       Hint = 'Move up'
       ImageIndex = 8
+      ShortCut = 16422
       OnExecute = actMoveUpExecute
     end
     object actMoveDown: TAction
@@ -1378,6 +1388,7 @@ object frmSettingsDialog: TfrmSettingsDialog
       Caption = 'Down'
       Hint = 'Move down'
       ImageIndex = 7
+      ShortCut = 16424
       OnExecute = actMoveDownExecute
     end
     object actDuplicate: TAction
@@ -1476,7 +1487,7 @@ object frmSettingsDialog: TfrmSettingsDialog
     DrawingStyle = dsTransparent
     Left = 600
     Bitmap = {
-      494C010118003000740010001000FFFFFFFF2110FFFFFFFFFFFFFFFF424D3600
+      494C0101180030007C0010001000FFFFFFFF2110FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000007000000001002000000000000070
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000

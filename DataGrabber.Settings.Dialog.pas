@@ -99,6 +99,7 @@ type
     btnSpacer1                   : TToolButton;
     btnSpacer2                   : TToolButton;
     btnStringColor               : TKColorButton;
+    btnTestConnection            : TButton;
     btnTimeColor                 : TKColorButton;
     cbxConnectionDefs            : TComboBox;
     cbxDrivers                   : TComboBox;
@@ -110,9 +111,13 @@ type
     chkOSAuthent                 : TCheckBox;
     chkReadOnlyResultSets        : TCheckBox;
     chkSetAsDefault              : TCheckBox;
+    conTest                      : TFDConnection;
+    dlgFont                      : TFontDialog;
     dlgOpenFile                  : TOpenDialog;
     edtCatalog                   : TButtonedEdit;
     edtDatabase                  : TButtonedEdit;
+    edtEditorFont                : TButtonedEdit;
+    edtGridFont                  : TButtonedEdit;
     edtPacketRecords             : TEdit;
     edtPassword                  : TEdit;
     edtProfileName               : TLabeledEdit;
@@ -122,6 +127,7 @@ type
     grpConnectionSettings        : TGroupBox;
     grpDBMSUserLogin             : TGroupBox;
     grpEditorSettings            : TGroupBox;
+    grpGridFont                  : TGroupBox;
     grpGridLines                 : TGroupBox;
     grpProfileSettings           : TGroupBox;
     grpResultSetDisplay          : TGroupBox;
@@ -133,7 +139,9 @@ type
     lblDates                     : TLabel;
     lblDateTimes                 : TLabel;
     lblDriverID                  : TLabel;
+    lblEditorFont                : TLabel;
     lblFloats                    : TLabel;
+    lblGridFont                  : TLabel;
     lblIntegers                  : TLabel;
     lblMemo                      : TLabel;
     lblNULL                      : TLabel;
@@ -167,14 +175,6 @@ type
     tsDisplay                    : TTabSheet;
     tsFDConnectionDefs           : TTabSheet;
     tsSettings                   : TTabSheet;
-    grpGridFont: TGroupBox;
-    edtGridFont: TButtonedEdit;
-    lblGridFont: TLabel;
-    dlgFont: TFontDialog;
-    edtEditorFont: TButtonedEdit;
-    lblEditorFont: TLabel;
-    conTest: TFDConnection;
-    btnTestConnection: TButton;
     {$ENDREGION}
 
     {$REGION 'action handlers'}
@@ -280,6 +280,7 @@ type
     procedure Changed;
 
     function AskSaveFileChanges: Boolean;
+    function ConfirmDeleteProfile: Boolean;
     procedure SaveConnectionDefinitionsFile;
     procedure LoadConnectionDefinitionsFile;
     procedure LoadApplicationSettingsFile;
@@ -440,26 +441,20 @@ begin
   if not Assigned(CD) then
   begin
     CD := FDManager.ConnectionDefs.AddConnectionDef;
-//    CD.Name            := S;
+    CD.Name            := S;
     CD.Params.DriverID := CS.DriverName;
     CD.Params.Database := CS.Database;
     CD.Params.UserName := CS.UserName;
     CD.Params.Password := CS.Password;
-    CD.Params.ConnectionDef := S;
     Logger.SendObject('CD', TObject(CD));
     CD.MarkPersistent; // required to add it to the connection definition file.
 //    CD.Apply;
 //    FDManager.ConnectionDefs.Save;
   end;
   ExecuteFDConnectionDialog(CD, '');
-  CD.Apply;
-  FDManager.ConnectionDefs.Save;
+//  CD.Apply;
+//  FDManager.ConnectionDefs.Save;
   Logger.Info(CD.Params.Text);
-
-
-
-
-
 
 //  OC := TFDOptionsContainer.Create(
 //    FDManager, // inherit standard options from global manager instance
@@ -468,11 +463,6 @@ begin
 //    TFDResourceOptions,
 //    nil
 //  );
-//
-//
-//
-//
-//
 //  OC.FetchOptions.RecsMax := CS.MaxRecords;
 //  if CS .FetchOnDemand then
 //    OC.FetchOptions.Mode := fmOnDemand
@@ -485,7 +475,7 @@ begin
 //  CD.ReadOptions(
 //    OC.FormatOptions, OC.UpdateOptions, OC.FetchOptions, OC.ResourceOptions
 //  );
-//  CS.MaxRecords := OC.FetchOptions.RecsMax;
+//  CS.MaxRecords    := OC.FetchOptions.RecsMax;
 //  CS.PacketRecords := OC.FetchOptions.RowsetSize;
 //  CS.FetchOnDemand := OC.FetchOptions.Mode = fmOnDemand;
 
@@ -497,16 +487,19 @@ end;
 
 procedure TfrmSettingsDialog.actDeleteExecute(Sender: TObject);
 begin
-  FVSTProfiles.BeginUpdate;
-  try
-    FObjectInspector.Component := nil;
-    FSettings.ConnectionProfiles.Delete(FVSTProfiles.FocusedNode.Index);
-    SelectNode(FVSTProfiles, FSettings.ConnectionProfiles.Count - 1);
-  finally
-    FVSTProfiles.EndUpdate;
+  if ConfirmDeleteProfile then
+  begin
+    FVSTProfiles.BeginUpdate;
+    try
+      FObjectInspector.Component := nil;
+      FSettings.ConnectionProfiles.Delete(FVSTProfiles.FocusedNode.Index);
+      SelectNode(FVSTProfiles, FSettings.ConnectionProfiles.Count - 1);
+    finally
+      FVSTProfiles.EndUpdate;
+    end;
+    FVSTProfiles.RootNodeCount := FSettings.ConnectionProfiles.Count;
+    FVSTProfiles.Refresh;
   end;
-  FVSTProfiles.RootNodeCount := FSettings.ConnectionProfiles.Count;
-  FVSTProfiles.Refresh;
 end;
 
 procedure TfrmSettingsDialog.actDuplicateExecute(Sender: TObject);
@@ -867,7 +860,6 @@ begin
       SaveConnectionDefinitionsFile
     else
       LoadConnectionDefinitionsFile;
-  //FDManager.RefreshConnectionDefFile; => needed?
   end;
 end;
 
@@ -887,35 +879,53 @@ var
   CP : TConnectionProfile;
 begin
   CP := FSettings.ConnectionProfiles[FVSTProfiles.FocusedNode.Index];
-  SaveConnectionProfileChanges(CP);
-
-  FSettings.GridCellColoring           := chkGridCellColoringEnabled.Checked;
-  FSettings.DataTypeColors[dtBoolean]  := btnBooleanColor.DlgColor;
-  FSettings.DataTypeColors[dtDate]     := btnDateColor.DlgColor;
-  FSettings.DataTypeColors[dtDateTime] := btnDateTimeColor.DlgColor;
-  FSettings.DataTypeColors[dtFloat]    := btnFloatColor.DlgColor;
-  FSettings.DataTypeColors[dtInteger]  := btnIntegerColor.DlgColor;
-  FSettings.DataTypeColors[dtString]   := btnStringColor.DlgColor;
-  FSettings.DataTypeColors[dtNULL]     := btnNULLColor.DlgColor;
-  FSettings.DataTypeColors[dtTime]     := btnTimeColor.DlgColor;
-
-  FSettings.GridType := rgpGridTypes.Items[rgpGridTypes.ItemIndex];
-
-  if Assigned(ApplySettingsMethod) then
-    ApplySettingsMethod;
-  Save;
-  LoadApplicationSettingsFile;
-  FVSTProfiles.Invalidate;
+  if edtProfileName.Text = '' then
+  begin
+    MessageDlg(SConnectionProfileNameCannotBeEmpty, mtError, [mbOK], 0);
+    pgcMain.ActivePage := tsConnectionProfiles;
+    edtProfileName.SetFocus;
+  end
+  else
+  begin
+    SaveConnectionProfileChanges(CP);
+    FSettings.GridCellColoring           := chkGridCellColoringEnabled.Checked;
+    FSettings.DataTypeColors[dtBoolean]  := btnBooleanColor.DlgColor;
+    FSettings.DataTypeColors[dtDate]     := btnDateColor.DlgColor;
+    FSettings.DataTypeColors[dtDateTime] := btnDateTimeColor.DlgColor;
+    FSettings.DataTypeColors[dtFloat]    := btnFloatColor.DlgColor;
+    FSettings.DataTypeColors[dtInteger]  := btnIntegerColor.DlgColor;
+    FSettings.DataTypeColors[dtString]   := btnStringColor.DlgColor;
+    FSettings.DataTypeColors[dtNULL]     := btnNULLColor.DlgColor;
+    FSettings.DataTypeColors[dtTime]     := btnTimeColor.DlgColor;
+    FSettings.GridType := rgpGridTypes.Items[rgpGridTypes.ItemIndex];
+    if Assigned(ApplySettingsMethod) then
+      ApplySettingsMethod;
+    Save;
+    LoadApplicationSettingsFile;
+    FVSTProfiles.Invalidate;
+  end;
 end;
 
 function TfrmSettingsDialog.AskSaveFileChanges: Boolean;
 begin
-  Result := MessageBox(
+  Result := MessageDlg(
+    SAskSaveChanges,
+    mtConfirmation,
+    [mbYes, mbNo],
     0,
-    PChar(SAskSaveChanges),
-    '',
-    MB_ICONQUESTION or MB_YESNO or MB_DEFBUTTON2
-  ) = idYes;
+    mbYes
+  ) = mrYes;
+end;
+
+function TfrmSettingsDialog.ConfirmDeleteProfile: Boolean;
+begin
+  Result := MessageDlg(
+    SConfirmDeleteProfile,
+    mtWarning,
+    [mbYes, mbNo],
+    0,
+    mbYes
+  ) = mrYes;
 end;
 
 procedure TfrmSettingsDialog.InitializeControls;
@@ -1025,11 +1035,15 @@ begin
   actApply.Enabled        := FModified;
   edtPacketRecords.Enabled := chkFetchOnDemand.Checked;
   lblPacketrecords.Enabled := chkFetchOnDemand.Checked;
-  B := Assigned(FVSTProfiles.FocusedNode);
+  B := Assigned(FVSTProfiles.FocusedNode)
+    and (pgcMain.ActivePage = tsConnectionProfiles);
   actMoveUp.Enabled   := B and (FVSTProfiles.FocusedNode.Index > 0);
   actMoveDown.Enabled := B
     and (FVSTProfiles.FocusedNode.Index < FVSTProfiles.RootNodeCount - 1);
-  actDelete.Enabled := B;
+  actDelete.Enabled    := B;
+  actDuplicate.Enabled := B;
+  actAdd.Enabled       := pgcMain.ActivePage = tsConnectionProfiles;
+
   chkReadOnlyResultSets.Enabled := not chkMultipleResultSets.Checked;
   actEditConnectionDef.Enabled := Trim(cbxConnectionDefs.Text) <> '';
 

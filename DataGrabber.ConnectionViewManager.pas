@@ -116,6 +116,7 @@ type
     ppmConnectionView             : TPopupMenu;
     ppmEditorView                 : TPopupMenu;
     Selection1                    : TMenuItem;
+    actFireDACInfo: TAction;
     {$ENDREGION}
 
     {$REGION 'action handlers'}
@@ -150,6 +151,9 @@ type
     procedure actShowAllColumnsExecute(Sender: TObject);
     procedure actChinookExampleQueryExecute(Sender: TObject);
     procedure actGroupByBoxVisibleExecute(Sender: TObject);
+    procedure actFireDACInfoExecute(Sender: TObject);
+    procedure actToggleStayOnTopExecute(Sender: TObject);
+    procedure actToggleFullScreenExecute(Sender: TObject);
     {$ENDREGION}
 
   private
@@ -230,6 +234,7 @@ implementation
 uses
   Vcl.Forms, Vcl.Clipbrd, Vcl.Dialogs,
   FireDAC.Comp.Client,
+  FireDAC.Stan.Consts,
 
   Spring,
 
@@ -258,7 +263,6 @@ begin
   actPrint.Visible              := False;
   actDesigner.Visible           := False;
   actRtti.Visible               := False;
-  actToggleFullScreen.Visible   := False;
   actDataInspector.Visible      := False;
 end;
 
@@ -305,6 +309,28 @@ procedure TdmConnectionViewManager.actShowAllColumnsExecute(Sender: TObject);
 begin
   if (ActiveData as IFieldVisiblity).ShowAllFields then
     ActiveDataView.UpdateView;
+end;
+
+procedure TdmConnectionViewManager.actToggleFullScreenExecute(Sender: TObject);
+var
+  A : TAction;
+begin
+  A := Sender as TAction;
+  if A.Checked then
+    Settings.FormSettings.WindowState := wsMaximized
+  else
+    Settings.FormSettings.WindowState := wsNormal;
+end;
+
+procedure TdmConnectionViewManager.actToggleStayOnTopExecute(Sender: TObject);
+var
+  A : TAction;
+begin
+  A := Sender as TAction;
+  if A.Checked then
+    Settings.FormSettings.FormStyle := fsStayOnTop
+  else
+    Settings.FormSettings.FormStyle := fsNormal;
 end;
 
 procedure TdmConnectionViewManager.actSelectionAsCommaTextExecute(
@@ -441,6 +467,11 @@ end;
 procedure TdmConnectionViewManager.actExecuteExecute(Sender: TObject);
 begin
   Execute(ActiveConnectionView.EditorView.Text);
+end;
+
+procedure TdmConnectionViewManager.actFireDACInfoExecute(Sender: TObject);
+begin
+  ShowMessageFmt('FireDAC version %s', [C_FD_Version]);
 end;
 
 procedure TdmConnectionViewManager.actPrintExecute(Sender: TObject);

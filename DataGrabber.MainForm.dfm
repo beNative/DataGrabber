@@ -29,7 +29,7 @@ object frmMain: TfrmMain
     AutoSize = True
     ButtonHeight = 20
     ButtonWidth = 50
-    DrawingStyle = dsGradient
+    Customizable = True
     EdgeInner = esNone
     EdgeOuter = esNone
     GradientEndColor = clBtnFace
@@ -37,7 +37,7 @@ object frmMain: TfrmMain
     HideClippedButtons = True
     List = True
     GradientDirection = gdHorizontal
-    ShowCaptions = True
+    AllowTextButtons = True
     TabOrder = 0
     Transparent = True
     Wrapable = False
@@ -224,24 +224,23 @@ object frmMain: TfrmMain
       Left = 0
       Top = 0
       Width = 1082
-      Height = 30
+      Height = 29
       OnActiveTabChanged = ctMainActiveTabChanged
       OnButtonAddClick = ctMainButtonAddClick
       OnButtonCloseTabClick = ctMainButtonCloseTabClick
       OnNeedDragImageControl = ctMainNeedDragImageControl
-      OnBeforeDrawItem = ctMainBeforeDrawItem
       ActiveTabIndex = -1
       ImagesSpinnerDownload = imlSpinner
-      Options.Display.CloseButton.Offsets.Vertical = 6
-      Options.Display.CloseButton.Offsets.Horizontal = 2
-      Options.Display.CloseButton.Height = 14
+      Options.Display.CloseButton.Offsets.Vertical = 2
+      Options.Display.CloseButton.Offsets.Horizontal = -10
+      Options.Display.CloseButton.Height = 15
       Options.Display.CloseButton.Width = 14
       Options.Display.CloseButton.AutoHide = True
       Options.Display.CloseButton.Visibility = bvActive
       Options.Display.CloseButton.AutoHideWidth = 20
       Options.Display.CloseButton.CrossRadialOffset = 4
       Options.Display.AddButton.Offsets.Vertical = 10
-      Options.Display.AddButton.Offsets.Horizontal = 2
+      Options.Display.AddButton.Offsets.Horizontal = 3
       Options.Display.AddButton.Height = 14
       Options.Display.AddButton.Width = 40
       Options.Display.AddButton.ShowPlusSign = True
@@ -264,18 +263,18 @@ object frmMain: TfrmMain
       Options.Display.TabModifiedGlow.AnimationUpdateMS = 50
       Options.Display.Tabs.SeeThroughTabs = False
       Options.Display.Tabs.TabOverlap = 15
-      Options.Display.Tabs.ContentOffsetLeft = 18
-      Options.Display.Tabs.ContentOffsetRight = 16
+      Options.Display.Tabs.ContentOffsetLeft = 15
+      Options.Display.Tabs.ContentOffsetRight = 22
       Options.Display.Tabs.OffsetLeft = 5
-      Options.Display.Tabs.OffsetTop = 4
+      Options.Display.Tabs.OffsetTop = 6
       Options.Display.Tabs.OffsetRight = 5
       Options.Display.Tabs.OffsetBottom = 0
-      Options.Display.Tabs.MinWidth = 25
+      Options.Display.Tabs.MinWidth = 120
       Options.Display.Tabs.MaxWidth = 400
       Options.Display.Tabs.TabWidthFromContent = True
-      Options.Display.Tabs.PinnedWidth = 39
-      Options.Display.Tabs.ImageOffsetLeft = 13
-      Options.Display.Tabs.TextTrimType = tttFade
+      Options.Display.Tabs.PinnedWidth = 150
+      Options.Display.Tabs.ImageOffsetLeft = 15
+      Options.Display.Tabs.TextTrimType = tttNone
       Options.Display.Tabs.Orientation = toTop
       Options.Display.Tabs.BaseLineTabRegionOnly = False
       Options.Display.Tabs.WordWrap = False
@@ -284,7 +283,7 @@ object frmMain: TfrmMain
       Options.Display.Tabs.ShowImages = True
       Options.Display.Tabs.ShowPinnedTabText = True
       Options.Display.TabContainer.TransparentBackground = True
-      Options.Display.TabContainer.OverlayButtons = True
+      Options.Display.TabContainer.OverlayButtons = False
       Options.Display.TabContainer.PaddingLeft = 0
       Options.Display.TabContainer.PaddingRight = 0
       Options.Display.TabMouseGlow.Offsets.Vertical = 0
@@ -336,7 +335,7 @@ object frmMain: TfrmMain
       Options.Animation.MovementAnimations.TabMove.UseDefaultAnimationTime = False
       Options.Animation.MovementAnimations.TabMove.EaseType = ttEaseOutExpo
       Options.Animation.MovementAnimations.TabMove.AnimationTimeMS = 500
-      Options.Behaviour.BackgroundDblClickMaximiseRestoreForm = True
+      Options.Behaviour.BackgroundDblClickMaximiseRestoreForm = False
       Options.Behaviour.BackgroundDragMovesForm = False
       Options.Behaviour.TabSmartDeleteResizing = True
       Options.Behaviour.TabSmartDeleteResizeCancelDelay = 700
@@ -349,7 +348,7 @@ object frmMain: TfrmMain
       Options.Scrolling.ScrollButtons = csbRight
       Options.Scrolling.ScrollStep = 20
       Options.Scrolling.ScrollRepeatDelay = 20
-      Options.Scrolling.AutoHideButtons = False
+      Options.Scrolling.AutoHideButtons = True
       Options.Scrolling.DragScroll = True
       Options.Scrolling.DragScrollOffset = 50
       Options.Scrolling.MouseWheelScroll = True
@@ -369,7 +368,7 @@ object frmMain: TfrmMain
       LookAndFeel.Tabs.Modified.OutsideAlpha = 0
       LookAndFeel.Tabs.DefaultFont.Name = 'Segoe UI'
       LookAndFeel.Tabs.DefaultFont.Color = clBlack
-      LookAndFeel.Tabs.DefaultFont.Size = 9
+      LookAndFeel.Tabs.DefaultFont.Size = 8
       LookAndFeel.Tabs.DefaultFont.Alpha = 255
       LookAndFeel.Tabs.DefaultFont.TextRendoringMode = TextRenderingHintClearTypeGridFit
       LookAndFeel.Tabs.MouseGlow.CentreColor = clWhite
@@ -382,9 +381,9 @@ object frmMain: TfrmMain
       LookAndFeel.Tabs.Spinners.Download.Color = 14388040
       LookAndFeel.Tabs.Spinners.Download.Thickness = 2.500000000000000000
       LookAndFeel.Tabs.Spinners.Download.Alpha = 255
-      LookAndFeel.Tabs.Active.Font.Name = 'Segoe UI'
-      LookAndFeel.Tabs.Active.Font.Color = clOlive
-      LookAndFeel.Tabs.Active.Font.Size = 9
+      LookAndFeel.Tabs.Active.Font.Name = 'Tahoma'
+      LookAndFeel.Tabs.Active.Font.Color = clBlack
+      LookAndFeel.Tabs.Active.Font.Size = 8
       LookAndFeel.Tabs.Active.Font.Alpha = 100
       LookAndFeel.Tabs.Active.Font.TextRendoringMode = TextRenderingHintClearTypeGridFit
       LookAndFeel.Tabs.Active.Font.UseDefaultFont = True
@@ -395,41 +394,41 @@ object frmMain: TfrmMain
       LookAndFeel.Tabs.Active.Style.OutlineColor = clGray
       LookAndFeel.Tabs.Active.Style.OutlineSize = 1.000000000000000000
       LookAndFeel.Tabs.Active.Style.OutlineAlpha = 255
-      LookAndFeel.Tabs.NotActive.Font.Name = 'Segoe UI'
-      LookAndFeel.Tabs.NotActive.Font.Color = 4603477
-      LookAndFeel.Tabs.NotActive.Font.Size = 9
-      LookAndFeel.Tabs.NotActive.Font.Alpha = 215
+      LookAndFeel.Tabs.NotActive.Font.Name = 'Tahoma'
+      LookAndFeel.Tabs.NotActive.Font.Color = clBlack
+      LookAndFeel.Tabs.NotActive.Font.Size = 8
+      LookAndFeel.Tabs.NotActive.Font.Alpha = 255
       LookAndFeel.Tabs.NotActive.Font.TextRendoringMode = TextRenderingHintClearTypeGridFit
-      LookAndFeel.Tabs.NotActive.Font.UseDefaultFont = False
+      LookAndFeel.Tabs.NotActive.Font.UseDefaultFont = True
       LookAndFeel.Tabs.NotActive.Style.StartColor = clSilver
       LookAndFeel.Tabs.NotActive.Style.StopColor = clSilver
-      LookAndFeel.Tabs.NotActive.Style.StartAlpha = 210
-      LookAndFeel.Tabs.NotActive.Style.StopAlpha = 210
+      LookAndFeel.Tabs.NotActive.Style.StartAlpha = 255
+      LookAndFeel.Tabs.NotActive.Style.StopAlpha = 255
       LookAndFeel.Tabs.NotActive.Style.OutlineColor = clGray
       LookAndFeel.Tabs.NotActive.Style.OutlineSize = 1.000000000000000000
-      LookAndFeel.Tabs.NotActive.Style.OutlineAlpha = 215
-      LookAndFeel.Tabs.Hot.Font.Name = 'Segoe UI'
-      LookAndFeel.Tabs.Hot.Font.Color = 4210752
-      LookAndFeel.Tabs.Hot.Font.Size = 9
-      LookAndFeel.Tabs.Hot.Font.Alpha = 215
+      LookAndFeel.Tabs.NotActive.Style.OutlineAlpha = 255
+      LookAndFeel.Tabs.Hot.Font.Name = 'Tahoma'
+      LookAndFeel.Tabs.Hot.Font.Color = clBlack
+      LookAndFeel.Tabs.Hot.Font.Size = 8
+      LookAndFeel.Tabs.Hot.Font.Alpha = 255
       LookAndFeel.Tabs.Hot.Font.TextRendoringMode = TextRenderingHintClearTypeGridFit
-      LookAndFeel.Tabs.Hot.Font.UseDefaultFont = False
+      LookAndFeel.Tabs.Hot.Font.UseDefaultFont = True
       LookAndFeel.Tabs.Hot.Style.StartColor = clSilver
       LookAndFeel.Tabs.Hot.Style.StopColor = clSilver
       LookAndFeel.Tabs.Hot.Style.StartAlpha = 255
       LookAndFeel.Tabs.Hot.Style.StopAlpha = 255
       LookAndFeel.Tabs.Hot.Style.OutlineColor = clGray
       LookAndFeel.Tabs.Hot.Style.OutlineSize = 1.000000000000000000
-      LookAndFeel.Tabs.Hot.Style.OutlineAlpha = 235
-      LookAndFeel.CloseButton.Cross.Normal.Color = 6643031
+      LookAndFeel.Tabs.Hot.Style.OutlineAlpha = 255
+      LookAndFeel.CloseButton.Cross.Normal.Color = clBlack
       LookAndFeel.CloseButton.Cross.Normal.Thickness = 1.500000000000000000
       LookAndFeel.CloseButton.Cross.Normal.Alpha = 255
-      LookAndFeel.CloseButton.Cross.Down.Color = 15461369
+      LookAndFeel.CloseButton.Cross.Down.Color = clWhite
       LookAndFeel.CloseButton.Cross.Down.Thickness = 2.000000000000000000
-      LookAndFeel.CloseButton.Cross.Down.Alpha = 220
+      LookAndFeel.CloseButton.Cross.Down.Alpha = 255
       LookAndFeel.CloseButton.Cross.Hot.Color = clWhite
       LookAndFeel.CloseButton.Cross.Hot.Thickness = 2.000000000000000000
-      LookAndFeel.CloseButton.Cross.Hot.Alpha = 220
+      LookAndFeel.CloseButton.Cross.Hot.Alpha = 255
       LookAndFeel.CloseButton.Circle.Normal.StartColor = clGradientActiveCaption
       LookAndFeel.CloseButton.Circle.Normal.StopColor = clNone
       LookAndFeel.CloseButton.Circle.Normal.StartAlpha = 0
@@ -444,11 +443,11 @@ object frmMain: TfrmMain
       LookAndFeel.CloseButton.Circle.Down.OutlineColor = clGray
       LookAndFeel.CloseButton.Circle.Down.OutlineSize = 1.000000000000000000
       LookAndFeel.CloseButton.Circle.Down.OutlineAlpha = 255
-      LookAndFeel.CloseButton.Circle.Hot.StartColor = 9408475
-      LookAndFeel.CloseButton.Circle.Hot.StopColor = 9803748
+      LookAndFeel.CloseButton.Circle.Hot.StartColor = clRed
+      LookAndFeel.CloseButton.Circle.Hot.StopColor = clRed
       LookAndFeel.CloseButton.Circle.Hot.StartAlpha = 255
       LookAndFeel.CloseButton.Circle.Hot.StopAlpha = 255
-      LookAndFeel.CloseButton.Circle.Hot.OutlineColor = 6054595
+      LookAndFeel.CloseButton.Circle.Hot.OutlineColor = clGray
       LookAndFeel.CloseButton.Circle.Hot.OutlineSize = 1.000000000000000000
       LookAndFeel.CloseButton.Circle.Hot.OutlineAlpha = 255
       LookAndFeel.AddButton.Button.Normal.StartColor = clSilver
@@ -504,11 +503,11 @@ object frmMain: TfrmMain
       LookAndFeel.ScrollButtons.Button.Down.StopColor = clSilver
       LookAndFeel.ScrollButtons.Button.Down.StartAlpha = 255
       LookAndFeel.ScrollButtons.Button.Down.StopAlpha = 255
-      LookAndFeel.ScrollButtons.Button.Down.OutlineColor = clGray
+      LookAndFeel.ScrollButtons.Button.Down.OutlineColor = clBlack
       LookAndFeel.ScrollButtons.Button.Down.OutlineSize = 1.000000000000000000
       LookAndFeel.ScrollButtons.Button.Down.OutlineAlpha = 255
-      LookAndFeel.ScrollButtons.Button.Hot.StartColor = clSilver
-      LookAndFeel.ScrollButtons.Button.Hot.StopColor = clSilver
+      LookAndFeel.ScrollButtons.Button.Hot.StartColor = clBlack
+      LookAndFeel.ScrollButtons.Button.Hot.StopColor = clBlack
       LookAndFeel.ScrollButtons.Button.Hot.StartAlpha = 255
       LookAndFeel.ScrollButtons.Button.Hot.StopAlpha = 255
       LookAndFeel.ScrollButtons.Button.Hot.OutlineColor = clGray
@@ -516,16 +515,16 @@ object frmMain: TfrmMain
       LookAndFeel.ScrollButtons.Button.Hot.OutlineAlpha = 255
       LookAndFeel.ScrollButtons.Button.Disabled.StartColor = clSilver
       LookAndFeel.ScrollButtons.Button.Disabled.StopColor = clSilver
-      LookAndFeel.ScrollButtons.Button.Disabled.StartAlpha = 150
-      LookAndFeel.ScrollButtons.Button.Disabled.StopAlpha = 150
+      LookAndFeel.ScrollButtons.Button.Disabled.StartAlpha = 255
+      LookAndFeel.ScrollButtons.Button.Disabled.StopAlpha = 255
       LookAndFeel.ScrollButtons.Button.Disabled.OutlineColor = clGray
       LookAndFeel.ScrollButtons.Button.Disabled.OutlineSize = 1.000000000000000000
-      LookAndFeel.ScrollButtons.Button.Disabled.OutlineAlpha = 100
+      LookAndFeel.ScrollButtons.Button.Disabled.OutlineAlpha = 255
       LookAndFeel.ScrollButtons.Arrow.Normal.StartColor = clWhite
       LookAndFeel.ScrollButtons.Arrow.Normal.StopColor = clWhite
       LookAndFeel.ScrollButtons.Arrow.Normal.StartAlpha = 255
       LookAndFeel.ScrollButtons.Arrow.Normal.StopAlpha = 255
-      LookAndFeel.ScrollButtons.Arrow.Normal.OutlineColor = clWhite
+      LookAndFeel.ScrollButtons.Arrow.Normal.OutlineColor = clGray
       LookAndFeel.ScrollButtons.Arrow.Normal.OutlineSize = 1.000000000000000000
       LookAndFeel.ScrollButtons.Arrow.Normal.OutlineAlpha = 255
       LookAndFeel.ScrollButtons.Arrow.Down.StartColor = clWhite
@@ -534,21 +533,21 @@ object frmMain: TfrmMain
       LookAndFeel.ScrollButtons.Arrow.Down.StopAlpha = 255
       LookAndFeel.ScrollButtons.Arrow.Down.OutlineColor = clGray
       LookAndFeel.ScrollButtons.Arrow.Down.OutlineSize = 1.000000000000000000
-      LookAndFeel.ScrollButtons.Arrow.Down.OutlineAlpha = 200
+      LookAndFeel.ScrollButtons.Arrow.Down.OutlineAlpha = 255
       LookAndFeel.ScrollButtons.Arrow.Hot.StartColor = clWhite
       LookAndFeel.ScrollButtons.Arrow.Hot.StopColor = clWhite
       LookAndFeel.ScrollButtons.Arrow.Hot.StartAlpha = 255
       LookAndFeel.ScrollButtons.Arrow.Hot.StopAlpha = 255
       LookAndFeel.ScrollButtons.Arrow.Hot.OutlineColor = clGray
       LookAndFeel.ScrollButtons.Arrow.Hot.OutlineSize = 1.000000000000000000
-      LookAndFeel.ScrollButtons.Arrow.Hot.OutlineAlpha = 200
-      LookAndFeel.ScrollButtons.Arrow.Disabled.StartColor = clSilver
-      LookAndFeel.ScrollButtons.Arrow.Disabled.StopColor = clSilver
-      LookAndFeel.ScrollButtons.Arrow.Disabled.StartAlpha = 150
-      LookAndFeel.ScrollButtons.Arrow.Disabled.StopAlpha = 150
+      LookAndFeel.ScrollButtons.Arrow.Hot.OutlineAlpha = 255
+      LookAndFeel.ScrollButtons.Arrow.Disabled.StartColor = clWhite
+      LookAndFeel.ScrollButtons.Arrow.Disabled.StopColor = clWhite
+      LookAndFeel.ScrollButtons.Arrow.Disabled.StartAlpha = 255
+      LookAndFeel.ScrollButtons.Arrow.Disabled.StopAlpha = 255
       LookAndFeel.ScrollButtons.Arrow.Disabled.OutlineColor = clGray
       LookAndFeel.ScrollButtons.Arrow.Disabled.OutlineSize = 1.000000000000000000
-      LookAndFeel.ScrollButtons.Arrow.Disabled.OutlineAlpha = 200
+      LookAndFeel.ScrollButtons.Arrow.Disabled.OutlineAlpha = 255
       Align = alTop
       TabOrder = 0
     end
@@ -566,13 +565,17 @@ object frmMain: TfrmMain
       ShortCut = 49225
       OnExecute = actInspectChromeTabExecute
     end
+    object actCloseAllOtherTabs: TAction
+      Caption = 'Close all other tabs.'
+      OnExecute = actCloseAllOtherTabsExecute
+    end
   end
   object imlSpinner: TImageList
     DrawingStyle = dsTransparent
     Left = 32
     Top = 72
     Bitmap = {
-      494C01010B000D00280010001000FFFFFFFF2110FFFFFFFFFFFFFFFF424D3600
+      494C01010B000D00340010001000FFFFFFFF2110FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000003000000001002000000000000030
       0000000000000000000000000000000000000000000000000000000000000000
       000000000000000000000B0B0B0C000000000000000000000000000000000000
@@ -974,5 +977,9 @@ object frmMain: TfrmMain
       9C1FB83F793FF03FB981798FF91FF33FF9E1F9C1FB87F30FFDFFF9FFFBE3F3C3
       FCFFFDFFF9FFFBFFFEFFFCFFFDFFFBFF00000000000000000000000000000000
       000000000000}
+  end
+  object ppmCVTabs: TPopupMenu
+    Left = 536
+    Top = 304
   end
 end

@@ -88,11 +88,14 @@ end;
 class procedure TDataGrabberFactories.AddToolbarButtons(AToolBar: TToolbar;
   AManager: IConnectionViewManager);
 
-  procedure AddActionButton(AParent: TToolBar; AAction: TBasicAction);
+  procedure AddActionButton(AParent: TToolBar; AAction: TBasicAction = nil;
+    AShowCaption: Boolean = False);
   var
     TB: TToolButton;
   begin
     TB := TToolButton.Create(AParent.Owner);
+    if AShowCaption then
+      TB.Style := tbsTextButton;
     TB.Parent := AParent;
     if not Assigned(AAction) then
       TB.Style := tbsSeparator
@@ -100,26 +103,37 @@ class procedure TDataGrabberFactories.AddToolbarButtons(AToolBar: TToolbar;
       TB.Action := AAction;
   end;
 
-  procedure AddButton(const AActionName: string);
+  procedure AddButton(const AActionName: string; AShowCaption: Boolean = False);
   begin
-    Guard.CheckNotNull(AManager.Actions[AActionName], AActionName);
-    AddActionButton(AToolBar, AManager.Actions[AActionName]);
+    if AActionName <> '' then
+    begin
+      Guard.CheckNotNull(AManager.Actions[AActionName], AActionName);
+      AddActionButton(AToolBar, AManager.Actions[AActionName], AShowCaption);
+    end
+    else
+    begin
+      AddActionButton(AToolBar);
+    end;
   end;
 
 begin
+  Guard.CheckTrue(AToolBar.ButtonCount = 0, '0');
+
+  AddButton('actSettings', True);
+  AddButton('actFireDACInfo');
+  AddButton('actToggleFullScreen');
+  AddButton('actToggleStayOnTop');
   AddButton('actPreview');
   AddButton('actDesigner');
   AddButton('actPrint');
   AddButton('actDataInspector');
   AddButton('actMergeColumnCells');
-  AddButton('actGroupByBoxVisible');
-  AddButton('actShowAllColumns');
-  AddButton('actHideSelectedColumns');
-  AddButton('actHideConstantColumns');
-  AddButton('actHideEmptyColumns');
-  AddButton('actAutoSizeCols');
-  AddButton('actToggleFullScreen');
-  AddButton('actSettings');
+  AddButton('actGroupByBoxVisible', True);
+  AddButton('actShowAllColumns', True);
+  AddButton('actHideSelectedColumns', True);
+  AddButton('actHideConstantColumns', True);
+  AddButton('actHideEmptyColumns', True);
+  AddButton('actAutoSizeCols', True);
   AddButton('actExecute');
 end;
 

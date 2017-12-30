@@ -423,10 +423,14 @@ procedure TfrmConnectionView.ApplySettings;
 var
   CP: TConnectionProfile;
 begin
-  if Assigned(FVSTProfiles.FocusedNode) then
+  FVSTProfiles.RootNodeCount := Manager.Settings.ConnectionProfiles.Count;
+  FVSTProfiles.Refresh;
+  if FVSTProfiles.RootNodeCount > 0 then
   begin
-    FVSTProfiles.RootNodeCount := Manager.Settings.ConnectionProfiles.Count;
-    FVSTProfiles.Refresh;
+    if not Assigned(FVSTProfiles.FocusedNode) then
+    begin
+      FVSTProfiles.FocusedNode := FVSTProfiles.GetFirst;
+    end;
     CP := Manager.Settings.ConnectionProfiles.Items[
       FVSTProfiles.FocusedNode.Index
     ];

@@ -81,6 +81,7 @@ type
     procedure Update(AItem: TCollectionItem); override;
     procedure Notify(Item: TCollectionItem; Action: TCollectionNotification);
       override;
+    function FindUniqueName(const Name: string): string;
 
   public
     constructor Create(AOwner : TPersistent);
@@ -124,6 +125,21 @@ end;
 {$ENDREGION}
 
 {$REGION 'protected methods'}
+function TConnectionProfiles.FindUniqueName(const Name: string): string;
+var
+  I : Integer;
+  S : string;
+begin
+  I := 0;
+  S := Name;
+  while Assigned(Find(S)) do
+  begin
+    Inc(I);
+    S := Format('%s%d', [Name, I]);
+  end;
+  Result := S;
+end;
+
 { Overridden method from TCollection to make any necessary changes when the
   items in the collection change. This method is called automatically when an
   update is issued.
@@ -169,12 +185,14 @@ end;
 { Constructs a unique itemname for a new collection item. }
 
 procedure TConnectionProfiles.SetItemName(Item: TCollectionItem);
+var
+  S : string;
 begin
 // The Insert method calls SetItemName to initialize the Name property of items
 // when it inserts them into the collection. This overridden version provides
 // collection items with default names.
-  TConnectionProfile(Item).Name :=
-    Copy(Item.ClassName, 2, Length(Item.ClassName)) + IntToStr(Item.ID + 1);
+  S := Copy(Item.ClassName, 2, Length(Item.ClassName));
+  TConnectionProfile(Item).Name := FindUniqueName(S);
 end;
 
 function TConnectionProfiles.Owner: TComponent;

@@ -88,7 +88,10 @@ resourcestring
   SConnected                = 'Connected';
   SDisconnected             = 'Disconnected';
   SAskSaveChanges           = 'Do you want to save changes?';
+  SConfirmDeleteProfile     = 'Are you sure you want to delete this profile?';
   SOpenSettingsFileLocation = 'Open settings file location (%s)';
+  SConnectionProfileNameCannotBeEmpty =
+    'The connection profile name cannot be empty!';
 
 implementation
 
