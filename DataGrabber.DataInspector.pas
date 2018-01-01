@@ -1,5 +1,5 @@
 {
-  Copyright (C) 2013-2017 Tim Sinaeve tim.sinaeve@gmail.com
+  Copyright (C) 2013-2018 Tim Sinaeve tim.sinaeve@gmail.com
 
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
@@ -179,8 +179,6 @@ end;
 {$ENDREGION}
 
 {$REGION 'property access methods'}
-//---|Data|--------------------------------------------------------------------
-
 function TfrmDataInspector.GetData: IData;
 begin
   Result := FData;
@@ -195,8 +193,6 @@ begin
     UpdateView;
   end;
 end;
-
-//---|DataSet|-----------------------------------------------------------------
 
 function TfrmDataInspector.GetDataSet: TDataSet;
 begin
@@ -242,8 +238,6 @@ begin
   if not Assigned(Field) then
     UpdateView;
 end;
-
-//---|FInspector|-----------------------------------------------------------------
 
 procedure TfrmDataInspector.FInspectorGetCellText(Sender: TObject; Cell: TGridCell;
   var Value: string);
@@ -311,7 +305,6 @@ procedure TfrmDataInspector.FInspectorCheckClick(Sender: TObject; Cell: TGridCel
 var
   F: TField;
 begin
-  inherited;
   if IsCellCheckBox(Cell) then
   begin
     F := FieldOf(Cell);

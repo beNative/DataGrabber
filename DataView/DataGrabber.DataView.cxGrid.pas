@@ -1,5 +1,5 @@
 {
-  Copyright (C) 2013-2017 Tim Sinaeve tim.sinaeve@gmail.com
+  Copyright (C) 2013-2018 Tim Sinaeve tim.sinaeve@gmail.com
 
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
@@ -24,7 +24,7 @@ uses
   Winapi.Windows, Winapi.Messages,
   System.SysUtils, System.Variants, System.Classes,
   Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, Vcl.Menus,
-  Vcl.ActnList,
+  Vcl.ActnList, Vcl.ToolWin, Vcl.ComCtrls,
   Data.DB,
 
   cxStyles, cxCustomData, cxGraphics, cxDataStorage, cxEdit,
@@ -34,11 +34,10 @@ uses
   cxLookAndFeels, cxLookAndFeelPainters, cxGridCardView, cxGridBandedTableView,
   cxGridDBCardView, cxGridDBBandedTableView, cxNavigator, cxFilter, cxData,
 
-  DataGrabber.Interfaces;
+  DataGrabber.Interfaces, DataGrabber.DataView.Base;
 
 type
-  TfrmcxGrid = class(TForm, IDataView, IGroupable, IMergable)
-    dscMain : TDataSource;
+  TfrmcxGrid = class(TBaseDataView, IDataView, IGroupable, IMergable)
     grdMain : TcxGrid;
     grlMain : TcxGridLevel;
     ppmMain : TcxGridPopupMenu;
@@ -69,38 +68,25 @@ type
       AViewInfo : TcxGridColumnHeaderViewInfo;
       var ADone : Boolean
     );
+    procedure grdMainExit(Sender: TObject);
 
   private
-    FSettings         : IDataViewSettings;
     FMergeColumnCells : Boolean;
     FAutoSizeCols     : Boolean;
-    FData             : IData;
-    FDataSet          : TDataSet;
 
+  protected
     {$REGION 'property access methods'}
-    function GetName: string;
-    function GetDataSet: TDataSet;
-    procedure SetDataSet(const Value: TDataSet);
-    function GetRecordCount: Integer;
+    function GetRecordCount: Integer; override;
     function GetMergeColumnCells: Boolean;
     procedure SetMergeColumnCells(const Value: Boolean);
     function GetAutoSizeCols: Boolean;
     procedure SetAutoSizeCols(const Value: Boolean);
-    function GetSettings: IDataViewSettings;
-    procedure SetSettings(const Value: IDataViewSettings);
-    function GetData: IData;
-    procedure SetData(const Value: IData);
     function GetPopupMenu: TPopupMenu; reintroduce;
-    procedure SetPopupMenu(const Value: TPopupMenu);
-    function GetGridType: string;
+    procedure SetPopupMenu(const Value: TPopupMenu); override;
+    function GetGridType: string; override;
     {$ENDREGION}
 
-    procedure DataAfterExecute(Sender: TObject);
-    procedure SettingsChanged(Sender: TObject);
-
-  protected
-    procedure ApplyGridSettings;
-    function IsActiveDataView: Boolean;
+    procedure ApplyGridSettings; override;
 
     procedure CopySelectionToClipboard(
       AController    : TcxGridTableController;
@@ -110,74 +96,54 @@ type
       AController    : TcxGridTableController;
       ADelimiter     : string = #9; // TAB
       AIncludeHeader : Boolean = True
-    ): string; overload;
+    ): string; reintroduce; overload;
     function SelectionToCommaText(
       AController : TcxGridTableController;
       AQuoteItems : Boolean = True
-    ): string; overload;
+    ): string; reintroduce; overload;
     function SelectionToFields(
       AController : TcxGridTableController;
       AQuoteItems : Boolean = True
-    ): string; overload;
+    ): string; reintroduce; overload;
     function SelectionToTextTable(
       AController    : TcxGridTableController;
       AIncludeHeader : Boolean = False
-    ): string; overload;
+    ): string; reintroduce; overload;
     function SelectionToWikiTable(
       AController    : TcxGridTableController;
       AIncludeHeader : Boolean = False
-    ): string; overload;
+    ): string; reintroduce; overload;
 
   public
-    constructor Create(
-      AOwner    : TComponent;
-      ASettings : IDataViewSettings;
-      AData     : IData;
-      ADataSet  : TDataSet = nil
-    ); reintroduce; virtual;
     procedure AfterConstruction; override;
-    procedure BeforeDestruction; override;
 
-    procedure AssignParent(AParent: TWinControl);
-    procedure HideSelectedColumns;
+    procedure HideSelectedColumns; override;
     procedure MergeAllColumnCells(AActive: Boolean);
-    procedure AutoSizeColumns;
+    procedure AutoSizeColumns; override;
     procedure GroupBySelectedColumns;
-    procedure Copy;
-    procedure Inspect;
-    procedure UpdateView;
+    procedure Copy; override;
+    procedure Inspect; override;
+    procedure UpdateView; override;
 
-    procedure BeginUpdate;
-    procedure EndUpdate;
+    procedure BeginUpdate; override;
+    procedure EndUpdate; override;
 
     function SelectionToWikiTable(
       AIncludeHeader : Boolean = False
-    ): string; overload;
+    ): string; overload; override;
     function SelectionToTextTable(
       AIncludeHeader : Boolean = False
-    ): string; overload;
+    ): string; overload; override;
     function SelectionToDelimitedTable(
       ADelimiter     : string = #9; // TAB
       AIncludeHeader : Boolean = True
-    ): string; overload;
+    ): string; overload; override;
     function SelectionToCommaText(
       AQuoteItems : Boolean = True
-    ): string; overload;
+    ): string; overload; override;
     function SelectionToFields(
       AQuoteItems : Boolean = True
-    ): string; overload;
-
-    property DataSet: TDataSet
-      read GetDataSet write SetDataSet;
-
-    property Data: IData
-      read GetData write SetData;
-
-    property Settings: IDataViewSettings
-      read GetSettings write SetSettings;
-
-    property RecordCount: Integer
-      read GetRecordCount;
+    ): string; overload; override;
 
     property MergeColumnCells: Boolean
       read GetMergeColumnCells write SetMergeColumnCells;
@@ -187,9 +153,6 @@ type
 
     property PopupMenu: TPopupMenu
       read GetPopupMenu write SetPopupMenu;
-
-    property GridType: string
-      read GetGridType;
   end;
 
 implementation
@@ -211,66 +174,19 @@ procedure TfrmcxGrid.AfterConstruction;
 begin
   inherited AfterConstruction;
   FAutoSizeCols := True;
-end;
-
-procedure TfrmcxGrid.BeforeDestruction;
-begin
-  if Assigned(Data) then
-    Data.OnAfterExecute.Remove(DataAfterExecute);
-  if Assigned(Settings) then
-    Settings.OnChanged.Remove(SettingsChanged);
-  inherited BeforeDestruction;
+  UpdateView;
 end;
 {$ENDREGION}
 
 {$REGION 'property access methods'}
-function TfrmcxGrid.GetData: IData;
-begin
-  Result := FData;
-end;
-
-procedure TfrmcxGrid.SetData(const Value: IData);
-begin
-  if Value <> Data then
-  begin
-    if Assigned(Data) then
-    begin
-      Data.OnAfterExecute.Remove(DataAfterExecute);
-    end;
-    FData := Value;
-    Data.OnAfterExecute.Add(DataAfterExecute);
-    UpdateView;
-  end;
-end;
-
-function TfrmcxGrid.GetDataSet: TDataSet;
-begin
-  Result := FDataSet;
-end;
-
-procedure TfrmcxGrid.SetDataSet(const Value: TDataSet);
-begin
-  if Value <> DataSet then
-  begin
-    FDataSet := Value;
-    dscMain.DataSet := FDataSet;
-    UpdateView;
-  end;
-end;
-
 function TfrmcxGrid.GetRecordCount: Integer;
 begin
   Result := tvwMain.DataController.RecordCount;
 end;
 
-function TfrmcxGrid.GetSettings: IDataViewSettings;
+procedure TfrmcxGrid.grdMainExit(Sender: TObject);
 begin
-  Result := FSettings;
-end;
-
-procedure TfrmcxGrid.SetSettings(const Value: IDataViewSettings);
-begin
-  FSettings := Value;
+  Logger.Info('grdMainExit');
 end;
 
 function TfrmcxGrid.GetMergeColumnCells: Boolean;
@@ -285,11 +201,6 @@ begin
     FMergeColumnCells := Value;
     MergeAllColumnCells(Value);
   end;
-end;
-
-function TfrmcxGrid.GetName: string;
-begin
-  Result := inherited Name;
 end;
 
 function TfrmcxGrid.GetPopupMenu: TPopupMenu;
@@ -330,16 +241,6 @@ end;
 procedure TfrmcxGrid.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
   Action := caFree;
-end;
-
-procedure TfrmcxGrid.DataAfterExecute(Sender: TObject);
-begin
-  UpdateView;
-end;
-
-procedure TfrmcxGrid.SettingsChanged(Sender: TObject);
-begin
-  ApplyGridSettings;
 end;
 
 procedure TfrmcxGrid.tvwMainCustomDrawCell(Sender: TcxCustomGridTableView;
@@ -452,21 +353,6 @@ begin
   finally
     FreeAndNil(SL);
   end;
-end;
-
-constructor TfrmcxGrid.Create(AOwner: TComponent; ASettings: IDataViewSettings;
-  AData: IData; ADataSet: TDataSet);
-begin
-  inherited Create(AOwner);
-  FSettings := ASettings;
-  FSettings.OnChanged.Add(SettingsChanged);
-  FData     := AData;
-  if Assigned(ADataSet) then
-    FDataSet := ADataSet
-  else
-    FDataSet := FData.DataSet;
-  dscMain.DataSet := FDataSet;
-  UpdateView;
 end;
 
 procedure TfrmcxGrid.EndUpdate;
@@ -725,11 +611,6 @@ begin
   InspectObject(tvwMain);
 end;
 
-function TfrmcxGrid.IsActiveDataView: Boolean;
-begin
-  Result := ContainsFocus(Self);
-end;
-
 procedure TfrmcxGrid.MergeAllColumnCells(AActive: Boolean);
 var
   I: Integer;
@@ -744,14 +625,6 @@ begin
   finally
     EndUpdate;
   end;
-end;
-
-procedure TfrmcxGrid.AssignParent(AParent: TWinControl);
-begin
-  Parent      := AParent;
-  BorderStyle := bsNone;
-  Align       := alClient;
-  Visible     := True;
 end;
 
 procedure TfrmcxGrid.AutoSizeColumns;
@@ -838,20 +711,21 @@ begin
   if Assigned(Settings) then
   begin
     GL := glNone;
-    if FSettings.ShowHorizontalGridLines then
+    if Settings.ShowHorizontalGridLines then
     begin
-      if FSettings.ShowVerticalGridLines then
+      if Settings.ShowVerticalGridLines then
         GL := glBoth
       else
         GL := glHorizontal;
     end
-    else if FSettings.ShowVerticalGridLines then
+    else if Settings.ShowVerticalGridLines then
     begin
       GL := glVertical;
     end;
     tvwMain.OptionsView.GridLines := GL;
     tvwMain.OptionsView.GroupByBox := Settings.GroupByBoxVisible;
     MergeColumnCells := Settings.MergeColumnCells;
+    grdMain.Font.Assign(Settings.GridFont);
   end;
 end;
 {$ENDREGION}

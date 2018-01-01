@@ -219,19 +219,6 @@ object frmSettingsDialog: TfrmSettingsDialog
                 TabOrder = 0
                 OnChange = cbxDriversChange
               end
-              object btnConnectionString: TButton
-                Left = 441
-                Top = 15
-                Width = 40
-                Height = 25
-                Action = actEditConnectionDef
-                Anchors = [akTop, akRight]
-                ImageAlignment = iaCenter
-                ImageIndex = 9
-                Images = imlMain
-                TabOrder = 1
-                WordWrap = True
-              end
               object edtDatabase: TButtonedEdit
                 Left = 76
                 Top = 44
@@ -242,7 +229,7 @@ object frmSettingsDialog: TfrmSettingsDialog
                 Images = imlMain
                 RightButton.ImageIndex = 10
                 RightButton.Visible = True
-                TabOrder = 2
+                TabOrder = 1
                 OnChange = edtDatabaseChange
                 OnRightButtonClick = edtDatabaseRightButtonClick
               end
@@ -255,7 +242,7 @@ object frmSettingsDialog: TfrmSettingsDialog
                 Images = imlMain
                 RightButton.Enabled = False
                 RightButton.ImageIndex = 10
-                TabOrder = 3
+                TabOrder = 2
                 OnChange = edtCatalogChange
               end
               object grpDBMSUserLogin: TGroupBox
@@ -265,7 +252,7 @@ object frmSettingsDialog: TfrmSettingsDialog
                 Height = 47
                 Anchors = [akLeft, akTop, akRight]
                 Caption = 'DBMS user &login'
-                TabOrder = 4
+                TabOrder = 3
                 DesignSize = (
                   474
                   47)
@@ -399,11 +386,11 @@ object frmSettingsDialog: TfrmSettingsDialog
               object cbxConnectionDefs: TComboBox
                 Left = 286
                 Top = 17
-                Width = 147
+                Width = 195
                 Height = 21
                 Anchors = [akLeft, akTop, akRight]
                 DropDownCount = 30
-                TabOrder = 5
+                TabOrder = 4
                 OnChange = cbxConnectionDefsChange
                 OnDropDown = cbxConnectionDefsDropDown
               end
@@ -482,6 +469,7 @@ object frmSettingsDialog: TfrmSettingsDialog
           object tsAdvanced: TTabSheet
             Caption = '&Advanced'
             ImageIndex = 1
+            OnExit = tsAdvancedExit
             ExplicitLeft = 0
             ExplicitTop = 0
             ExplicitWidth = 0
@@ -1025,7 +1013,7 @@ object frmSettingsDialog: TfrmSettingsDialog
           Width = 80
           Height = 91
           Align = alClient
-          ButtonWidth = 81
+          ButtonWidth = 75
           Images = imlMain
           List = True
           ShowCaptions = True
@@ -1069,7 +1057,7 @@ object frmSettingsDialog: TfrmSettingsDialog
           Width = 137
           Height = 91
           Align = alClient
-          ButtonWidth = 130
+          ButtonWidth = 122
           Images = imlMain
           List = True
           ShowCaptions = True
@@ -1116,11 +1104,12 @@ object frmSettingsDialog: TfrmSettingsDialog
           Width = 153
           Height = 21
           Images = imlMain
+          ReadOnly = True
           RightButton.ImageIndex = 23
           RightButton.Visible = True
           TabOrder = 0
           Text = 'Consolas'
-          OnRightButtonClick = edtGridFontRightButtonClick
+          OnRightButtonClick = edtEditorFontRightButtonClick
         end
       end
       object grpGridFont: TGroupBox
@@ -1139,11 +1128,12 @@ object frmSettingsDialog: TfrmSettingsDialog
           FocusControl = edtGridFont
         end
         object edtGridFont: TButtonedEdit
-          Left = 71
+          Left = 64
           Top = 24
           Width = 162
           Height = 21
           Images = imlMain
+          ReadOnly = True
           RightButton.ImageIndex = 23
           RightButton.Visible = True
           TabOrder = 0
@@ -1165,11 +1155,15 @@ object frmSettingsDialog: TfrmSettingsDialog
         Top = 0
         Width = 664
         Height = 359
-        ActivePage = tsDataGrabberSettings
+        ActivePage = tsFDConnectionDefs
         Align = alClient
         TabOrder = 0
         object tsDataGrabberSettings: TTabSheet
           Caption = 'Settings.json'
+          ExplicitLeft = 0
+          ExplicitTop = 0
+          ExplicitWidth = 0
+          ExplicitHeight = 0
           object seSettings: TSynEdit
             AlignWithMargins = True
             Left = 3
@@ -1220,10 +1214,6 @@ object frmSettingsDialog: TfrmSettingsDialog
         object tsFDConnectionDefs: TTabSheet
           Caption = 'FDConnectionDefs.ini'
           ImageIndex = 1
-          ExplicitLeft = 0
-          ExplicitTop = 0
-          ExplicitWidth = 0
-          ExplicitHeight = 0
           object seFDConnectionDefs: TSynEdit
             AlignWithMargins = True
             Left = 3
@@ -1273,9 +1263,9 @@ object frmSettingsDialog: TfrmSettingsDialog
         end
       end
       object tlbSettingsFiles: TToolBar
-        Left = 612
+        Left = 592
         Top = -1
-        Width = 52
+        Width = 72
         Height = 21
         Align = alNone
         Anchors = [akTop, akRight]
@@ -1294,7 +1284,21 @@ object frmSettingsDialog: TfrmSettingsDialog
           Top = 0
           Action = actRefreshFile
         end
+        object btnEditConnectionDef: TToolButton
+          Left = 46
+          Top = 0
+          Action = actEditConnectionDef
+        end
       end
+    end
+    object tsConnectionDefinitions: TTabSheet
+      Caption = 'Connection definitions'
+      ImageIndex = -1
+      TabVisible = False
+      ExplicitLeft = 3
+      ExplicitTop = 29
+      ExplicitWidth = 0
+      ExplicitHeight = 0
     end
   end
   object btnApply: TButton
@@ -1340,7 +1344,8 @@ object frmSettingsDialog: TfrmSettingsDialog
   end
   object aclMain: TActionList
     Images = imlMain
-    Left = 440
+    Left = 456
+    Top = 40
     object actApply: TAction
       Caption = '&Apply'
       Hint = 'Apply settings immediately'
@@ -1485,9 +1490,10 @@ object frmSettingsDialog: TfrmSettingsDialog
   object imlMain: TImageList
     ColorDepth = cd32Bit
     DrawingStyle = dsTransparent
-    Left = 600
+    Left = 592
+    Top = 112
     Bitmap = {
-      494C0101180030007C0010001000FFFFFFFF2110FFFFFFFFFFFFFFFF424D3600
+      494C010118003000880010001000FFFFFFFF2110FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000007000000001002000000000000070
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
@@ -2420,6 +2426,7 @@ object frmSettingsDialog: TfrmSettingsDialog
   end
   object dlgOpenFile: TOpenDialog
     Left = 344
+    Top = 40
   end
   object synJScript: TSynJScriptSyn
     Options.AutoDetectEnabled = False
@@ -2434,7 +2441,7 @@ object frmSettingsDialog: TfrmSettingsDialog
     SymbolAttri.Foreground = clRed
     SymbolAttri.Style = [fsBold]
     Left = 391
-    Top = 65532
+    Top = 44
   end
   object synIni: TSynIniSyn
     Options.AutoDetectEnabled = False
@@ -2451,8 +2458,8 @@ object frmSettingsDialog: TfrmSettingsDialog
     StringAttri.Style = [fsBold, fsItalic]
     SymbolAttri.Foreground = clRed
     SymbolAttri.Style = [fsBold]
-    Left = 494
-    Top = 65535
+    Left = 510
+    Top = 39
   end
   object dlgFont: TFontDialog
     Font.Charset = DEFAULT_CHARSET
@@ -2460,13 +2467,13 @@ object frmSettingsDialog: TfrmSettingsDialog
     Font.Height = -11
     Font.Name = 'Tahoma'
     Font.Style = []
-    Left = 546
-    Top = 2
+    Left = 562
+    Top = 42
   end
   object conTest: TFDConnection
     LoginPrompt = False
     OnError = conTestError
-    Left = 638
-    Top = 3
+    Left = 622
+    Top = 107
   end
 end

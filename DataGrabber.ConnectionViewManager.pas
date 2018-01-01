@@ -1,5 +1,5 @@
 {
-  Copyright (C) 2013-2017 Tim Sinaeve tim.sinaeve@gmail.com
+  Copyright (C) 2013-2018 Tim Sinaeve tim.sinaeve@gmail.com
 
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
@@ -116,7 +116,8 @@ type
     ppmConnectionView             : TPopupMenu;
     ppmEditorView                 : TPopupMenu;
     Selection1                    : TMenuItem;
-    actFireDACInfo: TAction;
+    actFireDACInfo                : TAction;
+    actShowMetaData: TAction;
     {$ENDREGION}
 
     {$REGION 'action handlers'}
@@ -154,6 +155,7 @@ type
     procedure actFireDACInfoExecute(Sender: TObject);
     procedure actToggleStayOnTopExecute(Sender: TObject);
     procedure actToggleFullScreenExecute(Sender: TObject);
+    procedure actShowMetaDataExecute(Sender: TObject);
     {$ENDREGION}
 
   private
@@ -240,7 +242,8 @@ uses
 
   DDuce.ObjectInspector.zObjectInspector,
 
-  DataGrabber.Settings.Dialog, DataGrabber.Factories, DataGrabber.Resources;
+  DataGrabber.Settings.Dialog, DataGrabber.Factories, DataGrabber.Resources,
+  DataGrabber.MetaData.Dialog;
 
 {$REGION 'construction and destruction'}
 constructor TdmConnectionViewManager.Create(AOwner: TComponent;
@@ -309,6 +312,15 @@ procedure TdmConnectionViewManager.actShowAllColumnsExecute(Sender: TObject);
 begin
   if (ActiveData as IFieldVisiblity).ShowAllFields then
     ActiveDataView.UpdateView;
+end;
+
+procedure TdmConnectionViewManager.actShowMetaDataExecute(Sender: TObject);
+var
+  F: TfrmMetaData;
+begin
+  F := TfrmMetaData.Create(Self, ActiveData.Connection);
+  F.ShowModal;
+
 end;
 
 procedure TdmConnectionViewManager.actToggleFullScreenExecute(Sender: TObject);

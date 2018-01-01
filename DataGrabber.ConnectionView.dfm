@@ -68,6 +68,8 @@ object frmConnectionView: TfrmConnectionView
         Align = alClient
         BevelOuter = bvNone
         TabOrder = 1
+        ExplicitLeft = 191
+        ExplicitTop = 2
       end
     end
     object pnlBottom: TOMultiPanel

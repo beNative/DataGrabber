@@ -1,5 +1,5 @@
 {
-  Copyright (C) 2013-2017 Tim Sinaeve tim.sinaeve@gmail.com
+  Copyright (C) 2013-2018 Tim Sinaeve tim.sinaeve@gmail.com
 
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
@@ -39,6 +39,8 @@ type
     FEditor  : TSynEdit;
     FManager : IConnectionViewManager;
 
+    procedure SettingsChanged(Sender: TObject);
+
   protected
     {$REGION 'property access methods'}
     function GetText: string;
@@ -63,6 +65,7 @@ type
     procedure AssignParent(AParent: TWinControl);
     procedure CopyToClipboard;
     procedure FillCompletionLists(ATables, AAttributes : TStrings);
+    procedure ApplySettings;
 
     procedure SetFocus; override;
 
@@ -82,7 +85,9 @@ type
 implementation
 
 uses
-  System.UITypes;
+  System.UITypes,
+
+  DataGrabber.Resources;
 
 {$R *.dfm}
 
@@ -95,16 +100,19 @@ constructor TfrmEditorView.Create(AOwner: TComponent;
 begin
   inherited Create(AOwner);
   FManager := AManager;
+
 end;
 
 procedure TfrmEditorView.AfterConstruction;
 begin
   inherited AfterConstruction;
   CreateEditor;
+  FManager.Settings.OnChanged.Add(SettingsChanged);
 end;
 
 procedure TfrmEditorView.BeforeDestruction;
 begin
+  FManager.Settings.OnChanged.Remove(SettingsChanged);
   FManager := nil;
   inherited BeforeDestruction;
 end;
@@ -152,9 +160,18 @@ end;
 {$ENDREGION}
 
 {$REGION 'event handlers'}
+procedure TfrmEditorView.SettingsChanged(Sender: TObject);
+begin
+  ApplySettings;
+end;
 {$ENDREGION}
 
 {$REGION 'protected methods'}
+procedure TfrmEditorView.ApplySettings;
+begin
+  FEditor.Font.Assign(FManager.Settings.EditorFont);
+end;
+
 procedure TfrmEditorView.AssignParent(AParent: TWinControl);
 begin
   Parent      := AParent;
@@ -170,7 +187,7 @@ begin
   FEditor.Align            := alClient;
   FEditor.AlignWithMargins := False;
   FEditor.BorderStyle      := bsSingle;
-  FEditor.Font.Name        := 'Consolas';
+  FEditor.Font.Assign(FManager.Settings.EditorFont);
   FEditor.Highlighter      := synSQL;
   FEditor.Options := [
     eoAltSetsColumnMode,
@@ -223,36 +240,36 @@ end;
 procedure TfrmEditorView.FillCompletionLists(ATables, AAttributes: TStrings);
 var
   I       : Integer;
-//  Items   : TStringList;
-//  Inserts : TStringList;
+  Items   : TStringList;
+  Inserts : TStringList;
 begin
   inherited SetFocus;
-//  Items  := FSynCP.ItemList as TStringList;
-//  Inserts := FSynCP.InsertList  as TStringList;
-//  Items.Clear;
-//  Inserts.Clear;
-//  FSynSQL.TableNames.Clear;
+  Items  := scpMain.ItemList as TStringList;
+  Inserts := scpMain.InsertList  as TStringList;
+  Items.Clear;
+  Inserts.Clear;
+  synSQL.TableNames.Clear;
   if Assigned(AAttributes) then
   begin
     for I := 0 to Pred(AAttributes.Count) do
     begin
-//      if Inserts.IndexOf(AAttributes.Strings[I]) = -1 then
-//      begin
-//        Items.Insert(0, Format(SFieldItem, [AAttributes.Strings[I]]));
-//        Inserts.Insert(0, AAttributes.Strings[I]);
-//      end;
+      if Inserts.IndexOf(AAttributes.Strings[I]) = -1 then
+      begin
+        Items.Insert(0, Format(SFieldItem, [AAttributes.Strings[I]]));
+        Inserts.Insert(0, AAttributes.Strings[I]);
+      end;
     end;
   end;
   if Assigned(ATables) then
   begin
     for I := 0 to Pred(ATables.Count) do
     begin
-//      if Inserts.IndexOf(ATables.Strings[I]) = -1 then
-//      begin
-//        Items.Add(Format(STableItem, [ATables.Strings[I]]));
-//        Inserts.Add(ATables.Strings[I]);
-//        //FSynSQL.TableNames.Add(ATables.Strings[I]);
-//      end;
+      if Inserts.IndexOf(ATables.Strings[I]) = -1 then
+      begin
+        Items.Add(Format(STableItem, [ATables.Strings[I]]));
+        Inserts.Add(ATables.Strings[I]);
+        synSQL.TableNames.Add(ATables.Strings[I]);
+      end;
     end;
   end;
 end;

@@ -80,7 +80,10 @@ uses
   DataGrabber.DataView.cxGrid in 'DataView\DataGrabber.DataView.cxGrid.pas' {frmcxGrid},
   ZeroMQ.API in '..\..\libraries\dduce\Source\Dependencies\ZeroMQ\ZeroMQ.API.pas',
   ZeroMQ in '..\..\libraries\dduce\Source\Dependencies\ZeroMQ\ZeroMQ.pas',
-  DataGrabber.About.Dialog in 'DataGrabber.About.Dialog.pas' {Form1};
+  DataGrabber.About.Dialog in 'DataGrabber.About.Dialog.pas' {frmAboutDialog},
+  DataGrabber.MetaData.Dialog in 'DataGrabber.MetaData.Dialog.pas' {frmMetaData},
+  DDuce.Factories.Toolbar in '..\..\libraries\dduce\Source\Factories\DDuce.Factories.Toolbar.pas',
+  DataGrabber.DataView.Base in 'DataView\DataGrabber.DataView.Base.pas' {BaseDataView};
 
 {$R *.res}
 

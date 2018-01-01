@@ -2,13 +2,13 @@
     <PropertyGroup>
         <ProjectGuid>{0D221B5C-B333-427E-BB6A-F384BA740104}</ProjectGuid>
         <MainSource>DataGrabber.dpr</MainSource>
-        <Config Condition="'$(Config)'==''">Debug</Config>
+        <Config Condition="'$(Config)'==''">Release</Config>
         <DCC_DCCCompiler>DCC32</DCC_DCCCompiler>
         <ProjectVersion>18.2</ProjectVersion>
         <Base>True</Base>
         <AppType>Application</AppType>
         <FrameworkType>VCL</FrameworkType>
-        <Platform Condition="'$(Platform)'==''">Win32</Platform>
+        <Platform Condition="'$(Platform)'==''">Win64</Platform>
         <TargetedPlatforms>3</TargetedPlatforms>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Config)'=='Base' or '$(Base)'!=''">
@@ -128,10 +128,10 @@
         <DCC_Define>DEBUG;$(DCC_Define)</DCC_Define>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_2_Win32)'!=''">
-        <VerInfo_Build>38</VerInfo_Build>
+        <VerInfo_Build>39</VerInfo_Build>
         <VerInfo_AutoGenVersion>false</VerInfo_AutoGenVersion>
         <VerInfo_AutoIncVersion>true</VerInfo_AutoIncVersion>
-        <VerInfo_Keys>FileDescription=DataGrabber;FileVersion=2.0.0.38;LegalCopyright=(c) 2011 - 2017 Tim Sinaeve;OriginalFilename=DataGrabber.exe;ProductName=DataGrabber;ProductVersion=2.0.0.0;ProgramID=com.embarcadero.$(MSBuildProjectName)</VerInfo_Keys>
+        <VerInfo_Keys>FileDescription=DataGrabber;FileVersion=2.0.0.39;LegalCopyright=(c) 2011 - 2017 Tim Sinaeve;OriginalFilename=DataGrabber.exe;ProductName=DataGrabber;ProductVersion=2.0.0.0;ProgramID=com.embarcadero.$(MSBuildProjectName)</VerInfo_Keys>
         <Icon_MainIcon>DataGrabber_Icon3.ico</Icon_MainIcon>
         <AppEnableRuntimeThemes>true</AppEnableRuntimeThemes>
         <DCC_RangeChecking>true</DCC_RangeChecking>
@@ -275,7 +275,16 @@
         <DCCReference Include="..\..\libraries\dduce\Source\Dependencies\ZeroMQ\ZeroMQ.API.pas"/>
         <DCCReference Include="..\..\libraries\dduce\Source\Dependencies\ZeroMQ\ZeroMQ.pas"/>
         <DCCReference Include="DataGrabber.About.Dialog.pas">
-            <Form>Form1</Form>
+            <Form>frmAboutDialog</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="DataGrabber.MetaData.Dialog.pas">
+            <Form>frmMetaData</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="..\..\libraries\dduce\Source\Factories\DDuce.Factories.Toolbar.pas"/>
+        <DCCReference Include="DataView\DataGrabber.DataView.Base.pas">
+            <Form>BaseDataView</Form>
             <FormType>dfm</FormType>
         </DCCReference>
         <None Include="README.md"/>

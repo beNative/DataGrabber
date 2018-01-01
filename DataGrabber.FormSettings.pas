@@ -1,5 +1,5 @@
 {
-  Copyright (C) 2013-2017 Tim Sinaeve tim.sinaeve@gmail.com
+  Copyright (C) 2013-2018 Tim Sinaeve tim.sinaeve@gmail.com
 
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
@@ -37,6 +37,7 @@ type
     FHSplitterPos : Integer;
     FWindowState  : TWindowState;
 
+    {$REGION 'property access methods'}
     procedure SetFormStyle(const Value: TFormStyle);
     procedure SetHeight(const Value: Integer);
     procedure SetLeft(const Value: Integer);
@@ -46,6 +47,7 @@ type
     procedure SetHSplitterPos(const Value: Integer);
     procedure SetVSplitterPos(const Value: Integer);
     procedure SetWindowState(const Value: TWindowState);
+    {$ENDREGION}
 
   protected
     procedure DoChanged;

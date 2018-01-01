@@ -1,5 +1,5 @@
 {
-  Copyright (C) 2013-2017 Tim Sinaeve tim.sinaeve@gmail.com
+  Copyright (C) 2013-2018 Tim Sinaeve tim.sinaeve@gmail.com
 
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
@@ -19,14 +19,12 @@ unit DataGrabber.Interfaces;
 interface
 
 uses
-  System.Classes,
+  System.Classes, System.TimeSpan,
   Vcl.Graphics, Vcl.Controls, Vcl.Menus, Vcl.Forms, Vcl.ActnList,
   Data.DB,
   FireDAC.Comp.Client, FireDAC.Stan.Intf, FireDAC.Comp.DataSet,
 
   Spring, Spring.Collections,
-
-//  DDuce.DynamicRecord,
 
   DataGrabber.ConnectionProfiles, DataGrabber.FormSettings,
   DataGrabber.ConnectionSettings;
@@ -83,6 +81,7 @@ type
     function GetOnBeforeExecute: IEvent<TNotifyEvent>;
     function GetMultipleResultSets: Boolean;
     procedure SetMultipleResultSets(const Value: Boolean);
+    function GetElapsedTime: TTimeSpan;
     {$ENDREGION}
 
     procedure Execute;
@@ -139,6 +138,9 @@ type
     property ConnectionSettings: TConnectionSettings
       read GetConnectionSettings;
 
+    property ElapsedTime: TTimeSpan
+      read GetElapsedTime;
+
     property Items[AIndex: Integer]: TFDMemTable
       read GetItem; default;
 
@@ -172,6 +174,8 @@ type
     function GetOnChanged: IEvent<TNotifyEvent>;
     function GetMergeColumnCells: Boolean;
     procedure SetMergeColumnCells(const Value: Boolean);
+    function GetGridFont: TFont;
+    procedure SetGridFont(const Value: TFont);
     {$ENDREGION}
 
     property DataTypeColors[Index: TDataType]: TColor
@@ -179,6 +183,9 @@ type
 
     property FieldTypeColors[Index: TFieldType]: TColor
       read GetFieldTypeColor;
+
+    property GridFont: TFont
+      read GetGridFont write SetGridFont;
 
     property GridCellColoring: Boolean
       read GetGridCellColoring write SetGridCellColoring;
@@ -288,6 +295,10 @@ type
     function GetOnChanged: IEvent<TNotifyEvent>;
     function GetMergeColumnCells: Boolean;
     procedure SetMergeColumnCells(const Value: Boolean);
+    function GetEditorFont: TFont;
+    procedure SetEditorFont(const Value: TFont);
+    function GetGridFont: TFont;
+    procedure SetGridFont(const Value: TFont);
     {$ENDREGION}
 
     procedure Load;
@@ -298,6 +309,12 @@ type
 
     property ConnectionProfiles: TConnectionProfiles
       read GetConnectionProfiles write SetConnectionProfiles;
+
+    property EditorFont: TFont
+      read GetEditorFont write SetEditorFont;
+
+    property GridFont: TFont
+      read GetGridFont write SetGridFont;
 
     property GridCellColoring: Boolean
       read GetGridCellColoring write SetGridCellColoring;

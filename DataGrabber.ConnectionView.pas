@@ -1,5 +1,5 @@
 {
-  Copyright (C) 2013-2017 Tim Sinaeve tim.sinaeve@gmail.com
+  Copyright (C) 2013-2018 Tim Sinaeve tim.sinaeve@gmail.com
 
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
@@ -107,6 +107,7 @@ type
     {$ENDREGION}
 
     procedure DataAfterExecute(Sender: TObject);
+    procedure DataBeforeExecute(Sender: TObject);
     function GetDataView(AIndex: Integer): IDataView;
 
   protected
@@ -176,6 +177,7 @@ end;
 procedure TfrmConnectionView.AfterConstruction;
 begin
   inherited AfterConstruction;
+  Data.OnBeforeExecute.Add(DataBeforeExecute);
   Data.OnAfterExecute.Add(DataAfterExecute);
   FDataViewList := TCollections.CreateInterfaceList<IDataView>;
   InitializeConnectionProfilesView;
@@ -190,7 +192,10 @@ end;
 procedure TfrmConnectionView.BeforeDestruction;
 begin
   if Assigned(Data) then
+  begin
     Data.OnAfterExecute.Remove(DataAfterExecute);
+    Data.OnBeforeExecute.Remove(DataBeforeExecute);
+  end;
   FEditorView     := nil;
   FActiveDataView := nil;
   FData           := nil;
@@ -245,8 +250,7 @@ begin
     begin
       DV := TDataGrabberFactories.CreateDataView(
         Self,
-        Manager.Settings as IDataViewSettings,
-        Manager.Settings.GridType,
+        Manager,
         Data,
         Data.Items[I]
       );
@@ -268,8 +272,7 @@ begin
   begin
     DV := TDataGrabberFactories.CreateDataView(
       Self,
-      Manager.Settings as IDataViewSettings,
-      Manager.Settings.GridType,
+      Manager,
       Data
     );
     DV.PopupMenu := Manager.ConnectionViewPopupMenu;
@@ -278,6 +281,11 @@ begin
   end;
   pnlMain.SplitterSize                := 8;
   pnlMain.PanelCollection[0].Position := 0.2;
+end;
+
+procedure TfrmConnectionView.DataBeforeExecute(Sender: TObject);
+begin
+  FActiveDataView := nil;
 end;
 {$ENDREGION}
 
@@ -463,8 +471,6 @@ begin
     if Assigned(FActiveDataView) and not FActiveDataView.IsActiveDataView then
       UpdateActiveDataView;
   end;
-  if Assigned(FActiveDataView) then
-    Logger.Watch('ActiveDatView', FActiveDataView.Name);
 end;
 
 procedure TfrmConnectionView.UpdateActiveDataView;

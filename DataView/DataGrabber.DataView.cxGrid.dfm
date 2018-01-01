@@ -1,23 +1,17 @@
-object frmcxGrid: TfrmcxGrid
-  Left = 0
-  Top = 0
+inherited frmcxGrid: TfrmcxGrid
   ClientHeight = 319
-  ClientWidth = 573
-  Color = clBtnFace
+  ClientWidth = 695
   DoubleBuffered = True
-  Font.Charset = DEFAULT_CHARSET
-  Font.Color = clWindowText
-  Font.Height = -11
   Font.Name = 'Se'
-  Font.Style = []
-  OldCreateOrder = False
   OnClose = FormClose
+  ExplicitWidth = 711
+  ExplicitHeight = 358
   PixelsPerInch = 96
   TextHeight = 14
-  object grdMain: TcxGrid
+  object grdMain: TcxGrid [0]
     Left = 0
     Top = 0
-    Width = 573
+    Width = 695
     Height = 319
     Align = alClient
     BevelInner = bvNone
@@ -29,6 +23,7 @@ object frmcxGrid: TfrmcxGrid
     Font.Style = []
     ParentFont = False
     TabOrder = 0
+    OnExit = grdMainExit
     LevelTabs.Slants.Positions = []
     LevelTabs.Style = 6
     LookAndFeel.Kind = lfStandard
@@ -94,15 +89,11 @@ object frmcxGrid: TfrmcxGrid
       Options.TabsForEmptyDetails = False
     end
   end
-  object dscMain: TDataSource
-    Left = 72
-    Top = 48
-  end
   object ppmMain: TcxGridPopupMenu
     Grid = grdMain
     PopupMenus = <>
     AlwaysFireOnPopup = True
-    Left = 160
+    Left = 128
     Top = 48
   end
 end

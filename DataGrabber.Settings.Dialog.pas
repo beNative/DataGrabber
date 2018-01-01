@@ -1,5 +1,5 @@
 {
-  Copyright (C) 2013-2017 Tim Sinaeve tim.sinaeve@gmail.com
+  Copyright (C) 2013-2018 Tim Sinaeve tim.sinaeve@gmail.com
 
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
@@ -24,7 +24,13 @@ uses
   System.Classes, System.TypInfo,
   Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls,
   Vcl.StdCtrls, Vcl.ComCtrls, Vcl.ActnList, Vcl.ImgList, Vcl.ToolWin,
-  FireDAC.Stan.Intf,
+  Data.DB,
+  FireDAC.Stan.Intf, FireDAC.Stan.Option, FireDAC.Stan.Error, FireDAC.Stan.Def,
+  FireDAC.Stan.Pool, FireDAC.Stan.Async,
+  FireDAC.UI.Intf,
+  FireDAC.Phys.Intf, FireDAC.Phys,
+  FireDAC.VCLUI.Wait,
+  FireDAC.Comp.Client,
 
   VirtualTrees,
 
@@ -38,10 +44,7 @@ uses
   DataGrabber.Interfaces,
 
   DataGrabber.Settings, DataGrabber.ConnectionProfiles,
-  DataGrabber.ConnectionProfileValueManager, FireDAC.Stan.Option,
-  FireDAC.Stan.Error, FireDAC.UI.Intf, FireDAC.Phys.Intf, FireDAC.Stan.Def,
-  FireDAC.Stan.Pool, FireDAC.Stan.Async, FireDAC.Phys, FireDAC.VCLUI.Wait,
-  Data.DB, FireDAC.Comp.Client;
+  DataGrabber.ConnectionProfileValueManager;
 
 type
   TApplySettingsMethod = reference to procedure;
@@ -75,7 +78,6 @@ type
     btnBooleanColor              : TKColorButton;
     btnCancel                    : TButton;
     btnClose                     : TButton;
-    btnConnectionString          : TButton;
     btnDateColor                 : TKColorButton;
     btnDateTimeColor             : TKColorButton;
     btnDelete                    : TToolButton;
@@ -175,6 +177,8 @@ type
     tsDisplay                    : TTabSheet;
     tsFDConnectionDefs           : TTabSheet;
     tsSettings                   : TTabSheet;
+    btnEditConnectionDef: TToolButton;
+    tsConnectionDefinitions: TTabSheet;
     {$ENDREGION}
 
     {$REGION 'action handlers'}
@@ -260,6 +264,8 @@ type
     procedure conTestError(ASender, AInitiator: TObject;
       var AException: Exception);
     procedure lblConnectionDefinitionNameDblClick(Sender: TObject);
+    procedure tsAdvancedExit(Sender: TObject);
+    procedure edtEditorFontRightButtonClick(Sender: TObject);
     {$ENDREGION}
 
   private
@@ -430,7 +436,7 @@ end;
 procedure TfrmSettingsDialog.actEditConnectionDefExecute(Sender: TObject);
 var
   CD : IFDStanConnectionDef;
-  OC : IFDStanOptions;
+  //OC : IFDStanOptions;
   CS : TConnectionSettings;
   S  : string;
 begin
@@ -448,12 +454,13 @@ begin
     CD.Params.Password := CS.Password;
     Logger.SendObject('CD', TObject(CD));
     CD.MarkPersistent; // required to add it to the connection definition file.
-//    CD.Apply;
-//    FDManager.ConnectionDefs.Save;
   end;
-  ExecuteFDConnectionDialog(CD, '');
-//  CD.Apply;
-//  FDManager.ConnectionDefs.Save;
+
+  TfrmFDGUIxFormsConnEdit.Execute(S, '');
+
+
+
+
   Logger.Info(CD.Params.Text);
 
 //  OC := TFDOptionsContainer.Create(
@@ -757,12 +764,30 @@ procedure TfrmSettingsDialog.edtDatabaseRightButtonClick(Sender: TObject);
 begin
   dlgOpenFile.FileName := edtDatabase.Text;
   if dlgOpenFile.Execute then
+  begin
     edtDatabase.Text := dlgOpenFile.FileName;
+    Changed;
+  end;
+end;
+
+procedure TfrmSettingsDialog.edtEditorFontRightButtonClick(Sender: TObject);
+begin
+  dlgFont.Font.Assign(FSettings.EditorFont);
+  dlgFont.Execute;
+  FSettings.EditorFont := dlgFont.Font;
+  edtEditorFont.Font.Assign(FSettings.EditorFont);
+  edtEditorFont.Text := FSettings.EditorFont.Name;
+  Changed;
 end;
 
 procedure TfrmSettingsDialog.edtGridFontRightButtonClick(Sender: TObject);
 begin
-  dlgFont.Execute()
+  dlgFont.Font.Assign(FSettings.GridFont);
+  dlgFont.Execute;
+  FSettings.GridFont := dlgFont.Font;
+  edtGridFont.Font.Assign(FSettings.GridFont);
+  edtGridFont.Text := FSettings.GridFont.Name;
+  Changed;
 end;
 
 procedure TfrmSettingsDialog.edtPacketRecordsChange(Sender: TObject);
@@ -787,6 +812,14 @@ end;
 procedure TfrmSettingsDialog.edtUserNameChange(Sender: TObject);
 begin
   Changed;
+end;
+
+procedure TfrmSettingsDialog.tsAdvancedExit(Sender: TObject);
+var
+  CP : TConnectionProfile;
+begin
+  CP := FSettings.ConnectionProfiles[FVSTProfiles.FocusedNode.Index];
+  UpdateConnectionProfileControls(CP);
 end;
 
 procedure TfrmSettingsDialog.tsSettingsEnter(Sender: TObject);
@@ -974,6 +1007,10 @@ begin
       actMRSVertically.Checked     := True;
   end;
   chkGridCellColoringEnabled.Checked := FSettings.GridCellColoring;
+  edtEditorFont.Font.Assign(FSettings.EditorFont);
+  edtEditorFont.Text := FSettings.EditorFont.Name;
+  edtGridFont.Font.Assign(FSettings.GridFont);
+  edtGridFont.Text   := FSettings.GridFont.Name;
 
   FVSTProfiles := TVirtualStringTreeFactory.CreateGrid(
     Self,
@@ -1045,7 +1082,9 @@ begin
   actAdd.Enabled       := pgcMain.ActivePage = tsConnectionProfiles;
 
   chkReadOnlyResultSets.Enabled := not chkMultipleResultSets.Checked;
-  actEditConnectionDef.Enabled := Trim(cbxConnectionDefs.Text) <> '';
+//  actEditConnectionDef.Enabled := Trim(cbxConnectionDefs.Text) <> '';
+
+  actEditConnectionDef.Enabled := True;
 
   B := chkOSAuthent.Checked;
   edtUserName.Enabled := not B;

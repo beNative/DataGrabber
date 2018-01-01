@@ -1,5 +1,5 @@
 {
-  Copyright (C) 2013-2017 Tim Sinaeve tim.sinaeve@gmail.com
+  Copyright (C) 2013-2018 Tim Sinaeve tim.sinaeve@gmail.com
 
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
@@ -24,46 +24,33 @@ uses
   Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.Menus,
   Data.DB,
 
-
-
   DDuce.Components.GridView, DDuce.Components.DBGridView,
 
-  DataGrabber.Interfaces;
+  DataGrabber.Interfaces, DataGrabber.DataView.Base;
 
 type
-  TfrmGridView = class(TForm, IDataView)
-    dscMain : TDataSource;
+  TfrmGridView = class(TBaseDataView, IDataView)
 
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
 
   private
-    FData            : IData;
     FGrid            : TDBGridView;
-    FDataSet         : TDataSet;
-    FSettings        : IDataViewSettings;
     FSortedFieldName : string;
     FSortDirection   : TGridSortDirection;
     FUpSortImage     : TBitmap;
     FDownSortImage   : TBitmap;
 
+  protected
     {$REGION 'property access methods'}
-    function GetName: string;
-    function GetDataSet: TDataSet;
-    function GetRecordCount: Integer;
-    function GetData: IData;
-    function GetSettings: IDataViewSettings;
-    function GetPopupMenu: TPopupMenu; reintroduce;
-    procedure SetPopupMenu(const Value: TPopupMenu);
-    function GetGridType: string;
+    function GetPopupMenu: TPopupMenu; reintroduce; override;
+    procedure SetPopupMenu(const Value: TPopupMenu); override;
+    function GetGridType: string; override;
     {$ENDREGION}
-
-    procedure DataAfterExecute(Sender: TObject);
-    procedure SettingsChanged(Sender: TObject);
 
     procedure InitializeGridColumns;
     procedure InitializeGridColumn(AGridColumn: TDBGridColumn);
 
-    procedure ApplyGridSettings;
+    procedure ApplyGridSettings; override;
 
     // shortcut methods
     function IsLookupField(const AFieldName: string) : Boolean;
@@ -147,61 +134,35 @@ type
     );
 
   public
-    constructor Create(
-      AOwner    : TComponent;
-      ASettings : IDataViewSettings;
-      AData     : IData;
-      ADataSet  : TDataSet = nil
-    ); reintroduce; virtual;
     procedure AfterConstruction; override;
     procedure BeforeDestruction; override;
 
-    procedure BeginUpdate;
-    procedure EndUpdate;
+    procedure BeginUpdate; override;
+    procedure EndUpdate; override;
 
-    procedure AssignParent(AParent: TWinControl);
-    procedure HideSelectedColumns;
-    procedure AutoSizeColumns;
-    procedure Copy;
-    procedure Inspect;
-    function IsActiveDataView: Boolean;
+    procedure HideSelectedColumns; override;
+    procedure AutoSizeColumns; override;
+    procedure Copy; override;
+    procedure Inspect; override;
 
     function SelectionToCommaText(
       AQuoteItems: Boolean = True
-    ): string;
+    ): string; override;
     function SelectionToDelimitedTable(
       ADelimiter     : string = #9;
       AIncludeHeader : Boolean = True
-    ): string;
+    ): string; override;
     function SelectionToTextTable(
       AIncludeHeader: Boolean = False
-    ): string;
+    ): string; override;
     function SelectionToWikiTable(
       AIncludeHeader: Boolean = False
-    ): string;
+    ): string; override;
     function SelectionToFields(
       AQuoteItems: Boolean = True
-    ): string;
+    ): string; override;
 
-    procedure UpdateView;
-
-    property DataSet: TDataSet
-       read GetDataSet;
-
-    property Data: IData
-      read GetData;
-
-    property Settings: IDataViewSettings
-      read GetSettings;
-
-    property RecordCount: Integer
-       read GetRecordCount;
-
-    property PopupMenu: TPopupMenu
-      read GetPopupMenu write SetPopupMenu;
-
-    property GridType: string
-      read GetGridType;
+    procedure UpdateView; override;
   end;
 
 implementation
@@ -292,16 +253,7 @@ procedure TfrmGridView.BeforeDestruction;
 begin
   FUpSortImage.Free;
   FDownSortImage.Free;
-  if Assigned(FData) then
-    FData.OnAfterExecute.Remove(DataAfterExecute);
   inherited BeforeDestruction;
-end;
-{$ENDREGION}
-
-{$REGION 'event handlers'}
-procedure TfrmGridView.DataAfterExecute(Sender: TObject);
-begin
-  UpdateView;
 end;
 {$ENDREGION}
 
@@ -309,11 +261,6 @@ end;
 function TfrmGridView.GetGridType: string;
 begin
   Result := 'GridView';
-end;
-
-function TfrmGridView.GetName: string;
-begin
-  Result := inherited Name;
 end;
 
 function TfrmGridView.GetPopupMenu: TPopupMenu;
@@ -324,26 +271,6 @@ end;
 procedure TfrmGridView.SetPopupMenu(const Value: TPopupMenu);
 begin
   FGrid.PopupMenu := Value;
-end;
-
-function TfrmGridView.GetSettings: IDataViewSettings;
-begin
-  Result := FSettings;
-end;
-
-function TfrmGridView.GetDataSet: TDataSet;
-begin
-  Result := FDataSet;
-end;
-
-function TfrmGridView.GetData: IData;
-begin
-  Result := FData;
-end;
-
-function TfrmGridView.GetRecordCount: Integer;
-begin
-  Result := Data.RecordCount;
 end;
 {$ENDREGION}
 
@@ -588,11 +515,6 @@ begin
 end;
 {$ENDREGION}
 
-procedure TfrmGridView.SettingsChanged(Sender: TObject);
-begin
-  ApplyGridSettings;
-end;
-
 procedure TfrmGridView.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
   Action := caFree;
@@ -600,11 +522,6 @@ end;
 {$ENDREGION}
 
 {$REGION 'private methods'}
-function TfrmGridView.IsActiveDataView: Boolean;
-begin
-  Result := ContainsFocus(Self);
-end;
-
 function TfrmGridView.IsCellReadOnly(const ACell: TGridCell): Boolean;
 begin
   Result := False;
@@ -656,23 +573,18 @@ end;
 procedure TfrmGridView.ApplyGridSettings;
 begin
   FGrid.GridLines := True;
-  if FSettings.ShowHorizontalGridLines then
+  if Settings.ShowHorizontalGridLines then
     FGrid.GridStyle := FGrid.GridStyle + [gsHorzLine]
   else
     FGrid.GridStyle := FGrid.GridStyle - [gsHorzLine];
 
-  if FSettings.ShowVerticalGridLines then
+  if Settings.ShowVerticalGridLines then
     FGrid.GridStyle := FGrid.GridStyle + [gsVertLine]
   else
     FGrid.GridStyle := FGrid.GridStyle - [gsVertLine];
-end;
-
-procedure TfrmGridView.AssignParent(AParent: TWinControl);
-begin
-  Parent      := AParent;
-  BorderStyle := bsNone;
-  Align       := alClient;
-  Visible     := True;
+  FGrid.Font.Assign(Settings.GridFont);
+  FGrid.Header.Font.Assign(Settings.GridFont);
+  FGrid.Header.Font.Style := FGrid.Header.Font.Style + [fsBold];
 end;
 
 procedure TfrmGridView.AutoSizeColumns;
@@ -684,20 +596,6 @@ end;
 procedure TfrmGridView.Copy;
 begin
 // TODO
-end;
-
-constructor TfrmGridView.Create(AOwner: TComponent;
-  ASettings: IDataViewSettings; AData: IData; ADataSet: TDataSet);
-begin
-  inherited Create(AOwner);
-  FSettings := ASettings;
-  FSettings.OnChanged.Add(SettingsChanged);
-  FData     := AData;
-  if Assigned(ADataSet) then
-    FDataSet := ADataSet
-  else
-    FDataSet := FData.DataSet;
-  dscMain.DataSet := FDataSet;
 end;
 
 procedure TfrmGridView.BeginUpdate;

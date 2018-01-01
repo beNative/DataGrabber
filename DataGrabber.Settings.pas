@@ -1,5 +1,5 @@
 {
-  Copyright (C) 2013-2017 Tim Sinaeve tim.sinaeve@gmail.com
+  Copyright (C) 2013-2018 Tim Sinaeve tim.sinaeve@gmail.com
 
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
@@ -47,6 +47,8 @@ type
     FMergeColumnCells         : Boolean;
     FUpdateLock               : Integer;
     FOnChanged                : Event<TNotifyEvent>;
+    FEditorFont               : TFont;
+    FGridFont                 : TFont;
 
     {$REGION 'property access methods'}
     function GetGridCellColoring: Boolean;
@@ -79,6 +81,10 @@ type
     function GetOnChanged: IEvent<TNotifyEvent>;
     function GetMergeColumnCells: Boolean;
     procedure SetMergeColumnCells(const Value: Boolean);
+    function GetEditorFont: TFont;
+    procedure SetEditorFont(const Value: TFont);
+    function GetGridFont: TFont;
+    procedure SetGridFont(const Value: TFont);
     {$ENDREGION}
 
     procedure FormSettingsChanged(Sender: TObject);
@@ -130,6 +136,12 @@ type
 
     property ConnectionProfiles: TConnectionProfiles
       read GetConnectionProfiles write SetConnectionProfiles;
+
+    property EditorFont: TFont
+      read GetEditorFont write SetEditorFont;
+
+    property GridFont: TFont
+      read GetGridFont write SetGridFont;
 
     property GridType: string
       read GetGridType write SetGridType;
@@ -192,6 +204,8 @@ begin
   FGridCellColoring := True;
   FGroupByBoxVisible := True;
   FResultDisplayLayout := TResultDisplayLayout.Horizontal;
+  FEditorFont := TFont.Create;
+  FGridFont   := TFont.Create;
 end;
 
 procedure TSettings.BeforeDestruction;
@@ -201,6 +215,8 @@ begin
   FreeAndNil(FFormSettings);
   FreeAndNil(FDataTypeColors);
   FreeAndNil(FConnectionSettings);
+  FreeAndNil(FEditorFont);
+  FreeAndNil(FGridFont);
   inherited BeforeDestruction;
 end;
 {$ENDREGION}
@@ -245,6 +261,17 @@ end;
 function TSettings.GetGridCellColoring: Boolean;
 begin
   Result := FGridCellColoring;
+end;
+
+function TSettings.GetGridFont: TFont;
+begin
+  Result := FGridFont;
+end;
+
+procedure TSettings.SetGridFont(const Value: TFont);
+begin
+  FGridFont.Assign(Value);
+  Changed;
 end;
 
 procedure TSettings.SetGridCellColoring(const Value: Boolean);
@@ -408,6 +435,17 @@ begin
   end;
 end;
 
+function TSettings.GetEditorFont: TFont;
+begin
+  Result := FEditorFont;
+end;
+
+procedure TSettings.SetEditorFont(const Value: TFont);
+begin
+  FEditorFont.Assign(Value);
+  Changed;
+end;
+
 function TSettings.GetFileName: string;
 begin
   Result := FFileName;
@@ -472,6 +510,8 @@ begin
       JO.LoadFromFile(FileName);
       JO.ToSimpleObject(Self);
       JO['FormSettings'].ObjectValue.ToSimpleObject(FFormSettings);
+      JO['EditorFont'].ObjectValue.ToSimpleObject(FEditorFont);
+      JO['GridFont'].ObjectValue.ToSimpleObject(FGridFont);
       for I := 0 to JO['ConnectionProfiles'].ArrayValue.Count - 1 do
       begin
         CP := FConnectionProfiles.Add;
@@ -495,6 +535,8 @@ begin
   try
     JO.FromSimpleObject(Self);
     JO['FormSettings'].ObjectValue.FromSimpleObject(FormSettings);
+    JO['EditorFont'].ObjectValue.FromSimpleObject(EditorFont);
+    JO['GridFont'].ObjectValue.FromSimpleObject(GridFont);
     for I := 0 to ConnectionProfiles.Count - 1 do
     begin
       JO['ConnectionProfiles'].ArrayValue

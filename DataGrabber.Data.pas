@@ -1,5 +1,5 @@
 ﻿{
-  Copyright (C) 2013-2017 Tim Sinaeve tim.sinaeve@gmail.com
+  Copyright (C) 2013-2018 Tim Sinaeve tim.sinaeve@gmail.com
 
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
@@ -68,12 +68,7 @@ uses
   DataGrabber.ConnectionSettings, DataGrabber.Interfaces;
 
 type
-  TdmData = class(
-    TDataModule,
-    IData,
-    IFieldLists,
-    IFieldVisiblity
-  )
+  TdmData = class(TDataModule, IData, IFieldLists, IFieldVisiblity)
     conMain : TFDConnection;
     qryMain : TFDQuery;
 
@@ -128,6 +123,7 @@ type
     FOnBeforeExecute        : Event<TNotifyEvent>;
     FDataSets               : IList<TFDMemTable>;
     FMultipleResultSets     : Boolean;
+    FStopWatch              : TStopwatch;
 
     {$REGION 'property access methods'}
     function GetConstantFields: IList<TField>;
@@ -159,6 +155,7 @@ type
     {$ENDREGION}
 
     procedure FConnectionSettingsChanged(Sender: TObject);
+    function GetElapsedTime: TTimeSpan;
 
   protected
     procedure Execute;
@@ -170,6 +167,9 @@ type
 
     procedure UpdateFieldLists;
 
+    {$REGION 'IData'}
+
+    {$ENDREGION}
     procedure SaveToFile(
       ADataSet        : TDataSet;
       const AFileName : string = '';
@@ -203,12 +203,17 @@ type
     property Connection: TFDConnection
       read GetConnection;
 
+    property ElapsedTime: TTimeSpan
+      read GetElapsedTime;
+
+    { Indicated if there is an active connection to the database. }
     property Connected: Boolean
       read GetConnected write SetConnected;
 
     property ConnectionSettings: TConnectionSettings
       read GetConnectionSettings;
 
+    { List of all supported drivernames (by FireDAC). }
     property DriverNames: TStrings
       read GetDriverNames;
 
@@ -230,15 +235,21 @@ type
     property RecordCount: Integer
       read GetRecordCount;
 
+    { Returns the listcount of the internal list of fetched datasets
+      (FDataSets). }
     property DataSetCount: Integer
       read GetDataSetCount;
 
+    { Multiple resultsets will be fetched and stored in a local list of
+      TFDMemtable instances (FDataSets). }
     property MultipleResultSets: Boolean
       read GetMultipleResultSets write SetMultipleResultSets;
 
+    { Called before the SQL statement or script is executed. }
     property OnAfterExecute: IEvent<TNotifyEvent>
       read GetOnAfterExecute;
 
+    { Called after the SQL statement or script is executed. }
     property OnBeforeExecute: IEvent<TNotifyEvent>
       read GetOnBeforeExecute;
     {$ENDREGION}
@@ -314,6 +325,7 @@ begin
   FDManager.ResourceOptions.SilentMode  := False;
   FDManager.GetDriverNames(DriverNames);
   InitializeConnection;
+  FStopWatch := TStopwatch.Create;
 end;
 
 procedure TdmData.BeforeDestruction;
@@ -386,6 +398,11 @@ begin
   end;
 end;
 {$ENDREGION}
+
+function TdmData.GetElapsedTime: TTimeSpan;
+begin
+  Result := FStopWatch.Elapsed;
+end;
 
 function TdmData.GetItem(AIndex: Integer): TFDMemTable;
 begin
@@ -671,8 +688,6 @@ end;
 procedure TdmData.InitializeConnection;
 begin
   Logger.Track('InitializeConnection');
-//  Logger.Send('ConnectionString', Connection.ConnectionString);
-
   Logger.Send('DriverName', ConnectionSettings.DriverName);
   MultipleResultSets := FConnectionSettings.MultipleResultSets;
   Connection.FetchOptions.RowsetSize := ConnectionSettings.PacketRecords;
@@ -684,7 +699,6 @@ begin
   begin
     Connection.FetchOptions.Mode := fmAll;
   end;
-//  Connection.ConnectionString := ConnectionSettings.ConnectionString;
   Connection.DriverName       := ConnectionSettings.DriverName;
   if MultipleResultSets then
   begin
@@ -726,7 +740,9 @@ begin
   begin
     FDataSets.Clear;
     qryMain.Close;
+    FStopWatch.Start;
     qryMain.Open(ACommandText);
+    FStopWatch.Stop;
     if MultipleResultSets then
     begin
       LMemTable := TFDMemTable.Create(nil);
@@ -772,6 +788,9 @@ procedure TdmData.Sort(const AFieldName: string; ADescending: Boolean);
 begin
   Sort(DataSet, AFieldName, ADescending);
 end;
+
+{ Sorts the TFDDataSet (or any of its descendants) on a given fieldname by
+  assigning an expression to the IndexFieldNames property. }
 
 procedure TdmData.Sort(ADataSet: TDataSet; const AFieldName: string;
   ADescending: Boolean);
@@ -828,12 +847,16 @@ end;
 
 procedure TdmData.Execute;
 begin
+  FStopWatch.Reset;
   InitializeConnection;
+  FStopWatch.Start;
   InternalExecute(SQL);
+  FStopWatch.Stop;
   UpdateFieldLists;
   if OnAfterExecute.CanInvoke then
     OnAfterExecute.Invoke(Self);
   FExecuted := True;
+  Logger.Send('TimeSpan', ElapsedTime.TotalMilliseconds);
 end;
 
 procedure TdmData.LoadFromFile(ADataSet: TDataSet; const AFileName: string;

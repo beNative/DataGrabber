@@ -1,5 +1,5 @@
 {
-  Copyright (C) 2013-2017 Tim Sinaeve tim.sinaeve@gmail.com
+  Copyright (C) 2013-2018 Tim Sinaeve tim.sinaeve@gmail.com
 
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
@@ -64,14 +64,18 @@ type
     pnlRecordCount         : TPanel;
     pnlStatus              : TPanel;
     pnlStatusBar           : TPanel;
-    tlbMain                : TToolBar;
     pnlHiddenFieldsCount   : TPanel;
-    ppmCVTabs: TPopupMenu;
-    actCloseAllOtherTabs: TAction;
+    ppmCVTabs              : TPopupMenu;
+    actCloseAllOtherTabs   : TAction;
+    mniCloseAllOtherTabs   : TMenuItem;
+    pnlTop                 : TPanel;
+    tlbMain                : TToolBar;
     {$ENDREGION}
 
     {$REGION 'action handlers'}
     procedure actAddConnectionViewExecute(Sender: TObject);
+    procedure actInspectChromeTabExecute(Sender : TObject);
+    procedure actCloseAllOtherTabsExecute(Sender: TObject);
     {$ENDREGION}
 
     {$REGION 'event handlers'}
@@ -103,8 +107,6 @@ type
       var DragControl : TWinControl
     );
 
-    procedure actInspectChromeTabExecute(Sender : TObject);
-    procedure actCloseAllOtherTabsExecute(Sender: TObject);
     {$ENDREGION}
 
   private
@@ -201,7 +203,7 @@ end;
 
 procedure TfrmMain.actCloseAllOtherTabsExecute(Sender: TObject);
 begin
-//
+//Manager.DeleteConnectionView(IConnectionView(ATab.Data));
 end;
 
 procedure TfrmMain.actInspectChromeTabExecute(Sender: TObject);
@@ -238,11 +240,6 @@ begin
     CV.Form.Show;
     CV.Form.SetFocus;
     Manager.ActiveConnectionView := CV;
-    if Assigned(CV.ActiveConnectionProfile) then
-    begin
-//      ctMain.LookAndFeel.Tabs.Active.Style.StartColor := CV.ActiveConnectionProfile.ProfileColor;
-//      ctMain.LookAndFeel.Tabs.Active.Style.StopColor  := CV.ActiveConnectionProfile.ProfileColor;
-    end;
     ATab.Caption := Format('%s-%s', [
       CV.Form.Caption,
       CV.ActiveConnectionProfile.Name
@@ -410,7 +407,8 @@ begin
       Format(SConstantFieldCount, [(Data as IFieldLists).ConstantFields.Count]);
     pnlEmptyFieldsCount.Caption :=
       Format(SEmptyFieldCount, [(Data as IFieldLists).EmptyFields.Count]);
-    pnlHiddenFieldsCount.Caption := 'Unknown';
+    pnlHiddenFieldsCount.Caption := '';
+    pnlElapsedTime.Caption := Format('%5.0f ms', [Data.ElapsedTime.TotalMilliseconds]);
     if Data.CanModify then
       S := SUpdateable
     else
@@ -426,7 +424,8 @@ begin
     pnlEmptyFieldsCount.Caption    := '';
     if Assigned(ActiveConnectionProfile) then
     begin
-      pnlGridType.Caption := Settings.GridType;
+      //pnlGridType.Caption := Settings.GridType;
+      pnlGridType.Caption := '';
     end;
   end;
   if Assigned(Data) {and Assigned(Data.Connection) and Data.Connection.Connected} then

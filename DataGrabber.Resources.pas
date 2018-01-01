@@ -1,5 +1,5 @@
 {
-  Copyright (C) 2013-2017 Tim Sinaeve tim.sinaeve@gmail.com
+  Copyright (C) 2013-2018 Tim Sinaeve tim.sinaeve@gmail.com
 
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
@@ -19,9 +19,9 @@ unit DataGrabber.Resources;
 interface
 
 const
-//  STableItem     = '\color{clBlue}table\column{}\color{clBlack}%s';
-//  SFieldItem     = '\color{clRed}field\column{}\color{clBlack}%s';
-//  SProcedureItem = '\color{clPurple}procedure\column{}\color{clBlack}%s';
+  STableItem     = '\color{clBlue}table\column{}\color{clBlack}%s';
+  SFieldItem     = '\color{clRed}field\column{}\color{clBlack}%s';
+  SProcedureItem = '\color{clPurple}procedure\column{}\color{clBlack}%s';
 
   CHINOOK_EXAMPLE_QUERY =
     '/* Chinook database example query */'    + #13#10 +

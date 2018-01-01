@@ -14,12 +14,26 @@
   limitations under the License.
 }
 
-{$DEFINE KGRID}
-{$DEFINE DEVEXPRESS}  // use cxGrid
-{$DEFINE FASTREPORT}
 
+unit DataGrabber.About.Dialog;
 
+interface
 
+uses
+  Winapi.Windows, Winapi.Messages,
+  System.SysUtils, System.Variants, System.Classes,
+  Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs;
 
+type
+  TfrmAboutDialog = class(TForm)
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
 
+implementation
 
+{$R *.dfm}
+
+end.

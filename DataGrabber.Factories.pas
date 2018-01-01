@@ -1,5 +1,5 @@
 {
-  Copyright (C) 2013-2017 Tim Sinaeve tim.sinaeve@gmail.com
+  Copyright (C) 2013-2018 Tim Sinaeve tim.sinaeve@gmail.com
 
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
@@ -20,7 +20,7 @@ interface
 
 uses
   System.Classes,
-  Vcl.ComCtrls, Vcl.Controls,
+  Vcl.ComCtrls, Vcl.Controls, Vcl.Menus,
   Data.DB,
 
   DataGrabber.Interfaces, DataGrabber.ConnectionSettings;
@@ -54,25 +54,33 @@ type
     ): IEditorView;
 
     class function CreateDataView(
-      AOwner          : TComponent;
-      ASettings       : IDataViewSettings;
-      const AGridType : string;
-      AData           : IData;
-      ADataSet        : TDataSet = nil
+      AOwner   : TComponent;
+      AManager : IConnectionViewManager;
+      AData    : IData;
+      ADataSet : TDataSet = nil
     ): IDataView;
 
     class procedure AddToolbarButtons(
       AToolBar : TToolbar;
       AManager : IConnectionViewManager
     );
+
+    class function CreateDataViewToolbar(
+      AOwner   : TComponent;
+      AParent  : TWinControl;
+      AManager : IConnectionViewManager
+    ): TToolbar;
+
   end;
 
 implementation
 
 uses
-  Vcl.Forms,
+  Vcl.Forms, Vcl.Graphics,
 
   Spring,
+
+  DDuce.Factories.ToolBar,
 
   DataGrabber.ConnectionViewManager, DataGrabber.Settings,
   DataGrabber.EditorView, DataGrabber.Data, DataGrabber.ConnectionView,
@@ -150,21 +158,56 @@ begin
 end;
 
 class function TDataGrabberFactories.CreateDataView(AOwner: TComponent;
-  ASettings: IDataViewSettings; const AGridType: string; AData: IData;
-  ADataSet: TDataSet): IDataView;
+  AManager: IConnectionViewManager; AData: IData; ADataSet: TDataSet): IDataView;
+var
+  LGridType : string;
 begin
-  if AGridType = 'cxGrid' then
+  LGridType := AManager.Settings.GridType;
+  if LGridType = 'cxGrid' then
   begin
-    Result := TfrmcxGrid.Create(AOwner, ASettings, AData, ADataSet);
+    Result := TfrmcxGrid.Create(AOwner, AManager, AData, ADataSet);
   end
-  else if AGridType = 'KGrid' then
+  else if LGridType = 'KGrid' then
   begin
-    Result := TfrmKGrid.Create(AOwner, ASettings, AData, ADataSet);
+    Result := TfrmKGrid.Create(AOwner, AManager, AData, ADataSet);
   end
   else
   begin
-    Result := TfrmGridView.Create(AOwner, ASettings, AData, ADataSet);
+    Result := TfrmGridView.Create(AOwner, AManager, AData, ADataSet);
   end;
+end;
+
+class function TDataGrabberFactories.CreateDataViewToolbar(AOwner: TComponent;
+  AParent: TWinControl; AManager : IConnectionViewManager): TToolbar;
+var
+  TB : TToolbar;
+
+    function CreateToolButton(
+      AParent           : TToolBar;
+      const AActionName : string = '';
+      APopupMenu        : TPopupMenu = nil
+    ): TToolButton;
+    begin
+      if AActionName = '' then
+        Result := TToolBarFactory.CreateToolButton(AParent, nil)
+     else
+       Result := TToolBarFactory.CreateToolButton(AParent, AManager.Actions[AActionName], APopupMenu);
+    end;
+
+begin
+  TB := TToolBar.Create(AOwner);
+  TB.Parent := AParent;
+  TB.Images := AManager.ActionList.Images;
+  TB.Color := clBtnFace;
+  TB.Transparent := False;
+  TB.DoubleBuffered := False;
+
+  CreateToolButton(TB, 'actShowAllColumns');
+  CreateToolButton(TB, 'actHideSelectedColumns');
+  CreateToolButton(TB, 'actHideConstantColumns');
+  CreateToolButton(TB, 'actHideEmptyColumns');
+  CreateToolButton(TB, 'actAutoSizeCols');
+  Result := TB;
 end;
 
 class function TDataGrabberFactories.CreateEditorView(AOwner: TComponent;

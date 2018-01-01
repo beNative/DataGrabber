@@ -21,28 +21,6 @@ object frmMain: TfrmMain
   OnShortCut = FormShortCut
   PixelsPerInch = 96
   TextHeight = 13
-  object tlbMain: TToolBar
-    Left = 0
-    Top = 0
-    Width = 1082
-    Height = 17
-    AutoSize = True
-    ButtonHeight = 20
-    ButtonWidth = 50
-    Customizable = True
-    EdgeInner = esNone
-    EdgeOuter = esNone
-    GradientEndColor = clBtnFace
-    GradientStartColor = clBtnFace
-    HideClippedButtons = True
-    List = True
-    GradientDirection = gdHorizontal
-    AllowTextButtons = True
-    TabOrder = 0
-    Transparent = True
-    Wrapable = False
-    OnCustomDraw = tlbMainCustomDraw
-  end
   object pnlStatusBar: TPanel
     Left = 0
     Top = 572
@@ -50,7 +28,7 @@ object frmMain: TfrmMain
     Height = 21
     Align = alBottom
     BevelOuter = bvNone
-    TabOrder = 1
+    TabOrder = 0
     object pnlStatus: TPanel
       AlignWithMargins = True
       Left = 1
@@ -69,7 +47,7 @@ object frmMain: TfrmMain
     end
     object pnlEditMode: TPanel
       AlignWithMargins = True
-      Left = 415
+      Left = 51
       Top = 1
       Width = 50
       Height = 19
@@ -85,11 +63,11 @@ object frmMain: TfrmMain
     end
     object pnlElapsedTime: TPanel
       AlignWithMargins = True
-      Left = 363
+      Left = 415
       Top = 1
       Width = 50
       Height = 19
-      Hint = 'Elapsed time'
+      Hint = 'Elapsed execution time'
       Margins.Left = 1
       Margins.Top = 1
       Margins.Right = 1
@@ -117,7 +95,7 @@ object frmMain: TfrmMain
     end
     object pnlConnectionStatus: TPanel
       AlignWithMargins = True
-      Left = 51
+      Left = 103
       Top = 1
       Width = 50
       Height = 19
@@ -133,7 +111,7 @@ object frmMain: TfrmMain
     end
     object pnlRecordCount: TPanel
       AlignWithMargins = True
-      Left = 103
+      Left = 155
       Top = 1
       Width = 50
       Height = 19
@@ -149,7 +127,7 @@ object frmMain: TfrmMain
     end
     object pnlFieldCount: TPanel
       AlignWithMargins = True
-      Left = 155
+      Left = 207
       Top = 1
       Width = 50
       Height = 19
@@ -165,7 +143,7 @@ object frmMain: TfrmMain
     end
     object pnlConstantFieldsCount: TPanel
       AlignWithMargins = True
-      Left = 259
+      Left = 311
       Top = 1
       Width = 50
       Height = 19
@@ -181,7 +159,7 @@ object frmMain: TfrmMain
     end
     object pnlEmptyFieldsCount: TPanel
       AlignWithMargins = True
-      Left = 207
+      Left = 259
       Top = 1
       Width = 50
       Height = 19
@@ -197,7 +175,7 @@ object frmMain: TfrmMain
     end
     object pnlHiddenFieldsCount: TPanel
       AlignWithMargins = True
-      Left = 311
+      Left = 363
       Top = 1
       Width = 50
       Height = 19
@@ -219,7 +197,9 @@ object frmMain: TfrmMain
     Height = 555
     Align = alClient
     BevelOuter = bvNone
-    TabOrder = 2
+    TabOrder = 1
+    ExplicitLeft = -8
+    ExplicitTop = 14
     object ctMain: TChromeTabs
       Left = 0
       Top = 0
@@ -258,7 +238,7 @@ object frmMain: TfrmMain
       Options.Display.TabModifiedGlow.VerticalOffset = -6
       Options.Display.TabModifiedGlow.Height = 30
       Options.Display.TabModifiedGlow.Width = 100
-      Options.Display.TabModifiedGlow.AnimationPeriodMS = 4000
+      Options.Display.TabModifiedGlow.AnimationPeriodMS = 100
       Options.Display.TabModifiedGlow.EaseType = ttEaseInOutSine
       Options.Display.TabModifiedGlow.AnimationUpdateMS = 50
       Options.Display.Tabs.SeeThroughTabs = False
@@ -317,9 +297,9 @@ object frmMain: TfrmMain
       Options.DragDrop.DragFormBorderWidth = 2
       Options.DragDrop.DragFormBorderColor = 8421504
       Options.DragDrop.ContrainDraggedTabWithinContainer = True
-      Options.Animation.DefaultMovementAnimationTimeMS = 100
-      Options.Animation.DefaultStyleAnimationTimeMS = 300
-      Options.Animation.AnimationTimerInterval = 15
+      Options.Animation.DefaultMovementAnimationTimeMS = 50
+      Options.Animation.DefaultStyleAnimationTimeMS = 10
+      Options.Animation.AnimationTimerInterval = 5
       Options.Animation.MinimumTabAnimationWidth = 40
       Options.Animation.DefaultMovementEaseType = ttLinearTween
       Options.Animation.DefaultStyleEaseType = ttLinearTween
@@ -549,7 +529,41 @@ object frmMain: TfrmMain
       LookAndFeel.ScrollButtons.Arrow.Disabled.OutlineSize = 1.000000000000000000
       LookAndFeel.ScrollButtons.Arrow.Disabled.OutlineAlpha = 255
       Align = alTop
+      PopupMenu = ppmCVTabs
       TabOrder = 0
+    end
+  end
+  object pnlTop: TPanel
+    Left = 0
+    Top = 0
+    Width = 1082
+    Height = 17
+    Align = alTop
+    AutoSize = True
+    BevelOuter = bvNone
+    ParentBackground = False
+    TabOrder = 2
+    object tlbMain: TToolBar
+      Left = 0
+      Top = 0
+      Width = 1082
+      Height = 17
+      AutoSize = True
+      ButtonHeight = 20
+      ButtonWidth = 50
+      Customizable = True
+      EdgeInner = esNone
+      EdgeOuter = esNone
+      GradientEndColor = clBtnFace
+      GradientStartColor = clBtnFace
+      HideClippedButtons = True
+      List = True
+      GradientDirection = gdHorizontal
+      AllowTextButtons = True
+      TabOrder = 0
+      Transparent = True
+      Wrapable = False
+      OnCustomDraw = tlbMainCustomDraw
     end
   end
   object aclMain: TActionList
@@ -575,7 +589,7 @@ object frmMain: TfrmMain
     Left = 32
     Top = 72
     Bitmap = {
-      494C01010B000D00340010001000FFFFFFFF2110FFFFFFFFFFFFFFFF424D3600
+      494C01010B000D003C0010001000FFFFFFFF2110FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000003000000001002000000000000030
       0000000000000000000000000000000000000000000000000000000000000000
       000000000000000000000B0B0B0C000000000000000000000000000000000000
@@ -981,5 +995,8 @@ object frmMain: TfrmMain
   object ppmCVTabs: TPopupMenu
     Left = 536
     Top = 304
+    object mniCloseAllOtherTabs: TMenuItem
+      Action = actCloseAllOtherTabs
+    end
   end
 end
