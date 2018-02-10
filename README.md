@@ -12,8 +12,8 @@ External dependencies and references:
 * [TzObjectInspector](http://github.com/MahdiSafsafi/zcontrols)
 * [JsonDataObjects](http://github.com/ahausladen/JsonDataObjects)
 * [Chinook database](http://github.com/lerocha/chinook-database)
-* [SQLite](https://www.sqlite.org/)
-* [SynEdit](http://github.com/SynEdit)
+* [SQLite](http://www.sqlite.org/)
+* [SynEdit](http://github.com/SynEdit/SynEdit)
 * [TChromeTabs](http://github.com/norgepaul/TChromeTabs)
 
 Commercial components (optional):
