@@ -13,7 +13,7 @@ External dependencies and references:
 * [JsonDataObjects](http://github.com/ahausladen/JsonDataObjects)
 * [Chinook database](http://github.com/lerocha/chinook-database)
 * [SQLite](https://www.sqlite.org/)
-* [TBCEditor]
+* [SynEdit](http://github.com/SynEdit)
 * [TChromeTabs](http://github.com/norgepaul/TChromeTabs)
 
 Commercial components (optional):
