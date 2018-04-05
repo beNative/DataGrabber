@@ -16,6 +16,8 @@
 
 unit DataGrabber.Interfaces;
 
+{ Application interfaces. }
+
 interface
 
 uses
@@ -82,10 +84,17 @@ type
     function GetMultipleResultSets: Boolean;
     procedure SetMultipleResultSets(const Value: Boolean);
     function GetElapsedTime: TTimeSpan;
+    function GetFieldListsUpdated: Boolean;
+    function GetDataEditMode: Boolean;
+    procedure SetDataEditMode(const Value: Boolean);
     {$ENDREGION}
 
     procedure Execute;
 
+    procedure HideField(
+      ADataSet         : TDataSet;
+      const AFieldName : string
+    );
     procedure SaveToFile(
       const AFileName : string = '';
       AFormat         : TFDStorageFormat = sfAuto
@@ -132,6 +141,9 @@ type
     property CanModify: Boolean
       read GetCanModify;
 
+    property DataEditMode: Boolean
+      read GetDataEditMode write SetDataEditMode;
+
     property RecordCount: Integer
       read GetRecordCount;
 
@@ -140,6 +152,9 @@ type
 
     property ElapsedTime: TTimeSpan
       read GetElapsedTime;
+
+    property FieldListsUpdated: Boolean
+      read GetFieldListsUpdated;
 
     property Items[AIndex: Integer]: TFDMemTable
       read GetItem; default;
@@ -474,6 +489,9 @@ type
   IGroupable = interface
   ['{C3E37BA9-5FCF-4AC5-A747-495F0B13E8E4}']
     procedure GroupBySelectedColumns;
+    procedure ClearGrouping;
+    procedure ExpandAll;
+    procedure CollapseAll;
   end;
 
   IMergable = interface
@@ -494,6 +512,7 @@ type
     function GetConstantFields: IList<TField>;
     function GetEmptyFields: IList<TField>;
     function GetNonEmptyFields: IList<TField>;
+    function GetHiddenFields: IList<TField>;
     {$ENDREGION}
 
     property ConstantFields: IList<TField>
@@ -504,6 +523,9 @@ type
 
     property NonEmptyFields: IList<TField>
       read GetNonEmptyFields;
+
+    property HiddenFields: IList<TField>
+      read GetHiddenFields;
   end;
 
   IFieldVisiblity = interface

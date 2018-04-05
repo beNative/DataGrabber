@@ -17,8 +17,6 @@
 
 unit DataGrabber.ConnectionSettings;
 
-interface
-
 {
   Application-level connection parameters.
 
@@ -39,6 +37,8 @@ interface
   PoolMaximumItems
 
 }
+
+interface
 
 uses
   System.Classes,

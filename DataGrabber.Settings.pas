@@ -16,6 +16,8 @@
 
 unit DataGrabber.Settings;
 
+{ Persistable application settings component. }
+
 interface
 
 uses

@@ -2,13 +2,13 @@
     <PropertyGroup>
         <ProjectGuid>{0D221B5C-B333-427E-BB6A-F384BA740104}</ProjectGuid>
         <MainSource>DataGrabber.dpr</MainSource>
-        <Config Condition="'$(Config)'==''">Release</Config>
+        <Config Condition="'$(Config)'==''">Debug</Config>
         <DCC_DCCCompiler>DCC32</DCC_DCCCompiler>
         <ProjectVersion>18.2</ProjectVersion>
         <Base>True</Base>
         <AppType>Application</AppType>
         <FrameworkType>VCL</FrameworkType>
-        <Platform Condition="'$(Platform)'==''">Win64</Platform>
+        <Platform Condition="'$(Platform)'==''">Win32</Platform>
         <TargetedPlatforms>3</TargetedPlatforms>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Config)'=='Base' or '$(Base)'!=''">
@@ -67,7 +67,7 @@
         <VerInfo_MajorVer>2</VerInfo_MajorVer>
         <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
         <VerInfo_Debug>true</VerInfo_Debug>
-        <VerInfo_Keys>FileDescription=DataGrabber;FileVersion=2.0.0.25;LegalCopyright=(c) 2011 - 2017 Tim Sinaeve;OriginalFilename=DataGrabber.exe;ProductName=DataGrabber;ProductVersion=2.0.0.0;Last Compile=2011-11-21 18:09</VerInfo_Keys>
+        <VerInfo_Keys>FileDescription=DataGrabber;FileVersion=2.3.0.25;LegalCopyright=(c) 2011 - 2018 Tim Sinaeve;OriginalFilename=DataGrabber.exe;ProductName=DataGrabber;ProductVersion=2.3</VerInfo_Keys>
         <VerInfo_Locale>1033</VerInfo_Locale>
         <DCC_UsePackage>vcl;CodeSiteExpressVcl;rtl;vclx;vclimg;dbrtl;adortl;vcldb;vclactnband;vcldbx;bdertl;DataSnapIndy10ServerTransport;DataSnapClient;dbexpress;xmlrtl;DbxClientDriver;DbxCommonDriver;dbxcds;vclie;inet;IndyProtocols;inetdbbde;inetdbxpress;DataSnapProviderClient;dsnap;inetdb;IndySystem;IndyCore;DataSnapServer;dsnapcon;DBXInterBaseDriver;DBXMySQLDriver;DBXFirebirdDriver;DBXSybaseASEDriver;DBXSybaseASADriver;DBXOracleDriver;DBXMSSQLDriver;DBXInformixDriver;DBXDb2Driver;vclib;ibxpress;webdsnap;vclribbon;soaprtl;VclSmp;vcltouch;websnap;AzureCloud;TeeUI;TeeDB;Tee;intrawebdb_110_150;Intraweb_110_150;VirtualTreesR;JclDeveloperTools;Jcl;JclVcl;JclContainers;SynEdit_RXE;dxCoreD15;cxLibraryD15;cxEditorsD15;cxExtEditorsD15;dxBarD15;dxBarDBNavD15;dxBarExtDBItemsD15;dxBarExtItemsD15;dxRibbonD15;cxBarEditItemD15;dxdbtrD15;dxtrmdD15;dxmdsD15;dxDockingD15;dxFlowChartD15;cxPageControlD15;dxLayoutControlD15;dxNavBarD15;dxorgcD15;dxdborD15;cxGridD15;cxPivotGridD15;cxPivotGridChartD15;cxPivotGridOLAPD15;cxTreeListD15;cxTreeListdxBarPopupMenuD15;cxSchedulerD15;cxSchedulerGridD15;dxComnD15;dxsbD15;dcldxSkinsCoreD15;dxSkinsCoreD15;dxSkinscxPCPainterD15;dxSkinscxScheduler3PainterD15;dxSkinsdxDLPainterD15;dxSkinsdxBarPainterD15;dxSkinsdxNavBar2PainterD15;dxSpellCheckerD15;cxSpreadSheetD15;cxVerticalGridD15;dxPSCoreD15;dxPSLnksD15;dxPScxCommonD15;dxPScxExtCommonD15;dxPScxGrid6LnkD15;dxPScxPivotGrid2LnkD15;dxPScxScheduler3LnkD15;dxPScxSSLnkD15;dxPScxTL5LnkD15;dxPScxVGridLnkD15;dxPSTeeChartD15;dxPSDBTeeChartD15;dxPSdxOCLnkD15;dxPSdxDBOCLnkD15;dxPSdxDBTVLnkD15;dxPSdxFCLnkD15;dxPSdxLC2LnkD15;dxPScxPCProdD15;dxPsPrVwAdvD15;dxPSPrVwRibbonD15;dxSkinsdxRibbonPainterD15;ExtLib_D15;JvCore;JvSystem;JvStdCtrls;JvAppFrm;JvBands;JvDB;JvDlgs;JvBDE;JvControls;JvCmp;JvCrypt;JvCustom;JvDocking;JvDotNetCtrls;JvGlobus;JvHMI;JvJans;JvManagedThreads;JvMM;JvNet;JvPageComps;JvPascalInterpreter;JvPluginSystem;JvPrintPreview;JvRuntimeDesign;JvTimeFramework;JvWizards;JvXPCtrls;KControls_DXER;dac140;unidac140;odbcprovider140;ZComponent;ZDbc;ZPlain;ZCore;ZParseSql;$(DCC_UsePackage)</DCC_UsePackage>
         <DCC_DebugInfoInExe>true</DCC_DebugInfoInExe>
@@ -78,6 +78,7 @@
         <DCC_ExeOutput>.\Library\$(Platform)\$(Config)\</DCC_ExeOutput>
         <DCC_BplOutput>.\Library\$(Platform)\$(Config)</DCC_BplOutput>
         <DCC_DcuOutput>.\Library\$(Platform)\$(Config)</DCC_DcuOutput>
+        <VerInfo_MinorVer>3</VerInfo_MinorVer>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base_Win32)'!=''">
         <DCC_UsePackage>dxCoreRS22;cxLibraryRS22;dxGDIPlusRS22;dxThemeRS22;cxBarEditItemRS22;dxBarRS22;dxComnRS22;cxEditorsRS22;cxDataRS22;cxGridRS22;cxPageControlRS22;cxExportRS22;dxServerModeRS22;cxPivotGridRS22;dxmdsRS22;cxPivotGridChartRS22;cxPivotGridOLAPRS22;cxSchedulerRS22;cxSchedulerGridRS22;dxRibbonRS22;cxSchedulerRibbonStyleEventEditorRS22;cxSchedulerTreeBrowserRS22;cxTreeListRS22;cxTreeListdxBarPopupMenuRS22;cxVerticalGridRS22;dxADOServerModeRS22;dxBarDBNavRS22;dxBarExtDBItemsRS22;dxBarExtItemsRS22;dxorgcRS22;dxdborRS22;dxdbtrRS22;dxDockingRS22;dxFireDACServerModeRS22;dxFlowChartRS22;dxLayoutControlRS22;dxMapControlRS22;dxNavBarRS22;dxPSCoreRS22;dxPScxCommonRS22;dxPSLnksRS22;dxPScxExtCommonRS22;dxPScxGridLnkRS22;dxPSdxLCLnkRS22;dxPScxPivotGridLnkRS22;dxPScxSchedulerLnkRS22;dxPScxTLLnkRS22;dxPScxVGridLnkRS22;dxPSDBTeeChartRS22;dxPSTeeChartRS22;dxPSdxDBOCLnkRS22;dxPSdxOCLnkRS22;dxPSdxDBTVLnkRS22;dxPSdxFCLnkRS22;dxPSdxSpreadSheetLnkRS22;dxSpreadSheetRS22;dxPsPrVwAdvRS22;dxPSPrVwRibbonRS22;dxSpellCheckerRS22;dxTabbedMDIRS22;dxTileControlRS22;dxtrmdRS22;dxWizardControlRS22;dxPScxPCProdRS22;$(DCC_UsePackage)</DCC_UsePackage>
@@ -128,10 +129,10 @@
         <DCC_Define>DEBUG;$(DCC_Define)</DCC_Define>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_2_Win32)'!=''">
-        <VerInfo_Build>39</VerInfo_Build>
+        <VerInfo_Build>41</VerInfo_Build>
         <VerInfo_AutoGenVersion>false</VerInfo_AutoGenVersion>
         <VerInfo_AutoIncVersion>true</VerInfo_AutoIncVersion>
-        <VerInfo_Keys>FileDescription=DataGrabber;FileVersion=2.0.0.39;LegalCopyright=(c) 2011 - 2017 Tim Sinaeve;OriginalFilename=DataGrabber.exe;ProductName=DataGrabber;ProductVersion=2.0.0.0;ProgramID=com.embarcadero.$(MSBuildProjectName)</VerInfo_Keys>
+        <VerInfo_Keys>FileDescription=DataGrabber;FileVersion=2.4.0.41;LegalCopyright=(c) 2011 - 2018 Tim Sinaeve;OriginalFilename=DataGrabber.exe;ProductName=DataGrabber;ProductVersion=2.4;ProgramID=</VerInfo_Keys>
         <Icon_MainIcon>DataGrabber_Icon3.ico</Icon_MainIcon>
         <AppEnableRuntimeThemes>true</AppEnableRuntimeThemes>
         <DCC_RangeChecking>true</DCC_RangeChecking>
@@ -140,11 +141,14 @@
         <DCC_Optimize>false</DCC_Optimize>
         <DCC_GenerateStackFrames>true</DCC_GenerateStackFrames>
         <BT_BuildType>Debug</BT_BuildType>
+        <VerInfo_MinorVer>4</VerInfo_MinorVer>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_2_Win64)'!=''">
         <AppEnableRuntimeThemes>true</AppEnableRuntimeThemes>
         <AppEnableHighDPI>true</AppEnableHighDPI>
         <DCC_ExeOutput>.\Library\$(Platform)\$(Config)\</DCC_ExeOutput>
+        <VerInfo_MinorVer>3</VerInfo_MinorVer>
+        <VerInfo_Keys>FileDescription=DataGrabber;FileVersion=2.3.0.25;LegalCopyright=(c) 2011 - 2018 Tim Sinaeve;OriginalFilename=DataGrabber.exe;ProductName=DataGrabber;ProductVersion=2.3.0.0</VerInfo_Keys>
     </PropertyGroup>
     <ItemGroup>
         <DelphiCompile Include="$(MainSource)">
@@ -270,22 +274,18 @@
         <DCCReference Include="DataGrabber.ConnectionSettings.pas"/>
         <DCCReference Include="DataView\DataGrabber.DataView.cxGrid.pas">
             <Form>frmcxGrid</Form>
-            <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="..\..\libraries\dduce\Source\Dependencies\ZeroMQ\ZeroMQ.API.pas"/>
         <DCCReference Include="..\..\libraries\dduce\Source\Dependencies\ZeroMQ\ZeroMQ.pas"/>
         <DCCReference Include="DataGrabber.About.Dialog.pas">
             <Form>frmAboutDialog</Form>
-            <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="DataGrabber.MetaData.Dialog.pas">
             <Form>frmMetaData</Form>
-            <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="..\..\libraries\dduce\Source\Factories\DDuce.Factories.Toolbar.pas"/>
         <DCCReference Include="DataView\DataGrabber.DataView.Base.pas">
             <Form>BaseDataView</Form>
-            <FormType>dfm</FormType>
         </DCCReference>
         <None Include="README.md"/>
         <None Include="..\..\libraries\dduce\Source\jedi.inc"/>

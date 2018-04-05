@@ -16,6 +16,8 @@
 
 unit DataGrabber.FormSettings;
 
+{ Persistable form settings. }
+
 interface
 
 uses

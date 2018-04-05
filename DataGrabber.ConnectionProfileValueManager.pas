@@ -16,10 +16,10 @@
 
 unit DataGrabber.ConnectionProfileValueManager;
 
-interface
+{ The TConnectionProfileValueManager class allows us to customize the property
+  inspector used in the settings dialog. }
 
-{ This class allows us to customize the property inspector used in the settings
-  dialog. }
+interface
 
 uses
   System.Classes, System.Rtti, System.Types,

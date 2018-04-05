@@ -82,6 +82,7 @@ type
     btnDateTimeColor             : TKColorButton;
     btnDelete                    : TToolButton;
     btnDuplicate                 : TToolButton;
+    btnEditConnectionDef         : TToolButton;
     btnFloatColor                : TKColorButton;
     btnGridlinesAll              : TToolButton;
     btnGridlinesHorizontal       : TToolButton;
@@ -172,13 +173,12 @@ type
     tlbSettingsFiles             : TToolBar;
     tsAdvanced                   : TTabSheet;
     tsBasic                      : TTabSheet;
+    tsConnectionDefinitions      : TTabSheet;
     tsConnectionProfiles         : TTabSheet;
     tsDataGrabberSettings        : TTabSheet;
     tsDisplay                    : TTabSheet;
     tsFDConnectionDefs           : TTabSheet;
     tsSettings                   : TTabSheet;
-    btnEditConnectionDef: TToolButton;
-    tsConnectionDefinitions: TTabSheet;
     {$ENDREGION}
 
     {$REGION 'action handlers'}
@@ -186,20 +186,22 @@ type
     procedure actApplyExecute(Sender: TObject);
     procedure actCancelExecute(Sender: TObject);
     procedure actCloseExecute(Sender: TObject);
-    procedure actEditConnectionDefExecute(Sender: TObject);
     procedure actDeleteExecute(Sender: TObject);
     procedure actDuplicateExecute(Sender: TObject);
+    procedure actEditConnectionDefExecute(Sender: TObject);
     procedure actGridlinesBothExecute(Sender: TObject);
     procedure actGridlinesHorizontalExecute(Sender: TObject);
     procedure actGridlinesNoneExecute(Sender: TObject);
     procedure actGridlinesVerticalExecute(Sender: TObject);
     procedure actMoveDownExecute(Sender: TObject);
     procedure actMoveUpExecute(Sender: TObject);
-    procedure actOpenSettingsFileLocationExecute(Sender: TObject);
-    procedure actTestConnectionExecute(Sender: TObject);
     procedure actMRSAsMultipleTabsExecute(Sender: TObject);
     procedure actMRSHorizontallyExecute(Sender: TObject);
     procedure actMRSVerticallyExecute(Sender: TObject);
+    procedure actOpenSettingsFileLocationExecute(Sender: TObject);
+    procedure actRefreshFileExecute(Sender: TObject);
+    procedure actSaveFileExecute(Sender: TObject);
+    procedure actTestConnectionExecute(Sender: TObject);
     {$ENDREGION}
 
     {$REGION 'event handlers'}
@@ -237,6 +239,8 @@ type
       TextType           : TVSTTextType
     );
     procedure btnProfileColorClick(Sender: TObject);
+    procedure cbxConnectionDefsChange(Sender: TObject);
+    procedure cbxConnectionDefsDropDown(Sender: TObject);
     procedure cbxDriversChange(Sender: TObject);
     procedure chkAutoReconnectClick(Sender: TObject);
     procedure chkDisconnectedModeClick(Sender: TObject);
@@ -245,27 +249,23 @@ type
     procedure chkMultipleResultSetsClick(Sender: TObject);
     procedure chkProviderModeClick(Sender: TObject);
     procedure chkSetAsDefaultClick(Sender: TObject);
+    procedure conTestError(ASender, AInitiator: TObject; var AException: Exception);
     procedure edtCatalogChange(Sender: TObject);
     procedure edtDatabaseChange(Sender: TObject);
     procedure edtDatabaseRightButtonClick(Sender: TObject);
+    procedure edtEditorFontRightButtonClick(Sender: TObject);
+    procedure edtGridFontRightButtonClick(Sender: TObject);
     procedure edtPacketRecordsChange(Sender: TObject);
     procedure edtPasswordChange(Sender: TObject);
     procedure edtProfileNameChange(Sender: TObject);
     procedure edtUserNameChange(Sender: TObject);
-    procedure tsSettingsEnter(Sender: TObject);
-    procedure seFDConnectionDefsExit(Sender: TObject);
-    procedure cbxConnectionDefsDropDown(Sender: TObject);
-    procedure actSaveFileExecute(Sender: TObject);
-    procedure seSettingsChange(Sender: TObject);
-    procedure seFDConnectionDefsChange(Sender: TObject);
-    procedure actRefreshFileExecute(Sender: TObject);
-    procedure cbxConnectionDefsChange(Sender: TObject);
-    procedure edtGridFontRightButtonClick(Sender: TObject);
-    procedure conTestError(ASender, AInitiator: TObject;
-      var AException: Exception);
     procedure lblConnectionDefinitionNameDblClick(Sender: TObject);
+    procedure seFDConnectionDefsChange(Sender: TObject);
+    procedure seFDConnectionDefsExit(Sender: TObject);
+    procedure seSettingsChange(Sender: TObject);
     procedure tsAdvancedExit(Sender: TObject);
-    procedure edtEditorFontRightButtonClick(Sender: TObject);
+    procedure tsAdvancedShow(Sender: TObject);
+    procedure tsSettingsEnter(Sender: TObject);
     {$ENDREGION}
 
   private
@@ -455,14 +455,8 @@ begin
     Logger.SendObject('CD', TObject(CD));
     CD.MarkPersistent; // required to add it to the connection definition file.
   end;
-
   TfrmFDGUIxFormsConnEdit.Execute(S, '');
-
-
-
-
   Logger.Info(CD.Params.Text);
-
 //  OC := TFDOptionsContainer.Create(
 //    FDManager, // inherit standard options from global manager instance
 //    TFDFetchOptions,
@@ -822,6 +816,14 @@ begin
   UpdateConnectionProfileControls(CP);
 end;
 
+procedure TfrmSettingsDialog.tsAdvancedShow(Sender: TObject);
+var
+  CP : TConnectionProfile;
+begin
+  CP := FSettings.ConnectionProfiles[FVSTProfiles.FocusedNode.Index];
+  InspectConnectionProfile(CP);
+end;
+
 procedure TfrmSettingsDialog.tsSettingsEnter(Sender: TObject);
 begin
   LoadApplicationSettingsFile;
@@ -841,9 +843,12 @@ end;
 
 procedure TfrmSettingsDialog.LoadConnectionDefinitionsFile;
 begin
-  seFDConnectionDefs.Lines.LoadFromFile(S_FD_DefCfgFileName);
-  seFDConnectionDefs.ResetModificationIndicator;
-  seFDConnectionDefs.Modified := False;
+  if FileExists(S_FD_DefCfgFileName) then
+  begin
+    seFDConnectionDefs.Lines.LoadFromFile(S_FD_DefCfgFileName);
+    seFDConnectionDefs.ResetModificationIndicator;
+    seFDConnectionDefs.Modified := False;
+  end;
 end;
 
 procedure TfrmSettingsDialog.SaveApplicationSettingsFile;
@@ -1024,8 +1029,12 @@ begin
   FVSTProfiles.Header.Options    := FVSTProfiles.Header.Options - [hoVisible];
   FVSTProfiles.TreeOptions.PaintOptions := FVSTProfiles.TreeOptions.PaintOptions
     - [toHideSelection, toUseExplorerTheme, toHotTrack];
+  FVSTProfiles.TreeOptions.PaintOptions := FVSTProfiles.TreeOptions.PaintOptions
+    + [toShowHorzGridLines];
+
   FVSTProfiles.Colors.FocusedSelectionColor := clBtnHighlight;
   FVSTProfiles.Indent    := 0;
+  FVSTProfiles.Alignment := taCenter;
 
   S := 'GridView';
   I := rgpGridTypes.Items.Add(S);
@@ -1048,13 +1057,17 @@ end;
 
 procedure TfrmSettingsDialog.InspectConnectionProfile(ACP: TConnectionProfile);
 begin
-  FObjectInspector.BeginUpdate;
-  try
-    FObjectInspector.Component := ACP;
-    FObjectInspector.ExpandAll;
-    FObjectInspector.SelectItem(-1);
-  finally
-    FObjectInspector.EndUpdate;
+  if FObjectInspector.CanFocus then
+  begin
+    FObjectInspector.BeginUpdate;
+    try
+      FObjectInspector.SetFocus;
+      FObjectInspector.Component := ACP;
+      FObjectInspector.ExpandAll;
+      FObjectInspector.SelectItem(-1);
+    finally
+      FObjectInspector.EndUpdate;
+    end;
   end;
 end;
 
@@ -1083,7 +1096,6 @@ begin
 
   chkReadOnlyResultSets.Enabled := not chkMultipleResultSets.Checked;
 //  actEditConnectionDef.Enabled := Trim(cbxConnectionDefs.Text) <> '';
-
   actEditConnectionDef.Enabled := True;
 
   B := chkOSAuthent.Checked;

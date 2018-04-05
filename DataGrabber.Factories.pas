@@ -27,6 +27,19 @@ uses
 
 type
   TDataGrabberFactories = class sealed
+  private
+    class procedure AddActionButton(
+      AParent      : TToolBar;
+      AAction      : TBasicAction = nil;
+      AShowCaption : Boolean = False
+    );
+    class procedure AddButton(
+      AManager          : IConnectionViewManager;
+      AToolBar          : TToolBar;
+      const AActionName : string = '';
+      AShowCaption      : Boolean = False
+    );
+
   public
     class function CreateSettings(
       AOwner : TComponent
@@ -60,7 +73,12 @@ type
       ADataSet : TDataSet = nil
     ): IDataView;
 
-    class procedure AddToolbarButtons(
+    class procedure AddMainToolbarButtons(
+      AToolBar : TToolbar;
+      AManager : IConnectionViewManager
+    );
+
+    class procedure AddTopRightToolbarButtons(
       AToolBar : TToolbar;
       AManager : IConnectionViewManager
     );
@@ -93,56 +111,79 @@ begin
   Result := TSettings.Create(AOwner);
 end;
 
-class procedure TDataGrabberFactories.AddToolbarButtons(AToolBar: TToolbar;
-  AManager: IConnectionViewManager);
-
-  procedure AddActionButton(AParent: TToolBar; AAction: TBasicAction = nil;
-    AShowCaption: Boolean = False);
-  var
-    TB: TToolButton;
+class procedure TDataGrabberFactories.AddActionButton(AParent: TToolBar;
+  AAction: TBasicAction; AShowCaption: Boolean);
+var
+  TB: TToolButton;
+begin
+  TB := TToolButton.Create(AParent.Owner);
+  TB.Parent := AParent;
+  if not Assigned(AAction) then
+    TB.Style := tbsDivider
+  else
   begin
-    TB := TToolButton.Create(AParent.Owner);
     if AShowCaption then
-      TB.Style := tbsTextButton;
-    TB.Parent := AParent;
-    if not Assigned(AAction) then
-      TB.Style := tbsSeparator
+      TB.Style := tbsTextButton
     else
-      TB.Action := AAction;
+      TB.Style := tbsButton;
+    TB.Action := AAction;
   end;
+end;
 
-  procedure AddButton(const AActionName: string; AShowCaption: Boolean = False);
+class procedure TDataGrabberFactories.AddButton(AManager: IConnectionViewManager;
+  AToolBar: TToolBar; const AActionName: string; AShowCaption: Boolean);
+begin
+  if AActionName <> '' then
   begin
-    if AActionName <> '' then
-    begin
-      Guard.CheckNotNull(AManager.Actions[AActionName], AActionName);
-      AddActionButton(AToolBar, AManager.Actions[AActionName], AShowCaption);
-    end
-    else
-    begin
-      AddActionButton(AToolBar);
-    end;
+    Guard.CheckNotNull(AManager.Actions[AActionName], AActionName);
+    AddActionButton(AToolBar, AManager.Actions[AActionName], AShowCaption);
+  end
+  else
+  begin
+    AddActionButton(AToolBar);
   end;
+end;
 
+class procedure TDataGrabberFactories.AddMainToolbarButtons(AToolBar: TToolbar;
+  AManager: IConnectionViewManager);
 begin
   Guard.CheckTrue(AToolBar.ButtonCount = 0, '0');
 
-  AddButton('actSettings', True);
-  AddButton('actFireDACInfo');
-  AddButton('actToggleFullScreen');
-  AddButton('actToggleStayOnTop');
-  AddButton('actPreview');
-  AddButton('actDesigner');
-  AddButton('actPrint');
-  AddButton('actDataInspector');
-  AddButton('actMergeColumnCells');
-  AddButton('actGroupByBoxVisible', True);
-  AddButton('actShowAllColumns', True);
-  AddButton('actHideSelectedColumns', True);
-  AddButton('actHideConstantColumns', True);
-  AddButton('actHideEmptyColumns', True);
-  AddButton('actAutoSizeCols', True);
-  AddButton('actExecute');
+  AddButton(AManager, AToolBar, 'actFireDACInfo');
+  AddButton(AManager, AToolBar);
+  AddButton(AManager, AToolBar, 'actPreview');
+  AddButton(AManager, AToolBar, 'actDesigner');
+  AddButton(AManager, AToolBar, 'actPrint');
+  AddButton(AManager, AToolBar, 'actDataInspector');
+  AddButton(AManager, AToolBar);
+  AddButton(AManager, AToolBar, 'actMergeColumnCells');
+  AddButton(AManager, AToolBar, 'actAutoSizeCols');
+  AddButton(AManager, AToolBar);
+  AddButton(AManager, AToolBar, 'actGroupByBoxVisible', True);
+  AddButton(AManager, AToolBar, 'actGroupBySelection', True);
+  AddButton(AManager, AToolBar, 'actClearGrouping', True);
+  AddButton(AManager, AToolBar, 'actExpandAll', True);
+  AddButton(AManager, AToolBar, 'actCollapseAll', True);
+  AddButton(AManager, AToolBar);
+  AddButton(AManager, AToolBar, 'actShowAllColumns', True);
+  AddButton(AManager, AToolBar, 'actHideSelectedColumns', True);
+  AddButton(AManager, AToolBar, 'actHideConstantColumns', True);
+  AddButton(AManager, AToolBar, 'actHideEmptyColumns', True);
+  AddButton(AManager, AToolBar);
+  AddButton(AManager, AToolBar, 'actSettings', True);
+  AddButton(AManager, AToolBar, 'actExecuteLiveResultSet', True);
+  AddButton(AManager, AToolBar, 'actExecute', True);
+
+  TToolBarFactory.CleanupToolBar(AToolBar);
+end;
+
+class procedure TDataGrabberFactories.AddTopRightToolbarButtons(
+  AToolBar: TToolbar; AManager: IConnectionViewManager);
+begin
+  Guard.CheckTrue(AToolBar.ButtonCount = 0, '0');
+  AddButton(AManager, AToolBar, 'actToggleFullScreen');
+  AddButton(AManager, AToolBar, 'actToggleStayOnTop');
+  TToolBarFactory.CleanupToolBar(AToolBar);
 end;
 
 class function TDataGrabberFactories.CreateConnectionView(AOwner: TComponent;
@@ -182,31 +223,36 @@ class function TDataGrabberFactories.CreateDataViewToolbar(AOwner: TComponent;
 var
   TB : TToolbar;
 
-    function CreateToolButton(
-      AParent           : TToolBar;
-      const AActionName : string = '';
-      APopupMenu        : TPopupMenu = nil
-    ): TToolButton;
-    begin
-      if AActionName = '' then
-        Result := TToolBarFactory.CreateToolButton(AParent, nil)
-     else
-       Result := TToolBarFactory.CreateToolButton(AParent, AManager.Actions[AActionName], APopupMenu);
-    end;
+  function CreateToolButton(
+    AParent           : TToolBar;
+    const AActionName : string = '';
+    APopupMenu        : TPopupMenu = nil
+  ): TToolButton;
+  begin
+    if AActionName = '' then
+      Result := TToolBarFactory.CreateToolButton(AParent, nil)
+   else
+     Result := TToolBarFactory.CreateToolButton(AParent, AManager.Actions[AActionName], APopupMenu);
+  end;
 
 begin
   TB := TToolBar.Create(AOwner);
   TB.Parent := AParent;
   TB.Images := AManager.ActionList.Images;
-  TB.Color := clBtnFace;
-  TB.Transparent := False;
-  TB.DoubleBuffered := False;
-
+  TB.Transparent := True;
+  CreateToolButton(TB, 'actAutoSizeCols');
+  CreateToolButton(TB);
   CreateToolButton(TB, 'actShowAllColumns');
   CreateToolButton(TB, 'actHideSelectedColumns');
   CreateToolButton(TB, 'actHideConstantColumns');
   CreateToolButton(TB, 'actHideEmptyColumns');
-  CreateToolButton(TB, 'actAutoSizeCols');
+  CreateToolButton(TB);
+  CreateToolButton(TB, 'actExpandAll');
+  CreateToolButton(TB, 'actCollapseAll');
+  CreateToolButton(TB, 'actGroupByBoxVisible');
+  CreateToolButton(TB, 'actGroupBySelection');
+  CreateToolButton(TB, 'actClearGrouping');
+  TToolBarFactory.CleanupToolBar(TB);
   Result := TB;
 end;
 

@@ -2,7 +2,6 @@ inherited frmKGrid: TfrmKGrid
   ClientHeight = 257
   ClientWidth = 430
   ShowHint = True
-  OnClose = FormClose
   ExplicitWidth = 446
   ExplicitHeight = 296
   PixelsPerInch = 96

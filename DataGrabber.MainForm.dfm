@@ -1,9 +1,9 @@
 object frmMain: TfrmMain
   Left = 731
   Top = 411
-  Caption = 'DataGrabber 2.0'
+  Caption = 'DataGrabber 2.4'
   ClientHeight = 593
-  ClientWidth = 1082
+  ClientWidth = 1124
   Color = clBtnFace
   TransparentColorValue = clGray
   DoubleBuffered = True
@@ -24,30 +24,14 @@ object frmMain: TfrmMain
   object pnlStatusBar: TPanel
     Left = 0
     Top = 572
-    Width = 1082
+    Width = 1124
     Height = 21
     Align = alBottom
     BevelOuter = bvNone
     TabOrder = 0
-    object pnlStatus: TPanel
-      AlignWithMargins = True
-      Left = 1
-      Top = 1
-      Width = 48
-      Height = 19
-      Hint = 'Status'
-      Margins.Left = 1
-      Margins.Top = 1
-      Margins.Right = 1
-      Margins.Bottom = 1
-      Align = alLeft
-      BevelKind = bkFlat
-      BevelOuter = bvNone
-      TabOrder = 0
-    end
     object pnlEditMode: TPanel
       AlignWithMargins = True
-      Left = 51
+      Left = 1
       Top = 1
       Width = 50
       Height = 19
@@ -59,11 +43,11 @@ object frmMain: TfrmMain
       Align = alLeft
       BevelKind = bkFlat
       BevelOuter = bvNone
-      TabOrder = 1
+      TabOrder = 0
     end
     object pnlElapsedTime: TPanel
       AlignWithMargins = True
-      Left = 415
+      Left = 157
       Top = 1
       Width = 50
       Height = 19
@@ -75,27 +59,12 @@ object frmMain: TfrmMain
       Align = alLeft
       BevelKind = bkFlat
       BevelOuter = bvNone
-      TabOrder = 2
-    end
-    object pnlGridType: TPanel
-      AlignWithMargins = True
-      Left = 467
-      Top = 1
-      Width = 50
-      Height = 19
-      Hint = 'Grid type'
-      Margins.Left = 1
-      Margins.Top = 1
-      Margins.Right = 1
-      Margins.Bottom = 1
-      Align = alLeft
-      BevelKind = bkFlat
-      BevelOuter = bvNone
-      TabOrder = 3
+      TabOrder = 1
+      ExplicitTop = 4
     end
     object pnlConnectionStatus: TPanel
       AlignWithMargins = True
-      Left = 103
+      Left = 53
       Top = 1
       Width = 50
       Height = 19
@@ -107,11 +76,17 @@ object frmMain: TfrmMain
       Align = alLeft
       BevelKind = bkFlat
       BevelOuter = bvNone
-      TabOrder = 4
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      ParentFont = False
+      TabOrder = 2
     end
     object pnlRecordCount: TPanel
       AlignWithMargins = True
-      Left = 155
+      Left = 105
       Top = 1
       Width = 50
       Height = 19
@@ -123,11 +98,11 @@ object frmMain: TfrmMain
       Align = alLeft
       BevelKind = bkFlat
       BevelOuter = bvNone
-      TabOrder = 5
+      TabOrder = 3
     end
     object pnlFieldCount: TPanel
       AlignWithMargins = True
-      Left = 207
+      Left = 209
       Top = 1
       Width = 50
       Height = 19
@@ -139,11 +114,12 @@ object frmMain: TfrmMain
       Align = alLeft
       BevelKind = bkFlat
       BevelOuter = bvNone
-      TabOrder = 6
+      TabOrder = 4
+      ExplicitLeft = 157
     end
     object pnlConstantFieldsCount: TPanel
       AlignWithMargins = True
-      Left = 311
+      Left = 313
       Top = 1
       Width = 50
       Height = 19
@@ -155,11 +131,12 @@ object frmMain: TfrmMain
       Align = alLeft
       BevelKind = bkFlat
       BevelOuter = bvNone
-      TabOrder = 7
+      TabOrder = 5
+      ExplicitLeft = 261
     end
     object pnlEmptyFieldsCount: TPanel
       AlignWithMargins = True
-      Left = 259
+      Left = 261
       Top = 1
       Width = 50
       Height = 19
@@ -171,11 +148,12 @@ object frmMain: TfrmMain
       Align = alLeft
       BevelKind = bkFlat
       BevelOuter = bvNone
-      TabOrder = 8
+      TabOrder = 6
+      ExplicitLeft = 209
     end
     object pnlHiddenFieldsCount: TPanel
       AlignWithMargins = True
-      Left = 363
+      Left = 365
       Top = 1
       Width = 50
       Height = 19
@@ -187,23 +165,22 @@ object frmMain: TfrmMain
       Align = alLeft
       BevelKind = bkFlat
       BevelOuter = bvNone
-      TabOrder = 9
+      TabOrder = 7
+      ExplicitLeft = 313
     end
   end
   object pnlConnectionViews: TPanel
     Left = 0
-    Top = 17
-    Width = 1082
-    Height = 555
+    Top = 23
+    Width = 1124
+    Height = 549
     Align = alClient
     BevelOuter = bvNone
     TabOrder = 1
-    ExplicitLeft = -8
-    ExplicitTop = 14
     object ctMain: TChromeTabs
       Left = 0
       Top = 0
-      Width = 1082
+      Width = 1124
       Height = 29
       OnActiveTabChanged = ctMainActiveTabChanged
       OnButtonAddClick = ctMainButtonAddClick
@@ -536,21 +513,22 @@ object frmMain: TfrmMain
   object pnlTop: TPanel
     Left = 0
     Top = 0
-    Width = 1082
-    Height = 17
+    Width = 1124
+    Height = 23
     Align = alTop
-    AutoSize = True
     BevelOuter = bvNone
     ParentBackground = False
     TabOrder = 2
     object tlbMain: TToolBar
       Left = 0
       Top = 0
-      Width = 1082
-      Height = 17
+      Width = 1081
+      Height = 23
+      Align = alLeft
+      Anchors = [akLeft, akTop, akRight, akBottom]
       AutoSize = True
       ButtonHeight = 20
-      ButtonWidth = 50
+      ButtonWidth = 20
       Customizable = True
       EdgeInner = esNone
       EdgeOuter = esNone
@@ -561,6 +539,25 @@ object frmMain: TfrmMain
       GradientDirection = gdHorizontal
       AllowTextButtons = True
       TabOrder = 0
+      Transparent = True
+      Wrapable = False
+      OnCustomDraw = tlbMainCustomDraw
+    end
+    object tlbTopRight: TToolBar
+      Left = 1074
+      Top = 0
+      Width = 50
+      Height = 23
+      Align = alRight
+      Anchors = [akLeft, akTop, akBottom]
+      ButtonHeight = 20
+      Customizable = True
+      EdgeInner = esNone
+      EdgeOuter = esNone
+      GradientEndColor = clBtnFace
+      GradientStartColor = clBtnFace
+      GradientDirection = gdHorizontal
+      TabOrder = 1
       Transparent = True
       Wrapable = False
       OnCustomDraw = tlbMainCustomDraw
@@ -580,8 +577,12 @@ object frmMain: TfrmMain
       OnExecute = actInspectChromeTabExecute
     end
     object actCloseAllOtherTabs: TAction
-      Caption = 'Close all other tabs.'
+      Caption = 'Close all other tabs'
       OnExecute = actCloseAllOtherTabsExecute
+    end
+    object actCloseTab: TAction
+      Caption = 'Close this tab'
+      OnExecute = actCloseTabExecute
     end
   end
   object imlSpinner: TImageList
@@ -589,7 +590,7 @@ object frmMain: TfrmMain
     Left = 32
     Top = 72
     Bitmap = {
-      494C01010B000D003C0010001000FFFFFFFF2110FFFFFFFFFFFFFFFF424D3600
+      494C01010B000D00640010001000FFFFFFFF2110FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000003000000001002000000000000030
       0000000000000000000000000000000000000000000000000000000000000000
       000000000000000000000B0B0B0C000000000000000000000000000000000000
@@ -993,10 +994,13 @@ object frmMain: TfrmMain
       000000000000}
   end
   object ppmCVTabs: TPopupMenu
-    Left = 536
-    Top = 304
+    Left = 32
+    Top = 128
     object mniCloseAllOtherTabs: TMenuItem
       Action = actCloseAllOtherTabs
+    end
+    object mniCloseTab: TMenuItem
+      Action = actCloseTab
     end
   end
 end

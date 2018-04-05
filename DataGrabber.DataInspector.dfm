@@ -12,10 +12,8 @@ object frmDataInspector: TfrmDataInspector
   Font.Height = -11
   Font.Name = 'Tahoma'
   Font.Style = []
-  FormStyle = fsStayOnTop
   OldCreateOrder = False
-  Position = poDesigned
-  ScreenSnap = True
+  Position = poMainFormCenter
   OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 13

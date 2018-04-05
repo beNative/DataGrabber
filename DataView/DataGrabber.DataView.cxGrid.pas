@@ -58,10 +58,6 @@ type
       AViewInfo : TcxGridTableDataCellViewInfo;
       var ADone : Boolean
     );
-    procedure FormClose(
-      Sender     : TObject;
-      var Action : TCloseAction
-    );
     procedure tvwMainCustomDrawColumnHeader(
       Sender    : TcxGridTableView;
       ACanvas   : TcxCanvas;
@@ -121,6 +117,9 @@ type
     procedure MergeAllColumnCells(AActive: Boolean);
     procedure AutoSizeColumns; override;
     procedure GroupBySelectedColumns;
+    procedure ExpandAll;
+    procedure CollapseAll;
+    procedure ClearGrouping;
     procedure Copy; override;
     procedure Inspect; override;
     procedure UpdateView; override;
@@ -238,11 +237,6 @@ end;
 {$ENDREGION}
 
 {$REGION 'event handlers'}
-procedure TfrmcxGrid.FormClose(Sender: TObject; var Action: TCloseAction);
-begin
-  Action := caFree;
-end;
-
 procedure TfrmcxGrid.tvwMainCustomDrawCell(Sender: TcxCustomGridTableView;
   ACanvas: TcxCanvas; AViewInfo: TcxGridTableDataCellViewInfo;
   var ADone: Boolean);
@@ -358,6 +352,26 @@ end;
 procedure TfrmcxGrid.EndUpdate;
 begin
   tvwMain.EndUpdate;
+end;
+
+procedure TfrmcxGrid.ClearGrouping;
+var
+  I : Integer;
+begin
+  for I := 0 to tvwMain.GroupedColumnCount - 1 do
+  begin
+    tvwMain.GroupedColumns[I].GroupIndex := -1;
+  end;
+end;
+
+procedure TfrmcxGrid.CollapseAll;
+begin
+  tvwMain.ViewData.Collapse(True);
+end;
+
+procedure TfrmcxGrid.ExpandAll;
+begin
+  tvwMain.ViewData.Expand(True);
 end;
 
 function TfrmcxGrid.SelectionToDelimitedTable(
@@ -564,10 +578,10 @@ begin
     BeginUpdate;
     try
       ApplyGridSettings;
+      AutoSizeColumns;
     finally
       EndUpdate;
     end;
-    AutoSizeColumns;
   end;
 end;
 
@@ -591,6 +605,7 @@ var
   C : TcxGridTableController;
   I : Integer;
   J : Integer;
+  F : TField;
 begin
   BeginUpdate;
   try
@@ -599,7 +614,8 @@ begin
     begin
       J := C.SelectedColumns[I].Index;
       tvwMain.Columns[J].Visible := False;
-      tvwMain.Columns[J].DataBinding.Field.Visible := False;
+      F := tvwMain.Columns[J].DataBinding.Field;
+      Data.HideField(F.DataSet, F.FieldName);
     end;
   finally
     EndUpdate;

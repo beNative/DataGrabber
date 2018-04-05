@@ -75,8 +75,6 @@ uses
   DDuce.Factories.zObjInspector in '..\..\libraries\dduce\Source\Factories\DDuce.Factories.zObjInspector.pas',
   DataGrabber.Data in 'DataGrabber.Data.pas' {dmData: TDataModule},
   DataGrabber.ConnectionSettings in 'DataGrabber.ConnectionSettings.pas',
-  Vcl.Themes,
-  Vcl.Styles,
   DataGrabber.DataView.cxGrid in 'DataView\DataGrabber.DataView.cxGrid.pas' {frmcxGrid},
   ZeroMQ.API in '..\..\libraries\dduce\Source\Dependencies\ZeroMQ\ZeroMQ.API.pas',
   ZeroMQ in '..\..\libraries\dduce\Source\Dependencies\ZeroMQ\ZeroMQ.pas',
@@ -88,9 +86,10 @@ uses
 {$R *.res}
 
 begin
-  ReportMemoryLeaksOnShutdown := True;
+  {$WARNINGS OFF}
+  ReportMemoryLeaksOnShutdown := DebugHook > 0;
+  {$WARNINGS ON}
   Application.Initialize;
-  Application.Title := 'DataGrabber 2';
   Application.CreateForm(TfrmMain, frmMain);
   Application.Run;
 end.

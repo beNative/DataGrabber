@@ -20,7 +20,6 @@ unit DataGrabber.DataView.KGrid;
   Issues:
     - column moving does not move its content, so it is disabled and not
       supported.
-
 }
 
 interface
@@ -46,7 +45,6 @@ type
       R      : TRect;
       State  : TKGridDrawState
     );
-    procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure grdMainCustomSortRows(
       Sender     : TObject;
       ByIndex    : Integer;
@@ -132,11 +130,6 @@ end;
 {$ENDREGION}
 
 {$REGION 'event handlers'}
-procedure TfrmKGrid.FormClose(Sender: TObject; var Action: TCloseAction);
-begin
-  Action := caFree;
-end;
-
 {$REGION 'grdMain'}
 procedure TfrmKGrid.grdMainCustomSortRows(Sender: TObject; ByIndex: Integer;
   SortMode: TKGridSortMode; var Sorted: Boolean);
@@ -280,7 +273,7 @@ begin
   try
     for I := SR.Col1 to SR.Col2 do
     begin
-      grdMain.Cols[I].Visible := False;
+      Data.HideField(DataSet, TKDBGridCol(grdMain.Cols[I]).FieldName);
     end;
   finally
     EndUpdate;

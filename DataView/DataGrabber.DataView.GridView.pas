@@ -30,9 +30,6 @@ uses
 
 type
   TfrmGridView = class(TBaseDataView, IDataView)
-
-    procedure FormClose(Sender: TObject; var Action: TCloseAction);
-
   private
     FGrid            : TDBGridView;
     FSortedFieldName : string;
@@ -514,11 +511,6 @@ begin
 //  end;
 end;
 {$ENDREGION}
-
-procedure TfrmGridView.FormClose(Sender: TObject; var Action: TCloseAction);
-begin
-  Action := caFree;
-end;
 {$ENDREGION}
 
 {$REGION 'private methods'}

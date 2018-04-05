@@ -86,12 +86,6 @@ type
       AError: EFDDBEngineException; var AAction: TFDErrorAction);
     procedure qryMainMasterSetValues(DataSet: TFDDataSet);
     procedure qryMainAfterApplyUpdates(DataSet: TFDDataSet; AErrors: Integer);
-    procedure conMainLost(Sender: TObject);
-    procedure conMainRecover(ASender, AInitiator: TObject;
-      AException: Exception; var AAction: TFDPhysConnectionRecoverAction);
-    procedure conMainRestored(Sender: TObject);
-    procedure conMainError(ASender, AInitiator: TObject;
-      var AException: Exception);
     procedure qryMainAfterExecute(DataSet: TFDDataSet);
     procedure qryMainBeforeClose(DataSet: TDataSet);
     procedure qryMainBeforeExecute(DataSet: TFDDataSet);
@@ -105,15 +99,23 @@ type
     procedure conMainBeforeDisconnect(Sender: TObject);
     procedure conMainBeforeStartTransaction(Sender: TObject);
     procedure conMainAfterStartTransaction(Sender: TObject);
+    procedure conMainLost(Sender: TObject);
+    procedure conMainRecover(ASender, AInitiator: TObject;
+      AException: Exception; var AAction: TFDPhysConnectionRecoverAction);
+    procedure conMainRestored(Sender: TObject);
+    procedure conMainError(ASender, AInitiator: TObject;
+      var AException: Exception);
     {$ENDREGION}
 
   private
     FConstantFields         : IList<TField>;
     FEmptyFields            : IList<TField>;
     FNonEmptyFields         : IList<TField>;
+    FHiddenFields           : IList<TField>;
     FFavoriteFields         : IList<TField>;
     FConstantFieldsVisible  : Boolean;
     FEmptyFieldsVisible     : Boolean;
+    FHiddenFieldCount       : Integer;
     FShowFavoriteFieldsOnly : Boolean;
     FExecuted               : Boolean;
     FSQL                    : string;
@@ -124,6 +126,8 @@ type
     FDataSets               : IList<TFDMemTable>;
     FMultipleResultSets     : Boolean;
     FStopWatch              : TStopwatch;
+    FFieldListsUpdated      : Boolean;
+    FDataEditMode           : Boolean;
 
     {$REGION 'property access methods'}
     function GetConstantFields: IList<TField>;
@@ -152,10 +156,14 @@ type
     function GetOnBeforeExecute: IEvent<TNotifyEvent>;
     function GetMultipleResultSets: Boolean;
     procedure SetMultipleResultSets(const Value: Boolean);
+    function GetElapsedTime: TTimeSpan;
+    function GetFieldListsUpdated: Boolean;
+    function GetDataEditMode: Boolean;
+    procedure SetDataEditMode(const Value: Boolean);
     {$ENDREGION}
 
     procedure FConnectionSettingsChanged(Sender: TObject);
-    function GetElapsedTime: TTimeSpan;
+    function GetHiddenFields: IList<TField>;
 
   protected
     procedure Execute;
@@ -165,11 +173,12 @@ type
     procedure InitFields(ADataSet: TDataSet);
     procedure InitField(AField: TField);
 
+    procedure HideField(
+      ADataSet         : TDataSet;
+      const AFieldName : string
+    );
     procedure UpdateFieldLists;
 
-    {$REGION 'IData'}
-
-    {$ENDREGION}
     procedure SaveToFile(
       ADataSet        : TDataSet;
       const AFileName : string = '';
@@ -199,6 +208,9 @@ type
       const AFieldName : string;
       ADescending      : Boolean = False
     ); overload;
+
+    property DataEditMode: Boolean
+      read GetDataEditMode write SetDataEditMode;
 
     property Connection: TFDConnection
       read GetConnection;
@@ -240,6 +252,9 @@ type
     property DataSetCount: Integer
       read GetDataSetCount;
 
+    property FieldListsUpdated: Boolean
+      read GetFieldListsUpdated;
+
     { Multiple resultsets will be fetched and stored in a local list of
       TFDMemtable instances (FDataSets). }
     property MultipleResultSets: Boolean
@@ -271,6 +286,9 @@ type
 
     property NonEmptyFields: IList<TField>
       read GetNonEmptyFields;
+
+    property HiddenFields: IList<TField>
+      read GetHiddenFields;
     {$ENDREGION}
 
     {$REGION 'IFieldVisibility'}
@@ -314,6 +332,7 @@ begin
   FEmptyFields    := TCollections.CreateObjectList<TField>(False);
   FNonEmptyFields := TCollections.CreateObjectList<TField>(False);
   FFavoriteFields := TCollections.CreateObjectList<TField>(False);
+  FHiddenFields   := TCollections.CreateObjectList<TField>(False);
   FConstantFieldsVisible := True;
   FEmptyFieldsVisible    := True;
   FDriverNames := TStringList.Create;
@@ -366,6 +385,7 @@ begin
   if Value <> ConstantFieldsVisible then
   begin
     FConstantFieldsVisible := Value;
+    UpdateFieldLists;
     InitFields(DataSet);
   end;
 end;
@@ -380,6 +400,7 @@ begin
   if Value <> EmptyFieldsVisible then
   begin
     FEmptyFieldsVisible := Value;
+    UpdateFieldLists;
     InitFields(DataSet);
   end;
 end;
@@ -396,6 +417,16 @@ begin
     FShowFavoriteFieldsOnly := Value;
     InitFields(DataSet);
   end;
+end;
+
+function TdmData.GetFieldListsUpdated: Boolean;
+begin
+  Result := FFieldListsUpdated;
+end;
+
+function TdmData.GetHiddenFields: IList<TField>;
+begin
+  Result := FHiddenFields;
 end;
 {$ENDREGION}
 
@@ -432,6 +463,20 @@ begin
   Result := DataSet.RecordCount;
 end;
 
+function TdmData.GetDataEditMode: Boolean;
+begin
+  Result := FDataEditMode;
+end;
+
+procedure TdmData.SetDataEditMode(const Value: Boolean);
+begin
+  if Value <> DataEditMode then
+  begin
+    FDataEditMode := Value;
+    InitializeConnection;
+  end;
+end;
+
 function TdmData.GetDataSet: TFDDataSet;
 begin
   if FDataSets.Any then
@@ -452,7 +497,9 @@ end;
 
 function TdmData.GetCanModify: Boolean;
 begin
-  Result := not qryMain.UpdateOptions.ReadOnly;
+  //Result := not qryMain.UpdateOptions.ReadOnly;
+  Result := qryMain.CanModify;
+
 end;
 
 function TdmData.GetConnected: Boolean;
@@ -493,6 +540,18 @@ begin
   Result := FSQL;
 end;
 
+procedure TdmData.HideField(ADataSet: TDataSet; const AFieldName: string);
+var
+  F : TField;
+begin
+  Guard.CheckNotNull(ADataSet, 'ADataSet');
+  F := ADataSet.FieldByName(AFieldName);
+  Guard.CheckNotNull(F, 'Field not found!');
+  F.Visible := False;
+  if not FHiddenFields.Contains(F) then
+    FHiddenFields.Add(F);
+end;
+
 procedure TdmData.SetSQL(const Value: string);
 begin
   if Value <> SQL then
@@ -505,7 +564,10 @@ end;
 {$REGION 'event handlers'}
 procedure TdmData.FConnectionSettingsChanged(Sender: TObject);
 begin
-  InitializeConnection;
+  if not DataEditMode then
+  begin
+    InitializeConnection;
+  end;
 end;
 
 {$REGION 'conMain'}
@@ -670,7 +732,9 @@ begin
     B := not FConstantFields.Contains(AField);
   if B and not EmptyFieldsVisible then
     B := not FEmptyFields.Contains(AField);
-
+  if not B and not FHiddenFields.Contains(AField) then
+    FHiddenFields.Add(AField);
+  B := not FHiddenFields.Contains(AField);
   AField.Visible := B;
 end;
 
@@ -678,8 +742,11 @@ procedure TdmData.InitFields(ADataSet: TDataSet);
 var
   Field : TField;
 begin
+  FHiddenFieldCount := 0;
   for Field in ADataSet.Fields do
+  begin
     InitField(Field);
+  end;
 end;
 
 { Assigns application level connection settings (TConnectionSettings object) to
@@ -689,26 +756,36 @@ procedure TdmData.InitializeConnection;
 begin
   Logger.Track('InitializeConnection');
   Logger.Send('DriverName', ConnectionSettings.DriverName);
-  MultipleResultSets := FConnectionSettings.MultipleResultSets;
-  Connection.FetchOptions.RowsetSize := ConnectionSettings.PacketRecords;
-  if ConnectionSettings.FetchOnDemand then
+  if DataEditMode then
   begin
-    Connection.FetchOptions.Mode := fmOnDemand
-  end
-  else
-  begin
-    Connection.FetchOptions.Mode := fmAll;
-  end;
-  Connection.DriverName       := ConnectionSettings.DriverName;
-  if MultipleResultSets then
-  begin
-    Connection.FetchOptions.AutoClose := False; // required to support multiple resultsets
-  end
-  else
-  begin
+    MultipleResultSets := False;
     Connection.FetchOptions.AutoClose := True;
+    conMain.UpdateOptions.ReadOnly := False;
+    Connection.FetchOptions.Mode := fmAll;
+  end
+  else
+  begin
+    MultipleResultSets := FConnectionSettings.MultipleResultSets;
+    Connection.FetchOptions.RowsetSize := ConnectionSettings.PacketRecords;
+    if ConnectionSettings.FetchOnDemand then
+    begin
+      Connection.FetchOptions.Mode := fmOnDemand
+    end
+    else
+    begin
+      Connection.FetchOptions.Mode := fmAll;
+    end;
+    if MultipleResultSets then
+    begin
+      Connection.FetchOptions.AutoClose := False; // required to support multiple resultsets
+    end
+    else
+    begin
+      Connection.FetchOptions.AutoClose := True;
+    end;
+    conMain.UpdateOptions.ReadOnly := ConnectionSettings.ReadOnly;
   end;
-  conMain.UpdateOptions.ReadOnly := ConnectionSettings.ReadOnly;
+  Connection.DriverName := ConnectionSettings.DriverName;
   if ConnectionSettings.DriverName <> '' then
   begin
     Connected := False;
@@ -722,12 +799,10 @@ begin
       Values['Password']  := ConnectionSettings.Password;
       Values['OSAuthent'] := IfThen(ConnectionSettings.OSAuthent, 'Yes', 'No');
     end;
-    Logger.Send('ConnectionString', Connection.ConnectionString);
     Connection.LoginPrompt := False;
     // Set this to prevent issues with FireDac's need for a cursor object﻿
     Connection.ResourceOptions.SilentMode := True;
     Connection.ResourceOptions.AutoReconnect := ConnectionSettings.AutoReconnect;
-    Logger.Send('ConnectionString', Connection.ConnectionString);
   end;
 end;
 
@@ -772,15 +847,22 @@ var
   F : TField;
 begin
   Result := False;
-  FConstantFieldsVisible := True;
-  FEmptyFieldsVisible    := True;
-  for F in DataSet.Fields do
-  begin
-    if not F.Visible then
+  DataSet.DisableControls;
+  try
+    FConstantFieldsVisible := True;
+    FEmptyFieldsVisible    := True;
+    for F in DataSet.Fields do
     begin
-      F.Visible := True;
-      Result := True;
+      if not F.Visible then
+      begin
+        F.Visible := True;
+        Result := True;
+      end;
     end;
+    FHiddenFields.Clear;
+    FHiddenFieldCount := 0;
+  finally
+    DataSet.EnableControls;
   end;
 end;
 
@@ -812,36 +894,40 @@ var
   LIsEmpty : Boolean;
   LIsConst : Boolean;
 begin
-  DataSet.DisableControls;
-  FConstantFields.Clear;
-  FEmptyFields.Clear;
-  FNonEmptyFields.Clear;
-  try
-    if DataSet.FindFirst then
-    begin
-      for F in DataSet.Fields do
+  if not FFieldListsUpdated then
+  begin
+    DataSet.DisableControls;
+    FConstantFields.Clear;
+    FEmptyFields.Clear;
+    FNonEmptyFields.Clear;
+    try
+      if DataSet.FindFirst then
       begin
-        // constant fields
-        DataSet.FindFirst;
-        S := F.AsString;
-        LIsConst := True;
-        LIsEmpty := F.IsNull or F.AsString.IsEmpty;
-        while (LIsConst or LIsEmpty) and DataSet.FindNext do
+        for F in DataSet.Fields do
         begin
-          T := F.AsString;
-          LIsConst := LIsConst and (S = T);
-          LIsEmpty := LIsEmpty and (F.IsNull or T.IsEmpty);
+          // constant fields
+          DataSet.FindFirst;
+          S := F.AsString;
+          LIsConst := True;
+          LIsEmpty := F.IsNull or F.AsString.IsEmpty;
+          while (LIsConst or LIsEmpty) and DataSet.FindNext do
+          begin
+            T := F.AsString;
+            LIsConst := LIsConst and (S = T);
+            LIsEmpty := LIsEmpty and (F.IsNull or T.IsEmpty);
+          end;
+          if LIsConst then
+            FConstantFields.Add(F);
+          if LIsEmpty then
+            FEmptyFields.Add(F)
+          else
+            FNonEmptyFields.Add(F);
         end;
-        if LIsConst then
-          FConstantFields.Add(F);
-        if LIsEmpty then
-          FEmptyFields.Add(F)
-        else
-          FNonEmptyFields.Add(F);
       end;
+      FFieldListsUpdated := True;
+    finally
+      DataSet.EnableControls;
     end;
-  finally
-    DataSet.EnableControls;
   end;
 end;
 
@@ -852,11 +938,16 @@ begin
   FStopWatch.Start;
   InternalExecute(SQL);
   FStopWatch.Stop;
-  UpdateFieldLists;
   if OnAfterExecute.CanInvoke then
     OnAfterExecute.Invoke(Self);
+  FConstantFields.Clear;
+  FEmptyFields.Clear;
+  FNonEmptyFields.Clear;
+  FHiddenFieldCount := 0;
+  FFieldListsUpdated := False;
+  if not EmptyFieldsVisible or not ConstantFieldsVisible then
+    UpdateFieldLists;
   FExecuted := True;
-  Logger.Send('TimeSpan', ElapsedTime.TotalMilliseconds);
 end;
 
 procedure TdmData.LoadFromFile(ADataSet: TDataSet; const AFileName: string;
@@ -882,7 +973,6 @@ procedure TdmData.SaveToFile(ADataSet: TDataSet; const AFileName: string;
 begin
   (ADataSet as TFDDataSet).SaveToFile(AFileName, AFormat);
 end;
-
 {$ENDREGION}
 
 end.

@@ -16,6 +16,8 @@
 
 unit DataGrabber.Resources;
 
+{ Constants and resourcestrings used by the application. }
+
 interface
 
 const
@@ -78,13 +80,13 @@ const
 resourcestring
   SFetchingData             = 'Fetching data...';
   SUpdatingView             = 'Updating view...';
-  SReady                    = 'Ready';
   SRecordCount              = '%d records';
   SFieldCount               = '%d fields';
   SConstantFieldCount       = '%d constant fields';
   SEmptyFieldCount          = '%d empty fields';
-  SUpdateable               = 'Updateable';
-  SReadOnly                 = 'ReadOnly';
+  SHiddenFieldCount         = '%d hidden fields';
+  SUpdateable               = 'Live resultset';
+  SReadOnly                 = 'Offline results';
   SConnected                = 'Connected';
   SDisconnected             = 'Disconnected';
   SAskSaveChanges           = 'Do you want to save changes?';

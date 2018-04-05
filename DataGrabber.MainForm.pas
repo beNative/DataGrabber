@@ -19,21 +19,21 @@ unit DataGrabber.MainForm;
 interface
 
 uses
-  Winapi.Windows, Winapi.Messages, Winapi.GDIPOBJ,
+  Winapi.Windows, Winapi.Messages,
   System.SysUtils, System.Variants, System.Classes, System.Actions,
   System.ImageList,
   Vcl.Menus, Vcl.ActnList, Vcl.Controls, Vcl.Forms, Vcl.ToolWin, Vcl.ExtCtrls,
   Vcl.Graphics, Vcl.Dialogs, Vcl.ComCtrls, Vcl.ImgList,
-  Data.DB, Data.Win.ADODB,
 
   VirtualTrees,
 
   ChromeTabs, ChromeTabsClasses, ChromeTabsTypes,
 
-  DataGrabber.ConnectionSettings,
-  DataGrabber.Interfaces, DataGrabber.Settings, DataGrabber.ConnectionProfiles;
+  DataGrabber.ConnectionSettings, DataGrabber.Interfaces, DataGrabber.Settings,
+  DataGrabber.ConnectionProfiles;
 
-{
+{ Main application form.
+
   TODO:
     - log executed statements to a local database
     - Use bindings in settings
@@ -50,9 +50,13 @@ type
     {$REGION 'designer controls'}
     aclMain                : TActionList;
     actAddConnectionView   : TAction;
+    actCloseAllOtherTabs   : TAction;
+    actCloseTab            : TAction;
     actInspectChromeTab    : TAction;
     ctMain                 : TChromeTabs;
     imlSpinner             : TImageList;
+    mniCloseAllOtherTabs   : TMenuItem;
+    mniCloseTab            : TMenuItem;
     pnlConnectionStatus    : TPanel;
     pnlConnectionViews     : TPanel;
     pnlConstantFieldsCount : TPanel;
@@ -60,16 +64,13 @@ type
     pnlElapsedTime         : TPanel;
     pnlEmptyFieldsCount    : TPanel;
     pnlFieldCount          : TPanel;
-    pnlGridType            : TPanel;
-    pnlRecordCount         : TPanel;
-    pnlStatus              : TPanel;
-    pnlStatusBar           : TPanel;
     pnlHiddenFieldsCount   : TPanel;
-    ppmCVTabs              : TPopupMenu;
-    actCloseAllOtherTabs   : TAction;
-    mniCloseAllOtherTabs   : TMenuItem;
+    pnlRecordCount         : TPanel;
+    pnlStatusBar           : TPanel;
     pnlTop                 : TPanel;
+    ppmCVTabs              : TPopupMenu;
     tlbMain                : TToolBar;
+    tlbTopRight            : TToolBar;
     {$ENDREGION}
 
     {$REGION 'action handlers'}
@@ -106,7 +107,7 @@ type
       ATab            : TChromeTab;
       var DragControl : TWinControl
     );
-
+    procedure actCloseTabExecute(Sender: TObject);
     {$ENDREGION}
 
   private
@@ -162,9 +163,11 @@ implementation
 {$R *.dfm}
 
 uses
+  System.UITypes,
   Vcl.Clipbrd,
+  Data.DB,
 
-  Spring.Container,
+  Spring.Utils,
 
   DDuce.ObjectInspector.zObjectInspector, DDuce.Logger, DDuce.Logger.Factories,
 
@@ -172,18 +175,22 @@ uses
 
 {$REGION 'construction and destruction'}
 procedure TfrmMain.AfterConstruction;
+var
+  FVI : TFileVersionInfo;
 begin
   inherited AfterConstruction;
   Logger.Channels.Add(TLoggerFactories.CreateWinIPCChannel);
   Logger.Clear;
+  FVI := TFileVersionInfo.GetVersionInfo(Application.ExeName);
+  Caption := Format('%s %s', [FVI.ProductName, FVI.ProductVersion]);
   FSettings := TDataGrabberFactories.CreateSettings(Self);
   FSettings.OnChanged.Add(SettingsChanged);
   FManager  := TDataGrabberFactories.CreateManager(Self, FSettings);
   FSettings.FormSettings.AssignTo(Self);
   AddConnectionView;
-  tlbMain.Images := FManager.ActionList.Images;
+  tlbMain.Images     := FManager.ActionList.Images;
+  tlbTopRight.Images := FManager.ActionList.Images;
   InitializeActions;
-  pnlStatus.Caption := SReady;
 end;
 
 procedure TfrmMain.BeforeDestruction;
@@ -202,8 +209,35 @@ begin
 end;
 
 procedure TfrmMain.actCloseAllOtherTabsExecute(Sender: TObject);
+var
+  I         : Integer;
+  LActiveCV : IConnectionView;
+  CV        : IConnectionView;
 begin
-//Manager.DeleteConnectionView(IConnectionView(ATab.Data));
+  I  := 0;
+  LActiveCV := IConnectionView(ctMain.ActiveTab.Data);
+  while (Manager.Count > 1) and (I < Manager.Count) do
+  begin
+    CV := IConnectionView(ctMain.Tabs[I].Data);
+    if CV <> LActiveCV then
+    begin
+      Manager.DeleteConnectionView(CV);
+      ctMain.Tabs.DeleteTab(ctMain.Tabs[I].Index, True);
+    end
+    else
+    begin
+      Inc(I);
+    end;
+  end;
+end;
+
+procedure TfrmMain.actCloseTabExecute(Sender: TObject);
+begin
+  if Manager.Count > 1 then
+  begin
+    Manager.DeleteConnectionView(IConnectionView(ctMain.ActiveTab.Data));
+    ctMain.Tabs.DeleteTab(ctMain.ActiveTabIndex, True);
+  end;
 end;
 
 procedure TfrmMain.actInspectChromeTabExecute(Sender: TObject);
@@ -341,14 +375,16 @@ end;
 
 procedure TfrmMain.InitializeActions;
 begin
-  TDataGrabberFactories.AddToolbarButtons(tlbMain, Manager);
+  TDataGrabberFactories.AddMainToolbarButtons(tlbMain, Manager);
+  TDataGrabberFactories.AddTopRightToolbarButtons(tlbTopRight, Manager);
 end;
 {$ENDREGION}
 
 {$REGION 'protected methods'}
 procedure TfrmMain.SettingsChanged(Sender: TObject);
 begin
-  Settings.FormSettings.AssignTo(Self);
+  FormStyle   := FSettings.FormSettings.FormStyle;
+  WindowState := FSettings.FormSettings.WindowState;
 end;
 
 procedure TfrmMain.ShowToolWindow(AForm: TForm);
@@ -390,6 +426,8 @@ begin
   if Assigned(Manager.ActiveConnectionView) then
   begin
     UpdateTabs;
+    actCloseTab.Enabled := Manager.Count > 1;
+    actCloseAllOtherTabs.Enabled := Manager.Count > 1;
   end;
 end;
 {$ENDREGION}
@@ -397,18 +435,30 @@ end;
 {$REGION 'public methods'}
 procedure TfrmMain.UpdateStatusBar;
 var
-  S : string;
+  S   : string;
+  TFC : Integer;
+  CFC : Integer;
+  EFC : Integer;
+  HFC : Integer;
 begin
   if Assigned(Data) and Assigned(Data.DataSet) and Data.DataSet.Active then
   begin
     pnlRecordCount.Caption := Format(SRecordCount, [Data.RecordCount]);
-    pnlFieldCount.Caption  := Format(SFieldCount, [Data.DataSet.FieldCount]);
-    pnlConstantFieldsCount.Caption :=
-      Format(SConstantFieldCount, [(Data as IFieldLists).ConstantFields.Count]);
-    pnlEmptyFieldsCount.Caption :=
-      Format(SEmptyFieldCount, [(Data as IFieldLists).EmptyFields.Count]);
-    pnlHiddenFieldsCount.Caption := '';
-    pnlElapsedTime.Caption := Format('%5.0f ms', [Data.ElapsedTime.TotalMilliseconds]);
+    TFC := Data.DataSet.FieldCount;
+    CFC := (Data as IFieldLists).ConstantFields.Count;
+    EFC := (Data as IFieldLists).EmptyFields.Count;
+    HFC := (Data as IFieldLists).HiddenFields.Count;
+    pnlFieldCount.Caption          := Format(SFieldCount, [TFC]);
+    pnlConstantFieldsCount.Caption := Format(SConstantFieldCount, [CFC]);
+    pnlEmptyFieldsCount.Caption    := Format(SEmptyFieldCount, [EFC]);
+    pnlHiddenFieldsCount.Caption   := Format(SHiddenFieldCount, [HFC]);
+    pnlElapsedTime.Caption         := Format(
+      '%5.0f ms', [Data.ElapsedTime.TotalMilliseconds]
+    );
+
+//    pnlConstantFieldsCount.Visible := Data.FieldListsUpdated;
+//    pnlEmptyFieldsCount.Visible    := Data.FieldListsUpdated;
+
     if Data.CanModify then
       S := SUpdateable
     else
@@ -416,34 +466,45 @@ begin
   end
   else
   begin
-    S                              := '';
+    pnlEditMode.Caption            := '';
     pnlRecordCount.Caption         := '';
     pnlFieldCount.Caption          := '';
     pnlElapsedTime.Caption         := '';
     pnlConstantFieldsCount.Caption := '';
     pnlEmptyFieldsCount.Caption    := '';
-    if Assigned(ActiveConnectionProfile) then
-    begin
-      //pnlGridType.Caption := Settings.GridType;
-      pnlGridType.Caption := '';
-    end;
+    pnlHiddenFieldsCount.Caption   := '';
   end;
-  if Assigned(Data) {and Assigned(Data.Connection) and Data.Connection.Connected} then
-    pnlConnectionStatus.Caption := SConnected
+  if Assigned(Data) and Assigned(Data.Connection) and Data.Connection.Connected then
+  begin
+    pnlConnectionStatus.Caption    := SConnected;
+    pnlConnectionStatus.Font.Color := clGreen;
+  end
   else
+  begin
     pnlConnectionStatus.Caption := SDisconnected;
+    pnlConnectionStatus.Font.Color := clBlack;
+  end;
 
+  if Data.CanModify then
+  begin
+    pnlEditMode.Font.Style := pnlEditMode.Font.Style + [fsBold];
+    pnlEditMode.Font.Color := clRed;
+  end
+  else
+  begin
+    pnlEditMode.Font.Style := pnlEditMode.Font.Style - [fsBold];
+    pnlEditMode.Font.Color := clGreen;
+  end;
   pnlEditMode.Caption := S;
-  OptimizeWidth(pnlStatus);
   OptimizeWidth(pnlConnectionStatus);
+  OptimizeWidth(pnlEditMode);
   OptimizeWidth(pnlRecordCount);
+  OptimizeWidth(pnlElapsedTime);
   OptimizeWidth(pnlFieldCount);
   OptimizeWidth(pnlEmptyFieldsCount);
   OptimizeWidth(pnlConstantFieldsCount);
   OptimizeWidth(pnlHiddenFieldsCount);
-  OptimizeWidth(pnlElapsedTime);
-  OptimizeWidth(pnlEditMode);
-  OptimizeWidth(pnlGridType);
+  FSettings.FormSettings.WindowState := WindowState;
 end;
 
 procedure TfrmMain.UpdateTabs;

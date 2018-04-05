@@ -3,7 +3,6 @@ inherited frmcxGrid: TfrmcxGrid
   ClientWidth = 695
   DoubleBuffered = True
   Font.Name = 'Se'
-  OnClose = FormClose
   ExplicitWidth = 711
   ExplicitHeight = 358
   PixelsPerInch = 96

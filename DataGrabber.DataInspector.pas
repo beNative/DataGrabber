@@ -174,7 +174,7 @@ end;
 procedure TfrmDataInspector.BeforeDestruction;
 begin
   FreeAndNil(FNonEmptyFields);
-  inherited;
+  inherited BeforeDestruction;
 end;
 {$ENDREGION}
 

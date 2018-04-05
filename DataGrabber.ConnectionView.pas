@@ -157,6 +157,8 @@ uses
 
   Spring, Spring.Container,
 
+  DDuce.ObjectInspector.zObjectInspector,
+
   DDuce.Logger, DDuce.Factories.VirtualTrees,
 
   DataGrabber.Utils, DataGrabber.Factories;
@@ -224,7 +226,8 @@ begin
     FreeAndNil(FPageControl);
   end;
 
-  B := Manager.Settings.ResultDisplayLayout = TResultDisplayLayout.Tabbed;
+  B := (not Data.DataEditMode) and Manager.Settings.ConnectionSettings.ReadOnly
+    and (Manager.Settings.ResultDisplayLayout = TResultDisplayLayout.Tabbed);
   if B then
   begin
     FPageControl := TPageControl.Create(Self);
@@ -358,6 +361,11 @@ begin
   end;
   EditorView.SetFocus;
 end;
+
+procedure TfrmConnectionView.splVerticalMoved(Sender: TObject);
+begin
+  FVSTProfiles.Invalidate;
+end;
 {$ENDREGION}
 
 {$REGION 'property access methods'}
@@ -417,14 +425,10 @@ begin
   FVSTProfiles.Colors.FocusedSelectionColor := clBtnHighlight;
   FVSTProfiles.Margins.Right := 0;
   FVSTProfiles.Indent        := 0;
+  FVSTProfiles.Alignment     := taCenter;
   FVSTProfiles.Constraints.MinWidth  := 150;
   FVSTProfiles.Constraints.MinHeight := 100;
   FVSTProfiles.Constraints.MaxWidth  := 300;
-end;
-
-procedure TfrmConnectionView.splVerticalMoved(Sender: TObject);
-begin
-  FVSTProfiles.Invalidate;
 end;
 
 procedure TfrmConnectionView.ApplySettings;
