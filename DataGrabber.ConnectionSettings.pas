@@ -20,7 +20,7 @@ unit DataGrabber.ConnectionSettings;
 {
   Application-level connection parameters.
 
-  FireDAC connection parameters
+  FireDAC connection parameters with example:
 
   Name      := 'MSSQL_Connection';
   DriverID  := 'MSSQL';

@@ -22,7 +22,6 @@ inherited frmcxGrid: TfrmcxGrid
     Font.Style = []
     ParentFont = False
     TabOrder = 0
-    OnExit = grdMainExit
     LevelTabs.Slants.Positions = []
     LevelTabs.Style = 6
     LookAndFeel.Kind = lfStandard
@@ -41,6 +40,7 @@ inherited frmcxGrid: TfrmcxGrid
       OnCustomDrawCell = tvwMainCustomDrawCell
       DataController.DataSource = dscMain
       DataController.MultiThreadedOptions.Filtering = bTrue
+      DataController.MultiThreadedOptions.Sorting = bTrue
       DataController.Options = [dcoAssignGroupingValues, dcoAssignMasterDetailKeys, dcoSaveExpanding, dcoSortByDisplayText, dcoFocusTopRowAfterSorting, dcoImmediatePost, dcoInsertOnNewItemRowFocusing]
       DataController.Summary.DefaultGroupSummaryItems = <
         item
@@ -64,6 +64,7 @@ inherited frmcxGrid: TfrmcxGrid
       OptionsBehavior.NavigatorHints = True
       OptionsBehavior.BestFitMaxRecordCount = 100
       OptionsBehavior.ImmediateEditor = False
+      OptionsBehavior.ShowLockedStateImageOptions.BestFit = lsimImmediate
       OptionsBehavior.PullFocusing = True
       OptionsCustomize.ColumnHiding = True
       OptionsCustomize.ColumnsQuickCustomization = True

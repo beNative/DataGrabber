@@ -32,6 +32,7 @@ uses
 
   DataGrabber.Interfaces, DataGrabber.ConnectionProfiles;
 
+{$REGION 'documentation'}
 {
    A IConnectionView instance consists of
      - one editorview (IEditorView)
@@ -44,15 +45,16 @@ uses
      - an active connection profile (of the available profiles in
         FSettings.ConnectionProfiles)
 }
+{$ENDREGION}
 
 type
   TfrmConnectionView = class(TForm, IConnectionView)
     pnlMain     : TOMultiPanel;
     pnlTop      : TPanel;
-    pnlBottom   : TOMultiPanel;
     pnlVST      : TPanel;
     splVertical : TSplitter;
     pnlTopRight : TPanel;
+    pnlBottom   : TPanel;
 
     procedure FVSTProfilesBeforeCellPaint(
       Sender          : TBaseVirtualTree;
@@ -95,6 +97,7 @@ type
     FDefaultNode    : PVirtualNode;
     FDataViewList   : IList<IDataView>;
     FPageControl    : TPageControl;
+    FMultiPanel     : TOMultiPanel;
     FManager        : IConnectionViewManager;
 
     {$REGION 'property access methods'}
@@ -215,19 +218,19 @@ var
   DV : IDataView;
   B  : Boolean;
 begin
-  pnlBottom.PanelCollection.Clear;
-  for DV in FDataViewList do
+  if Assigned(FMultiPanel) then
   begin
-    DV.Close;
+    FMultiPanel.PanelCollection.Clear;
+    FreeAndNil(FMultiPanel);
   end;
+  FActiveDataView := nil;
   FDataViewList.Clear;
   if Assigned(FPageControl) then
   begin
     FreeAndNil(FPageControl);
   end;
-
-  B := (not Data.DataEditMode) and Manager.Settings.ConnectionSettings.ReadOnly
-    and (Manager.Settings.ResultDisplayLayout = TResultDisplayLayout.Tabbed);
+  B := (Manager.Settings.ResultDisplayLayout = TResultDisplayLayout.Tabbed)
+    and (not Data.DataEditMode);
   if B then
   begin
     FPageControl := TPageControl.Create(Self);
@@ -237,17 +240,21 @@ begin
   end
   else
   begin
+    FMultiPanel := TOMultiPanel.Create(Self);
+    FMultiPanel.SplitterSize := 8;
+    FMultiPanel.Parent := pnlBottom;
+    FMultiPanel.Align  := alClient;
     if Manager.Settings.ResultDisplayLayout = TResultDisplayLayout.Vertical then
     begin
-      pnlBottom.PanelType := ptHorizontal;
+      FMultiPanel.PanelType := ptHorizontal;
     end
     else
     begin
-      pnlBottom.PanelType := ptVertical;
+      FMultiPanel.PanelType := ptVertical;
     end;
   end;
 
-  if Data.MultipleResultSets then
+  if Data.MultipleResultSets and (Data.DataSetCount > 1) then
   begin
     for I := 0 to Data.DataSetCount - 1 do
     begin
@@ -267,7 +274,9 @@ begin
         DV.AssignParent(TS);
       end
       else
-        DV.AssignParent(pnlBottom);
+      begin
+        DV.AssignParent(FMultiPanel);
+      end;
       FDataViewList.Add(DV);
     end;
   end

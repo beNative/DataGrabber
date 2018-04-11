@@ -45,6 +45,8 @@ type
     pnlMain            : TPanel;
     ppmMain            : TPopupMenu;
 
+    procedure actHideEmptyFieldsExecute(Sender: TObject);
+
     procedure dscMainDataChange(Sender: TObject; Field: TField);
     procedure FormShow(Sender: TObject);
 
@@ -97,8 +99,6 @@ type
       Cell        : TGridCell;
       var CanShow : Boolean
     );
-
-    procedure actHideEmptyFieldsExecute(Sender: TObject);
 
   strict private
     FHideEmptyFields : Boolean;

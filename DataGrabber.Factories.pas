@@ -147,6 +147,8 @@ end;
 class procedure TDataGrabberFactories.AddMainToolbarButtons(AToolBar: TToolbar;
   AManager: IConnectionViewManager);
 begin
+  Guard.CheckNotNull(AToolBar, 'AToolBar');
+  Guard.CheckNotNull(AManager, 'AManager');
   Guard.CheckTrue(AToolBar.ButtonCount = 0, '0');
 
   AddButton(AManager, AToolBar, 'actFireDACInfo');
@@ -180,9 +182,13 @@ end;
 class procedure TDataGrabberFactories.AddTopRightToolbarButtons(
   AToolBar: TToolbar; AManager: IConnectionViewManager);
 begin
+  Guard.CheckNotNull(AToolBar, 'AToolBar');
+  Guard.CheckNotNull(AManager, 'AManager');
   Guard.CheckTrue(AToolBar.ButtonCount = 0, '0');
+
   AddButton(AManager, AToolBar, 'actToggleFullScreen');
   AddButton(AManager, AToolBar, 'actToggleStayOnTop');
+
   TToolBarFactory.CleanupToolBar(AToolBar);
 end;
 
@@ -203,6 +209,9 @@ class function TDataGrabberFactories.CreateDataView(AOwner: TComponent;
 var
   LGridType : string;
 begin
+  Guard.CheckNotNull(AManager, 'AManager');
+  Guard.CheckNotNull(AData, 'AData');
+
   LGridType := AManager.Settings.GridType;
   if LGridType = 'cxGrid' then
   begin

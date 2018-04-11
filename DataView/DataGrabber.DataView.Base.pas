@@ -220,7 +220,8 @@ end;
 {$REGION 'event handlers'}
 procedure TBaseDataView.DataAfterExecute(Sender: TObject);
 begin
-  UpdateView;
+  if Assigned(Data) then
+    UpdateView;
 end;
 
 procedure TBaseDataView.SettingsChanged(Sender: TObject);

@@ -497,9 +497,7 @@ end;
 
 function TdmData.GetCanModify: Boolean;
 begin
-  //Result := not qryMain.UpdateOptions.ReadOnly;
   Result := qryMain.CanModify;
-
 end;
 
 function TdmData.GetConnected: Boolean;
@@ -538,18 +536,6 @@ end;
 function TdmData.GetSQL: string;
 begin
   Result := FSQL;
-end;
-
-procedure TdmData.HideField(ADataSet: TDataSet; const AFieldName: string);
-var
-  F : TField;
-begin
-  Guard.CheckNotNull(ADataSet, 'ADataSet');
-  F := ADataSet.FieldByName(AFieldName);
-  Guard.CheckNotNull(F, 'Field not found!');
-  F.Visible := False;
-  if not FHiddenFields.Contains(F) then
-    FHiddenFields.Add(F);
 end;
 
 procedure TdmData.SetSQL(const Value: string);
@@ -721,9 +707,21 @@ end;
 {$ENDREGION}
 
 {$REGION 'protected methods'}
+procedure TdmData.HideField(ADataSet: TDataSet; const AFieldName: string);
+var
+  F : TField;
+begin
+  Guard.CheckNotNull(ADataSet, 'ADataSet');
+  F := ADataSet.FieldByName(AFieldName);
+  Guard.CheckNotNull(F, 'Field not found!');
+  F.Visible := False;
+  if not FHiddenFields.Contains(F) then
+    FHiddenFields.Add(F);
+end;
+
 procedure TdmData.InitField(AField: TField);
 var
-  B: Boolean;
+  B : Boolean;
 begin
   B := True;
   if ShowFavoriteFieldsOnly then

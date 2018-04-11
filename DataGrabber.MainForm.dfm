@@ -1,7 +1,6 @@
 object frmMain: TfrmMain
   Left = 731
   Top = 411
-  Caption = 'DataGrabber 2.4'
   ClientHeight = 593
   ClientWidth = 1124
   Color = clBtnFace
@@ -60,7 +59,6 @@ object frmMain: TfrmMain
       BevelKind = bkFlat
       BevelOuter = bvNone
       TabOrder = 1
-      ExplicitTop = 4
     end
     object pnlConnectionStatus: TPanel
       AlignWithMargins = True
@@ -115,7 +113,6 @@ object frmMain: TfrmMain
       BevelKind = bkFlat
       BevelOuter = bvNone
       TabOrder = 4
-      ExplicitLeft = 157
     end
     object pnlConstantFieldsCount: TPanel
       AlignWithMargins = True
@@ -132,7 +129,6 @@ object frmMain: TfrmMain
       BevelKind = bkFlat
       BevelOuter = bvNone
       TabOrder = 5
-      ExplicitLeft = 261
     end
     object pnlEmptyFieldsCount: TPanel
       AlignWithMargins = True
@@ -149,7 +145,6 @@ object frmMain: TfrmMain
       BevelKind = bkFlat
       BevelOuter = bvNone
       TabOrder = 6
-      ExplicitLeft = 209
     end
     object pnlHiddenFieldsCount: TPanel
       AlignWithMargins = True
@@ -166,7 +161,6 @@ object frmMain: TfrmMain
       BevelKind = bkFlat
       BevelOuter = bvNone
       TabOrder = 7
-      ExplicitLeft = 313
     end
   end
   object pnlConnectionViews: TPanel
@@ -590,7 +584,7 @@ object frmMain: TfrmMain
     Left = 32
     Top = 72
     Bitmap = {
-      494C01010B000D00640010001000FFFFFFFF2110FFFFFFFFFFFFFFFF424D3600
+      494C01010B000D00680010001000FFFFFFFF2110FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000003000000001002000000000000030
       0000000000000000000000000000000000000000000000000000000000000000
       000000000000000000000B0B0B0C000000000000000000000000000000000000

@@ -518,7 +518,7 @@ begin
     ctMain.ActiveTab.Caption := Format('%s', [V.Form.Caption]);
     C := V.ActiveConnectionProfile.ProfileColor;
     ctMain.LookAndFeel.Tabs.Active.Style.StartColor := C;
-    ctMain.LookAndFeel.Tabs.Active.Style.StopColor := C;
+    ctMain.LookAndFeel.Tabs.Active.Style.StopColor  := C;
   end;
 end;
 {$ENDREGION}

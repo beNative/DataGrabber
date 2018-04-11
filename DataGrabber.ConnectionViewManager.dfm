@@ -307,6 +307,11 @@ object dmConnectionViewManager: TdmConnectionViewManager
     object mniExecute: TMenuItem
       Action = actExecute
     end
+    object Liveresults1: TMenuItem
+      Action = actExecuteLiveResultSet
+      Caption = 'Execute and return live resultset'
+      Hint = 'Execute SQL and return a live resultset.'
+    end
     object N5: TMenuItem
       Caption = '-'
     end
@@ -435,7 +440,7 @@ object dmConnectionViewManager: TdmConnectionViewManager
     Left = 24
     Top = 80
     Bitmap = {
-      494C010155002003E40110001000FFFFFFFF2110FFFFFFFFFFFFFFFF424D3600
+      494C010155002003EC0110001000FFFFFFFF2110FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000006001000001002000000000000060
       0100000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000

@@ -64,7 +64,6 @@ type
       AViewInfo : TcxGridColumnHeaderViewInfo;
       var ADone : Boolean
     );
-    procedure grdMainExit(Sender: TObject);
 
   private
     FMergeColumnCells : Boolean;
@@ -181,11 +180,6 @@ end;
 function TfrmcxGrid.GetRecordCount: Integer;
 begin
   Result := tvwMain.DataController.RecordCount;
-end;
-
-procedure TfrmcxGrid.grdMainExit(Sender: TObject);
-begin
-  Logger.Info('grdMainExit');
 end;
 
 function TfrmcxGrid.GetMergeColumnCells: Boolean;
@@ -644,12 +638,18 @@ begin
 end;
 
 procedure TfrmcxGrid.AutoSizeColumns;
+var
+  I: Integer;
 begin
-  tvwMain.BeginBestFitUpdate;
+  BeginUpdate;
   try
     tvwMain.ApplyBestFit;
+    for I := 0 to tvwMain.ColumnCount - 1 do
+    begin
+      tvwMain.Columns[I].Width := tvwMain.Columns[I].Width + 10;
+    end;
   finally
-    tvwMain.EndBestFitUpdate;
+    EndUpdate;
   end;
 end;
 

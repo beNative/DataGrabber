@@ -127,6 +127,7 @@ type
     N6                            : TMenuItem;
     ppmConnectionView             : TPopupMenu;
     ppmEditorView                 : TPopupMenu;
+    Liveresults1: TMenuItem;
     {$ENDREGION}
 
     {$REGION 'action handlers'}

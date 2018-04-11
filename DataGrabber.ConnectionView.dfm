@@ -2,7 +2,7 @@ object frmConnectionView: TfrmConnectionView
   AlignWithMargins = True
   Left = 0
   Top = 0
-  ClientHeight = 465
+  ClientHeight = 487
   ClientWidth = 906
   Color = clBtnFace
   DoubleBuffered = True
@@ -17,7 +17,7 @@ object frmConnectionView: TfrmConnectionView
     Left = 0
     Top = 0
     Width = 906
-    Height = 465
+    Height = 487
     PanelType = ptVertical
     PanelCollection = <
       item
@@ -36,11 +36,12 @@ object frmConnectionView: TfrmConnectionView
     SplitterSize = 8
     Align = alClient
     TabOrder = 0
+    ExplicitHeight = 465
     object pnlTop: TPanel
       Left = 0
       Top = 0
       Width = 906
-      Height = 232
+      Height = 244
       Align = alClient
       BevelOuter = bvNone
       TabOrder = 0
@@ -48,39 +49,38 @@ object frmConnectionView: TfrmConnectionView
         Left = 185
         Top = 0
         Width = 8
-        Height = 232
+        Height = 244
         OnMoved = splVerticalMoved
+        ExplicitHeight = 232
       end
       object pnlVST: TPanel
         Left = 0
         Top = 0
         Width = 185
-        Height = 232
+        Height = 244
         Align = alLeft
         BevelOuter = bvNone
         TabOrder = 0
+        ExplicitHeight = 232
       end
       object pnlTopRight: TPanel
         Left = 193
         Top = 0
         Width = 713
-        Height = 232
+        Height = 244
         Align = alClient
         BevelOuter = bvNone
         TabOrder = 1
+        ExplicitHeight = 232
       end
     end
-    object pnlBottom: TOMultiPanel
+    object pnlBottom: TPanel
       Left = 0
-      Top = 240
+      Top = 252
       Width = 906
-      Height = 225
-      PanelType = ptVertical
-      PanelCollection = <>
-      MinPosition = 0.020000000000000000
-      SplitterSize = 8
+      Height = 235
       Align = alClient
-      ParentBackground = False
+      BevelOuter = bvNone
       TabOrder = 1
     end
   end
