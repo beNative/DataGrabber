@@ -440,14 +440,16 @@ var
   CFC : Integer;
   EFC : Integer;
   HFC : Integer;
+  RS  : IResultSet;
 begin
-  if Assigned(Data) and Assigned(Data.DataSet) and Data.DataSet.Active then
+  if Assigned(Data) and Assigned(ActiveConnectionView.ActiveDataView) and ActiveConnectionView.ActiveDataView.ResultSet.DataSet.Active then
   begin
-    pnlRecordCount.Caption := Format(SRecordCount, [Data.RecordCount]);
-    TFC := Data.DataSet.FieldCount;
-    CFC := (Data as IFieldLists).ConstantFields.Count;
-    EFC := (Data as IFieldLists).EmptyFields.Count;
-    HFC := (Data as IFieldLists).HiddenFields.Count;
+    RS := ActiveConnectionView.ActiveDataView.ResultSet;
+    pnlRecordCount.Caption := Format(SRecordCount, [RS.DataSet.RecordCount]);
+    TFC := RS.DataSet.FieldCount;
+    CFC := RS.ConstantFields.Count;
+    EFC := RS.EmptyFields.Count;
+    HFC := RS.HiddenFields.Count;
     pnlFieldCount.Caption          := Format(SFieldCount, [TFC]);
     pnlConstantFieldsCount.Caption := Format(SConstantFieldCount, [CFC]);
     pnlEmptyFieldsCount.Caption    := Format(SEmptyFieldCount, [EFC]);

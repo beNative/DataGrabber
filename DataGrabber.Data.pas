@@ -65,10 +65,11 @@ uses
 
   Spring, Spring.Collections,
 
-  DataGrabber.ConnectionSettings, DataGrabber.Interfaces;
+  DataGrabber.ConnectionSettings, DataGrabber.Interfaces,
+  DataGrabber.Data.ResultSet;
 
 type
-  TdmData = class(TDataModule, IData, IFieldLists, IFieldVisiblity)
+  TdmData = class(TDataModule, IData, IResultSet)
     conMain : TFDConnection;
     qryMain : TFDQuery;
 
@@ -123,15 +124,16 @@ type
     FDriverNames            : TStrings;
     FOnAfterExecute         : Event<TNotifyEvent>;
     FOnBeforeExecute        : Event<TNotifyEvent>;
-    FDataSets               : IList<TFDMemTable>;
     FMultipleResultSets     : Boolean;
     FStopWatch              : TStopwatch;
     FFieldListsUpdated      : Boolean;
     FDataEditMode           : Boolean;
+    FResultSets             : TResultSets;
 
     {$REGION 'property access methods'}
     function GetConstantFields: IList<TField>;
     function GetEmptyFields: IList<TField>;
+    function GetHiddenFields: IList<TField>;
     function GetNonEmptyFields: IList<TField>;
     function GetConstantFieldsVisible: Boolean;
     function GetEmptyFieldsVisible: Boolean;
@@ -151,7 +153,7 @@ type
     function GetCanModify: Boolean;
     function GetOnAfterExecute: IEvent<TNotifyEvent>;
     function GetConnection: TFDConnection;
-    function GetItem(AIndex: Integer): TFDMemTable;
+    function GetItem(AIndex: Integer): IResultSet;
     function GetDataSetCount: Integer;
     function GetOnBeforeExecute: IEvent<TNotifyEvent>;
     function GetMultipleResultSets: Boolean;
@@ -160,10 +162,11 @@ type
     function GetFieldListsUpdated: Boolean;
     function GetDataEditMode: Boolean;
     procedure SetDataEditMode(const Value: Boolean);
+    function GetResultSet: IResultSet;
+    function GetData: IData;
     {$ENDREGION}
 
     procedure FConnectionSettingsChanged(Sender: TObject);
-    function GetHiddenFields: IList<TField>;
 
   protected
     procedure Execute;
@@ -235,7 +238,7 @@ type
     property DataSet: TFDDataSet
       read GetDataSet;
 
-    property Items[AIndex: Integer]: TFDMemTable
+    property Items[AIndex: Integer]: IResultSet
       read GetItem; default;
 
     property Active: Boolean
@@ -260,11 +263,11 @@ type
     property MultipleResultSets: Boolean
       read GetMultipleResultSets write SetMultipleResultSets;
 
-    { Called before the SQL statement or script is executed. }
+    { Called after the SQL statement or script is executed. }
     property OnAfterExecute: IEvent<TNotifyEvent>
       read GetOnAfterExecute;
 
-    { Called after the SQL statement or script is executed. }
+    { Called before the SQL statement or script is executed. }
     property OnBeforeExecute: IEvent<TNotifyEvent>
       read GetOnBeforeExecute;
     {$ENDREGION}
@@ -277,7 +280,7 @@ type
     procedure AfterConstruction; override;
     procedure BeforeDestruction; override;
 
-    {$REGION 'IFieldLists'}
+    {$REGION 'IResultSet'}
     property ConstantFields: IList<TField>
       read GetConstantFields;
 
@@ -289,9 +292,7 @@ type
 
     property HiddenFields: IList<TField>
       read GetHiddenFields;
-    {$ENDREGION}
 
-    {$REGION 'IFieldVisibility'}
     function ShowAllFields: Boolean;
 
     property ConstantFieldsVisible: Boolean
@@ -336,7 +337,8 @@ begin
   FConstantFieldsVisible := True;
   FEmptyFieldsVisible    := True;
   FDriverNames := TStringList.Create;
-  FDataSets := TCollections.CreateObjectList<TFDMemTable>;
+  FResultSets  := TResultSets.Create;
+
   FDManager.ResourceOptions.AutoReconnect := True;
   // Blocking with cancel dialog.
   FDManager.ResourceOptions.CmdExecMode := amCancelDialog;
@@ -352,6 +354,7 @@ begin
   FConnectionSettings.Free;
   FDriverNames.Free;
   FOnAfterExecute.RemoveAll(Self);
+  FResultSets.Free;
   inherited BeforeDestruction;
 end;
 {$ENDREGION}
@@ -435,9 +438,9 @@ begin
   Result := FStopWatch.Elapsed;
 end;
 
-function TdmData.GetItem(AIndex: Integer): TFDMemTable;
+function TdmData.GetItem(AIndex: Integer): IResultSet;
 begin
-  Result := FDataSets[AIndex];
+  Result := FResultSets[AIndex];
 end;
 
 function TdmData.GetMultipleResultSets: Boolean;
@@ -463,6 +466,16 @@ begin
   Result := DataSet.RecordCount;
 end;
 
+function TdmData.GetResultSet: IResultSet;
+begin
+  Result := Self as IResultSet;
+end;
+
+function TdmData.GetData: IData;
+begin
+  Result := Self;
+end;
+
 function TdmData.GetDataEditMode: Boolean;
 begin
   Result := FDataEditMode;
@@ -479,15 +492,15 @@ end;
 
 function TdmData.GetDataSet: TFDDataSet;
 begin
-  if FDataSets.Any then
-    Result := FDataSets.First
+  if FResultSets.Any then
+    Result := FResultSets.First.DataSet
   else
     Result := qryMain;
 end;
 
 function TdmData.GetDataSetCount: Integer;
 begin
-  Result := FDataSets.Count;
+  Result := FResultSets.Count;
 end;
 
 function TdmData.GetActive: Boolean;
@@ -806,30 +819,25 @@ end;
 
 procedure TdmData.InternalExecute(const ACommandText: string);
 var
-  LMemTable : TFDMemTable;
-  B         : Boolean;
+  B : Boolean;
 begin
   if Trim(ACommandText) <> '' then
   begin
-    FDataSets.Clear;
+    FResultSets.Clear;
     qryMain.Close;
     FStopWatch.Start;
     qryMain.Open(ACommandText);
     FStopWatch.Stop;
     if MultipleResultSets then
     begin
-      LMemTable := TFDMemTable.Create(nil);
-      LMemTable.Data := qryMain.Data;
-      FDataSets.Add(LMemTable);
+      FResultSets.Add(TResultSet.Create(Self, qryMain.Data));
       B := qryMain.Active;
       while B do
       begin
         qryMain.NextRecordSet;
         if qryMain.Active then
         begin
-          LMemTable := TFDMemTable.Create(nil);
-          LMemTable.Data := qryMain.Data;
-          FDataSets.Add(LMemTable);
+          FResultSets.Add(TResultSet.Create(Self, qryMain.Data));
         end
         else
         begin

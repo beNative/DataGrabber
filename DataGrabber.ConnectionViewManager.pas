@@ -333,7 +333,7 @@ end;
 
 procedure TdmConnectionViewManager.actShowAllColumnsExecute(Sender: TObject);
 begin
-  if (ActiveData as IFieldVisiblity).ShowAllFields then
+  if ActiveDataView.ResultSet.ShowAllFields then
     ActiveDataView.UpdateView;
 end;
 
@@ -415,15 +415,15 @@ end;
 procedure TdmConnectionViewManager.actHideConstantColumnsExecute(
   Sender: TObject);
 begin
-  (ActiveData as IFieldVisiblity).ConstantFieldsVisible := not
-  (ActiveData as IFieldVisiblity).ConstantFieldsVisible;
+  ActiveDataView.ResultSet.ConstantFieldsVisible := not
+    ActiveDataView.ResultSet.ConstantFieldsVisible;
   ActiveDataView.UpdateView;
 end;
 
 procedure TdmConnectionViewManager.actHideEmptyColumnsExecute(Sender: TObject);
 begin
-  (ActiveData as IFieldVisiblity).EmptyFieldsVisible :=
-    not (ActiveData as IFieldVisiblity).EmptyFieldsVisible;
+  ActiveDataView.ResultSet.EmptyFieldsVisible := not
+    ActiveDataView.ResultSet.EmptyFieldsVisible;
   ActiveDataView.UpdateView;
 end;
 
@@ -491,7 +491,7 @@ end;
 procedure TdmConnectionViewManager.actDataInspectorExecute(Sender: TObject);
 begin
   FSettings.DataInspectorVisible := actDataInspector.Checked;
-  FDataInspector.Data := ActiveDataView.Data;
+  FDataInspector.ResultSet := ActiveDataView.ResultSet;
   if actDataInspector.Checked then
     FDataInspector.Show;
 end;
@@ -666,14 +666,14 @@ begin
   FStopWatch.Start;
   ActiveData.Execute;
   FStopWatch.Stop;
-  if Assigned(FDataInspector) and FDataInspector.Visible then
-  begin
-    FDataInspector.Data := ActiveData;
-  end;
-  if Assigned(FFieldInspector) and FFieldInspector.Visible then
-  begin
-    FFieldInspector.DataSet := ActiveDataView.DataSet;
-  end;
+//  if Assigned(FDataInspector) and FDataInspector.Visible then
+//  begin
+//    FDataInspector.Data := ActiveData;
+//  end;
+//  if Assigned(FFieldInspector) and FFieldInspector.Visible then
+//  begin
+//    FFieldInspector.DataSet := ActiveDataView.DataSet;
+//  end;
 end;
 
 procedure TdmConnectionViewManager.UpdateActions;
@@ -700,12 +700,11 @@ begin
     actPrint.Enabled               := B;
     actDesigner.Enabled            := B;
 
-    actHideEmptyColumns.Checked    :=
-      not (ActiveData as IFieldVisiblity).EmptyFieldsVisible;
-    actHideConstantColumns.Checked :=
-      not (ActiveData as IFieldVisiblity).ConstantFieldsVisible;
-
     B := Assigned(ActiveDataView);
+    actHideEmptyColumns.Checked    := B and
+      not ActiveDataView.ResultSet.EmptyFieldsVisible;
+    actHideConstantColumns.Checked := B and
+      not ActiveDataView.ResultSet.ConstantFieldsVisible;
     actAutoSizeCols.Visible      := B;
     actAutoSizeCols.Enabled      := actAutoSizeCols.Visible;
     actGroupBySelection.Visible  := B and Supports(ActiveDataView, IGroupable);

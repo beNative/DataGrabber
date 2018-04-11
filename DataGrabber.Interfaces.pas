@@ -65,6 +65,49 @@ const
 
 type
   IEditorView = interface;
+  IData       = interface;
+
+  IResultSet = interface
+  ['{2A65FFAE-DA27-4088-B9E5-EB055A0E46A0}']
+    {$REGION 'property access methods'}
+    function GetConstantFields: IList<TField>;
+    function GetEmptyFields: IList<TField>;
+    function GetNonEmptyFields: IList<TField>;
+    function GetHiddenFields: IList<TField>;
+    function GetConstantFieldsVisible: Boolean;
+    function GetEmptyFieldsVisible: Boolean;
+    procedure SetConstantFieldsVisible(const Value: Boolean);
+    procedure SetEmptyFieldsVisible(const Value: Boolean);
+    function GetDataSet: TFDDataSet;
+    function GetData: IData;
+    {$ENDREGION}
+
+    property Data: IData
+      read GetData;
+
+    property DataSet: TFDDataSet
+      read GetDataSet;
+
+    property ConstantFields: IList<TField>
+      read GetConstantFields;
+
+    property EmptyFields: IList<TField>
+      read GetEmptyFields;
+
+    property NonEmptyFields: IList<TField>
+      read GetNonEmptyFields;
+
+    property HiddenFields: IList<TField>
+      read GetHiddenFields;
+
+    function ShowAllFields: Boolean;
+
+    property ConstantFieldsVisible: Boolean
+      read GetConstantFieldsVisible write SetConstantFieldsVisible;
+
+    property EmptyFieldsVisible: Boolean
+      read GetEmptyFieldsVisible write SetEmptyFieldsVisible;
+  end;
 
   IData = interface
   ['{0E8958C3-CECD-4E3F-A990-B73635E50F26}']
@@ -77,7 +120,7 @@ type
     function GetCanModify: Boolean;
     function GetConnectionSettings: TConnectionSettings;
     function GetConnection: TFDConnection;
-    function GetItem(AIndex: Integer): TFDMemTable;
+    function GetItem(AIndex: Integer): IResultSet;
     function GetDataSetCount: Integer;
     function GetOnAfterExecute: IEvent<TNotifyEvent>;
     function GetOnBeforeExecute: IEvent<TNotifyEvent>;
@@ -87,6 +130,7 @@ type
     function GetFieldListsUpdated: Boolean;
     function GetDataEditMode: Boolean;
     procedure SetDataEditMode(const Value: Boolean);
+    function GetResultSet: IResultSet;
     {$ENDREGION}
 
     procedure Execute;
@@ -129,8 +173,11 @@ type
     property SQL: string
       read GetSQL write SetSQL;
 
-    property DataSet: TFDDataSet
-      read GetDataSet;
+    property ResultSet: IResultSet
+      read GetResultSet;
+
+//    property DataSet: TFDDataSet
+//      read GetDataSet;
 
     property Connection: TFDConnection
       read GetConnection;
@@ -153,10 +200,7 @@ type
     property ElapsedTime: TTimeSpan
       read GetElapsedTime;
 
-    property FieldListsUpdated: Boolean
-      read GetFieldListsUpdated;
-
-    property Items[AIndex: Integer]: TFDMemTable
+    property Items[AIndex: Integer]: IResultSet
       read GetItem; default;
 
     property DataSetCount: Integer
@@ -232,6 +276,7 @@ type
     function GetPopupMenu: TPopupMenu;
     procedure SetPopupMenu(const Value: TPopupMenu);
     function GetDataSet: TDataSet;
+    function GetResultSet: IResultSet;
     {$ENDREGION}
 
     procedure AssignParent(AParent: TWinControl);
@@ -264,8 +309,11 @@ type
     property DataSet: TDataSet
       read GetDataSet;
 
-    property Data: IData
-      read GetData;
+    property ResultSet: IResultSet
+      read GetResultSet;
+
+//    property Data: IData
+//      read GetData;
 
     property RecordCount: Integer
       read GetRecordCount;
@@ -504,46 +552,6 @@ type
 
     property MergeColumnCells: Boolean
       read GetMergeColumnCells write SetMergeColumnCells;
-  end;
-
-  IFieldLists = interface
-  ['{0AC7FBDA-CAF3-49B2-990D-7053D3188D51}']
-    {$REGION 'property access methods'}
-    function GetConstantFields: IList<TField>;
-    function GetEmptyFields: IList<TField>;
-    function GetNonEmptyFields: IList<TField>;
-    function GetHiddenFields: IList<TField>;
-    {$ENDREGION}
-
-    property ConstantFields: IList<TField>
-      read GetConstantFields;
-
-    property EmptyFields: IList<TField>
-      read GetEmptyFields;
-
-    property NonEmptyFields: IList<TField>
-      read GetNonEmptyFields;
-
-    property HiddenFields: IList<TField>
-      read GetHiddenFields;
-  end;
-
-  IFieldVisiblity = interface
-  ['{DEAE8EF5-FE14-4743-8FC7-1A12A41303E2}']
-    {$REGION 'property access methods'}
-    function GetConstantFieldsVisible: Boolean;
-    function GetEmptyFieldsVisible: Boolean;
-    procedure SetConstantFieldsVisible(const Value: Boolean);
-    procedure SetEmptyFieldsVisible(const Value: Boolean);
-    {$ENDREGION}
-
-    function ShowAllFields: Boolean;
-
-    property ConstantFieldsVisible: Boolean
-      read GetConstantFieldsVisible write SetConstantFieldsVisible;
-
-    property EmptyFieldsVisible: Boolean
-      read GetEmptyFieldsVisible write SetEmptyFieldsVisible;
   end;
 
 implementation

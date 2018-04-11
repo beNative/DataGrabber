@@ -34,11 +34,10 @@ type
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
 
   private
-    FData         : IData;
-    FDataSet      : TDataSet;
     FManager      : IConnectionViewManager;
     FToolBar      : TToolBar;
     FToolBarPanel : TPanel;
+    FResultSet    : IResultSet;
 
   protected
     {$REGION 'property access methods'}
@@ -50,6 +49,7 @@ type
     function GetPopupMenu: TPopupMenu; reintroduce; virtual;
     procedure SetPopupMenu(const Value: TPopupMenu); virtual;
     function GetDataSet: TDataSet; virtual;
+    function GetResultSet: IResultSet;
     {$ENDREGION}
 
     procedure DataAfterExecute(Sender: TObject); virtual;
@@ -87,10 +87,9 @@ type
 
    public
      constructor Create(
-       AOwner    : TComponent;
-       AManager  : IConnectionViewManager;
-       AData     : IData;
-       ADataSet  : TDataSet = nil
+       AOwner     : TComponent;
+       AManager   : IConnectionViewManager;
+       AResultSet : IResultSet
      ); reintroduce; virtual;
     procedure AfterConstruction; override;
     procedure BeforeDestruction; override;
@@ -129,18 +128,14 @@ uses
 
 {$REGION 'construction and destruction'}
 constructor TBaseDataView.Create(AOwner: TComponent; AManager:
-  IConnectionViewManager; AData: IData; ADataSet: TDataSet);
+  IConnectionViewManager; AResultSet: IResultSet);
 begin
   inherited Create(AOwner);
   Guard.CheckNotNull(AManager, 'AManager');
-  Guard.CheckNotNull(AData, 'AData');
-  FData    := AData;
-  FManager := AManager;
-  if Assigned(ADataSet) then
-    FDataSet := ADataSet
-  else
-    FDataSet := FData.DataSet;
-  dscMain.DataSet := FDataSet;
+  Guard.CheckNotNull(AResultSet, 'AResultSet');
+  FResultSet := AResultSet;
+  FManager   := AManager;
+  dscMain.DataSet := AResultSet.DataSet;
 end;
 
 procedure TBaseDataView.AfterConstruction;
@@ -168,9 +163,8 @@ end;
 procedure TBaseDataView.BeforeDestruction;
 begin
   Settings.OnChanged.Remove(SettingsChanged);
-  FData.OnAfterExecute.Remove(DataAfterExecute);
-  FDataSet := nil;
-  FData    := nil;
+  Data.OnAfterExecute.Remove(DataAfterExecute);
+  FResultSet := nil;
   inherited BeforeDestruction;
 end;
 {$ENDREGION}
@@ -178,12 +172,12 @@ end;
 {$REGION 'property access methods'}
 function TBaseDataView.GetData: IData;
 begin
-  Result := FData;
+  Result := FResultSet.Data;
 end;
 
 function TBaseDataView.GetDataSet: TDataSet;
 begin
-  Result := FDataSet;
+  Result := FResultSet.DataSet;
 end;
 
 function TBaseDataView.GetGridType: string;
@@ -209,6 +203,11 @@ end;
 function TBaseDataView.GetRecordCount: Integer;
 begin
   Result := DataSet.RecordCount;
+end;
+
+function TBaseDataView.GetResultSet: IResultSet;
+begin
+  Result := FResultSet;
 end;
 
 function TBaseDataView.GetSettings: IDataViewSettings;

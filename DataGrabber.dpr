@@ -81,7 +81,8 @@ uses
   DataGrabber.About.Dialog in 'DataGrabber.About.Dialog.pas' {frmAboutDialog},
   DataGrabber.MetaData.Dialog in 'DataGrabber.MetaData.Dialog.pas' {frmMetaData},
   DDuce.Factories.Toolbar in '..\..\libraries\dduce\Source\Factories\DDuce.Factories.Toolbar.pas',
-  DataGrabber.DataView.Base in 'DataView\DataGrabber.DataView.Base.pas' {BaseDataView};
+  DataGrabber.DataView.Base in 'DataView\DataGrabber.DataView.Base.pas' {BaseDataView},
+  DataGrabber.Data.ResultSet in 'DataGrabber.Data.ResultSet.pas';
 
 {$R *.res}
 

@@ -261,7 +261,6 @@ begin
       DV := TDataGrabberFactories.CreateDataView(
         Self,
         Manager,
-        Data,
         Data.Items[I]
       );
       DV.PopupMenu := Manager.ConnectionViewPopupMenu;
@@ -285,7 +284,7 @@ begin
     DV := TDataGrabberFactories.CreateDataView(
       Self,
       Manager,
-      Data
+      Data.ResultSet
     );
     DV.PopupMenu := Manager.ConnectionViewPopupMenu;
     DV.AssignParent(pnlBottom);

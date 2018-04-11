@@ -67,10 +67,9 @@ type
     ): IEditorView;
 
     class function CreateDataView(
-      AOwner   : TComponent;
-      AManager : IConnectionViewManager;
-      AData    : IData;
-      ADataSet : TDataSet = nil
+      AOwner     : TComponent;
+      AManager   : IConnectionViewManager;
+      AResultSet : IResultSet = nil
     ): IDataView;
 
     class procedure AddMainToolbarButtons(
@@ -205,25 +204,25 @@ begin
 end;
 
 class function TDataGrabberFactories.CreateDataView(AOwner: TComponent;
-  AManager: IConnectionViewManager; AData: IData; ADataSet: TDataSet): IDataView;
+  AManager: IConnectionViewManager; AResultSet: IResultSet): IDataView;
 var
   LGridType : string;
 begin
   Guard.CheckNotNull(AManager, 'AManager');
-  Guard.CheckNotNull(AData, 'AData');
+  Guard.CheckNotNull(AResultSet, 'AResultSet');
 
   LGridType := AManager.Settings.GridType;
   if LGridType = 'cxGrid' then
   begin
-    Result := TfrmcxGrid.Create(AOwner, AManager, AData, ADataSet);
+    Result := TfrmcxGrid.Create(AOwner, AManager, AResultSet);
   end
   else if LGridType = 'KGrid' then
   begin
-    Result := TfrmKGrid.Create(AOwner, AManager, AData, ADataSet);
+    Result := TfrmKGrid.Create(AOwner, AManager, AResultSet);
   end
   else
   begin
-    Result := TfrmGridView.Create(AOwner, AManager, AData, ADataSet);
+    Result := TfrmGridView.Create(AOwner, AManager, AResultSet);
   end;
 end;
 
