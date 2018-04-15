@@ -172,12 +172,18 @@ end;
 {$REGION 'property access methods'}
 function TBaseDataView.GetData: IData;
 begin
-  Result := FResultSet.Data;
+  if Assigned(FResultSet) then
+    Result := FResultSet.Data
+  else
+    Result := nil;
 end;
 
 function TBaseDataView.GetDataSet: TDataSet;
 begin
-  Result := FResultSet.DataSet;
+  if Assigned(FResultSet) then
+    Result := FResultSet.DataSet
+  else
+    Result := nil;
 end;
 
 function TBaseDataView.GetGridType: string;

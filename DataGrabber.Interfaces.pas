@@ -16,7 +16,7 @@
 
 unit DataGrabber.Interfaces;
 
-{ Application interfaces. }
+{ Application interfaces }
 
 interface
 

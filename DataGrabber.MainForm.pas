@@ -442,7 +442,8 @@ var
   HFC : Integer;
   RS  : IResultSet;
 begin
-  if Assigned(Data) and Assigned(ActiveConnectionView.ActiveDataView) and ActiveConnectionView.ActiveDataView.ResultSet.DataSet.Active then
+  if Assigned(Data) and Assigned(ActiveConnectionView.ActiveDataView)
+    and ActiveConnectionView.ActiveDataView.ResultSet.DataSet.Active then
   begin
     RS := ActiveConnectionView.ActiveDataView.ResultSet;
     pnlRecordCount.Caption := Format(SRecordCount, [RS.DataSet.RecordCount]);

@@ -66,7 +66,6 @@ uses
   FloatConv.Extended in '..\..\components\zcontrols\Source\FloatConv\FloatConv.Extended.pas',
   FloatConv in '..\..\components\zcontrols\Source\FloatConv\FloatConv.pas',
   FloatConv.Single in '..\..\components\zcontrols\Source\FloatConv\FloatConv.Single.pas',
-  JsonDataObjects in '..\..\libraries\JsonDataObjects\Source\JsonDataObjects.pas',
   DataGrabber.DataView.KGrid in 'DataView\DataGrabber.DataView.KGrid.pas',
   DDuce.ObjectInspector in '..\..\libraries\dduce\Source\Modules\ObjectInspector\DDuce.ObjectInspector.pas' {frmComponentInspector},
   zValueManager in '..\..\components\zcontrols\Source\zValueManager.pas',
@@ -82,7 +81,8 @@ uses
   DataGrabber.MetaData.Dialog in 'DataGrabber.MetaData.Dialog.pas' {frmMetaData},
   DDuce.Factories.Toolbar in '..\..\libraries\dduce\Source\Factories\DDuce.Factories.Toolbar.pas',
   DataGrabber.DataView.Base in 'DataView\DataGrabber.DataView.Base.pas' {BaseDataView},
-  DataGrabber.Data.ResultSet in 'DataGrabber.Data.ResultSet.pas';
+  DataGrabber.Data.ResultSet in 'DataGrabber.Data.ResultSet.pas',
+  JsonDataObjects in '..\..\libraries\JsonDataObjects\Source\JsonDataObjects.pas';
 
 {$R *.res}
 
