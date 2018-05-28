@@ -1,5 +1,5 @@
 {
-  Copyright (C) 2013-2017 Tim Sinaeve tim.sinaeve@gmail.com
+  Copyright (C) 2013-2018 Tim Sinaeve tim.sinaeve@gmail.com
 
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
@@ -31,19 +31,15 @@ type
   private
     FName               : string;
     FProfileColor       : TColor;
-    FVisibleItems       : TStrings;
-    FFavoriteFields     : TStrings;
     FConnectionSettings : TConnectionSettings;
 
   protected
+    {$REGION 'property access methods'}
     procedure SetCollection(const Value: TConnectionProfiles); reintroduce;
     function GetCollection: TConnectionProfiles;
-    function GetVisibleItems: string;
-    procedure SetVisibleItems(const Value: string);
-    function GetFavoriteFields: string;
-    procedure SetFavoriteFields(const Value: string);
     procedure SetDisplayName(const Value: string); override;
     function GetDisplayName: string; override;
+    {$ENDREGION}
 
   public
     constructor Create(Collection: TCollection); override;
@@ -67,12 +63,6 @@ type
     property ProfileColor: TColor
       read FProfileColor write FProfileColor default clWhite;
 
-    property VisibleItems: string
-      read GetVisibleItems write SetVisibleItems;
-
-    property FavoriteFields: string
-      read GetFavoriteFields write SetFavoriteFields;
-
     property ConnectionSettings: TConnectionSettings
       read FConnectionSettings write FConnectionSettings;
   end;
@@ -91,6 +81,7 @@ type
     procedure Update(AItem: TCollectionItem); override;
     procedure Notify(Item: TCollectionItem; Action: TCollectionNotification);
       override;
+    function FindUniqueName(const Name: string): string;
 
   public
     constructor Create(AOwner : TPersistent);
@@ -134,6 +125,21 @@ end;
 {$ENDREGION}
 
 {$REGION 'protected methods'}
+function TConnectionProfiles.FindUniqueName(const Name: string): string;
+var
+  I : Integer;
+  S : string;
+begin
+  I := 0;
+  S := Name;
+  while Assigned(Find(S)) do
+  begin
+    Inc(I);
+    S := Format('%s%d', [Name, I]);
+  end;
+  Result := S;
+end;
+
 { Overridden method from TCollection to make any necessary changes when the
   items in the collection change. This method is called automatically when an
   update is issued.
@@ -179,12 +185,14 @@ end;
 { Constructs a unique itemname for a new collection item. }
 
 procedure TConnectionProfiles.SetItemName(Item: TCollectionItem);
+var
+  S : string;
 begin
 // The Insert method calls SetItemName to initialize the Name property of items
 // when it inserts them into the collection. This overridden version provides
 // collection items with default names.
-  TConnectionProfile(Item).Name :=
-    Copy(Item.ClassName, 2, Length(Item.ClassName)) + IntToStr(Item.ID + 1);
+  S := Copy(Item.ClassName, 2, Length(Item.ClassName));
+  TConnectionProfile(Item).Name := FindUniqueName(S);
 end;
 
 function TConnectionProfiles.Owner: TComponent;
@@ -234,20 +242,11 @@ constructor TConnectionProfile.Create(Collection: TCollection);
 begin
   inherited Create(Collection);
   FConnectionSettings := TConnectionSettings.Create;
-  FVisibleItems := TStringList.Create;
-  TStringList(FVisibleItems).Sorted     := True;
-  TStringList(FVisibleItems).Duplicates := dupIgnore;
-  FFavoriteFields := TStringList.Create;
-  TStringList(FFavoriteFields).Sorted     := True;
-  TStringList(FFavoriteFields).Duplicates := dupIgnore;
-  FProfileColor                           := clWhite;
-  // Add your property storage initializations here.
+  FProfileColor       := clWhite;
 end;
 
 destructor TConnectionProfile.Destroy;
 begin
-  FreeAndNil(FVisibleItems);
-  FreeAndNil(FFavoriteFields);
   FreeAndNil(FConnectionSettings);
   inherited Destroy;
 end;
@@ -280,27 +279,7 @@ begin
     (TConnectionProfiles(Collection).IndexOf(Value) >= 0) then
       raise Exception.CreateFmt('Duplicate name [%s]!', [Value]);
   FName := Value;
-  inherited;
-end;
-
-function TConnectionProfile.GetFavoriteFields: string;
-begin
-  Result := FFavoriteFields.Text;
-end;
-
-procedure TConnectionProfile.SetFavoriteFields(const Value: string);
-begin
-  FFavoriteFields.Text := Value;
-end;
-
-function TConnectionProfile.GetVisibleItems: string;
-begin
-  Result := FVisibleItems.Text;
-end;
-
-procedure TConnectionProfile.SetVisibleItems(const Value: string);
-begin
-  FVisibleItems.Text := Value;
+  inherited SetDisplayName(Value);
 end;
 {$ENDREGION}
 
@@ -316,7 +295,6 @@ begin
      Collection.BeginUpdate;
    try
      ProfileColor     := CP.ProfileColor;
-     VisibleItems     := CP.VisibleItems;
      ConnectionSettings.Assign(CP.ConnectionSettings);
    finally
      if Assigned(Collection) then

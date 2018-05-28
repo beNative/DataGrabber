@@ -22,11 +22,11 @@ select
   *
 from
   Customer c
-
+;
 select
   *
 from
-  Employee
+  Employee e
 
 select
   *

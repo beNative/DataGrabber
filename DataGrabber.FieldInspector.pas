@@ -1,5 +1,5 @@
 {
-  Copyright (C) 2013-2017 Tim Sinaeve tim.sinaeve@gmail.com
+  Copyright (C) 2013-2018 Tim Sinaeve tim.sinaeve@gmail.com
 
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
@@ -26,13 +26,9 @@ uses
   Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, Vcl.ActnList,
   Data.DB,
 
-  DDuce.Components.PropertyInspector,
-
   zObjInspector,
 
-  VirtualTrees,
-
-  DataGrabber.Interfaces;
+  VirtualTrees;
 
 type
   TfrmFieldInspector = class(TForm)
@@ -44,39 +40,39 @@ type
     splVertical : TSplitter;
     {$ENDREGION}
 
-    procedure vstFieldsGetText(
+    procedure FVSTFieldsGetText(
       Sender       : TBaseVirtualTree;
       Node         : PVirtualNode;
       Column       : TColumnIndex;
       TextType     : TVSTTextType;
       var CellText : string
     );
-    procedure vstFieldsFocusChanged(
+    procedure FVSTFieldsFocusChanged(
       Sender : TBaseVirtualTree;
       Node   : PVirtualNode;
       Column : TColumnIndex
     );
+
     procedure actInspectExecute(Sender: TObject);
 
   private
-    FData      : IData;
+    FDataSet   : TDataSet;
     FOIField   : TzObjectInspector;
     FVSTFields : TVirtualStringTree;
 
-    function GetData: IData;
     function GetDataSet: TDataSet;
-    procedure SetData(const Value: IData);
+    procedure SetDataSet(const Value: TDataSet);
 
   public
-    constructor Create(AOwner: TComponent; AData: IData = nil); reintroduce;
+    constructor Create(
+      AOwner   : TComponent;
+      ADataSet : TDataSet = nil
+    ); reintroduce; virtual;
 
     procedure UpdateView;
 
     property DataSet : TDataSet
-      read GetDataSet;
-
-    property Data: IData
-      read GetData write SetData;
+      read GetDataSet write SetDataSet;
   end;
 
 implementation
@@ -84,21 +80,22 @@ implementation
 {$R *.dfm}
 
 uses
-  System.Math,
+  System.Math, System.UITypes,
 
-  DDuce.Factories, DDuce.Components.Factories,
+  Spring,
 
+  DDuce.Factories.VirtualTrees, DDuce.Factories.zObjInspector,
   DDuce.ObjectInspector.zObjectInspector;
 
 {$REGION 'construction and destruction'}
-constructor TfrmFieldInspector.Create(AOwner: TComponent; AData: IData);
+constructor TfrmFieldInspector.Create(AOwner: TComponent; ADataSet: TDataSet);
 var
   C: TVirtualTreeColumn;
 begin
   inherited Create(AOwner);
-  Data := AData;
-  FOIField   := TFactories.CreatezObjectInspector(Self, pnlRight);
-  FVSTFields := TFactories.CreateVirtualStringTree(Self, pnlLeft);
+  FDataSet := ADataSet;
+  FOIField   := TzObjectInspectorFactory.Create(Self, pnlRight);
+  FVSTFields := TVirtualStringTreeFactory.CreateGrid(Self, pnlLeft);
     // cell in first column is fully selected
   FVSTFields.TreeOptions.MiscOptions :=
     FVSTFields.TreeOptions.MiscOptions + [toGridExtensions];
@@ -110,8 +107,8 @@ begin
     FVSTFields.TreeOptions.SelectionOptions - [toDisableDrawSelection];
   FVSTFields.TreeOptions.SelectionOptions :=
     FVSTFields.TreeOptions.SelectionOptions + [toAlwaysSelectNode];
-  FVSTFields.OnGetText := vstFieldsGetText;
-  FVSTFields.OnFocusChanged := vstFieldsFocusChanged;
+  FVSTFields.OnGetText := FVSTFieldsGetText;
+  FVSTFields.OnFocusChanged := FVSTFieldsFocusChanged;
   FVSTFields.LineStyle := lsSolid;
   FVSTFields.Header.Font.Style := FVSTFields.Header.Font.Style + [fsBold];
   // required when using it as a grid
@@ -130,26 +127,18 @@ end;
 {$ENDREGION}
 
 {$REGION 'property access methods'}
-function TfrmFieldInspector.GetData: IData;
-begin
-  Result := FData;
-end;
-
-procedure TfrmFieldInspector.SetData(const Value: IData);
-begin
-  if Assigned(Value) and (Value <> Data) then
-  begin
-    FData := Value;
-    UpdateView;
-  end;
-end;
-
 function TfrmFieldInspector.GetDataSet: TDataSet;
 begin
-  if Assigned(FData) then
-    Result := FData.DataSet
-  else
-    Result := nil;
+  Result := FDataSet;
+end;
+
+procedure TfrmFieldInspector.SetDataSet(const Value: TDataSet);
+begin
+  if Value <> DataSet then
+  begin
+    FDataSet := Value;
+    UpdateView;
+  end;
 end;
 {$ENDREGION}
 
@@ -161,14 +150,14 @@ end;
 {$ENDREGION}
 
 {$REGION 'event handlers'}
-procedure TfrmFieldInspector.vstFieldsFocusChanged(Sender: TBaseVirtualTree;
+procedure TfrmFieldInspector.FVSTFieldsFocusChanged(Sender: TBaseVirtualTree;
   Node: PVirtualNode; Column: TColumnIndex);
 begin
   FOIField.Component := DataSet.Fields[Node.Index];
   FOIField.SelectItem(-1); // this prevents any invalid selection
 end;
 
-procedure TfrmFieldInspector.vstFieldsGetText(Sender: TBaseVirtualTree;
+procedure TfrmFieldInspector.FVSTFieldsGetText(Sender: TBaseVirtualTree;
   Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType;
   var CellText: string);
 begin
@@ -182,7 +171,7 @@ end;
 {$REGION 'public methods'}
 procedure TfrmFieldInspector.UpdateView;
 begin
-  FVSTFields.RootNodeCount := IfThen(Assigned(FData), DataSet.FieldCount, 0);
+  FVSTFields.RootNodeCount := IfThen(Assigned(DataSet), DataSet.FieldCount, 0);
 end;
 {$ENDREGION}
 

@@ -1,8 +1,9 @@
-object frmGridView: TfrmGridView
+object BaseDataView: TBaseDataView
   Left = 0
   Top = 0
-  ClientHeight = 219
-  ClientWidth = 447
+  Caption = 'BaseDataView'
+  ClientHeight = 204
+  ClientWidth = 419
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -13,4 +14,8 @@ object frmGridView: TfrmGridView
   OnClose = FormClose
   PixelsPerInch = 96
   TextHeight = 13
+  object dscMain: TDataSource
+    Left = 8
+    Top = 16
+  end
 end

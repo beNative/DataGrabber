@@ -1,5 +1,5 @@
 {
-  Copyright (C) 2013-2017 Tim Sinaeve tim.sinaeve@gmail.com
+  Copyright (C) 2013-2018 Tim Sinaeve tim.sinaeve@gmail.com
 
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
@@ -61,9 +61,9 @@ procedure SelectNode(
 ); overload;
 
 procedure RunApplication(
-  AParams : string;
-  AFile   : string;
-  AWait   : Boolean = True
+  const AParams : string;
+  const AFile   : string;
+  AWait         : Boolean = True
 );
 
 procedure LockPaint(AControl: TWinControl);
@@ -74,7 +74,7 @@ implementation
 
 uses
   Winapi.ShellAPI, Winapi.Messages,
-  System.Math, System.Character, System.SysUtils,
+  System.SysUtils,
   Vcl.Forms;
 
 {$REGION 'interfaced routines'}
@@ -126,8 +126,9 @@ begin
   end;
 end;
 
-procedure RunApplication(AParams: string; AFile: string; AWait : Boolean);
-  // borrowed from Project JEDI Code Library (JCL)
+procedure RunApplication(const AParams: string; const AFile: string;
+  AWait: Boolean);
+
   procedure ResetMemory(out P; Size: Longint);
   begin
     if Size > 0 then
@@ -136,65 +137,65 @@ procedure RunApplication(AParams: string; AFile: string; AWait : Boolean);
       FillChar(P, Size, 0);
     end;
   end;
-  // borrowed from Project JEDI Code Library (JCL)
+
   function PCharOrNil(const S: string): PChar;
   begin
     Result := Pointer(S);
   end;
-  // borrowed from Project JEDI Code Library (JCL)
+
   function ShellExecAndWait(const FileName: string;
-  const Parameters: string = ''; const Verb: string = '';
-  CmdShow: Integer = SW_HIDE; const Directory: string = ''): Boolean;
+    const Parameters: string = ''; const Verb: string = '';
+    CmdShow: Integer = SW_HIDE; const Directory: string = ''): Boolean;
   var
-    Sei: TShellExecuteInfo;
-    Res: LongBool;
-    Msg: tagMSG;
+    SEI : TShellExecuteInfo;
+    Res : LongBool;
+    Msg : tagMSG;
   begin
-    ResetMemory(Sei, SizeOf(Sei));
-    Sei.cbSize := SizeOf(Sei);
-    Sei.fMask := SEE_MASK_DOENVSUBST  or SEE_MASK_FLAG_NO_UI  or SEE_MASK_NOCLOSEPROCESS or
-      SEE_MASK_FLAG_DDEWAIT;
-    Sei.lpFile := PChar(FileName);
-    Sei.lpParameters := PCharOrNil(Parameters);
-    Sei.lpVerb := PCharOrNil(Verb);
-    Sei.nShow := CmdShow;
-    Sei.lpDirectory := PCharOrNil(Directory);
+    ResetMemory(SEI, SizeOf(SEI));
+    SEI.cbSize := SizeOf(SEI);
+    SEI.fMask  := SEE_MASK_DOENVSUBST or SEE_MASK_FLAG_NO_UI
+      or SEE_MASK_NOCLOSEPROCESS or SEE_MASK_FLAG_DDEWAIT;
+    SEI.lpFile       := PChar(FileName);
+    SEI.lpParameters := PCharOrNil(Parameters);
+    SEI.lpVerb       := PCharOrNil(Verb);
+    SEI.nShow        := CmdShow;
+    SEI.lpDirectory  := PCharOrNil(Directory);
     {$TYPEDADDRESS ON}
-    Result := ShellExecuteEx(@Sei);
+    Result := ShellExecuteEx(@SEI);
     {$IFNDEF TYPEDADDRESS_ON}
     {$TYPEDADDRESS OFF}
     {$ENDIF ~TYPEDADDRESS_ON}
     if Result then
     begin
-      WaitForInputIdle(Sei.hProcess, INFINITE);
-      while WaitForSingleObject(Sei.hProcess, 10) = WAIT_TIMEOUT do
+      WaitForInputIdle(SEI.hProcess, INFINITE);
+      while WaitForSingleObject(SEI.hProcess, 10) = WAIT_TIMEOUT do
         repeat
           Msg.hwnd := 0;
-          Res := PeekMessage(Msg, Sei.Wnd, 0, 0, PM_REMOVE);
+          Res := PeekMessage(Msg, SEI.Wnd, 0, 0, PM_REMOVE);
           if Res then
           begin
             TranslateMessage(Msg);
             DispatchMessage(Msg);
           end;
         until not Res;
-      CloseHandle(Sei.hProcess);
+      CloseHandle(SEI.hProcess);
     end;
   end;
    // borrowed from Project JEDI Code Library (JCL)
   function ShellExecEx(const FileName: string; const Parameters: string = '';
-  const Verb: string = ''; CmdShow: Integer = SW_SHOWNORMAL): Boolean;
+    const Verb: string = ''; CmdShow: Integer = SW_SHOWNORMAL): Boolean;
   var
-    Sei: TShellExecuteInfo;
+    SEI: TShellExecuteInfo;
   begin
-    ResetMemory(Sei, SizeOf(Sei));
-    Sei.cbSize := SizeOf(Sei);
-    Sei.fMask := SEE_MASK_DOENVSUBST or SEE_MASK_FLAG_NO_UI;
-    Sei.lpFile := PChar(FileName);
-    Sei.lpParameters := PCharOrNil(Parameters);
-    Sei.lpVerb := PCharOrNil(Verb);
-    Sei.nShow := CmdShow;
+    ResetMemory(SEI, SizeOf(SEI));
+    SEI.cbSize := SizeOf(SEI);
+    SEI.fMask := SEE_MASK_DOENVSUBST or SEE_MASK_FLAG_NO_UI;
+    SEI.lpFile := PChar(FileName);
+    SEI.lpParameters := PCharOrNil(Parameters);
+    SEI.lpVerb := PCharOrNil(Verb);
+    SEI.nShow := CmdShow;
     {$TYPEDADDRESS ON}
-    Result := ShellExecuteEx(@Sei);
+    Result := ShellExecuteEx(@SEI);
     {$IFNDEF TYPEDADDRESS_ON}
     {$TYPEDADDRESS OFF}
     {$ENDIF ~TYPEDADDRESS_ON}

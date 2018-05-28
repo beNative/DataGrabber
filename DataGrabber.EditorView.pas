@@ -1,5 +1,5 @@
 {
-  Copyright (C) 2013-2017 Tim Sinaeve tim.sinaeve@gmail.com
+  Copyright (C) 2013-2018 Tim Sinaeve tim.sinaeve@gmail.com
 
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
@@ -16,41 +16,61 @@
 
 unit DataGrabber.EditorView;
 
-{ Simple BCEditor-based SQL editor. }
+{ Simple TSynEdit based SQL editor. }
 
 interface
 
 uses
   Winapi.Windows, Winapi.Messages,
   System.SysUtils, System.Variants, System.Classes,
-  Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs,
+  Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.Menus,
 
-  BCEditor.Editor.Base, BCEditor.Editor,
+  SynEdit, SynEditHighlighter, SynHighlighterSQL, SynCompletionProposal,
+  SynEditMiscClasses,
 
   DataGrabber.Interfaces;
 
 type
   TfrmEditorView = class(TForm, IEditorView)
-  private
-    FEditor : TBCEditor;
+    synSQL  : TSynSQLSyn;
+    scpMain : TSynCompletionProposal;
 
+  private
+    FEditor  : TSynEdit;
+    FManager : IConnectionViewManager;
+
+    procedure SettingsChanged(Sender: TObject);
+
+  protected
+    {$REGION 'property access methods'}
     function GetText: string;
     procedure SetText(const Value: string);
     function GetColor: TColor;
     procedure SetColor(const Value: TColor);
     function GetEditorFocused: Boolean;
+    function GetPopupMenu: TPopupMenu; reintroduce;
+    procedure SetPopupMenu(const Value: TPopupMenu);
+    {$ENDREGION}
 
-  protected
     procedure CreateEditor;
 
   public
     procedure AfterConstruction; override;
-    constructor Create; reintroduce; virtual;
+    procedure BeforeDestruction; override;
+    constructor Create(
+      AOwner   : TComponent;
+      AManager : IConnectionViewManager
+    ); reintroduce; virtual;
 
+    procedure AssignParent(AParent: TWinControl);
     procedure CopyToClipboard;
     procedure FillCompletionLists(ATables, AAttributes : TStrings);
+    procedure ApplySettings;
 
     procedure SetFocus; override;
+
+    property PopupMenu: TPopupMenu
+      read GetPopupMenu write SetPopupMenu;
 
     property EditorFocused: Boolean
       read GetEditorFocused;
@@ -64,35 +84,68 @@ type
 
 implementation
 
+uses
+  System.UITypes,
+
+  DataGrabber.Resources;
+
 {$R *.dfm}
 
+type
+  TScrollStyle = System.UITypes.TScrollStyle;
+
 {$REGION 'construction and destruction'}
-constructor TfrmEditorView.Create;
+constructor TfrmEditorView.Create(AOwner: TComponent;
+  AManager: IConnectionViewManager);
 begin
-  inherited Create(Application);
+  inherited Create(AOwner);
+  FManager := AManager;
+
 end;
 
 procedure TfrmEditorView.AfterConstruction;
 begin
   inherited AfterConstruction;
   CreateEditor;
+  FManager.Settings.OnChanged.Add(SettingsChanged);
+end;
+
+procedure TfrmEditorView.BeforeDestruction;
+begin
+  FManager.Settings.OnChanged.Remove(SettingsChanged);
+  FManager := nil;
+  inherited BeforeDestruction;
 end;
 {$ENDREGION}
 
 {$REGION 'property access methods'}
 function TfrmEditorView.GetColor: TColor;
 begin
-  Result := FEditor.BackgroundColor;
+  Result := FEditor.Color;
 end;
 
 procedure TfrmEditorView.SetColor(const Value: TColor);
 begin
-  FEditor.BackgroundColor := Value;
+  if Value <> Color then
+  begin
+    FEditor.Color := Value;
+    FEditor.Gutter.GradientEndColor := Value;
+  end;
 end;
 
 function TfrmEditorView.GetEditorFocused: Boolean;
 begin
   Result := FEditor.Focused;
+end;
+
+function TfrmEditorView.GetPopupMenu: TPopupMenu;
+begin
+  Result := FEditor.PopupMenu;
+end;
+
+procedure TfrmEditorView.SetPopupMenu(const Value: TPopupMenu);
+begin
+  FEditor.PopupMenu := Value;
 end;
 
 function TfrmEditorView.GetText: string;
@@ -107,22 +160,68 @@ end;
 {$ENDREGION}
 
 {$REGION 'event handlers'}
+procedure TfrmEditorView.SettingsChanged(Sender: TObject);
+begin
+  ApplySettings;
+end;
 {$ENDREGION}
 
 {$REGION 'protected methods'}
+procedure TfrmEditorView.ApplySettings;
+begin
+  FEditor.Font.Assign(FManager.Settings.EditorFont);
+end;
+
+procedure TfrmEditorView.AssignParent(AParent: TWinControl);
+begin
+  Parent      := AParent;
+  BorderStyle := bsNone;
+  Align       := alClient;
+  Visible     := True;
+end;
+
 procedure TfrmEditorView.CreateEditor;
 begin
-  FEditor := TBCEditor.Create(Self);
-  FEditor.Parent := Self;
-  FEditor.Align := alClient;
+  FEditor := TSynEdit.Create(Self);
+  FEditor.Parent           := Self;
+  FEditor.Align            := alClient;
   FEditor.AlignWithMargins := False;
-  FEditor.BorderStyle := bsSingle;
-  FEditor.Directories.Colors := 'Colors';
-  FEditor.Directories.Highlighters := 'Highlighters';
-  FEditor.Highlighter.LoadFromFile('SQL - Standard' + '.json');
-  FEditor.Highlighter.Colors.LoadFromFile('tsColors' + '.json');
-  FEditor.CodeFolding.Visible := True;
-  FEditor.Font.Name := 'Consolas';
+  FEditor.BorderStyle      := bsSingle;
+  FEditor.Font.Assign(FManager.Settings.EditorFont);
+  FEditor.Highlighter      := synSQL;
+  FEditor.Options := [
+    eoAltSetsColumnMode,
+    eoAutoIndent,
+    eoDragDropEditing,
+    eoDropFiles,
+    eoEnhanceHomeKey,
+    eoEnhanceEndKey,
+    eoGroupUndo,
+    eoScrollPastEol,
+    eoShowScrollHint,
+    eoSmartTabDelete,
+    eoSmartTabs,
+    eoSpecialLineDefaultFg,
+    eoTabIndent,
+    eoTabsToSpaces,
+    eoTrimTrailingSpaces
+  ];
+  FEditor.ActiveLineColor := clYellow;
+  FEditor.WordWrap := True;
+  FEditor.Gutter.AutoSize             := True;
+  FEditor.Gutter.ShowLineNumbers      := True;
+  FEditor.Gutter.Font.Name            := 'Consolas';
+  FEditor.Gutter.Font.Color           := clSilver;
+  FEditor.Gutter.Gradient             := True;
+  FEditor.Gutter.GradientStartColor   := clWhite;
+  FEditor.Gutter.GradientEndColor     := clWhite;
+  FEditor.Gutter.ModificationBarWidth := 0;
+  FEditor.Gutter.LeftOffset           := 0;
+  FEditor.Gutter.RightOffset          := 0;
+  FEditor.Gutter.RightMargin          := 2;
+  FEditor.Gutter.Color                := cl3DLight;
+  FEditor.RightEdgeColor              := cl3DLight;
+  scpMain.Editor := FEditor;
 end;
 {$ENDREGION}
 
@@ -141,36 +240,36 @@ end;
 procedure TfrmEditorView.FillCompletionLists(ATables, AAttributes: TStrings);
 var
   I       : Integer;
-//  Items   : TStringList;
-//  Inserts : TStringList;
+  Items   : TStringList;
+  Inserts : TStringList;
 begin
   inherited SetFocus;
-//  Items  := FSynCP.ItemList as TStringList;
-//  Inserts := FSynCP.InsertList  as TStringList;
-//  Items.Clear;
-//  Inserts.Clear;
-//  FSynSQL.TableNames.Clear;
+  Items  := scpMain.ItemList as TStringList;
+  Inserts := scpMain.InsertList  as TStringList;
+  Items.Clear;
+  Inserts.Clear;
+  synSQL.TableNames.Clear;
   if Assigned(AAttributes) then
   begin
     for I := 0 to Pred(AAttributes.Count) do
     begin
-//      if Inserts.IndexOf(AAttributes.Strings[I]) = -1 then
-//      begin
-//        Items.Insert(0, Format(SFieldItem, [AAttributes.Strings[I]]));
-//        Inserts.Insert(0, AAttributes.Strings[I]);
-//      end;
+      if Inserts.IndexOf(AAttributes.Strings[I]) = -1 then
+      begin
+        Items.Insert(0, Format(SFieldItem, [AAttributes.Strings[I]]));
+        Inserts.Insert(0, AAttributes.Strings[I]);
+      end;
     end;
   end;
   if Assigned(ATables) then
   begin
     for I := 0 to Pred(ATables.Count) do
     begin
-//      if Inserts.IndexOf(ATables.Strings[I]) = -1 then
-//      begin
-//        Items.Add(Format(STableItem, [ATables.Strings[I]]));
-//        Inserts.Add(ATables.Strings[I]);
-//        //FSynSQL.TableNames.Add(ATables.Strings[I]);
-//      end;
+      if Inserts.IndexOf(ATables.Strings[I]) = -1 then
+      begin
+        Items.Add(Format(STableItem, [ATables.Strings[I]]));
+        Inserts.Add(ATables.Strings[I]);
+        synSQL.TableNames.Add(ATables.Strings[I]);
+      end;
     end;
   end;
 end;

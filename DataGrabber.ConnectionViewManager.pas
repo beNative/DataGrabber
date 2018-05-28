@@ -1,5 +1,5 @@
 {
-  Copyright (C) 2013-2017 Tim Sinaeve tim.sinaeve@gmail.com
+  Copyright (C) 2013-2018 Tim Sinaeve tim.sinaeve@gmail.com
 
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
@@ -23,6 +23,8 @@ uses
   System.ImageList,
   Vcl.ActnList, Vcl.Menus, Vcl.ImgList, Vcl.Controls,
 
+  Spring.Collections,
+
   DataGrabber.DataInspector, DataGrabber.FieldInspector,
 
   DataGrabber.Interfaces, DataGrabber.ConnectionProfiles,
@@ -32,13 +34,10 @@ uses
 {$REGION 'documentation'}
 {
   The ConnectionViewManager is a singleton instance which manages:
-    - the application settings (TDGSettings)
+    - the application settings  (TDGSettings)
     - the ConnectionView instances (ConnectionViews)
     - the active connection view (ActiveConnectionView)
     - all actions that can be executed on the active connectionview
-
-    TODO:
-      react on changes in manager
 }
 {$ENDREGION}
 
@@ -46,132 +45,142 @@ type
   TdmConnectionViewManager = class(TDataModule, IConnectionViewManager)
     {$REGION 'designer controls'}
     aclActions                    : TActionList;
-    actExecute                    : TAction;
-    actHideEmptyColumns           : TAction;
-    actShowAllColumns             : TAction;
-    actToggleStayOnTop            : TAction;
-    actExecuteLimited             : TAction;
-    actHideSelectedColumns        : TAction;
-    actHideConstantColumns        : TAction;
-    actSelectionAsWiki            : TAction;
-    actSelectionAsText            : TAction;
-    actMergeAllColumnCells        : TAction;
+    actAddConnectionView          : TAction;
     actAutoSizeCols               : TAction;
-    actFormatSQL                  : TAction;
-    actToggleFullScreen           : TAction;
+    actChinookExampleQuery        : TAction;
+    actClearGrouping              : TAction;
+    actCollapseAll                : TAction;
     actCopy                       : TAction;
-    actGroupBySelection           : TAction;
-    actSelectionAsCommaText       : TAction;
-    actSelectionAsQuotedCommaText : TAction;
-    actMergeCells                 : TAction;
-    actSelectionAsTextTable       : TAction;
-    actStartTransaction           : TAction;
-    actCommitTransaction          : TAction;
-    actRollbackTransaction        : TAction;
-    actInspect                    : TAction;
     actDataInspector              : TAction;
-    actcxGrid                     : TAction;
-    actGridView                   : TAction;
-    actKGrid                      : TAction;
-    actSettings                   : TAction;
-    actInspectDataSet             : TAction;
-    actInspectConnection          : TAction;
-    actInspectGrid                : TAction;
-    actInspectFields              : TAction;
-    actToggleRepositoryTree       : TAction;
-    actSyncEditorWithRepository   : TAction;
-    actPreview                    : TAction;
-    actDesigner                   : TAction;
-    actPrint                      : TAction;
     actDebug                      : TAction;
-    actSelectionAsFields          : TAction;
-    actSelectionAsQuotedFields    : TAction;
-    actFavoriteFieldsOnly         : TAction;
+    actDesigner                   : TAction;
+    actExecute                    : TAction;
+    actExecuteLiveResultSet       : TAction;
+    actExpandAll                  : TAction;
+    actFireDACInfo                : TAction;
+    actFormatSQL                  : TAction;
+    actGroupByBoxVisible          : TAction;
+    actGroupBySelection           : TAction;
+    actHideConstantColumns        : TAction;
+    actHideEmptyColumns           : TAction;
+    actHideSelectedColumns        : TAction;
+    actInspect                    : TAction;
+    actInspectConnection          : TAction;
+    actInspectDataSet             : TAction;
+    actInspectFDManager           : TAction;
+    actInspectFields              : TAction;
+    actInspectGrid                : TAction;
+    actMergeColumnCells           : TAction;
+    actPreview                    : TAction;
+    actPrint                      : TAction;
     actRtti                       : TAction;
+    actSelectionAsCommaText       : TAction;
+    actSelectionAsFields          : TAction;
+    actSelectionAsQuotedCommaText : TAction;
+    actSelectionAsQuotedFields    : TAction;
+    actSelectionAsText            : TAction;
+    actSelectionAsTextTable       : TAction;
     actSelectionAsWhereIn         : TAction;
-    actCreateModel                : TAction;
-    ppmConnectionView             : TPopupMenu;
-    mniGroupBySelection           : TMenuItem;
-    mniHideSelectedColumns        : TMenuItem;
-    mniHideEmptyColumns           : TMenuItem;
-    mniHideConstantColumns        : TMenuItem;
-    mniShowAllColumns             : TMenuItem;
-    mniN1                         : TMenuItem;
-    mniMergeColumns               : TMenuItem;
+    actSelectionAsWiki            : TAction;
+    actSettings                   : TAction;
+    actShowAllColumns             : TAction;
+    actShowMetaData               : TAction;
+    actToggleFullScreen           : TAction;
+    actToggleStayOnTop            : TAction;
+    imlMain                       : TImageList;
+    mniAutoSizeCols               : TMenuItem;
+    mniClearGrouping              : TMenuItem;
+    mniCollapseAll                : TMenuItem;
     mniCopy                       : TMenuItem;
-    mniCopyWikiTable              : TMenuItem;
     mniCopyTextTable              : TMenuItem;
-    mniSelectionAsTextTable       : TMenuItem;
-    mniSelectionAsCommaText       : TMenuItem;
-    mniSelectionAsQuotedCommaText : TMenuItem;
-    mniSelectionAsFields          : TMenuItem;
-    mniSelectionAsQuotedFields    : TMenuItem;
+    mniCopyWikiTable              : TMenuItem;
+    mniExecute                    : TMenuItem;
+    mniExpandAll                  : TMenuItem;
+    mniFormatSQL1                 : TMenuItem;
+    mniGroupByBoxVisible          : TMenuItem;
+    mniGroupBySelection           : TMenuItem;
+    mniHideConstantColumns        : TMenuItem;
+    mniHideEmptyColumns           : TMenuItem;
+    mniHideSelectedColumns        : TMenuItem;
+    mniInspect                    : TMenuItem;
     mniInspectConnection          : TMenuItem;
+    mniInspectConnectionManager   : TMenuItem;
     mniInspectDataSet             : TMenuItem;
     mniInspectFields              : TMenuItem;
     mniInspectGrid                : TMenuItem;
+    mniMergeColumns               : TMenuItem;
+    mniN1                         : TMenuItem;
     mniN3                         : TMenuItem;
+    mniSelection                  : TMenuItem;
+    mniSelectionAsCommaText       : TMenuItem;
+    mniSelectionAsFields          : TMenuItem;
+    mniSelectionAsQuotedCommaText : TMenuItem;
+    mniSelectionAsQuotedFields    : TMenuItem;
+    mniSelectionAsTextTable       : TMenuItem;
     mniSettings                   : TMenuItem;
+    mniShowAllColumns             : TMenuItem;
+    N1                            : TMenuItem;
+    N2                            : TMenuItem;
+    N3                            : TMenuItem;
+    N4                            : TMenuItem;
+    N5                            : TMenuItem;
+    N6                            : TMenuItem;
+    ppmConnectionView             : TPopupMenu;
     ppmEditorView                 : TPopupMenu;
-    mniFormatSQL1                 : TMenuItem;
-    mniAutoSizeCols               : TMenuItem;
-    imlMain                       : TImageList;
-    Selection1: TMenuItem;
-    N1: TMenuItem;
-    N2: TMenuItem;
-    N3: TMenuItem;
-    Inspect1: TMenuItem;
-    N4: TMenuItem;
-    actAddConnectionView: TAction;
+    Liveresults1: TMenuItem;
     {$ENDREGION}
 
     {$REGION 'action handlers'}
-    procedure actExecuteExecute(Sender: TObject);
-    procedure actExecuteLimitedExecute(Sender: TObject);
-    procedure actStartTransactionExecute(Sender: TObject);
-    procedure actCommitTransactionExecute(Sender: TObject);
-    procedure actRollbackTransactionExecute(Sender: TObject);
-    procedure actAutoSizeColsExecute(Sender: TObject);
-    procedure actShowAllColumnsExecute(Sender: TObject);
-    procedure actHideSelectedColumnsExecute(Sender: TObject);
-    procedure actHideConstantColumnsExecute(Sender: TObject);
-    procedure actSelectionAsWikiExecute(Sender: TObject);
-    procedure actSelectionAsTextExecute(Sender: TObject);
-    procedure actMergeAllColumnCellsExecute(Sender: TObject);
-    procedure actCopyExecute(Sender: TObject);
-    procedure actGroupBySelectionExecute(Sender: TObject);
-    procedure actSelectionAsCommaTextExecute(Sender: TObject);
-    procedure actSelectionAsQuotedCommaTextExecute(Sender: TObject);
-    procedure actMergeCellsExecute(Sender: TObject);
-    procedure actSelectionAsTextTableExecute(Sender: TObject);
-    procedure actcxGridExecute(Sender: TObject);
-    procedure actGridViewExecute(Sender: TObject);
-    procedure actKGridExecute(Sender: TObject);
-    procedure actSelectionAsFieldsExecute(Sender: TObject);
-    procedure actFavoriteFieldsOnlyExecute(Sender: TObject);
-    procedure actSelectionAsWhereInExecute(Sender: TObject);
-    procedure actHideEmptyColumnsExecute(Sender: TObject);
-    procedure actSelectionAsQuotedFieldsExecute(Sender: TObject);
-    procedure actInspectExecute(Sender: TObject);
-    procedure actDataInspectorExecute(Sender: TObject);
-    procedure actInspectDataSetExecute(Sender: TObject);
-    procedure actInspectConnectionExecute(Sender: TObject);
-    procedure actInspectGridExecute(Sender: TObject);
-    procedure actInspectFieldsExecute(Sender: TObject);
-    procedure actPreviewExecute(Sender: TObject);
-    procedure actDesignerExecute(Sender: TObject);
-    procedure actPrintExecute(Sender: TObject);
-    procedure actSettingsExecute(Sender: TObject);
     procedure actAddConnectionViewExecute(Sender: TObject);
+    procedure actAutoSizeColsExecute(Sender: TObject);
+    procedure actChinookExampleQueryExecute(Sender: TObject);
+    procedure actClearGroupingExecute(Sender: TObject);
+    procedure actCollapseAllExecute(Sender: TObject);
+    procedure actCopyExecute(Sender: TObject);
+    procedure actDataInspectorExecute(Sender: TObject);
+    procedure actDesignerExecute(Sender: TObject);
+    procedure actExecuteExecute(Sender: TObject);
+    procedure actExecuteLiveResultSetExecute(Sender: TObject);
+    procedure actExpandAllExecute(Sender: TObject);
+    procedure actFireDACInfoExecute(Sender: TObject);
+    procedure actGroupByBoxVisibleExecute(Sender: TObject);
+    procedure actGroupBySelectionExecute(Sender: TObject);
+    procedure actHideConstantColumnsExecute(Sender: TObject);
+    procedure actHideEmptyColumnsExecute(Sender: TObject);
+    procedure actHideSelectedColumnsExecute(Sender: TObject);
+    procedure actInspectConnectionExecute(Sender: TObject);
+    procedure actInspectDataSetExecute(Sender: TObject);
+    procedure actInspectExecute(Sender: TObject);
+    procedure actInspectFDManagerExecute(Sender: TObject);
+    procedure actInspectFieldsExecute(Sender: TObject);
+    procedure actInspectGridExecute(Sender: TObject);
+    procedure actMergeColumnCellsExecute(Sender: TObject);
+    procedure actPreviewExecute(Sender: TObject);
+    procedure actPrintExecute(Sender: TObject);
+    procedure actSelectionAsCommaTextExecute(Sender: TObject);
+    procedure actSelectionAsFieldsExecute(Sender: TObject);
+    procedure actSelectionAsQuotedCommaTextExecute(Sender: TObject);
+    procedure actSelectionAsQuotedFieldsExecute(Sender: TObject);
+    procedure actSelectionAsTextExecute(Sender: TObject);
+    procedure actSelectionAsTextTableExecute(Sender: TObject);
+    procedure actSelectionAsWhereInExecute(Sender: TObject);
+    procedure actSelectionAsWikiExecute(Sender: TObject);
+    procedure actSettingsExecute(Sender: TObject);
+    procedure actShowAllColumnsExecute(Sender: TObject);
+    procedure actShowMetaDataExecute(Sender: TObject);
+    procedure actToggleFullScreenExecute(Sender: TObject);
+    procedure actToggleStayOnTopExecute(Sender: TObject);
     {$ENDREGION}
 
   private
     FSettings             : ISettings;
-    FConnectionViewList   : TConnectionViewList;
+    FConnectionViewList   : IList<IConnectionView>;
     FActiveConnectionView : IConnectionView;
     FStopWatch            : TStopwatch;
     FDataInspector        : TfrmDataInspector;
     FFieldInspector       : TfrmFieldInspector;
+
+    procedure SettingsChanged(Sender: TObject);
 
     {$REGION 'property access methods'}
     function GetSettings: ISettings;
@@ -180,9 +189,11 @@ type
     function GetActiveDataView: IDataView;
     function GetActiveData: IData;
     function GetActionList: TActionList;
-    function GetItem(AName: string): TCustomAction;
+    function GetAction(AName: string): TCustomAction;
     function GetConnectionViewPopupMenu: TPopupMenu;
     function GetDefaultConnectionProfile: TConnectionProfile;
+    function GetItem(AIndex: Integer): IConnectionView;
+    function GetCount: Integer;
     {$ENDREGION}
 
   protected
@@ -192,11 +203,16 @@ type
     procedure UpdateConnectionViewCaptions;
 
   public
-    constructor Create(ASettings: ISettings); reintroduce; virtual;
     procedure AfterConstruction; override;
     procedure BeforeDestruction; override;
+    constructor Create(
+      AOwner    : TComponent;
+      ASettings : ISettings
+    ); reintroduce; virtual;
 
     function AddConnectionView: IConnectionView;
+    function DeleteConnectionView(AIndex: Integer): Boolean; overload;
+    function DeleteConnectionView(AConnectionView: IConnectionView): Boolean; overload;
 
     property ActiveConnectionView: IConnectionView
       read GetActiveConnectionView write SetActiveConnectionView;
@@ -213,8 +229,14 @@ type
     property ActionList: TActionList
       read GetActionList;
 
-    property Items[AName: string]: TCustomAction
+    property Items[AIndex: Integer]: IConnectionView
       read GetItem; default;
+
+    property Count: Integer
+      read GetCount;
+
+    property Actions[AName: string]: TCustomAction
+      read GetAction;
 
     property ConnectionViewPopupMenu: TPopupMenu
       read GetConnectionViewPopupMenu;
@@ -229,18 +251,21 @@ implementation
 
 uses
   Vcl.Forms, Vcl.Clipbrd, Vcl.Dialogs,
+  FireDAC.Comp.Client,
+  FireDAC.Stan.Consts,
+
+  Spring,
 
   DDuce.ObjectInspector.zObjectInspector,
 
-  DataGrabber.Settings.Dialog, DataGrabber.ConnectionView,
-  DataGrabber.Data.FireDac,
-
-  Spring.Container;
+  DataGrabber.Settings.Dialog, DataGrabber.Factories, DataGrabber.Resources,
+  DataGrabber.MetaData.Dialog;
 
 {$REGION 'construction and destruction'}
-constructor TdmConnectionViewManager.Create(ASettings: ISettings);
+constructor TdmConnectionViewManager.Create(AOwner: TComponent;
+  ASettings: ISettings);
 begin
-  inherited Create(Application);
+  inherited Create(AOwner);
   FSettings := ASettings;
 end;
 
@@ -248,27 +273,25 @@ procedure TdmConnectionViewManager.AfterConstruction;
 begin
   inherited AfterConstruction;
   FSettings.Load;
-  FConnectionViewList := TConnectionViewList.Create;
+  FSettings.OnChanged.Add(SettingsChanged);
+  FConnectionViewList := TCollections.CreateInterfaceList<IConnectionView>;
   FDataInspector      := TfrmDataInspector.Create(Self);
   FFieldInspector     := TfrmFieldInspector.Create(Self);
 
   // disable actions that are not fully implemented yet
-  actSyncEditorWithRepository.Visible := False;
-  actToggleRepositoryTree.Visible     := False;
-  actCreateModel.Visible              := False;
-  actPreview.Visible                  := False;
-  actPrint.Visible                    := False;
-  actDesigner.Visible                 := False;
-  actFavoriteFieldsOnly.Visible       := False;
-  actRtti.Visible                     := False;
-  actToggleFullScreen.Visible         := False;
-  actDataInspector.Visible            := False;
+  actPreview.Visible       := False;
+  actPrint.Visible         := False;
+  actDesigner.Visible      := False;
+  actRtti.Visible          := False;
+  actDataInspector.Visible := False;
 end;
 
 procedure TdmConnectionViewManager.BeforeDestruction;
 begin
+  FSettings.Save;
+  FConnectionViewList := nil;
   FreeAndNil(FDataInspector);
-  FreeAndNil(FConnectionViewList);
+  FreeAndNil(FFieldInspector);
   inherited BeforeDestruction;
 end;
 {$ENDREGION}
@@ -286,6 +309,11 @@ begin
   );
 end;
 
+procedure TdmConnectionViewManager.actCollapseAllExecute(Sender: TObject);
+begin
+  (ActiveDataView as IGroupable).CollapseAll;
+end;
+
 procedure TdmConnectionViewManager.actCopyExecute(Sender: TObject);
 begin
   ActiveConnectionView.Copy;
@@ -293,19 +321,9 @@ end;
 
 // grid
 {$REGION 'DataView actions'}
-procedure TdmConnectionViewManager.actFavoriteFieldsOnlyExecute(
-  Sender: TObject);
+procedure TdmConnectionViewManager.actGroupByBoxVisibleExecute(Sender: TObject);
 begin
-  (ActiveData as IFieldVisiblity).ShowFavoriteFieldsOnly :=
-    not actFavoriteFieldsOnly.Checked;
-  ActiveDataView.UpdateView;
-end;
-
-
-procedure TdmConnectionViewManager.actGridViewExecute(Sender: TObject);
-begin
-  FSettings.GridType := 'GridView';
-  ApplySettings;
+  Settings.GroupByBoxVisible := (Sender as TAction).Checked;
 end;
 
 procedure TdmConnectionViewManager.actGroupBySelectionExecute(Sender: TObject);
@@ -315,8 +333,38 @@ end;
 
 procedure TdmConnectionViewManager.actShowAllColumnsExecute(Sender: TObject);
 begin
-  if (ActiveData as IFieldVisiblity).ShowAllFields then
+  if ActiveDataView.ResultSet.ShowAllFields then
     ActiveDataView.UpdateView;
+end;
+
+procedure TdmConnectionViewManager.actShowMetaDataExecute(Sender: TObject);
+var
+  F: TfrmMetaData;
+begin
+  F := TfrmMetaData.Create(Self, ActiveData.Connection);
+  F.ShowModal;
+end;
+
+procedure TdmConnectionViewManager.actToggleFullScreenExecute(Sender: TObject);
+var
+  A : TAction;
+begin
+  A := Sender as TAction;
+  if A.Checked then
+    Settings.FormSettings.WindowState := wsMaximized
+  else
+    Settings.FormSettings.WindowState := wsNormal;
+end;
+
+procedure TdmConnectionViewManager.actToggleStayOnTopExecute(Sender: TObject);
+var
+  A : TAction;
+begin
+  A := Sender as TAction;
+  if A.Checked then
+    Settings.FormSettings.FormStyle := fsStayOnTop
+  else
+    Settings.FormSettings.FormStyle := fsNormal;
 end;
 
 procedure TdmConnectionViewManager.actSelectionAsCommaTextExecute(
@@ -367,15 +415,15 @@ end;
 procedure TdmConnectionViewManager.actHideConstantColumnsExecute(
   Sender: TObject);
 begin
-  (ActiveData as IFieldVisiblity).ConstantFieldsVisible := not
-  (ActiveData as IFieldVisiblity).ConstantFieldsVisible;
+  ActiveDataView.ResultSet.ConstantFieldsVisible := not
+    ActiveDataView.ResultSet.ConstantFieldsVisible;
   ActiveDataView.UpdateView;
 end;
 
 procedure TdmConnectionViewManager.actHideEmptyColumnsExecute(Sender: TObject);
 begin
-  (ActiveData as IFieldVisiblity).EmptyFieldsVisible :=
-    not (ActiveData as IFieldVisiblity).EmptyFieldsVisible;
+  ActiveDataView.ResultSet.EmptyFieldsVisible := not
+    ActiveDataView.ResultSet.EmptyFieldsVisible;
   ActiveDataView.UpdateView;
 end;
 
@@ -392,7 +440,7 @@ end;
 
 procedure TdmConnectionViewManager.actInspectDataSetExecute(Sender: TObject);
 begin
-  InspectComponent(ActiveData.DataSet);
+  InspectComponent(ActiveDataView.DataSet);
 end;
 
 procedure TdmConnectionViewManager.actInspectExecute(Sender: TObject);
@@ -400,33 +448,30 @@ begin
   ShowMessage('Not supported yet.');
 end;
 
+procedure TdmConnectionViewManager.actInspectFDManagerExecute(Sender: TObject);
+begin
+  InspectObject(FDManager);
+end;
+
 procedure TdmConnectionViewManager.actInspectFieldsExecute(Sender: TObject);
 begin
-  FFieldInspector.Data := ActiveData;
-  FFieldInspector.Show;
+  if Assigned(FFieldInspector) then
+  begin
+    FFieldInspector.DataSet := ActiveDataView.DataSet;
+    FFieldInspector.Show;
+  end;
 end;
 
 procedure TdmConnectionViewManager.actInspectGridExecute(Sender: TObject);
 begin
-  ActiveDataView.Inspect;
+  if Assigned(ActiveDataView) then
+    ActiveDataView.Inspect;
 end;
 
-procedure TdmConnectionViewManager.actKGridExecute(Sender: TObject);
-begin
-  FSettings.GridType := 'KGrid';
-  ApplySettings;
-end;
-
-procedure TdmConnectionViewManager.actMergeAllColumnCellsExecute(
+procedure TdmConnectionViewManager.actMergeColumnCellsExecute(
   Sender: TObject);
 begin
-  (ActiveDataView as IMergable).MergeColumnCells := actMergeAllColumnCells.Checked;
-end;
-
-procedure TdmConnectionViewManager.actMergeCellsExecute(Sender: TObject);
-begin
-  (ActiveDataView as IMergable).MergeColumnCells :=
-    not (ActiveDataView as IMergable).MergeColumnCells;
+  Settings.MergeColumnCells := (Sender as TAction).Checked;
 end;
 
 procedure TdmConnectionViewManager.actAddConnectionViewExecute(Sender: TObject);
@@ -436,13 +481,8 @@ end;
 
 procedure TdmConnectionViewManager.actAutoSizeColsExecute(Sender: TObject);
 begin
-  ActiveDataView.AutoSizeColumns;
-end;
-
-procedure TdmConnectionViewManager.actcxGridExecute(Sender: TObject);
-begin
-  FSettings.GridType := 'cxGrid';
-  ApplySettings;
+  if Assigned(ActiveDataView) then
+    ActiveDataView.AutoSizeColumns;
 end;
 {$ENDREGION}
 
@@ -451,37 +491,42 @@ end;
 procedure TdmConnectionViewManager.actDataInspectorExecute(Sender: TObject);
 begin
   FSettings.DataInspectorVisible := actDataInspector.Checked;
-  FDataInspector.Data := ActiveDataView.Data;
+  FDataInspector.ResultSet := ActiveDataView.ResultSet;
   if actDataInspector.Checked then
     FDataInspector.Show;
 end;
 
-procedure TdmConnectionViewManager.actCommitTransactionExecute(Sender: TObject);
+procedure TdmConnectionViewManager.actChinookExampleQueryExecute(Sender: TObject);
 begin
-  ShowMessage('Not supported yet.');
+  ActiveConnectionView.EditorView.Text := CHINOOK_EXAMPLE_QUERY;
+end;
+
+procedure TdmConnectionViewManager.actClearGroupingExecute(Sender: TObject);
+begin
+  (ActiveDataView as IGroupable).ClearGrouping;
 end;
 
 procedure TdmConnectionViewManager.actExecuteExecute(Sender: TObject);
 begin
-  ActiveData.MaxRecords := 0;
+  ActiveData.DataEditMode := False;
   Execute(ActiveConnectionView.EditorView.Text);
 end;
 
-procedure TdmConnectionViewManager.actRollbackTransactionExecute(
+procedure TdmConnectionViewManager.actExecuteLiveResultSetExecute(
   Sender: TObject);
 begin
-  ShowMessage('Not supported yet.');
-end;
-
-procedure TdmConnectionViewManager.actStartTransactionExecute(Sender: TObject);
-begin
-  ShowMessage('Not supported yet.');
-end;
-
-procedure TdmConnectionViewManager.actExecuteLimitedExecute(Sender: TObject);
-begin
-  ActiveData.MaxRecords := 100;
+  ActiveData.DataEditMode := True;
   Execute(ActiveConnectionView.EditorView.Text);
+end;
+
+procedure TdmConnectionViewManager.actExpandAllExecute(Sender: TObject);
+begin
+  (ActiveDataView as IGroupable).ExpandAll;
+end;
+
+procedure TdmConnectionViewManager.actFireDACInfoExecute(Sender: TObject);
+begin
+  ShowMessageFmt('FireDAC version %s', [C_FD_Version]);
 end;
 
 procedure TdmConnectionViewManager.actPrintExecute(Sender: TObject);
@@ -520,10 +565,15 @@ begin
   FActiveConnectionView := Value;
 end;
 
+procedure TdmConnectionViewManager.SettingsChanged(Sender: TObject);
+begin
+  actToggleFullScreen.Checked := Settings.FormSettings.WindowState = wsMaximized;
+end;
+
 function TdmConnectionViewManager.GetActiveData: IData;
 begin
   if Assigned(FActiveConnectionView) then
-    Result := FActiveConnectionView.ActiveData
+    Result := FActiveConnectionView.Data
   else
     Result := nil;
 end;
@@ -541,12 +591,22 @@ begin
   Result := ppmConnectionView;
 end;
 
+function TdmConnectionViewManager.GetCount: Integer;
+begin
+  Result := FConnectionViewList.Count;
+end;
+
 function TdmConnectionViewManager.GetDefaultConnectionProfile: TConnectionProfile;
 begin
   Result := FSettings.ConnectionProfiles.Find(FSettings.DefaultConnectionProfile);
 end;
 
-function TdmConnectionViewManager.GetItem(AName: string): TCustomAction;
+function TdmConnectionViewManager.GetItem(AIndex: Integer): IConnectionView;
+begin
+  Result := FConnectionViewList[AIndex];
+end;
+
+function TdmConnectionViewManager.GetAction(AName: string): TCustomAction;
 var
   I: Integer;
 begin
@@ -571,27 +631,49 @@ begin
   ActiveConnectionView.ApplySettings;
 end;
 
+function TdmConnectionViewManager.DeleteConnectionView(
+  AIndex: Integer): Boolean;
+begin
+  if AIndex < Count then
+  begin
+    FConnectionViewList.Delete(AIndex);
+    Result := True;
+  end
+  else
+    Result := False;
+end;
+
+function TdmConnectionViewManager.DeleteConnectionView(
+  AConnectionView: IConnectionView): Boolean;
+var
+  N : Integer;
+begin
+  Guard.CheckNotNull(AConnectionView, 'AConnectionView');
+  N := FConnectionViewList.IndexOf(AConnectionView);
+  if N <> -1 then
+  begin
+    FConnectionViewList.Delete(N);
+    Result := True;
+  end
+  else
+    Result := False;
+end;
+
 procedure TdmConnectionViewManager.Execute(const ASQL: string);
 begin
   FStopWatch.Reset;
-  Screen.Cursor := crSQLWait;
-  try
-    ActiveData.SQL := ASQL;
-    FStopWatch.Start;
-    ActiveData.Execute;
-    FStopWatch.Stop;
-    if FDataInspector.Visible then
-    begin
-      FDataInspector.Data := ActiveData;
-    end;
-    if FFieldInspector.Visible then
-    begin
-      FFieldInspector.Data := ActiveData;
-    end;
-  finally
-    Screen.Cursor := crDefault;
-//    pnlElapsedTime.Caption := Format('%d ms', [FStopWatch.ElapsedMilliseconds]);
-  end;
+  ActiveData.SQL := ASQL;
+  FStopWatch.Start;
+  ActiveData.Execute;
+  FStopWatch.Stop;
+//  if Assigned(FDataInspector) and FDataInspector.Visible then
+//  begin
+//    FDataInspector.Data := ActiveData;
+//  end;
+//  if Assigned(FFieldInspector) and FFieldInspector.Visible then
+//  begin
+//    FFieldInspector.DataSet := ActiveDataView.DataSet;
+//  end;
 end;
 
 procedure TdmConnectionViewManager.UpdateActions;
@@ -600,24 +682,16 @@ var
 begin
   if Assigned(FSettings) then
   begin
-    actSyncEditorWithRepository.Visible := actToggleRepositoryTree.Checked;
-    actSyncEditorWithRepository.Enabled := actToggleRepositoryTree.Checked;
-
     actToggleStayOnTop.Checked := FSettings.FormSettings.FormStyle = fsStayOnTop;
-    actToggleRepositoryTree.Checked := FSettings.RepositoryVisible;
-    actDataInspector.Checked        := FSettings.DataInspectorVisible;
+    actDataInspector.Checked   := FSettings.DataInspectorVisible;
   end;
 
-  if Assigned(ActiveData) and Assigned(ActiveDataView) then
+  if Assigned(ActiveData) and Assigned(ActiveConnectionView) then
   begin
+    actExecute.Enabled := not ActiveConnectionView.EditorView.Text.Trim.IsEmpty;
+    actExecuteLiveResultSet.Enabled := actExecute.Enabled;
+
     B := ActiveData.Active;
-    actMergeCells.Visible          := Supports(ActiveDataView, IMergable);
-    actMergeCells.Enabled          := B and Supports(ActiveDataView, IMergable);
-    actGroupBySelection.Visible    := Supports(ActiveDataView, IGroupable);
-    actGroupBySelection.Enabled    := B and Supports(ActiveDataView, IGroupable);
-    actMergeAllColumnCells.Visible := actMergeCells.Visible;
-    actMergeAllColumnCells.Enabled := actMergeCells.Enabled;
-    actFavoriteFieldsOnly.Enabled  := B;
     actHideEmptyColumns.Enabled    := B;
     actHideConstantColumns.Enabled := B;
     actHideSelectedColumns.Enabled := B;
@@ -625,11 +699,24 @@ begin
     actPreview.Enabled             := B;
     actPrint.Enabled               := B;
     actDesigner.Enabled            := B;
-    actHideEmptyColumns.Checked    := not (ActiveData as IFieldVisiblity).EmptyFieldsVisible;
-    actHideConstantColumns.Checked := not (ActiveData as IFieldVisiblity).ConstantFieldsVisible;
-    actFavoriteFieldsOnly.Checked  :=
-      (ActiveData as IFieldVisiblity).ShowFavoriteFieldsOnly;
-    Logger.Watch('RecordCount', ActiveDataView.RecordCount);
+
+    B := Assigned(ActiveDataView);
+    actHideEmptyColumns.Checked    := B and
+      not ActiveDataView.ResultSet.EmptyFieldsVisible;
+    actHideConstantColumns.Checked := B and
+      not ActiveDataView.ResultSet.ConstantFieldsVisible;
+    actAutoSizeCols.Visible      := B;
+    actAutoSizeCols.Enabled      := actAutoSizeCols.Visible;
+    actGroupBySelection.Visible  := B and Supports(ActiveDataView, IGroupable);
+    actGroupBySelection.Enabled  := actGroupBySelection.Visible;
+    actGroupByBoxVisible.Visible := B and Supports(ActiveDataView, IGroupable);
+    actGroupByBoxVisible.Checked := Settings.GroupByBoxVisible;
+    actExpandAll.Visible         := B and Supports(ActiveDataView, IGroupable);
+    actCollapseAll.Visible       := B and Supports(ActiveDataView, IGroupable);
+    actClearGrouping.Visible     := B and Supports(ActiveDataView, IGroupable);
+    actMergeColumnCells.Visible  := B and Supports(ActiveDataView, IMergable);
+    actMergeColumnCells.Enabled  := actMergeColumnCells.Visible;
+    actMergeColumnCells.Checked  := Settings.MergeColumnCells;
   end;
 end;
 
@@ -650,35 +737,21 @@ end;
 {$REGION 'public methods'}
 function TdmConnectionViewManager.AddConnectionView: IConnectionView;
 var
-  CV : IConnectionView;
-  EV : IEditorView;
-  DV : IDataView;
-  D  : IData;
   CP : TConnectionProfile;
+  CV : IConnectionView;
+  D  : IData;
 begin
-  EV := GlobalContainer.Resolve<IEditorView>;
-  DV := GlobalContainer.Resolve<IDataView>(Settings.GridType);
-  DV.Settings := FSettings as IDataViewSettings;
-  DV.PopupMenu := ConnectionViewPopupMenu;
   if Assigned(FActiveConnectionView) then
-  begin
-    CP := FActiveConnectionView.ActiveConnectionProfile;
-  end
+    CP := FActiveConnectionView.ActiveConnectionProfile
   else
-  begin
     CP := DefaultConnectionProfile;
-  end;
-  D := TdmDataFireDAC.Create(Self, CP.ConnectionSettings);
-  DV.Data := D;
-  CV := TfrmConnectionView.Create(Self, EV, DV, D);
+  D  := TDataGrabberFactories.CreateData(Self, CP.ConnectionSettings);
+  CV := TDataGrabberFactories.CreateConnectionView(Self, Self, D);
   FConnectionViewList.Add(CV);
   ActiveConnectionView := CV;
   UpdateConnectionViewCaptions;
   Result := CV;
 end;
 {$ENDREGION}
-
-initialization
-  TdmConnectionViewManager.ClassName;
 
 end.

@@ -1,5 +1,5 @@
 {
-  Copyright (C) 2013-2017 Tim Sinaeve tim.sinaeve@gmail.com
+  Copyright (C) 2013-2018 Tim Sinaeve tim.sinaeve@gmail.com
 
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
@@ -19,67 +19,64 @@ unit DataGrabber.MainForm;
 interface
 
 uses
-  Winapi.Windows, Winapi.Messages, Winapi.GDIPOBJ,
+  Winapi.Windows, Winapi.Messages,
   System.SysUtils, System.Variants, System.Classes, System.Actions,
-  System.Threading, System.ImageList,
+  System.ImageList,
   Vcl.Menus, Vcl.ActnList, Vcl.Controls, Vcl.Forms, Vcl.ToolWin, Vcl.ExtCtrls,
   Vcl.Graphics, Vcl.Dialogs, Vcl.ComCtrls, Vcl.ImgList,
-  Data.DB, Data.Win.ADODB,
 
   VirtualTrees,
 
   ChromeTabs, ChromeTabsClasses, ChromeTabsTypes,
 
-  DataGrabber.ConnectionSettings,
-  DataGrabber.Interfaces, DataGrabber.Settings, DataGrabber.ConnectionProfiles;
+  DataGrabber.ConnectionSettings, DataGrabber.Interfaces, DataGrabber.Settings,
+  DataGrabber.ConnectionProfiles;
 
-{
+{ Main application form.
+
   TODO:
-    - autosize form (to data)
-    - testing !!!
-    - query tree (using gaSQLParser)
-    - multiple statements => multiple resultsets
     - log executed statements to a local database
     - Use bindings in settings
     - Select <selected fields?> Where in
-    - Presenter for vertical grid
-    - Multiselect in vertical grid? => selection delimited quoted text fieldnames
-    - Datainspector -> group by table?
-    - Store executed sql’s
-    - Multiple sessions
-    - Smart grouping (detect common field prefixes/suffixes (vb. Date, ...Id,)
+    - Smart grouping (detect common field prefixes/suffixes (eg. Date, ...Id,)
     - Working set of tables (cache meta info and links and make them
       customizable as a profile setting)
-    - Statement builder
-    - Smart joining
+    - Statement builder, smart joining
     - Profile color for tab backgrounds
 }
 
 type
   TfrmMain = class(TForm)
     {$REGION 'designer controls'}
-    aclMain                       : TActionList;
-    actAddConnectionView          : TAction;
-    actInspectChromeTab           : TAction;
-    ctMain                        : TChromeTabs;
-    imlSpinner                    : TImageList;
-    pnlConnectionStatus           : TPanel;
-    pnlConnectionViews            : TPanel;
-    pnlConstantFieldsCount        : TPanel;
-    pnlEditMode                   : TPanel;
-    pnlElapsedTime                : TPanel;
-    pnlEmptyFieldsCount           : TPanel;
-    pnlFieldCount                 : TPanel;
-    pnlGridType                   : TPanel;
-    pnlRecordCount                : TPanel;
-    pnlStatus                     : TPanel;
-    pnlStatusBar                  : TPanel;
-    tlbMain                       : TToolBar;
-    pnlHiddenFieldsCount: TPanel;
+    aclMain                : TActionList;
+    actAddConnectionView   : TAction;
+    actCloseAllOtherTabs   : TAction;
+    actCloseTab            : TAction;
+    actInspectChromeTab    : TAction;
+    ctMain                 : TChromeTabs;
+    imlSpinner             : TImageList;
+    mniCloseAllOtherTabs   : TMenuItem;
+    mniCloseTab            : TMenuItem;
+    pnlConnectionStatus    : TPanel;
+    pnlConnectionViews     : TPanel;
+    pnlConstantFieldsCount : TPanel;
+    pnlEditMode            : TPanel;
+    pnlElapsedTime         : TPanel;
+    pnlEmptyFieldsCount    : TPanel;
+    pnlFieldCount          : TPanel;
+    pnlHiddenFieldsCount   : TPanel;
+    pnlRecordCount         : TPanel;
+    pnlStatusBar           : TPanel;
+    pnlTop                 : TPanel;
+    ppmCVTabs              : TPopupMenu;
+    tlbMain                : TToolBar;
+    tlbTopRight            : TToolBar;
     {$ENDREGION}
 
     {$REGION 'action handlers'}
     procedure actAddConnectionViewExecute(Sender: TObject);
+    procedure actInspectChromeTabExecute(Sender : TObject);
+    procedure actCloseAllOtherTabsExecute(Sender: TObject);
     {$ENDREGION}
 
     {$REGION 'event handlers'}
@@ -110,20 +107,15 @@ type
       ATab            : TChromeTab;
       var DragControl : TWinControl
     );
-    procedure ctMainBeforeDrawItem(
-      Sender       : TObject;
-      TargetCanvas : TGPGraphics;
-      ItemRect     : TRect;
-      ItemType     : TChromeTabItemType;
-      TabIndex     : Integer;
-      var Handled  : Boolean
-    );
-    procedure actInspectChromeTabExecute(Sender : TObject);
+    procedure actCloseTabExecute(Sender: TObject);
     {$ENDREGION}
 
   private
-    FManager     : IConnectionViewManager;
-    FSettings    : ISettings;
+    FManager  : IConnectionViewManager;
+    FSettings : ISettings;
+
+    procedure SettingsChanged(Sender: TObject);
+    procedure UpdateTabs;
 
   protected
     function GetActiveConnectionView: IConnectionView;
@@ -171,32 +163,39 @@ implementation
 {$R *.dfm}
 
 uses
-  Winapi.ActiveX,
+  System.UITypes,
   Vcl.Clipbrd,
+  Data.DB,
 
-  Spring.Container,
+  Spring.Utils,
 
-  DDuce.ObjectInspector, DDuce.Logger, DDuce.Logger.Factories,
+  DDuce.ObjectInspector.zObjectInspector, DDuce.Logger, DDuce.Logger.Factories,
 
   DataGrabber.Utils, DataGrabber.Resources, DataGrabber.Factories;
 
 {$REGION 'construction and destruction'}
 procedure TfrmMain.AfterConstruction;
+var
+  FVI : TFileVersionInfo;
 begin
   inherited AfterConstruction;
   Logger.Channels.Add(TLoggerFactories.CreateWinIPCChannel);
   Logger.Clear;
-  FManager  := GlobalContainer.Resolve<IConnectionViewManager>;
-  FSettings := GlobalContainer.Resolve<ISettings>;
+  FVI := TFileVersionInfo.GetVersionInfo(Application.ExeName);
+  Caption := Format('%s %s', [FVI.ProductName, FVI.ProductVersion]);
+  FSettings := TDataGrabberFactories.CreateSettings(Self);
+  FSettings.OnChanged.Add(SettingsChanged);
+  FManager  := TDataGrabberFactories.CreateManager(Self, FSettings);
+  FSettings.FormSettings.AssignTo(Self);
   AddConnectionView;
-  tlbMain.Images := FManager.ActionList.Images;
+  tlbMain.Images     := FManager.ActionList.Images;
+  tlbTopRight.Images := FManager.ActionList.Images;
   InitializeActions;
-  pnlStatus.Caption := SReady;
-  FManager.ActiveConnectionView.EditorView.Text := EXAMPLE_QUERY;
 end;
 
 procedure TfrmMain.BeforeDestruction;
 begin
+  FSettings.FormSettings.Assign(Self);
   FManager  := nil;
   FSettings := nil;
   inherited BeforeDestruction;
@@ -207,6 +206,38 @@ end;
 procedure TfrmMain.actAddConnectionViewExecute(Sender: TObject);
 begin
   AddConnectionView;
+end;
+
+procedure TfrmMain.actCloseAllOtherTabsExecute(Sender: TObject);
+var
+  I         : Integer;
+  LActiveCV : IConnectionView;
+  CV        : IConnectionView;
+begin
+  I  := 0;
+  LActiveCV := IConnectionView(ctMain.ActiveTab.Data);
+  while (Manager.Count > 1) and (I < Manager.Count) do
+  begin
+    CV := IConnectionView(ctMain.Tabs[I].Data);
+    if CV <> LActiveCV then
+    begin
+      Manager.DeleteConnectionView(CV);
+      ctMain.Tabs.DeleteTab(ctMain.Tabs[I].Index, True);
+    end
+    else
+    begin
+      Inc(I);
+    end;
+  end;
+end;
+
+procedure TfrmMain.actCloseTabExecute(Sender: TObject);
+begin
+  if Manager.Count > 1 then
+  begin
+    Manager.DeleteConnectionView(IConnectionView(ctMain.ActiveTab.Data));
+    ctMain.Tabs.DeleteTab(ctMain.ActiveTabIndex, True);
+  end;
 end;
 
 procedure TfrmMain.actInspectChromeTabExecute(Sender: TObject);
@@ -250,34 +281,6 @@ begin
   end;
 end;
 
-procedure TfrmMain.ctMainBeforeDrawItem(Sender: TObject;
-  TargetCanvas: TGPGraphics; ItemRect: TRect; ItemType: TChromeTabItemType;
-  TabIndex: Integer; var Handled: Boolean);
-var
-  CV : IConnectionView;
-begin
-
-  if (ItemType = itTab)  then
-  begin
-    CV := IConnectionView(ctMain.Tabs[TabIndex].Data);
-    if Assigned(CV) then
-    begin
-
-    //ctMain.LookAndFeel.Tabs.NotActive.Style.StartColor := CV.ActiveConnectionProfile.ProfileColor;
-    //ctMain.LookAndFeel.Tabs.NotActive.Style.StopColor  := CV.ActiveConnectionProfile.ProfileColor;
-
-//  if FBrush = nil then
-//    FBrush := TGPLinearGradientBrush.Create(MakePoint(0, ClientRect.Top),
-//                                            MakePoint(0, ClientRect.Bottom),
-//                                            MakeGDIPColor(StartColor, StartAlpha),
-//                                            MakeGDIPColor(StopColor, StopAlpha));
-
-        end;
-
-    //TargetCanvas.Brush.Color := CV.ActiveConnectionProfile.Color;
-  end;
-end;
-
 procedure TfrmMain.ctMainButtonAddClick(Sender: TObject; var Handled: Boolean);
 begin
   AddConnectionView;
@@ -287,7 +290,12 @@ end;
 procedure TfrmMain.ctMainButtonCloseTabClick(Sender: TObject; ATab: TChromeTab;
   var Close: Boolean);
 begin
-//
+  if Manager.Count > 1 then
+  begin
+    Close := Manager.DeleteConnectionView(IConnectionView(ATab.Data));
+  end
+  else
+    Close := False;
 end;
 
 procedure TfrmMain.ctMainNeedDragImageControl(Sender: TObject; ATab: TChromeTab;
@@ -367,11 +375,18 @@ end;
 
 procedure TfrmMain.InitializeActions;
 begin
-  AddToolbarButtons(tlbMain, Manager);
+  TDataGrabberFactories.AddMainToolbarButtons(tlbMain, Manager);
+  TDataGrabberFactories.AddTopRightToolbarButtons(tlbTopRight, Manager);
 end;
 {$ENDREGION}
 
 {$REGION 'protected methods'}
+procedure TfrmMain.SettingsChanged(Sender: TObject);
+begin
+  FormStyle   := FSettings.FormSettings.FormStyle;
+  WindowState := FSettings.FormSettings.WindowState;
+end;
+
 procedure TfrmMain.ShowToolWindow(AForm: TForm);
 begin
   if Assigned(AForm) then
@@ -405,20 +420,14 @@ begin
 end;
 
 procedure TfrmMain.UpdateActions;
-var
-  V: IConnectionView;
 begin
   inherited UpdateActions;
   UpdateStatusBar;
   if Assigned(Manager.ActiveConnectionView) then
   begin
-    V := Manager.ActiveConnectionView;
-    if Assigned(ctMain.ActiveTab) then
-    begin
-      ctMain.ActiveTab.Caption := Format('%s', [
-        V.Form.Caption
-      ]);
-    end;
+    UpdateTabs;
+    actCloseTab.Enabled := Manager.Count > 1;
+    actCloseAllOtherTabs.Enabled := Manager.Count > 1;
   end;
 end;
 {$ENDREGION}
@@ -426,17 +435,33 @@ end;
 {$REGION 'public methods'}
 procedure TfrmMain.UpdateStatusBar;
 var
-  S: string;
+  S   : string;
+  TFC : Integer;
+  CFC : Integer;
+  EFC : Integer;
+  HFC : Integer;
+  RS  : IResultSet;
 begin
-  if Assigned(Data) and Assigned(Data.DataSet) and Data.DataSet.Active then
+  if Assigned(Data) and Assigned(ActiveConnectionView.ActiveDataView)
+    and ActiveConnectionView.ActiveDataView.ResultSet.DataSet.Active then
   begin
-    pnlRecordCount.Caption := Format(SRecordCount, [Data.RecordCount]);
-    pnlFieldCount.Caption  := Format(SFieldCount, [Data.DataSet.FieldCount]);
-    pnlConstantFieldsCount.Caption :=
-      Format(SConstantFieldCount, [(Data as IFieldLists).ConstantFields.Count]);
-    pnlEmptyFieldsCount.Caption :=
-      Format(SEmptyFieldCount, [(Data as IFieldLists).EmptyFields.Count]);
-    pnlHiddenFieldsCount.Caption := 'Unknown';
+    RS := ActiveConnectionView.ActiveDataView.ResultSet;
+    pnlRecordCount.Caption := Format(SRecordCount, [RS.DataSet.RecordCount]);
+    TFC := RS.DataSet.FieldCount;
+    CFC := RS.ConstantFields.Count;
+    EFC := RS.EmptyFields.Count;
+    HFC := RS.HiddenFields.Count;
+    pnlFieldCount.Caption          := Format(SFieldCount, [TFC]);
+    pnlConstantFieldsCount.Caption := Format(SConstantFieldCount, [CFC]);
+    pnlEmptyFieldsCount.Caption    := Format(SEmptyFieldCount, [EFC]);
+    pnlHiddenFieldsCount.Caption   := Format(SHiddenFieldCount, [HFC]);
+    pnlElapsedTime.Caption         := Format(
+      '%5.0f ms', [Data.ElapsedTime.TotalMilliseconds]
+    );
+
+//    pnlConstantFieldsCount.Visible := Data.FieldListsUpdated;
+//    pnlEmptyFieldsCount.Visible    := Data.FieldListsUpdated;
+
     if Data.CanModify then
       S := SUpdateable
     else
@@ -444,33 +469,60 @@ begin
   end
   else
   begin
-    S                              := '';
+    pnlEditMode.Caption            := '';
     pnlRecordCount.Caption         := '';
     pnlFieldCount.Caption          := '';
     pnlElapsedTime.Caption         := '';
     pnlConstantFieldsCount.Caption := '';
     pnlEmptyFieldsCount.Caption    := '';
-    if Assigned(ActiveConnectionProfile) then
-    begin
-      pnlGridType.Caption := Settings.GridType;
-    end;
+    pnlHiddenFieldsCount.Caption   := '';
   end;
-  if Assigned(Data) {and Assigned(Data.Connection) and Data.Connection.Connected} then
-    pnlConnectionStatus.Caption := SConnected
+  if Assigned(Data) and Assigned(Data.Connection) and Data.Connection.Connected then
+  begin
+    pnlConnectionStatus.Caption    := SConnected;
+    pnlConnectionStatus.Font.Color := clGreen;
+  end
   else
+  begin
     pnlConnectionStatus.Caption := SDisconnected;
+    pnlConnectionStatus.Font.Color := clBlack;
+  end;
 
+  if Data.CanModify then
+  begin
+    pnlEditMode.Font.Style := pnlEditMode.Font.Style + [fsBold];
+    pnlEditMode.Font.Color := clRed;
+  end
+  else
+  begin
+    pnlEditMode.Font.Style := pnlEditMode.Font.Style - [fsBold];
+    pnlEditMode.Font.Color := clGreen;
+  end;
   pnlEditMode.Caption := S;
-  OptimizeWidth(pnlStatus);
   OptimizeWidth(pnlConnectionStatus);
+  OptimizeWidth(pnlEditMode);
   OptimizeWidth(pnlRecordCount);
+  OptimizeWidth(pnlElapsedTime);
   OptimizeWidth(pnlFieldCount);
   OptimizeWidth(pnlEmptyFieldsCount);
   OptimizeWidth(pnlConstantFieldsCount);
   OptimizeWidth(pnlHiddenFieldsCount);
-  OptimizeWidth(pnlElapsedTime);
-  OptimizeWidth(pnlEditMode);
-  OptimizeWidth(pnlGridType);
+  FSettings.FormSettings.WindowState := WindowState;
+end;
+
+procedure TfrmMain.UpdateTabs;
+var
+  V : IConnectionView;
+  C : Integer;
+begin
+  V := Manager.ActiveConnectionView;
+  if Assigned(ctMain.ActiveTab) and Assigned(V) then
+  begin
+    ctMain.ActiveTab.Caption := Format('%s', [V.Form.Caption]);
+    C := V.ActiveConnectionProfile.ProfileColor;
+    ctMain.LookAndFeel.Tabs.Active.Style.StartColor := C;
+    ctMain.LookAndFeel.Tabs.Active.Style.StopColor  := C;
+  end;
 end;
 {$ENDREGION}
 

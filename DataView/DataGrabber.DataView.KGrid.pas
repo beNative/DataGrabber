@@ -1,5 +1,5 @@
 {
-  Copyright (C) 2013-2017 Tim Sinaeve tim.sinaeve@gmail.com
+  Copyright (C) 2013-2018 Tim Sinaeve tim.sinaeve@gmail.com
 
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
@@ -16,84 +16,80 @@
 
 unit DataGrabber.DataView.KGrid;
 
+{
+  Issues:
+    - column moving does not move its content, so it is disabled and not
+      supported.
+}
+
 interface
 
 uses
   Winapi.Windows, Winapi.Messages,
-  System.SysUtils, System.Variants, System.Classes, System.Generics.Collections,
+  System.SysUtils, System.Variants, System.Classes,
   Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Menus, Vcl.Dialogs,
   Data.DB,
 
   KControls, KGrids, KDBGrids,
 
-  DataGrabber.Interfaces;
+  DataGrabber.Interfaces, DataGrabber.DataView.Base;
 
 type
-  TfrmKGrid = class(TForm, IDataView)
+  TfrmKGrid = class(TBaseDataView, IDataView)
     grdMain : TKDBGrid;
-    dscMain : TDataSource;
 
     procedure grdMainDrawCell(
+      Sender : TObject;
+      ACol   : Integer;
+      ARow   : Integer;
+      R      : TRect;
+      State  : TKGridDrawState
+    );
+    procedure grdMainCustomSortRows(
       Sender     : TObject;
-      ACol, ARow : Integer;
-      R          : TRect;
-      State      : TKGridDrawState
+      ByIndex    : Integer;
+      SortMode   : TKGridSortMode;
+      var Sorted : Boolean
     );
 
-  private
-    FData     : IData;
-    FSettings : IDataViewSettings;
-
-    function GetDataSet: TDataSet;
-    function GetRecordCount: Integer;
-    function GetSettings: IDataViewSettings;
-    procedure SetSettings(const Value: IDataViewSettings);
-
-    procedure NormalizeRect(var SR: TKGridRect);
-    function GetData: IData;
-    procedure SetData(const Value: IData);
-
-    function GetGridType: string;
-    function GetName: string;
-
-    procedure DataAfterExecute(Sender: TObject);
-
   protected
-    procedure SetPopupMenu(const Value: TPopupMenu);
+    procedure NormalizeRect(var SR: TKGridRect);
+
+    function GetGridType: string; override;
+    procedure SetPopupMenu(const Value: TPopupMenu); override;
 
   public
-    function SelectionToCommaText(AQuoteItems: Boolean = True): string;
-    function SelectionToDelimitedTable(ADelimiter : string = #9;
-      AIncludeHeader: Boolean = True): string;
-    function SelectionToTextTable(AIncludeHeader: Boolean = False): string;
-    function SelectionToWikiTable(AIncludeHeader: Boolean = False): string;
-    function SelectionToFields(AQuoteItems: Boolean = True): string;
-    procedure ApplyGridSettings;
-    procedure AutoSizeColumns;
-    procedure Copy;
-    procedure HideSelectedColumns;
-    procedure MergeAllColumnCells(AActive: Boolean);
-    procedure UpdateView;
-    procedure BeginUpdate;
-    procedure EndUpdate;
-
-    procedure AssignParent(AParent: TWinControl);
     procedure AfterConstruction; override;
 
-    procedure Inspect;
-    procedure BeforeDestruction; override;
+    function SelectionToCommaText(
+      AQuoteItems: Boolean = True
+    ): string; override;
+    function SelectionToTextTable(
+      AIncludeHeader: Boolean = False
+    ): string; override;
+    function SelectionToWikiTable(
+      AIncludeHeader: Boolean = False
+    ): string; override;
+    function SelectionToFields(
+      AQuoteItems: Boolean = True
+    ): string; override;
+    function SelectionToDelimitedTable(
+      ADelimiter     : string = #9;
+      AIncludeHeader : Boolean = True
+    ): string; override;
 
-    property DataSet: TDataSet
-      read GetDataSet;
+    procedure ApplyGridSettings; override;
+    procedure AutoSizeColumns; override;
 
-    property Data: IData
-      read GetData write SetData;
+    procedure Copy; override;
+    procedure HideSelectedColumns; override;
+    procedure MergeAllColumnCells(AActive: Boolean);
 
-    property Settings: IDataViewSettings
-      read GetSettings write SetSettings;
+    procedure UpdateView; override;
+    procedure BeginUpdate; override;
+    procedure EndUpdate; override;
 
-    property RecordCount: Integer
-      read GetRecordCount;
+    procedure Inspect; override;
   end;
 
 implementation
@@ -101,7 +97,7 @@ implementation
 {$R *.dfm}
 
 uses
-  System.StrUtils, System.Math,
+  System.StrUtils, System.Math, System.UITypes,
   Vcl.Clipbrd,
 
   DDuce.ObjectInspector.zObjectInspector,
@@ -114,78 +110,52 @@ uses
 procedure TfrmKGrid.AfterConstruction;
 begin
   inherited AfterConstruction;
-  grdMain.Font.Name                := 'Callibri';
+  grdMain.MinRowHeight             := 17;
+  grdMain.DefaultRowHeight         := 17;
   grdMain.Colors.FocusedRangeBkGnd := clGray;
-end;
-
-procedure TfrmKGrid.BeforeDestruction;
-begin
-  if Assigned(FData) then
-    (FData as IDataEvents).OnAfterExecute.Remove(DataAfterExecute);
-  inherited BeforeDestruction;
+  UpdateView;
 end;
 {$ENDREGION}
 
 {$REGION 'property access methods'}
 function TfrmKGrid.GetGridType: string;
 begin
-  Result := 'GridView';
-end;
-
-function TfrmKGrid.GetName: string;
-begin
-  Result := inherited Name;
+  Result := 'KGrid';
 end;
 
 procedure TfrmKGrid.SetPopupMenu(const Value: TPopupMenu);
 begin
   grdMain.PopupMenu := Value;
 end;
-
-function TfrmKGrid.GetData: IData;
-begin
-  Result := FData;
-end;
-
-procedure TfrmKGrid.SetData(const Value: IData);
-begin
-  if Value <> Data then
-  begin
-    if Data <> nil then
-     (Data as IDataEvents).OnAfterExecute.Remove(DataAfterExecute);
-    FData := Value;
-    (Data as IDataEvents).OnAfterExecute.Add(DataAfterExecute);
-    dscMain.DataSet := DataSet;
-    UpdateView;
-  end;
-end;
-
-function TfrmKGrid.GetDataSet: TDataSet;
-begin
-  Result := Data.DataSet;
-end;
-
-function TfrmKGrid.GetRecordCount: Integer;
-begin
-  Result := DataSet.RecordCount;
-end;
-
-function TfrmKGrid.GetSettings: IDataViewSettings;
-begin
-  Result := FSettings;
-end;
-
-procedure TfrmKGrid.SetSettings(const Value: IDataViewSettings);
-begin
-  FSettings := Value;
-end;
 {$ENDREGION}
 
 {$REGION 'event handlers'}
+{$REGION 'grdMain'}
+procedure TfrmKGrid.grdMainCustomSortRows(Sender: TObject; ByIndex: Integer;
+  SortMode: TKGridSortMode; var Sorted: Boolean);
+var
+  Field : TField;
+begin
+  Field := DataSet.FieldByName(TKDBGridCol(grdMain.Columns[ByIndex]).FieldName);
+  if Assigned(Field) and (Field.FieldKind = fkData) then
+  begin
+    case SortMode of
+      smNone, smDown:
+        Data.Sort(DataSet, Field.FieldName, False);
+      smUp:
+      begin
+        Data.Sort(DataSet, Field.FieldName, True);
+      end;
+    end;
+    Sorted := True;
+    DataSet.First;
+  end
+end;
+
 procedure TfrmKGrid.grdMainDrawCell(Sender: TObject; ACol, ARow: Integer;
   R: TRect; State: TKGridDrawState);
 var
-  C: TCanvas;
+  C : TCanvas;
   F : TField;
   D : Double;
 begin
@@ -194,7 +164,6 @@ begin
   begin
     C.Font.Style := C.Font.Style + [fsBold];
   end;
-
   grdMain.Cell[ACol, ARow].ApplyDrawProperties;
   if Settings.GridCellColoring and (State = []) then
   begin
@@ -223,6 +192,7 @@ begin
   grdMain.CellPainter.DefaultDraw;
 end;
 {$ENDREGION}
+{$ENDREGION}
 
 {$REGION 'private methods'}
 procedure TfrmKGrid.NormalizeRect(var SR: TKGridRect);
@@ -247,23 +217,16 @@ end;
 {$REGION 'public methods'}
 procedure TfrmKGrid.ApplyGridSettings;
 begin
-  if FSettings.ShowHorizontalGridLines then
+  if Settings.ShowHorizontalGridLines then
     grdMain.Options := grdMain.Options + [goHorzLine]
   else
     grdMain.Options := grdMain.Options - [goHorzLine];
 
-  if FSettings.ShowVerticalGridLines then
+  if Settings.ShowVerticalGridLines then
     grdMain.Options := grdMain.Options + [goVertLine]
   else
     grdMain.Options := grdMain.Options - [goVertLine];
-end;
-
-procedure TfrmKGrid.AssignParent(AParent: TWinControl);
-begin
-  Parent      := AParent;
-  BorderStyle := bsNone;
-  Align       := alClient;
-  Visible     := True;
+  grdMain.Font.Assign(Settings.GridFont);
 end;
 
 procedure TfrmKGrid.AutoSizeColumns;
@@ -283,9 +246,11 @@ begin
     grdMain.AutoSizeGrid(mpColWidth);
     for I := 0 to grdMain.ColCount - 1 do
     begin
-      grdMain.ColWidths[I] := grdMain.ColWidths[I] + 4;
+      grdMain.ColWidths[I] := grdMain.ColWidths[I] + 12;
       C := TKDBGridCol(grdMain.Cols[I]);
       C.CurrencyFormat := CF;
+      C.Font.Assign(grdMain.Font);
+      C.TitleFont.Assign(grdMain.Font);
     end;
   finally
     EndUpdate;
@@ -295,11 +260,6 @@ end;
 procedure TfrmKGrid.Copy;
 begin
   Clipboard.AsText := Trim(SelectionToDelimitedTable(#9, False));
-end;
-
-procedure TfrmKGrid.DataAfterExecute(Sender: TObject);
-begin
-  UpdateView;
 end;
 
 procedure TfrmKGrid.HideSelectedColumns;
@@ -313,7 +273,7 @@ begin
   try
     for I := SR.Col1 to SR.Col2 do
     begin
-      grdMain.Cols[I].Visible := False;
+      Data.HideField(DataSet, TKDBGridCol(grdMain.Cols[I]).FieldName);
     end;
   finally
     EndUpdate;
@@ -493,7 +453,6 @@ procedure TfrmKGrid.UpdateView;
 begin
   BeginUpdate;
   try
-    dscMain.DataSet := Data.DataSet;
     if Assigned(DataSet) and DataSet.Active then
     begin
       ApplyGridSettings;

@@ -1,5 +1,5 @@
 {
-  Copyright (C) 2013-2017 Tim Sinaeve tim.sinaeve@gmail.com
+  Copyright (C) 2013-2018 Tim Sinaeve tim.sinaeve@gmail.com
 
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
@@ -16,12 +16,16 @@
 
 unit DataGrabber.Settings;
 
+{ Persistable application settings component. }
+
 interface
 
 uses
   System.Classes, System.Generics.Collections,
   Vcl.Graphics,
   Data.DB,
+
+  Spring,
 
   DataGrabber.Interfaces, DataGrabber.FormSettings,
   DataGrabber.ConnectionSettings, DataGrabber.ConnectionProfiles;
@@ -37,10 +41,16 @@ type
     FGridType                 : string;
     FDefaultConnectionProfile : string;
     FConnectionSettings       : TConnectionSettings;
-    FRepositoryVisible        : Boolean;
     FDataInspectorVisible     : Boolean;
     FShowVerticalGridLines    : Boolean;
     FShowHorizontalGridLines  : Boolean;
+    FResultDisplayLayout      : TResultDisplayLayout;
+    FGroupByBoxVisible        : Boolean;
+    FMergeColumnCells         : Boolean;
+    FUpdateLock               : Integer;
+    FOnChanged                : Event<TNotifyEvent>;
+    FEditorFont               : TFont;
+    FGridFont                 : TFont;
 
     {$REGION 'property access methods'}
     function GetGridCellColoring: Boolean;
@@ -55,11 +65,9 @@ type
     function GetConnectionSettings: TConnectionSettings;
     function GetDataInspectorVisible: Boolean;
     function GetDefaultConnectionProfile: string;
-    function GetRepositoryVisible: Boolean;
     procedure SetConnectionSettings(const Value: TConnectionSettings);
     procedure SetDataInspectorVisible(const Value: Boolean);
     procedure SetDefaultConnectionProfile(const Value: string);
-    procedure SetRepositoryVisible(const Value: Boolean);
     function GetGridType: string;
     procedure SetGridType(const Value: string);
     function GetFileName: string;
@@ -68,7 +76,25 @@ type
     function GetShowVerticalGridLines: Boolean;
     procedure SetShowHorizontalGridLines(const Value: Boolean);
     procedure SetShowVerticalGridLines(const Value: Boolean);
+    function GetResultDisplayLayout: TResultDisplayLayout;
+    procedure SetResultDisplayLayout(const Value: TResultDisplayLayout);
+    function GetGroupByBoxVisible: Boolean;
+    procedure SetGroupByBoxVisible(const Value: Boolean);
+    function GetOnChanged: IEvent<TNotifyEvent>;
+    function GetMergeColumnCells: Boolean;
+    procedure SetMergeColumnCells(const Value: Boolean);
+    function GetEditorFont: TFont;
+    procedure SetEditorFont(const Value: TFont);
+    function GetGridFont: TFont;
+    procedure SetGridFont(const Value: TFont);
     {$ENDREGION}
+
+    procedure FormSettingsChanged(Sender: TObject);
+
+  protected
+    procedure BeginUpdate;
+    procedure EndUpdate;
+    procedure Changed;
 
   public
     constructor Create(AOwner: TComponent); override;
@@ -88,7 +114,16 @@ type
     property FileName: string
       read GetFileName write SetFileName;
 
+    property OnChanged: IEvent<TNotifyEvent>
+      read GetOnChanged;
+
   published
+    property GroupByBoxVisible: Boolean
+      read GetGroupByBoxVisible write SetGroupByBoxVisible default True;
+
+    property MergeColumnCells: Boolean
+      read GetMergeColumnCells write SetMergeColumnCells default False;
+
     property GridCellColoring: Boolean
       read GetGridCellColoring write SetGridCellColoring default True;
 
@@ -104,6 +139,12 @@ type
     property ConnectionProfiles: TConnectionProfiles
       read GetConnectionProfiles write SetConnectionProfiles;
 
+    property EditorFont: TFont
+      read GetEditorFont write SetEditorFont;
+
+    property GridFont: TFont
+      read GetGridFont write SetGridFont;
+
     property GridType: string
       read GetGridType write SetGridType;
 
@@ -113,24 +154,31 @@ type
     property DefaultConnectionProfile: string
       read GetDefaultConnectionProfile write SetDefaultConnectionProfile;
 
-    property RepositoryVisible: Boolean
-      read GetRepositoryVisible write SetRepositoryVisible;
-
     property DataInspectorVisible: Boolean
       read GetDataInspectorVisible write SetDataInspectorVisible;
+
+    property ResultDisplayLayout: TResultDisplayLayout
+      read GetResultDisplayLayout
+      write SetResultDisplayLayout
+      default TResultDisplayLayout.Horizontal;
   end;
 
 implementation
 
 uses
   System.SysUtils,
-  Vcl.Forms, Vcl.GraphUtil, Vcl.Dialogs,
+  Vcl.Forms, Vcl.GraphUtil,
 
   JsonDataObjects,
 
   DataGrabber.Resources;
 
 {$REGION 'construction and destruction'}
+procedure TSettings.Changed;
+begin
+  OnChanged.Invoke(Self);
+end;
+
 constructor TSettings.Create(AOwner: TComponent);
 begin
   if not Assigned(AOwner) then
@@ -152,17 +200,25 @@ begin
   for I := Low(TDataType) to High(TDataType) do
     FDataTypeColors.Add(I, ColorAdjustLuma(DEFAULT_DATATYPE_COLORS[I], 6, False));
   FFormSettings := TFormSettings.Create;
+  FFormSettings.OnChanged.Add(FormSettingsChanged);
   FConnectionProfiles := TConnectionProfiles.Create(Self);
   FFileName := SETTINGS_FILE;
   FGridCellColoring := True;
+  FGroupByBoxVisible := True;
+  FResultDisplayLayout := TResultDisplayLayout.Horizontal;
+  FEditorFont := TFont.Create;
+  FGridFont   := TFont.Create;
 end;
 
 procedure TSettings.BeforeDestruction;
 begin
   FreeAndNil(FConnectionProfiles);
+  FFormSettings.OnChanged.Remove(FormSettingsChanged);
   FreeAndNil(FFormSettings);
   FreeAndNil(FDataTypeColors);
   FreeAndNil(FConnectionSettings);
+  FreeAndNil(FEditorFont);
+  FreeAndNil(FGridFont);
   inherited BeforeDestruction;
 end;
 {$ENDREGION}
@@ -209,9 +265,24 @@ begin
   Result := FGridCellColoring;
 end;
 
+function TSettings.GetGridFont: TFont;
+begin
+  Result := FGridFont;
+end;
+
+procedure TSettings.SetGridFont(const Value: TFont);
+begin
+  FGridFont.Assign(Value);
+  Changed;
+end;
+
 procedure TSettings.SetGridCellColoring(const Value: Boolean);
 begin
-  FGridCellColoring := Value;
+  if Value <> GridCellColoring then
+  begin
+    FGridCellColoring := Value;
+    Changed;
+  end;
 end;
 
 function TSettings.GetGridType: string;
@@ -221,7 +292,44 @@ end;
 
 procedure TSettings.SetGridType(const Value: string);
 begin
-  FGridType := Value;
+  if Value <> GridType then
+  begin
+    FGridType := Value;
+    Changed;
+  end;
+end;
+
+function TSettings.GetGroupByBoxVisible: Boolean;
+begin
+  Result := FGroupByBoxVisible;
+end;
+
+function TSettings.GetMergeColumnCells: Boolean;
+begin
+  Result := FMergeColumnCells;
+end;
+
+procedure TSettings.SetMergeColumnCells(const Value: Boolean);
+begin
+  if Value <> MergeColumnCells then
+  begin
+    FMergeColumnCells := Value;
+    Changed;
+  end;
+end;
+
+procedure TSettings.SetGroupByBoxVisible(const Value: Boolean);
+begin
+  if Value <> GroupByBoxVisible then
+  begin
+    FGroupByBoxVisible := Value;
+    Changed;
+  end;
+end;
+
+function TSettings.GetOnChanged: IEvent<TNotifyEvent>;
+begin
+  Result := FOnChanged;
 end;
 
 function TSettings.GetConnectionProfiles: TConnectionProfiles;
@@ -231,12 +339,22 @@ end;
 
 procedure TSettings.SetConnectionProfiles(const Value: TConnectionProfiles);
 begin
-  FConnectionProfiles := Value;
+  FConnectionProfiles.Assign(Value);
+  Changed;
 end;
 
-function TSettings.GetRepositoryVisible: Boolean;
+function TSettings.GetResultDisplayLayout: TResultDisplayLayout;
 begin
-  Result := FRepositoryVisible;
+  Result := FResultDisplayLayout;
+end;
+
+procedure TSettings.SetResultDisplayLayout(const Value: TResultDisplayLayout);
+begin
+  if Value <> ResultDisplayLayout then
+  begin
+    FResultDisplayLayout := Value;
+    Changed;
+  end;
 end;
 
 function TSettings.GetShowHorizontalGridLines: Boolean;
@@ -246,7 +364,11 @@ end;
 
 procedure TSettings.SetShowHorizontalGridLines(const Value: Boolean);
 begin
-  FShowHorizontalGridLines := Value;
+  if Value <> ShowHorizontalGridLines then
+  begin
+    FShowHorizontalGridLines := Value;
+    Changed;
+  end;
 end;
 
 function TSettings.GetShowVerticalGridLines: Boolean;
@@ -256,12 +378,11 @@ end;
 
 procedure TSettings.SetShowVerticalGridLines(const Value: Boolean);
 begin
-  FShowVerticalGridLines := Value;
-end;
-
-procedure TSettings.SetRepositoryVisible(const Value: Boolean);
-begin
-  FRepositoryVisible := Value;
+  if Value <> ShowVerticalGridLines then
+  begin
+    FShowVerticalGridLines := Value;
+    Changed;
+  end;
 end;
 
 function TSettings.GetConnectionSettings: TConnectionSettings;
@@ -271,7 +392,8 @@ end;
 
 procedure TSettings.SetConnectionSettings(const Value: TConnectionSettings);
 begin
-  FConnectionSettings := Value;
+  FConnectionSettings.Assign(Value);
+  Changed;
 end;
 
 function TSettings.GetDataTypeColor(Index: TDataType): TColor;
@@ -281,7 +403,11 @@ end;
 
 procedure TSettings.SetDataTypeColor(Index: TDataType; const Value: TColor);
 begin
-  FDataTypeColors[Index] := Value;
+  if FDataTypeColors[Index] <> Value then
+  begin
+    FDataTypeColors[Index] := Value;
+    Changed;
+  end;
 end;
 
 function TSettings.GetDefaultConnectionProfile: string;
@@ -291,7 +417,10 @@ end;
 
 procedure TSettings.SetDefaultConnectionProfile(const Value: string);
 begin
-  FDefaultConnectionProfile := Value;
+  if Value <> DefaultConnectionProfile then
+  begin
+    FDefaultConnectionProfile := Value;
+  end;
 end;
 
 function TSettings.GetDataInspectorVisible: Boolean;
@@ -301,7 +430,22 @@ end;
 
 procedure TSettings.SetDataInspectorVisible(const Value: Boolean);
 begin
-  FDataInspectorVisible := Value;
+  if Value <> DataInspectorVisible then
+  begin
+    FDataInspectorVisible := Value;
+    Changed;
+  end;
+end;
+
+function TSettings.GetEditorFont: TFont;
+begin
+  Result := FEditorFont;
+end;
+
+procedure TSettings.SetEditorFont(const Value: TFont);
+begin
+  FEditorFont.Assign(Value);
+  Changed;
 end;
 
 function TSettings.GetFileName: string;
@@ -314,6 +458,7 @@ begin
   if Value <> FileName then
   begin
     FFileName := Value;
+    Changed;
   end;
 end;
 
@@ -324,7 +469,32 @@ end;
 
 procedure TSettings.SetFormSettings(const Value: TFormSettings);
 begin
-  FFormSettings := Value;
+  FFormSettings.Assign(Value);
+  Changed;
+end;
+{$ENDREGION}
+
+{$REGION 'event handlers'}
+procedure TSettings.FormSettingsChanged(Sender: TObject);
+begin
+  Changed;
+end;
+{$ENDREGION}
+
+{$REGION 'protected methods'}
+procedure TSettings.BeginUpdate;
+begin
+  Inc(FUpdateLock);
+end;
+
+procedure TSettings.EndUpdate;
+begin
+  if FUpdateLock > 0 then
+  begin
+    Dec(FUpdateLock);
+    if FUpdateLock = 0 then
+      Changed;
+  end;
 end;
 {$ENDREGION}
 
@@ -342,6 +512,8 @@ begin
       JO.LoadFromFile(FileName);
       JO.ToSimpleObject(Self);
       JO['FormSettings'].ObjectValue.ToSimpleObject(FFormSettings);
+      JO['EditorFont'].ObjectValue.ToSimpleObject(FEditorFont);
+      JO['GridFont'].ObjectValue.ToSimpleObject(FGridFont);
       for I := 0 to JO['ConnectionProfiles'].ArrayValue.Count - 1 do
       begin
         CP := FConnectionProfiles.Add;
@@ -365,6 +537,8 @@ begin
   try
     JO.FromSimpleObject(Self);
     JO['FormSettings'].ObjectValue.FromSimpleObject(FormSettings);
+    JO['EditorFont'].ObjectValue.FromSimpleObject(EditorFont);
+    JO['GridFont'].ObjectValue.FromSimpleObject(GridFont);
     for I := 0 to ConnectionProfiles.Count - 1 do
     begin
       JO['ConnectionProfiles'].ArrayValue
@@ -382,8 +556,5 @@ begin
   end;
 end;
 {$ENDREGION}
-
-initialization
-  TSettings.ClassName;
 
 end.

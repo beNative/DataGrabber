@@ -1,5 +1,5 @@
 {
-  Copyright (C) 2013-2017 Tim Sinaeve tim.sinaeve@gmail.com
+  Copyright (C) 2013-2018 Tim Sinaeve tim.sinaeve@gmail.com
 
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
@@ -44,6 +44,8 @@ type
     mniHideEmptyFields : TMenuItem;
     pnlMain            : TPanel;
     ppmMain            : TPopupMenu;
+
+    procedure actHideEmptyFieldsExecute(Sender: TObject);
 
     procedure dscMainDataChange(Sender: TObject; Field: TField);
     procedure FormShow(Sender: TObject);
@@ -98,23 +100,20 @@ type
       var CanShow : Boolean
     );
 
-    procedure actHideEmptyFieldsExecute(Sender: TObject);
-
-  strict private
+  private
     FHideEmptyFields : Boolean;
     FData            : IData;
-    FNonEmptyFields  : TObjectList<TField>;
+    FResultSet       : IResultSet;
     FInspector       : TInspector;
 
     procedure SetHideEmptyFields(const Value: Boolean);
-    function GetData: IData;
-    procedure SetData(const Value: IData);
     function GetDataSet: TDataSet;
-    function GetFieldCount: Integer;
+    function GetResultSet: IResultSet;
+    procedure SetResultSet(const Value: IResultSet);
+
 
   protected
     procedure AutoSizeWidth;
-    procedure UpdateFieldList;
 
     function IsCellReadOnly(const ACell: TGridCell): Boolean; inline;
     function IsCellCheckBox(const ACell: TGridCell): Boolean; inline;
@@ -122,21 +121,20 @@ type
     function FieldOf(const ACell: TGridCell): TField;
 
   public
-    constructor Create(AOwner: TComponent; AData: IData = nil); reintroduce;
+    constructor Create(
+      AOwner     : TComponent;
+      AResultSet : IResultSet = nil
+    ); reintroduce;
     procedure UpdateView;
-    procedure BeforeDestruction; override;
 
     property DataSet : TDataSet
       read GetDataSet;
 
-    property Data: IData
-      read GetData write SetData;
+    property ResultSet: IResultSet
+      read GetResultSet write SetResultSet;
 
     property HideEmptyFields: Boolean
       read FHideEmptyFields write SetHideEmptyFields;
-
-    property FieldCount: Integer
-      read GetFieldCount;
   end;
 
 implementation
@@ -147,10 +145,9 @@ uses
   System.Math;
 
 {$REGION 'construction and destruction'}
-constructor TfrmDataInspector.Create(AOwner: TComponent; AData: IData);
+constructor TfrmDataInspector.Create(AOwner: TComponent; AResultSet: IResultSet);
 begin
   inherited Create(AOwner);
-  FNonEmptyFields := TObjectList<TField>.Create(False);
   FInspector := TInspector.Create(Self);
 
   FInspector.Color      := clWhite;
@@ -168,42 +165,14 @@ begin
   FInspector.OnGetCheckState     := FInspectorGetCheckState;
   FInspector.OnCheckClick        := FInspectorCheckClick;
   FInspector.OnEditCanShow       := FInspectorEditCanShow;
-  Data := AData;
-end;
-
-procedure TfrmDataInspector.BeforeDestruction;
-begin
-  FreeAndNil(FNonEmptyFields);
-  inherited;
+  FResultSet := AResultSet;
 end;
 {$ENDREGION}
 
 {$REGION 'property access methods'}
-//---|Data|--------------------------------------------------------------------
-
-function TfrmDataInspector.GetData: IData;
-begin
-  Result := FData;
-end;
-
-procedure TfrmDataInspector.SetData(const Value: IData);
-begin
-  if Assigned(Value) then
-  begin
-    FData := Value;
-    dscMain.DataSet := FData.DataSet;
-    UpdateView;
-  end;
-end;
-
-//---|DataSet|-----------------------------------------------------------------
-
 function TfrmDataInspector.GetDataSet: TDataSet;
 begin
-  if Assigned(FData) then
-    Exit(FData.DataSet)
-  else
-    Exit(nil);
+  Result := FResultSet.DataSet;
 end;
 
 procedure TfrmDataInspector.SetHideEmptyFields(const Value: Boolean);
@@ -215,13 +184,21 @@ begin
   end;
 end;
 
-function TfrmDataInspector.GetFieldCount: Integer;
+function TfrmDataInspector.GetResultSet: IResultSet;
 begin
-  if HideEmptyFields then
-    Exit(FNonEmptyFields.Count)
-  else
-    Exit(IfThen(Assigned(DataSet), DataSet.FieldCount, 0));
+  Result := FResultSet;
 end;
+
+procedure TfrmDataInspector.SetResultSet(const Value: IResultSet);
+begin
+  if Assigned(Value) then
+  begin
+    FResultSet := Value;
+    dscMain.DataSet := DataSet;
+    UpdateView;
+  end;
+end;
+
 {$ENDREGION}
 
 {$REGION 'action handlers'}
@@ -242,8 +219,6 @@ begin
   if not Assigned(Field) then
     UpdateView;
 end;
-
-//---|FInspector|-----------------------------------------------------------------
 
 procedure TfrmDataInspector.FInspectorGetCellText(Sender: TObject; Cell: TGridCell;
   var Value: string);
@@ -311,7 +286,6 @@ procedure TfrmDataInspector.FInspectorCheckClick(Sender: TObject; Cell: TGridCel
 var
   F: TField;
 begin
-  inherited;
   if IsCellCheckBox(Cell) then
   begin
     F := FieldOf(Cell);
@@ -363,41 +337,27 @@ end;
 
 function TfrmDataInspector.FieldOf(const ACell: TGridCell): TField;
 begin
-  if ACell.Row < FieldCount then
-  begin
-    if HideEmptyFields then
-      Result := FNonEmptyFields[ACell.Row]
-    else
-      Result := DataSet.Fields[ACell.Row];
-  end
-  else
-    Exit(nil);
+//  if ACell.Row < FieldCount then
+//  begin
+//    if HideEmptyFields then
+//      Result := FNonEmptyFields[ACell.Row]
+//    else
+//      Result := DataSet.Fields[ACell.Row];
+//  end
+//  else
+//    Exit(nil);
 end;
 
 function TfrmDataInspector.IsCellCheckBox(const ACell: TGridCell): Boolean;
 begin
-  Result := (ACell.Col = 1) and (ACell.Row < FieldCount)
-    and (Data as IDisplayData).IsCheckBoxField(FieldOf(ACell).FieldName);
+//  Result := (ACell.Col = 1) and (ACell.Row < FieldCount)
+//    and (Data as IDisplayData).IsCheckBoxField(FieldOf(ACell).FieldName);
+  Result := False;
 end;
 
 function TfrmDataInspector.IsCellReadOnly(const ACell: TGridCell): Boolean;
 begin
   Result := (ACell.Col = 0) or IsCellCheckBox(ACell) or FieldOf(ACell).ReadOnly;
-end;
-
-procedure TfrmDataInspector.UpdateFieldList;
-var
-  F: TField;
-begin
-  FNonEmptyFields.Clear;
-  if Assigned(FData) and Assigned(DataSet) and not DataSet.IsEmpty then
-  begin
-    for F in DataSet.Fields do
-    begin
-      if (not F.IsNull) and (Trim(F.AsString) <> '') then
-        FNonEmptyFields.Add(F);
-    end;
-  end;
 end;
 {$ENDREGION}
 
@@ -408,8 +368,7 @@ begin
   begin
     FInspector.LockUpdate;
     try
-      UpdateFieldList;
-      FInspector.Rows.Count := FieldCount;
+      FInspector.Rows.Count := DataSet.FieldCount;
       FInspector.UpdateEditContents(False);
       AutoSizeWidth;
     finally

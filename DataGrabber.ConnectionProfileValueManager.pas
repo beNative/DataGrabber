@@ -1,5 +1,5 @@
 {
-  Copyright (C) 2013-2017 Tim Sinaeve tim.sinaeve@gmail.com
+  Copyright (C) 2013-2018 Tim Sinaeve tim.sinaeve@gmail.com
 
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
@@ -16,26 +16,21 @@
 
 unit DataGrabber.ConnectionProfileValueManager;
 
-interface
+{ The TConnectionProfileValueManager class allows us to customize the property
+  inspector used in the settings dialog. }
 
-{ This class allows us to customize the property inspector used in the settings
-  dialog. }
+interface
 
 uses
   System.Classes, System.Rtti, System.Types,
   Vcl.Graphics,
 
-  zObjInspector, zObjInspTypes, zValueManager,
+  zObjInspTypes, zValueManager,
 
   DataGrabber.ConnectionProfiles;
 
 type
   TConnectionProfileValueManager = class(TzCustomValueManager)
-  private
-    function GetConnectionProfile(
-      const PItem: PPropItem
-    ): TConnectionProfile;
-
   public
     procedure SetValue(
       const PItem : PPropItem;
@@ -47,7 +42,10 @@ type
     function HasDialog(const PItem: PPropItem): Boolean; override;
 
     function GetDialog(const PItem: PPropItem): TComponentClass; override;
-    function DialogResultValue(const PItem: PPropItem; Dialog: TComponent): TValue; override;
+    function DialogResultValue(
+      const PItem : PPropItem;
+      Dialog      : TComponent
+    ): TValue; override;
 
     procedure GetListItems(
       const PItem : PPropItem;
@@ -63,20 +61,7 @@ uses
 
   Spring.Container,
 
-  DataGrabber.Interfaces,
-
   DDuce.Logger;
-
-{$REGION 'private methods'}
-function TConnectionProfileValueManager.GetConnectionProfile(
-  const PItem: PPropItem): TConnectionProfile;
-begin
-  if Assigned(PItem.Parent) then
-    Result := PItem.Parent.Instance as TConnectionProfile
-  else
-    Result := PItem.Instance as TConnectionProfile;
-end;
-{$ENDREGION}
 
 {$REGION 'protected methods'}
 function TConnectionProfileValueManager.HasButton(
@@ -88,16 +73,13 @@ end;
 function TConnectionProfileValueManager.HasDialog(
   const PItem: PPropItem): Boolean;
 begin
-  if PItem.Name = 'ConnectionString' then
-    Result := True
-  else
-    Result := inherited HasDialog(PItem);
+  Result := inherited HasDialog(PItem);
 end;
 
 function TConnectionProfileValueManager.HasList(
   const PItem: PPropItem): Boolean;
 begin
-  if MatchStr(PItem.Name, ['Protocol']) then
+  if MatchStr(PItem.Name, ['DriverName', 'ConnectionDefName']) then
     Result := True
   else
   begin
@@ -113,34 +95,14 @@ end;
 
 function TConnectionProfileValueManager.GetDialog(
   const PItem: PPropItem): TComponentClass;
-var
-  S : string;
-  CP : TConnectionProfile;
 begin
-  if PItem.Name = 'ConnectionString' then
-  begin
-    S := PItem.Value.AsString;
-    TfrmFDGUIxFormsConnEdit.Execute(S, '');
-    CP := PItem.Component as TConnectionProfile;
-    CP.ConnectionSettings.ConnectionString := S;
-  end;
   Result := inherited GetDialog(PItem);
 end;
 
 function TConnectionProfileValueManager.DialogResultValue(
   const PItem: PPropItem; Dialog: TComponent): TValue;
-var
-  CP : TConnectionProfile;
 begin
-  if PItem.Name = 'ConnectionString' then
-  begin
-    CP := PItem.Component as TConnectionProfile;
-    Result := CP.ConnectionSettings.ConnectionString;
-  end
-  else
-  begin
-    Result := inherited DialogResultValue(PItem, Dialog);
-  end;
+  Result := inherited DialogResultValue(PItem, Dialog);
 end;
 
 procedure TConnectionProfileValueManager.GetListItems(
@@ -149,6 +111,10 @@ begin
   if PItem.Name = 'DriverName' then
   begin
     FDManager.GetDriverNames(Items);
+  end
+  else if PItem.Name = 'ConnectionDefName' then
+  begin
+    FDManager.GetConnectionDefNames(Items);
   end
   else
   begin

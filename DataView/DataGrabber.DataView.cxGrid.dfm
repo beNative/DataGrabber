@@ -1,22 +1,16 @@
-object frmcxGrid: TfrmcxGrid
-  Left = 0
-  Top = 0
+inherited frmcxGrid: TfrmcxGrid
   ClientHeight = 319
-  ClientWidth = 573
-  Color = clBtnFace
+  ClientWidth = 695
   DoubleBuffered = True
-  Font.Charset = DEFAULT_CHARSET
-  Font.Color = clWindowText
-  Font.Height = -11
   Font.Name = 'Se'
-  Font.Style = []
-  OldCreateOrder = False
+  ExplicitWidth = 711
+  ExplicitHeight = 358
   PixelsPerInch = 96
   TextHeight = 14
-  object grdMain: TcxGrid
+  object grdMain: TcxGrid [0]
     Left = 0
     Top = 0
-    Width = 573
+    Width = 695
     Height = 319
     Align = alClient
     BevelInner = bvNone
@@ -29,7 +23,7 @@ object frmcxGrid: TfrmcxGrid
     ParentFont = False
     TabOrder = 0
     LevelTabs.Slants.Positions = []
-    LevelTabs.Style = 5
+    LevelTabs.Style = 6
     LookAndFeel.Kind = lfStandard
     LookAndFeel.NativeStyle = True
     object tvwMain: TcxGridDBTableView
@@ -40,17 +34,13 @@ object frmcxGrid: TfrmcxGrid
       Navigator.Visible = True
       FilterBox.MRUItemsListDropDownCount = 10
       FindPanel.ApplyInputDelay = 500
-      FindPanel.DisplayMode = fpdmManual
       FindPanel.MRUItemsListCount = 100
       FindPanel.MRUItemsListDropDownCount = 20
       FindPanel.Position = fppBottom
-      FindPanel.ShowClearButton = False
-      FindPanel.ShowCloseButton = False
-      FindPanel.ShowFindButton = False
       OnCustomDrawCell = tvwMainCustomDrawCell
-      DataController.DataModeController.GridMode = True
       DataController.DataSource = dscMain
       DataController.MultiThreadedOptions.Filtering = bTrue
+      DataController.MultiThreadedOptions.Sorting = bTrue
       DataController.Options = [dcoAssignGroupingValues, dcoAssignMasterDetailKeys, dcoSaveExpanding, dcoSortByDisplayText, dcoFocusTopRowAfterSorting, dcoImmediatePost, dcoInsertOnNewItemRowFocusing]
       DataController.Summary.DefaultGroupSummaryItems = <
         item
@@ -70,44 +60,40 @@ object frmcxGrid: TfrmcxGrid
       OptionsBehavior.FocusCellOnTab = True
       OptionsBehavior.FocusFirstCellOnNewRecord = True
       OptionsBehavior.GoToNextCellOnEnter = True
-      OptionsBehavior.ImmediateEditor = False
       OptionsBehavior.IncSearch = True
       OptionsBehavior.NavigatorHints = True
       OptionsBehavior.BestFitMaxRecordCount = 100
-      OptionsBehavior.EditMode = emInplaceEditForm
+      OptionsBehavior.ImmediateEditor = False
+      OptionsBehavior.ShowLockedStateImageOptions.BestFit = lsimImmediate
       OptionsBehavior.PullFocusing = True
       OptionsCustomize.ColumnHiding = True
       OptionsCustomize.ColumnsQuickCustomization = True
       OptionsCustomize.DataRowSizing = True
       OptionsCustomize.GroupRowSizing = True
       OptionsData.Appending = True
-      OptionsSelection.InvertSelect = False
       OptionsSelection.MultiSelect = True
       OptionsSelection.CellMultiSelect = True
+      OptionsSelection.InvertSelect = False
       OptionsView.CellEndEllipsis = True
+      OptionsView.FocusRect = False
       OptionsView.ExpandButtonsForEmptyDetails = False
-      OptionsView.Footer = True
-      OptionsView.FooterAutoHeight = True
-      OptionsView.FooterMultiSummaries = True
       OptionsView.GridLineColor = clSilver
-      OptionsView.GroupFooterMultiSummaries = True
+      OptionsView.HeaderAutoHeight = True
       OptionsView.HeaderEndEllipsis = True
+      OptionsView.Indicator = True
+      OnCustomDrawColumnHeader = tvwMainCustomDrawColumnHeader
       OnCustomDrawGroupSummaryCell = tvwMainCustomDrawGroupSummaryCell
     end
-    object grlGrid1Level1: TcxGridLevel
+    object grlMain: TcxGridLevel
       GridView = tvwMain
       Options.TabsForEmptyDetails = False
     end
-  end
-  object dscMain: TDataSource
-    Left = 72
-    Top = 48
   end
   object ppmMain: TcxGridPopupMenu
     Grid = grdMain
     PopupMenus = <>
     AlwaysFireOnPopup = True
-    Left = 160
+    Left = 128
     Top = 48
   end
 end
