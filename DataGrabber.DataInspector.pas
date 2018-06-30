@@ -345,7 +345,7 @@ begin
 //      Result := DataSet.Fields[ACell.Row];
 //  end
 //  else
-//    Exit(nil);
+    Exit(nil);
 end;
 
 function TfrmDataInspector.IsCellCheckBox(const ACell: TGridCell): Boolean;

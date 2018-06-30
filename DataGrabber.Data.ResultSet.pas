@@ -187,12 +187,12 @@ end;
 
 function TResultSet.GetShowFavoriteFieldsOnly: Boolean;
 begin
-
+  Result := False;
 end;
 
 procedure TResultSet.SetShowFavoriteFieldsOnly(const Value: Boolean);
 begin
-
+// TODO
 end;
 
 function TResultSet.GetConstantFieldsVisible: Boolean;
