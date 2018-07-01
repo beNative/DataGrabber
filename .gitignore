@@ -62,3 +62,4 @@ __history/
 *.txvpck
 *.txaPackage
 /Resources/Thumbs.db
+*.skincfg
