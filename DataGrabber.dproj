@@ -2,7 +2,7 @@
     <PropertyGroup>
         <ProjectGuid>{0D221B5C-B333-427E-BB6A-F384BA740104}</ProjectGuid>
         <MainSource>DataGrabber.dpr</MainSource>
-        <Config Condition="'$(Config)'==''">Release</Config>
+        <Config Condition="'$(Config)'==''">Debug</Config>
         <DCC_DCCCompiler>DCC32</DCC_DCCCompiler>
         <ProjectVersion>18.2</ProjectVersion>
         <Base>True</Base>

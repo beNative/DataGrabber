@@ -169,7 +169,8 @@ uses
 
   Spring.Utils,
 
-  DDuce.ObjectInspector.zObjectInspector, DDuce.Logger, DDuce.Logger.Factories,
+  DDuce.ObjectInspector.zObjectInspector,
+  //DDuce.Logger, DDuce.Logger.Factories,
 
   DataGrabber.Utils, DataGrabber.Resources, DataGrabber.Factories;
 
@@ -179,8 +180,8 @@ var
   FVI : TFileVersionInfo;
 begin
   inherited AfterConstruction;
-  Logger.Channels.Add(TLoggerFactories.CreateWinIPCChannel);
-  Logger.Clear;
+  //Logger.Channels.Add(TLoggerFactories.CreateWinIPCChannel);
+  //Logger.Clear;
   FVI := TFileVersionInfo.GetVersionInfo(Application.ExeName);
   Caption := Format('%s %s', [FVI.ProductName, FVI.ProductVersion]);
   FSettings := TDataGrabberFactories.CreateSettings(Self);
