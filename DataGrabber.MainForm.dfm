@@ -321,7 +321,7 @@ object frmMain: TfrmMain
       LookAndFeel.Tabs.DefaultFont.Color = clBlack
       LookAndFeel.Tabs.DefaultFont.Size = 8
       LookAndFeel.Tabs.DefaultFont.Alpha = 255
-      LookAndFeel.Tabs.DefaultFont.TextRendoringMode = TextRenderingHintClearTypeGridFit
+      LookAndFeel.Tabs.DefaultFont.TextRenderingMode = TextRenderingHintClearTypeGridFit
       LookAndFeel.Tabs.MouseGlow.CentreColor = clWhite
       LookAndFeel.Tabs.MouseGlow.OutsideColor = clWhite
       LookAndFeel.Tabs.MouseGlow.CentreAlpha = 120
@@ -336,7 +336,7 @@ object frmMain: TfrmMain
       LookAndFeel.Tabs.Active.Font.Color = clBlack
       LookAndFeel.Tabs.Active.Font.Size = 8
       LookAndFeel.Tabs.Active.Font.Alpha = 100
-      LookAndFeel.Tabs.Active.Font.TextRendoringMode = TextRenderingHintClearTypeGridFit
+      LookAndFeel.Tabs.Active.Font.TextRenderingMode = TextRenderingHintClearTypeGridFit
       LookAndFeel.Tabs.Active.Font.UseDefaultFont = True
       LookAndFeel.Tabs.Active.Style.StartColor = clWhite
       LookAndFeel.Tabs.Active.Style.StopColor = clWhite
@@ -349,7 +349,7 @@ object frmMain: TfrmMain
       LookAndFeel.Tabs.NotActive.Font.Color = clBlack
       LookAndFeel.Tabs.NotActive.Font.Size = 8
       LookAndFeel.Tabs.NotActive.Font.Alpha = 255
-      LookAndFeel.Tabs.NotActive.Font.TextRendoringMode = TextRenderingHintClearTypeGridFit
+      LookAndFeel.Tabs.NotActive.Font.TextRenderingMode = TextRenderingHintClearTypeGridFit
       LookAndFeel.Tabs.NotActive.Font.UseDefaultFont = True
       LookAndFeel.Tabs.NotActive.Style.StartColor = clSilver
       LookAndFeel.Tabs.NotActive.Style.StopColor = clSilver
@@ -362,7 +362,7 @@ object frmMain: TfrmMain
       LookAndFeel.Tabs.Hot.Font.Color = clBlack
       LookAndFeel.Tabs.Hot.Font.Size = 8
       LookAndFeel.Tabs.Hot.Font.Alpha = 255
-      LookAndFeel.Tabs.Hot.Font.TextRendoringMode = TextRenderingHintClearTypeGridFit
+      LookAndFeel.Tabs.Hot.Font.TextRenderingMode = TextRenderingHintClearTypeGridFit
       LookAndFeel.Tabs.Hot.Font.UseDefaultFont = True
       LookAndFeel.Tabs.Hot.Style.StartColor = clSilver
       LookAndFeel.Tabs.Hot.Style.StopColor = clSilver
@@ -584,7 +584,7 @@ object frmMain: TfrmMain
     Left = 32
     Top = 72
     Bitmap = {
-      494C01010B000D00680010001000FFFFFFFF2110FFFFFFFFFFFFFFFF424D3600
+      494C01010B000D006C0010001000FFFFFFFF2110FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000003000000001002000000000000030
       0000000000000000000000000000000000000000000000000000000000000000
       000000000000000000000B0B0B0C000000000000000000000000000000000000
