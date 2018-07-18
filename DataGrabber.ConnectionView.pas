@@ -111,6 +111,7 @@ type
 
     procedure DataAfterExecute(Sender: TObject);
     procedure DataBeforeExecute(Sender: TObject);
+
     function GetDataView(AIndex: Integer): IDataView;
 
   protected
@@ -119,6 +120,8 @@ type
     procedure UpdateActions; override;
     procedure ApplySettings;
     procedure UpdateActiveDataView;
+
+    function ExportAsWiki: string;
 
   public
     procedure AfterConstruction; override;
@@ -418,6 +421,22 @@ end;
 {$ENDREGION}
 
 {$REGION 'protected methods'}
+function TfrmConnectionView.ExportAsWiki: string;
+var
+  DV : IDataView;
+  S : string;
+begin
+  if not FDataViewList.IsEmpty then
+  begin
+    for DV in FDataViewList do
+    begin
+      S := S + DV.ResultsToWikiTable(True);
+      S := S + #13#10;
+    end;
+  end;
+  Result := S;
+end;
+
 procedure TfrmConnectionView.InitializeConnectionProfilesView;
 begin
   FVSTProfiles := TVirtualStringTreeFactory.CreateGrid(Self, pnlVST);

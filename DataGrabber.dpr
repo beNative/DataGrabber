@@ -4,6 +4,8 @@ program DataGrabber;
 
 uses
   Forms,
+  DDuce.Logger,
+  DDuce.Logger.Channels.WinIPC,
   DataGrabber.Resources in 'DataGrabber.Resources.pas',
   DataGrabber.DataInspector in 'DataGrabber.DataInspector.pas' {frmDataInspector},
   DataGrabber.Utils in 'DataGrabber.Utils.pas',
@@ -25,7 +27,6 @@ uses
   DataGrabber.Data in 'DataGrabber.Data.pas' {dmData: TDataModule},
   DataGrabber.ConnectionSettings in 'DataGrabber.ConnectionSettings.pas',
   DataGrabber.DataView.cxGrid in 'DataView\DataGrabber.DataView.cxGrid.pas' {frmcxGrid},
-  DataGrabber.About.Dialog in 'DataGrabber.About.Dialog.pas' {frmAboutDialog},
   DataGrabber.MetaData.Dialog in 'DataGrabber.MetaData.Dialog.pas' {frmMetaData},
   DataGrabber.DataView.Base in 'DataView\DataGrabber.DataView.Base.pas' {BaseDataView},
   DataGrabber.Data.ResultSet in 'DataGrabber.Data.ResultSet.pas';
@@ -36,6 +37,8 @@ begin
   {$WARNINGS OFF}
   ReportMemoryLeaksOnShutdown := DebugHook > 0;
   {$WARNINGS ON}
+  Logger.Channels.Add(TWinIPCChannel.Create());
+  Logger.Clear;
   Application.Initialize;
   Application.CreateForm(TfrmMain, frmMain);
   Application.Run;

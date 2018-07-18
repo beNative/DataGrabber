@@ -151,6 +151,7 @@ begin
   Guard.CheckTrue(AToolBar.ButtonCount = 0, '0');
 
   AddButton(AManager, AToolBar, 'actFireDACInfo');
+  AddButton(AManager, AToolBar, 'actAbout');
   AddButton(AManager, AToolBar);
   AddButton(AManager, AToolBar, 'actPreview');
   AddButton(AManager, AToolBar, 'actDesigner');

@@ -187,43 +187,34 @@
         </DCCReference>
         <DCCReference Include="DataView\DataGrabber.DataView.GridView.pas">
             <Form>frmGridView</Form>
-            <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="DataGrabber.ConnectionProfiles.pas"/>
         <DCCReference Include="DataGrabber.ConnectionView.pas">
             <Form>frmConnectionView</Form>
-            <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="DataGrabber.ConnectionViewManager.pas">
             <Form>dmConnectionViewManager</Form>
-            <FormType>dfm</FormType>
             <DesignClass>TDataModule</DesignClass>
         </DCCReference>
         <DCCReference Include="DataGrabber.EditorView.pas">
             <Form>frmEditorView</Form>
-            <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="DataGrabber.FormSettings.pas"/>
         <DCCReference Include="DataGrabber.Factories.pas"/>
         <DCCReference Include="DataGrabber.Interfaces.pas"/>
         <DCCReference Include="DataGrabber.MainForm.pas">
             <Form>frmMain</Form>
-            <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="uCustomImageDrawHook.pas"/>
         <DCCReference Include="DataGrabber.ConnectionProfileValueManager.pas"/>
         <DCCReference Include="DataView\DataGrabber.DataView.KGrid.pas"/>
         <DCCReference Include="DataGrabber.Data.pas">
             <Form>dmData</Form>
-            <FormType>dfm</FormType>
             <DesignClass>TDataModule</DesignClass>
         </DCCReference>
         <DCCReference Include="DataGrabber.ConnectionSettings.pas"/>
         <DCCReference Include="DataView\DataGrabber.DataView.cxGrid.pas">
             <Form>frmcxGrid</Form>
-        </DCCReference>
-        <DCCReference Include="DataGrabber.About.Dialog.pas">
-            <Form>frmAboutDialog</Form>
         </DCCReference>
         <DCCReference Include="DataGrabber.MetaData.Dialog.pas">
             <Form>frmMetaData</Form>
@@ -297,12 +288,6 @@
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
-                <DeployFile LocalName="..\..\libraries\dduce\Source\jedi.inc" Configuration="Release" Class="ProjectFile">
-                    <Platform Name="Win32">
-                        <RemoteDir>.\</RemoteDir>
-                        <Overwrite>true</Overwrite>
-                    </Platform>
-                </DeployFile>
                 <DeployFile LocalName="d:\program files (x86)\embarcadero\studio\19.0\bin\Artwork\Windows\UWP\delphi_UwpDefault_150.png" Configuration="Release" Class="UWP_DelphiLogo150">
                     <Platform Name="Win64">
                         <RemoteDir>Assets\</RemoteDir>
@@ -328,19 +313,13 @@
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
-                <DeployFile LocalName="..\..\libraries\dduce\Source\DDuce.inc" Configuration="Release" Class="ProjectFile">
-                    <Platform Name="Win32">
-                        <RemoteDir>.\</RemoteDir>
-                        <Overwrite>true</Overwrite>
-                    </Platform>
-                </DeployFile>
                 <DeployFile LocalName="README.md" Configuration="Debug" Class="ProjectFile">
                     <Platform Name="Win32">
                         <RemoteDir>.\</RemoteDir>
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
-                <DeployFile LocalName="Library\Win32\Release\DataGrabber.exe" Configuration="Release" Class="ProjectOutput">
+                <DeployFile LocalName="Bin\Win32\DataGrabber.exe" Configuration="Release" Class="ProjectOutput">
                     <Platform Name="Win32">
                         <RemoteName>DataGrabber.exe</RemoteName>
                         <Overwrite>true</Overwrite>

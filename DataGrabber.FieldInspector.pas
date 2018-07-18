@@ -97,8 +97,6 @@ begin
   FOIField   := TzObjectInspectorFactory.Create(Self, pnlRight);
   FVSTFields := TVirtualStringTreeFactory.CreateGrid(Self, pnlLeft);
     // cell in first column is fully selected
-  FVSTFields.TreeOptions.MiscOptions :=
-    FVSTFields.TreeOptions.MiscOptions + [toGridExtensions];
   FVSTFields.TreeOptions.PaintOptions :=
     FVSTFields.TreeOptions.PaintOptions - [toHideSelection];
   FVSTFields.TreeOptions.PaintOptions :=

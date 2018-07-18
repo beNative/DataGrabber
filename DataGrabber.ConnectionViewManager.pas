@@ -128,6 +128,11 @@ type
     ppmConnectionView             : TPopupMenu;
     ppmEditorView                 : TPopupMenu;
     Liveresults1: TMenuItem;
+    actResultsAsWiki: TAction;
+    mniCopyResults: TMenuItem;
+    ResultsasWiki1: TMenuItem;
+    actCopyConnectionViewAsWiki: TAction;
+    actAbout: TAction;
     {$ENDREGION}
 
     {$REGION 'action handlers'}
@@ -170,6 +175,9 @@ type
     procedure actShowMetaDataExecute(Sender: TObject);
     procedure actToggleFullScreenExecute(Sender: TObject);
     procedure actToggleStayOnTopExecute(Sender: TObject);
+    procedure actResultsAsWikiExecute(Sender: TObject);
+    procedure actCopyConnectionViewAsWikiExecute(Sender: TObject);
+    procedure actAboutExecute(Sender: TObject);
     {$ENDREGION}
 
   private
@@ -256,7 +264,7 @@ uses
 
   Spring,
 
-  DDuce.ObjectInspector.zObjectInspector,
+  DDuce.ObjectInspector.zObjectInspector, DDuce.AboutDialog,
 
   DataGrabber.Settings.Dialog, DataGrabber.Factories, DataGrabber.Resources,
   DataGrabber.MetaData.Dialog;
@@ -312,6 +320,12 @@ end;
 procedure TdmConnectionViewManager.actCollapseAllExecute(Sender: TObject);
 begin
   (ActiveDataView as IGroupable).CollapseAll;
+end;
+
+procedure TdmConnectionViewManager.actCopyConnectionViewAsWikiExecute(
+  Sender: TObject);
+begin
+  Clipboard.AsText := ActiveConnectionView.ExportAsWiki;
 end;
 
 procedure TdmConnectionViewManager.actCopyExecute(Sender: TObject);
@@ -474,6 +488,18 @@ begin
   Settings.MergeColumnCells := (Sender as TAction).Checked;
 end;
 
+procedure TdmConnectionViewManager.actAboutExecute(Sender: TObject);
+var
+  F : TfrmAboutDialog;
+begin
+  F := TfrmAboutDialog.Create(Self);
+  try
+    F.ShowModal;
+  finally
+    F.Free;
+  end;
+end;
+
 procedure TdmConnectionViewManager.actAddConnectionViewExecute(Sender: TObject);
 begin
   AddConnectionView;
@@ -532,6 +558,11 @@ end;
 procedure TdmConnectionViewManager.actPrintExecute(Sender: TObject);
 begin
   //(ActiveData as IDataReport).PrintReport;
+end;
+
+procedure TdmConnectionViewManager.actResultsAsWikiExecute(Sender: TObject);
+begin
+  Clipboard.AsText := ActiveConnectionView.ExportAsWiki;
 end;
 
 procedure TdmConnectionViewManager.actDesignerExecute(Sender: TObject);
@@ -692,10 +723,6 @@ begin
     actExecuteLiveResultSet.Enabled := actExecute.Enabled;
 
     B := ActiveData.Active;
-    actHideEmptyColumns.Enabled    := B;
-    actHideConstantColumns.Enabled := B;
-    actHideSelectedColumns.Enabled := B;
-    actShowAllColumns.Enabled      := B;
     actPreview.Enabled             := B;
     actPrint.Enabled               := B;
     actDesigner.Enabled            := B;
@@ -718,6 +745,7 @@ begin
     actMergeColumnCells.Enabled  := actMergeColumnCells.Visible;
     actMergeColumnCells.Checked  := Settings.MergeColumnCells;
   end;
+  Logger.Watch('ActiveConnectionView', ActiveConnectionView.EditorView.Text);
 end;
 
 procedure TdmConnectionViewManager.UpdateConnectionViewCaptions;

@@ -87,6 +87,14 @@ type
       AController    : TcxGridTableController;
       AIncludeHeader : Boolean = False
     );
+
+    function ResultsToWikiTable(
+      AIncludeHeader: Boolean = False
+    ): string; virtual;
+    function ResultsToTextTable(
+      AIncludeHeader: Boolean = False
+    ): string; virtual;
+
     function SelectionToDelimitedTable(
       AController    : TcxGridTableController;
       ADelimiter     : string = #9; // TAB
@@ -634,6 +642,48 @@ begin
     end;
   finally
     EndUpdate;
+  end;
+end;
+
+function TfrmcxGrid.ResultsToTextTable(AIncludeHeader: Boolean): string;
+begin
+//
+end;
+
+function TfrmcxGrid.ResultsToWikiTable(AIncludeHeader: Boolean): string;
+var
+  X, Y : Integer;
+  S, T : string;
+  V    : Variant;
+  SL   : TStringList;
+begin
+  SL := TStringList.Create;
+  try
+    if AIncludeHeader then
+    begin
+      S := '||';
+      for X := 0 to tvwMain.VisibleColumnCount - 1 do
+      begin
+        S := S + tvwMain.VisibleColumns[X].Caption + '||';
+      end;
+      SL.Add(S);
+    end;
+    for Y := 0 to tvwMain.ViewData.RowCount - 1 do
+    begin
+      S := '|';
+      for X := 0 to tvwMain.VisibleColumnCount -1 do
+      begin
+        V := tvwMain.ViewData.Rows[Y].Values[tvwMain.VisibleColumns[X].Index];
+        T := VarToStr(V);
+        if T = '' then
+          T := ' ';
+        S := S + T + '|';
+      end;
+      SL.Add(S);
+    end;
+    Result := SL.Text;
+  finally
+    FreeAndNil(SL);
   end;
 end;
 

@@ -291,6 +291,9 @@ type
     procedure BeginUpdate;
     procedure EndUpdate;
 
+    function ResultsToWikiTable(AIncludeHeader: Boolean = False): string;
+    function ResultsToTextTable(AIncludeHeader: Boolean = False): string;
+
     function SelectionToCommaText(AQuoteItems: Boolean = True): string;
     function SelectionToDelimitedTable(
       ADelimiter     : string = #9;
@@ -434,6 +437,8 @@ type
 
     procedure Copy;
     procedure ApplySettings;
+
+    function ExportAsWiki: string;
 
     property ActiveDataView: IDataView
       read GetActiveDataView;

@@ -13,6 +13,7 @@ object frmFieldInspector: TfrmFieldInspector
   Font.Name = 'Tahoma'
   Font.Style = []
   OldCreateOrder = False
+  Position = poOwnerFormCenter
   PixelsPerInch = 96
   TextHeight = 13
   object splVertical: TSplitter
@@ -33,6 +34,8 @@ object frmFieldInspector: TfrmFieldInspector
     Align = alClient
     BevelOuter = bvNone
     TabOrder = 0
+    ExplicitLeft = 0
+    ExplicitTop = -2
   end
   object pnlRight: TPanel
     AlignWithMargins = True

@@ -65,6 +65,13 @@ type
     procedure BeginUpdate; virtual;
     procedure EndUpdate; virtual;
 
+    function ResultsToWikiTable(
+      AIncludeHeader: Boolean = False
+    ): string; virtual;
+    function ResultsToTextTable(
+      AIncludeHeader: Boolean = False
+    ): string; virtual;
+
     function SelectionToCommaText(
       AQuoteItems: Boolean = True
     ): string; virtual;
@@ -287,6 +294,16 @@ end;
 function TBaseDataView.IsActiveDataView: Boolean;
 begin
   Result := ContainsFocus(Self);
+end;
+
+function TBaseDataView.ResultsToTextTable(AIncludeHeader: Boolean): string;
+begin
+  Result := '';
+end;
+
+function TBaseDataView.ResultsToWikiTable(AIncludeHeader: Boolean): string;
+begin
+  Result := '';
 end;
 
 function TBaseDataView.SelectionToCommaText(AQuoteItems: Boolean): string;

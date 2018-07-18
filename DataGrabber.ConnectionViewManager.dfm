@@ -299,6 +299,21 @@ object dmConnectionViewManager: TdmConnectionViewManager
       ShortCut = 16500
       OnExecute = actExecuteLiveResultSetExecute
     end
+    object actResultsAsWiki: TAction
+      Category = 'Grid'
+      Caption = 'Results as Wiki'
+      ImageIndex = 23
+      OnExecute = actResultsAsWikiExecute
+    end
+    object actCopyConnectionViewAsWiki: TAction
+      Caption = 'Copy SQL query and results as Wiki to clipboard'
+      Hint = 'Copy SQL query and results as Wiki to clipboard.'
+      OnExecute = actCopyConnectionViewAsWikiExecute
+    end
+    object actAbout: TAction
+      Caption = 'About'
+      OnExecute = actAboutExecute
+    end
   end
   object ppmConnectionView: TPopupMenu
     Images = imlMain
@@ -361,6 +376,13 @@ object dmConnectionViewManager: TdmConnectionViewManager
     end
     object mniCopy: TMenuItem
       Action = actCopy
+    end
+    object mniCopyResults: TMenuItem
+      Caption = 'Copy results ...'
+      object ResultsasWiki1: TMenuItem
+        Action = actResultsAsWiki
+        Caption = '... as Wiki table'
+      end
     end
     object mniSelection: TMenuItem
       Caption = 'Copy selection ...'
@@ -440,7 +462,7 @@ object dmConnectionViewManager: TdmConnectionViewManager
     Left = 24
     Top = 80
     Bitmap = {
-      494C010155002003EC0110001000FFFFFFFF2110FFFFFFFFFFFFFFFF424D3600
+      494C010155002003F80110001000FFFFFFFF2110FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000006001000001002000000000000060
       0100000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
