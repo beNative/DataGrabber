@@ -34,7 +34,7 @@ object dmConnectionViewManager: TdmConnectionViewManager
     object actToggleStayOnTop: TAction
       AutoCheck = True
       Caption = 'Stay on Top'
-      Hint = 'Toggle stay on top.'
+      Hint = 'Toggle stay on top'
       ImageIndex = 78
       ShortCut = 49232
       OnExecute = actToggleStayOnTopExecute
@@ -96,7 +96,7 @@ object dmConnectionViewManager: TdmConnectionViewManager
     object actToggleFullScreen: TAction
       AutoCheck = True
       Caption = 'Toggle full screen'
-      Hint = 'Toggle full screen mode.'
+      Hint = 'Toggle full screen mode'
       ImageIndex = 9
       ShortCut = 122
       OnExecute = actToggleFullScreenExecute
@@ -156,7 +156,7 @@ object dmConnectionViewManager: TdmConnectionViewManager
     end
     object actSettings: TAction
       Caption = 'Settings'
-      Hint = 'Open settings dialog.'
+      Hint = 'Open settings dialog'
       ImageIndex = 32
       ShortCut = 49235
       OnExecute = actSettingsExecute
@@ -238,7 +238,7 @@ object dmConnectionViewManager: TdmConnectionViewManager
     end
     object actAddConnectionView: TAction
       Caption = 'Add new connection view'
-      Hint = 'Add new connection view.'
+      Hint = 'Add new connection view'
       ImageIndex = 75
       OnExecute = actAddConnectionViewExecute
     end
@@ -289,12 +289,14 @@ object dmConnectionViewManager: TdmConnectionViewManager
     object actClearGrouping: TAction
       Category = 'Grid'
       Caption = 'Clear grouping'
+      Hint = 'Clear grouping'
       ImageIndex = 82
       OnExecute = actClearGroupingExecute
     end
     object actExecuteLiveResultSet: TAction
       Category = 'Data'
       Caption = 'Live results'
+      Hint = 'Execute SQL and return a live resultset'
       ImageIndex = 84
       ShortCut = 16500
       OnExecute = actExecuteLiveResultSetExecute
@@ -312,6 +314,8 @@ object dmConnectionViewManager: TdmConnectionViewManager
     end
     object actAbout: TAction
       Caption = 'About'
+      Hint = 'Show About dialog'
+      ImageIndex = 33
       OnExecute = actAboutExecute
     end
   end
@@ -462,7 +466,7 @@ object dmConnectionViewManager: TdmConnectionViewManager
     Left = 24
     Top = 80
     Bitmap = {
-      494C010155002003F80110001000FFFFFFFF2110FFFFFFFFFFFFFFFF424D3600
+      494C010155002003FC0110001000FFFFFFFF2110FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000006001000001002000000000000060
       0100000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000

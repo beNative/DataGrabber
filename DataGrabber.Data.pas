@@ -116,7 +116,6 @@ type
     FFavoriteFields         : IList<TField>;
     FConstantFieldsVisible  : Boolean;
     FEmptyFieldsVisible     : Boolean;
-    FHiddenFieldCount       : Integer;
     FShowFavoriteFieldsOnly : Boolean;
     FExecuted               : Boolean;
     FSQL                    : string;
@@ -753,7 +752,6 @@ procedure TdmData.InitFields(ADataSet: TDataSet);
 var
   Field : TField;
 begin
-  FHiddenFieldCount := 0;
   for Field in ADataSet.Fields do
   begin
     InitField(Field);
@@ -824,6 +822,13 @@ begin
   if Trim(ACommandText) <> '' then
   begin
     FResultSets.Clear;
+
+    FConstantFields.Clear;
+    FHiddenFields.Clear;
+    FEmptyFields.Clear;
+    FFavoriteFields.Clear;
+
+
     qryMain.Close;
     FStopWatch.Start;
     qryMain.Open(ACommandText);
@@ -866,7 +871,6 @@ begin
       end;
     end;
     FHiddenFields.Clear;
-    FHiddenFieldCount := 0;
   finally
     DataSet.EnableControls;
   end;
@@ -942,6 +946,8 @@ begin
   FStopWatch.Reset;
   InitializeConnection;
   FStopWatch.Start;
+  if OnBeforeExecute.CanInvoke then
+    OnBeforeExecute.Invoke(Self);
   InternalExecute(SQL);
   FStopWatch.Stop;
   if OnAfterExecute.CanInvoke then
@@ -949,7 +955,7 @@ begin
   FConstantFields.Clear;
   FEmptyFields.Clear;
   FNonEmptyFields.Clear;
-  FHiddenFieldCount := 0;
+  FHiddenFields.Clear;
   FFieldListsUpdated := False;
   if not EmptyFieldsVisible or not ConstantFieldsVisible then
     UpdateFieldLists;

@@ -1334,23 +1334,23 @@ object frmSettingsDialog: TfrmSettingsDialog
   end
   object aclMain: TActionList
     Images = imlMain
-    Left = 456
-    Top = 40
+    Left = 16
+    Top = 272
     object actApply: TAction
       Caption = '&Apply'
-      Hint = 'Apply settings immediately'
+      Hint = 'Apply changes'
       ImageIndex = 2
       OnExecute = actApplyExecute
     end
     object actClose: TAction
       Caption = 'Clos&e'
-      Hint = 'Close dialog'
+      Hint = 'Save changes and close'
       ImageIndex = 12
       OnExecute = actCloseExecute
     end
     object actCancel: TAction
       Caption = '&Cancel'
-      Hint = 'Cancel all changes.'
+      Hint = 'Cancel all changes and close'
       ImageIndex = 1
       OnExecute = actCancelExecute
     end
@@ -1388,7 +1388,7 @@ object frmSettingsDialog: TfrmSettingsDialog
     end
     object actDuplicate: TAction
       Category = 'ConnectionProfiles'
-      Caption = 'Copy'
+      Caption = 'Duplicate'
       Hint = 'Duplicate'
       ImageIndex = 13
       OnExecute = actDuplicateExecute
@@ -1466,13 +1466,13 @@ object frmSettingsDialog: TfrmSettingsDialog
     end
     object actSaveFile: TAction
       Caption = 'Save'
-      Hint = 'Save file to disk.'
+      Hint = 'Save file to disk'
       ImageIndex = 0
       OnExecute = actSaveFileExecute
     end
     object actRefreshFile: TAction
       Caption = 'Refresh'
-      Hint = 'Reload file from disk.'
+      Hint = 'Reload file from disk'
       ImageIndex = 22
       OnExecute = actRefreshFileExecute
     end
@@ -1480,10 +1480,10 @@ object frmSettingsDialog: TfrmSettingsDialog
   object imlMain: TImageList
     ColorDepth = cd32Bit
     DrawingStyle = dsTransparent
-    Left = 544
-    Top = 104
+    Left = 16
+    Top = 200
     Bitmap = {
-      494C010119003000BC0010001000FFFFFFFF2110FFFFFFFFFFFFFFFF424D3600
+      494C010119003000C00010001000FFFFFFFF2110FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000007000000001002000000000000070
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
@@ -2415,8 +2415,8 @@ object frmSettingsDialog: TfrmSettingsDialog
       000000000000}
   end
   object dlgOpenFile: TOpenDialog
-    Left = 344
-    Top = 40
+    Left = 16
+    Top = 72
   end
   object synJScript: TSynJScriptSyn
     Options.AutoDetectEnabled = False
@@ -2430,8 +2430,8 @@ object frmSettingsDialog: TfrmSettingsDialog
     StringAttri.Style = [fsBold, fsItalic]
     SymbolAttri.Foreground = clRed
     SymbolAttri.Style = [fsBold]
-    Left = 391
-    Top = 44
+    Left = 95
+    Top = 76
   end
   object synIni: TSynIniSyn
     Options.AutoDetectEnabled = False
@@ -2448,8 +2448,8 @@ object frmSettingsDialog: TfrmSettingsDialog
     StringAttri.Style = [fsBold, fsItalic]
     SymbolAttri.Foreground = clRed
     SymbolAttri.Style = [fsBold]
-    Left = 510
-    Top = 39
+    Left = 14
+    Top = 135
   end
   object dlgFont: TFontDialog
     Font.Charset = DEFAULT_CHARSET
@@ -2457,13 +2457,13 @@ object frmSettingsDialog: TfrmSettingsDialog
     Font.Height = -11
     Font.Name = 'Tahoma'
     Font.Style = []
-    Left = 562
-    Top = 42
+    Left = 98
+    Top = 130
   end
   object conTest: TFDConnection
     LoginPrompt = False
     OnError = conTestError
-    Left = 622
-    Top = 107
+    Left = 94
+    Top = 203
   end
 end

@@ -100,7 +100,7 @@ uses
   System.StrUtils, System.Math, System.UITypes,
   Vcl.Clipbrd,
 
-  DDuce.ObjectInspector.zObjectInspector,
+  DDuce.ObjectInspector.zObjectInspector, DDuce.Utils,
 
   KFunctions,
 

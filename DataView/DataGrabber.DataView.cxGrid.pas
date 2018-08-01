@@ -90,10 +90,10 @@ type
 
     function ResultsToWikiTable(
       AIncludeHeader: Boolean = False
-    ): string; virtual;
+    ): string; override;
     function ResultsToTextTable(
       AIncludeHeader: Boolean = False
-    ): string; virtual;
+    ): string; override;
 
     function SelectionToDelimitedTable(
       AController    : TcxGridTableController;
@@ -171,7 +171,7 @@ uses
 
   cxGridDBDataDefinitions, cxGridCommon,
 
-  DDuce.ObjectInspector.zObjectInspector, DDuce.Logger,
+  DDuce.ObjectInspector.zObjectInspector, DDuce.Logger, DDuce.Utils,
 
   DataGrabber.Utils;
 

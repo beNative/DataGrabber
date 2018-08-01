@@ -169,7 +169,7 @@ uses
 
   Spring.Utils,
 
-  DDuce.ObjectInspector.zObjectInspector,
+  DDuce.ObjectInspector.zObjectInspector, DDuce.Utils,
   //DDuce.Logger, DDuce.Logger.Factories,
 
   DataGrabber.Utils, DataGrabber.Resources, DataGrabber.Factories;
@@ -456,6 +456,12 @@ begin
     pnlConstantFieldsCount.Caption := Format(SConstantFieldCount, [CFC]);
     pnlEmptyFieldsCount.Caption    := Format(SEmptyFieldCount, [EFC]);
     pnlHiddenFieldsCount.Caption   := Format(SHiddenFieldCount, [HFC]);
+    if HFC > 0 then
+      pnlHiddenFieldsCount.Font.Style :=
+        pnlHiddenFieldsCount.Font.Style + [fsBold]
+    else
+      pnlHiddenFieldsCount.Font.Style :=
+        pnlHiddenFieldsCount.Font.Style - [fsBold];
     pnlElapsedTime.Caption         := Format(
       '%5.0f ms', [Data.ElapsedTime.TotalMilliseconds]
     );

@@ -727,7 +727,12 @@ begin
     actPrint.Enabled               := B;
     actDesigner.Enabled            := B;
 
-    B := Assigned(ActiveDataView);
+    B := Assigned(ActiveDataView) and Assigned(ActiveDataView.ResultSet);
+    actHideEmptyColumns.Enabled    := B;
+    actHideConstantColumns.Enabled := B;
+    actHideSelectedColumns.Enabled := B;
+    actShowAllColumns.Enabled      := B;
+
     actHideEmptyColumns.Checked    := B and
       not ActiveDataView.ResultSet.EmptyFieldsVisible;
     actHideConstantColumns.Checked := B and
@@ -745,7 +750,6 @@ begin
     actMergeColumnCells.Enabled  := actMergeColumnCells.Visible;
     actMergeColumnCells.Checked  := Settings.MergeColumnCells;
   end;
-  Logger.Watch('ActiveConnectionView', ActiveConnectionView.EditorView.Text);
 end;
 
 procedure TdmConnectionViewManager.UpdateConnectionViewCaptions;

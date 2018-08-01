@@ -165,7 +165,7 @@ uses
 
   DDuce.ObjectInspector.zObjectInspector,
 
-  DDuce.Logger, DDuce.Factories.VirtualTrees,
+  DDuce.Logger, DDuce.Factories.VirtualTrees, DDuce.Utils,
 
   DataGrabber.Utils, DataGrabber.Factories;
 

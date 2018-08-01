@@ -25,22 +25,6 @@ uses
 
   VirtualTrees;
 
-function ContainsFocus(AControl: TWinControl): Boolean;
-
-function GetTextWidth(const AText: string): Integer; overload;
-
-function GetMaxTextWidth(AStrings: TStrings): Integer;
-
-function GetTextWidth(
-  const AText : string;
-  AFont       : TFont
-): Integer; overload;
-
-function GetTextHeight(
-  const AText : string;
-  AFont       : TFont
-): Integer;
-
 function Explode(ASeparator, AText: string): TStringList;
 
 function FindNode(
@@ -60,197 +44,16 @@ procedure SelectNode(
   ANode : PVirtualNode
 ); overload;
 
-procedure RunApplication(
-  const AParams : string;
-  const AFile   : string;
-  AWait         : Boolean = True
-);
-
-procedure LockPaint(AControl: TWinControl);
-
-procedure UnlockPaint(AControl: TWinControl);
-
 implementation
 
 uses
   Winapi.ShellAPI, Winapi.Messages,
   System.SysUtils,
-  Vcl.Forms;
+  Vcl.Forms,
+
+  DDuce.Utils, DDuce.Utils.Winapi;
 
 {$REGION 'interfaced routines'}
-function GetTextHeight(const AText: string; AFont: TFont): Integer;
-var
-  Bitmap: TBitmap;
-begin
-  Bitmap := TBitmap.Create;
-  try
-    Bitmap.Canvas.Font.Assign(AFont);
-    Result := Bitmap.Canvas.TextExtent(AText).cy;
-  finally
-    Bitmap.Free;
-  end;
-end;
-
-function GetTextWidth(const AText: string; AFont: TFont): Integer;
-var
-  Bitmap : TBitmap;
-begin
-  Bitmap := TBitmap.Create;
-  try
-    Bitmap.Canvas.Font.Assign(AFont);
-    Result := Bitmap.Canvas.TextExtent(AText).cx;
-  finally
-    Bitmap.Free;
-  end;
-end;
-
-procedure LockPaint(AControl: TWinControl);
-begin
-  if Assigned(AControl) and (AControl.Handle <> 0) then
-  begin
-    SendMessage(AControl.Handle, WM_SETREDRAW, 0, 0);
-  end;
-end;
-
-procedure UnlockPaint(AControl: TWinControl);
-begin
-  if Assigned(AControl) and (AControl.Handle <> 0) then
-  begin
-    SendMessage(AControl.Handle, WM_SETREDRAW, 1, 0);
-    RedrawWindow(
-      AControl.Handle,
-      nil,
-      0,
-      RDW_ERASE or RDW_FRAME or RDW_INVALIDATE or RDW_ALLCHILDREN
-    );
-  end;
-end;
-
-procedure RunApplication(const AParams: string; const AFile: string;
-  AWait: Boolean);
-
-  procedure ResetMemory(out P; Size: Longint);
-  begin
-    if Size > 0 then
-    begin
-      Byte(P) := 0;
-      FillChar(P, Size, 0);
-    end;
-  end;
-
-  function PCharOrNil(const S: string): PChar;
-  begin
-    Result := Pointer(S);
-  end;
-
-  function ShellExecAndWait(const FileName: string;
-    const Parameters: string = ''; const Verb: string = '';
-    CmdShow: Integer = SW_HIDE; const Directory: string = ''): Boolean;
-  var
-    SEI : TShellExecuteInfo;
-    Res : LongBool;
-    Msg : tagMSG;
-  begin
-    ResetMemory(SEI, SizeOf(SEI));
-    SEI.cbSize := SizeOf(SEI);
-    SEI.fMask  := SEE_MASK_DOENVSUBST or SEE_MASK_FLAG_NO_UI
-      or SEE_MASK_NOCLOSEPROCESS or SEE_MASK_FLAG_DDEWAIT;
-    SEI.lpFile       := PChar(FileName);
-    SEI.lpParameters := PCharOrNil(Parameters);
-    SEI.lpVerb       := PCharOrNil(Verb);
-    SEI.nShow        := CmdShow;
-    SEI.lpDirectory  := PCharOrNil(Directory);
-    {$TYPEDADDRESS ON}
-    Result := ShellExecuteEx(@SEI);
-    {$IFNDEF TYPEDADDRESS_ON}
-    {$TYPEDADDRESS OFF}
-    {$ENDIF ~TYPEDADDRESS_ON}
-    if Result then
-    begin
-      WaitForInputIdle(SEI.hProcess, INFINITE);
-      while WaitForSingleObject(SEI.hProcess, 10) = WAIT_TIMEOUT do
-        repeat
-          Msg.hwnd := 0;
-          Res := PeekMessage(Msg, SEI.Wnd, 0, 0, PM_REMOVE);
-          if Res then
-          begin
-            TranslateMessage(Msg);
-            DispatchMessage(Msg);
-          end;
-        until not Res;
-      CloseHandle(SEI.hProcess);
-    end;
-  end;
-   // borrowed from Project JEDI Code Library (JCL)
-  function ShellExecEx(const FileName: string; const Parameters: string = '';
-    const Verb: string = ''; CmdShow: Integer = SW_SHOWNORMAL): Boolean;
-  var
-    SEI: TShellExecuteInfo;
-  begin
-    ResetMemory(SEI, SizeOf(SEI));
-    SEI.cbSize := SizeOf(SEI);
-    SEI.fMask := SEE_MASK_DOENVSUBST or SEE_MASK_FLAG_NO_UI;
-    SEI.lpFile := PChar(FileName);
-    SEI.lpParameters := PCharOrNil(Parameters);
-    SEI.lpVerb := PCharOrNil(Verb);
-    SEI.nShow := CmdShow;
-    {$TYPEDADDRESS ON}
-    Result := ShellExecuteEx(@SEI);
-    {$IFNDEF TYPEDADDRESS_ON}
-    {$TYPEDADDRESS OFF}
-    {$ENDIF ~TYPEDADDRESS_ON}
-  end;
-
-begin
-  if FileExists(AFile) then
-  begin
-    if AWait then
-      ShellExecAndWait(AFile, AParams)
-    else
-      ShellExecEx(AFile, AParams);
-  end
-  else
-    raise Exception.CreateFmt('"%s" not found', [AFile]);
-end;
-
-function GetTextWidth(const AText: string): Integer;
-var
-  SL      : TStringList;
-  I, W, R : Integer;
-begin
-  SL := TStringList.Create;
-  try
-    SL.Text := AText;
-    R := 0;
-    for I := 0 to SL.Count - 1 do
-    begin
-      W := Length(SL[I]);
-      if W > R then
-        R := W;
-    end;
-    Result := R;
-  finally
-    SL.Free;
-  end;
-end;
-
-function GetMaxTextWidth(AStrings: TStrings): Integer;
-var
-  I : Integer;
-  N : Integer;
-begin
-  Result := 0;
-  if Assigned(AStrings) then
-  begin
-    for I := 0 to AStrings.Count - 1 do
-    begin
-      N := GetTextWidth(AStrings[I]);
-      if N > Result then
-        Result := N;
-    end;
-  end;
-end;
-
 function RunFormatterProcess(const AExeName: string; const AParams: string;
   const AString: string; const ATempFile: string): string;
 var
@@ -350,21 +153,6 @@ begin
   AVT.FocusedNode := ANode;
   AVT.Selected[ANode] := True;
   AVT.ScrollIntoView(ANode, False);
-end;
-
-function ContainsFocus(AControl: TWinControl): Boolean;
-var
-  H : HWND;
-  C : TWinControl;
-begin
-  H := Winapi.Windows.GetFocus;
-  C := FindControl(H);
-  if not Assigned(C) then
-    Result := False
-  else
-  begin
-    Result := AControl.ContainsControl(C);
-  end;
 end;
 {$ENDREGION}
 

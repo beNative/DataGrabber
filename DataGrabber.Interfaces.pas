@@ -176,9 +176,6 @@ type
     property ResultSet: IResultSet
       read GetResultSet;
 
-//    property DataSet: TFDDataSet
-//      read GetDataSet;
-
     property Connection: TFDConnection
       read GetConnection;
 
@@ -314,9 +311,6 @@ type
 
     property ResultSet: IResultSet
       read GetResultSet;
-
-//    property Data: IData
-//      read GetData;
 
     property RecordCount: Integer
       read GetRecordCount;

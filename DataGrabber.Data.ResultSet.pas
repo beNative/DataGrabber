@@ -42,7 +42,6 @@ type
     FFavoriteFields        : IList<TField>;
     FConstantFieldsVisible : Boolean;
     FEmptyFieldsVisible    : Boolean;
-    FHiddenFieldCount      : Integer;
 
     {$REGION 'property access methods'}
     function GetConstantFields: IList<TField>;
@@ -58,6 +57,10 @@ type
     function GetDataSet: TFDDataSet;
     function GetData: IData;
     {$ENDREGION}
+
+    procedure FDataAfterExecute(Sender: TObject);
+    procedure FDataBeforeExecute(Sender: TObject);
+
 
   protected
     procedure UpdateFieldLists;
@@ -122,6 +125,8 @@ end;
 
 procedure TResultSet.BeforeDestruction;
 begin
+  FData.OnBeforeExecute.Remove(FDataBeforeExecute);
+  FData.OnAfterExecute.Remove(FDataAfterExecute);
   FData := nil;
   FreeAndNil(FDataSet);
   inherited BeforeDestruction;
@@ -134,6 +139,8 @@ begin
   Guard.CheckNotNull(AData, 'AData');
   Guard.CheckNotNull(AFDDataSetReference, 'AFDDataSetReference');
   FData := AData;
+  FData.OnBeforeExecute.Add(FDataBeforeExecute);
+  FData.OnAfterExecute.Add(FDataAfterExecute);
   FDataSet := TFDMemTable.Create(nil);;
   FDataSet.Data := AFDDataSetReference;
 end;
@@ -211,6 +218,23 @@ begin
 end;
 {$ENDREGION}
 
+{$REGION 'event handlers'}
+procedure TResultSet.FDataBeforeExecute(Sender: TObject);
+begin
+  FConstantFields.Clear;
+  FEmptyFields.Clear;
+  FNonEmptyFields.Clear;
+  FHiddenFields.Clear;
+  FFavoriteFields.Clear;
+end;
+
+procedure TResultSet.FDataAfterExecute(Sender: TObject);
+begin
+  UpdateFieldLists;
+  InitFields(DataSet);
+end;
+{$ENDREGION}
+
 {$REGION 'protected methods'}
 procedure TResultSet.InitField(AField: TField);
 var
@@ -233,7 +257,6 @@ procedure TResultSet.InitFields(ADataSet: TDataSet);
 var
   Field : TField;
 begin
-  FHiddenFieldCount := 0;
   for Field in ADataSet.Fields do
   begin
     InitField(Field);
@@ -258,7 +281,6 @@ begin
       end;
     end;
     FHiddenFields.Clear;
-    FHiddenFieldCount := 0;
   finally
     DataSet.EnableControls;
   end;

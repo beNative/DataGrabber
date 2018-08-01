@@ -131,6 +131,8 @@ implementation
 uses
   Spring,
 
+  DDuce.Utils,
+
   DataGrabber.Utils, DataGrabber.Factories;
 
 {$REGION 'construction and destruction'}
