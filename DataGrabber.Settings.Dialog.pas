@@ -846,7 +846,7 @@ begin
   if FileExists(S_FD_DefCfgFileName) then
   begin
     seFDConnectionDefs.Lines.LoadFromFile(S_FD_DefCfgFileName);
-    seFDConnectionDefs.ResetModificationIndicator;
+    //seFDConnectionDefs.ResetModificationIndicator;
     seFDConnectionDefs.Modified := False;
   end;
 end;
@@ -859,7 +859,7 @@ end;
 procedure TfrmSettingsDialog.SaveConnectionDefinitionsFile;
 begin
   seFDConnectionDefs.Lines.SaveToFile(S_FD_DefCfgFileName);
-  seFDConnectionDefs.MarkModifiedLinesAsSaved;
+  //seFDConnectionDefs.MarkModifiedLinesAsSaved;
   seFDConnectionDefs.Modified := False;
 end;
 

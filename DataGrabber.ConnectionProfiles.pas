@@ -188,9 +188,6 @@ procedure TConnectionProfiles.SetItemName(Item: TCollectionItem);
 var
   S : string;
 begin
-// The Insert method calls SetItemName to initialize the Name property of items
-// when it inserts them into the collection. This overridden version provides
-// collection items with default names.
   S := Copy(Item.ClassName, 2, Length(Item.ClassName));
   TConnectionProfile(Item).Name := FindUniqueName(S);
 end;
@@ -262,10 +259,6 @@ procedure TConnectionProfile.SetCollection(const Value: TConnectionProfiles);
 begin
   inherited Collection := Value;
 end;
-
-// By default, DisplayName is the name of the TCollectionItem descendant class
-// of which the item is an instance. By providing a dedicated field each item
-// in the Collection editor can be displayed with a unique name.
 
 function TConnectionProfile.GetDisplayName: string;
 begin

@@ -138,6 +138,12 @@ begin
   if Value <> DataSet then
   begin
     FDataSet := Value;
+    if FDataSet.FieldCount > 0 then
+    begin
+      FOIField.Component := DataSet.Fields[0];
+    end
+    else
+      FOIField.Component := nil;
     UpdateView;
   end;
 end;

@@ -701,10 +701,10 @@ begin
 //  begin
 //    FDataInspector.Data := ActiveData;
 //  end;
-//  if Assigned(FFieldInspector) and FFieldInspector.Visible then
-//  begin
-//    FFieldInspector.DataSet := ActiveDataView.DataSet;
-//  end;
+  if Assigned(FFieldInspector) and FFieldInspector.Visible then
+  begin
+    FFieldInspector.DataSet := ActiveDataView.DataSet;
+  end;
 end;
 
 procedure TdmConnectionViewManager.UpdateActions;
