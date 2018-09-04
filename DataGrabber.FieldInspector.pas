@@ -62,6 +62,8 @@ type
 
     function GetDataSet: TDataSet;
     procedure SetDataSet(const Value: TDataSet);
+  protected
+    procedure UpdateActions; override;
 
   public
     constructor Create(
@@ -70,6 +72,7 @@ type
     ); reintroduce; virtual;
 
     procedure UpdateView;
+
 
     property DataSet : TDataSet
       read GetDataSet write SetDataSet;
@@ -163,6 +166,14 @@ begin
     CellText := DataSet.Fields[Node.Index].FieldName
   else if Column = 1 then
     CellText := DataSet.Fields[Node.Index].ClassName;
+end;
+{$ENDREGION}
+
+{$REGION 'protected methods'}
+procedure TfrmFieldInspector.UpdateActions;
+begin
+  inherited UpdateActions;
+  FOIField.Invalidate;
 end;
 {$ENDREGION}
 
