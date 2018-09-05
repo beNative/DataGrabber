@@ -34,8 +34,6 @@ object frmFieldInspector: TfrmFieldInspector
     Align = alClient
     BevelOuter = bvNone
     TabOrder = 0
-    ExplicitLeft = 0
-    ExplicitTop = -2
   end
   object pnlRight: TPanel
     AlignWithMargins = True
