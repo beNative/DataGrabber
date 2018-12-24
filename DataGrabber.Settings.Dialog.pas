@@ -808,6 +808,23 @@ begin
   Changed;
 end;
 
+procedure TfrmSettingsDialog.seFDConnectionDefsChange(Sender: TObject);
+begin
+  if seFDConnectionDefs.Modified then
+    actSaveFile.Enabled := True;
+end;
+
+procedure TfrmSettingsDialog.seFDConnectionDefsExit(Sender: TObject);
+begin
+  if seFDConnectionDefs.Modified then
+  begin
+    if AskSaveFileChanges then
+      SaveConnectionDefinitionsFile
+    else
+      LoadConnectionDefinitionsFile;
+  end;
+end;
+
 procedure TfrmSettingsDialog.tsAdvancedExit(Sender: TObject);
 var
   CP : TConnectionProfile;
@@ -882,23 +899,6 @@ begin
   ACP.ConnectionSettings.DisconnectedMode   := chkDisconnectedMode.Checked;
   ACP.ConnectionSettings.ConnectionDefName  := cbxConnectionDefs.Text;
   FModified := False;
-end;
-
-procedure TfrmSettingsDialog.seFDConnectionDefsChange(Sender: TObject);
-begin
-  if seFDConnectionDefs.Modified then
-    actSaveFile.Enabled := True;
-end;
-
-procedure TfrmSettingsDialog.seFDConnectionDefsExit(Sender: TObject);
-begin
-  if seFDConnectionDefs.Modified then
-  begin
-    if AskSaveFileChanges then
-      SaveConnectionDefinitionsFile
-    else
-      LoadConnectionDefinitionsFile;
-  end;
 end;
 
 procedure TfrmSettingsDialog.seSettingsChange(Sender: TObject);
@@ -1095,7 +1095,6 @@ begin
   actAdd.Enabled       := pgcMain.ActivePage = tsConnectionProfiles;
 
   chkReadOnlyResultSets.Enabled := not chkMultipleResultSets.Checked;
-//  actEditConnectionDef.Enabled := Trim(cbxConnectionDefs.Text) <> '';
   actEditConnectionDef.Enabled := True;
 
   B := chkOSAuthent.Checked;

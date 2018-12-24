@@ -25,8 +25,6 @@ uses
 
   VirtualTrees;
 
-function Explode(ASeparator, AText: string): TStringList;
-
 function FindNode(
   AVT         : TVirtualStringTree;
   AIdx        : Integer;
@@ -92,30 +90,6 @@ begin
   );
 end;
 
-function Explode(ASeparator, AText: string): TStringList;
-var
-  I    : Integer;
-  Item : string;
-begin
-  // Explode a string by separator into a TStringList
-  Result := TStringList.Create;
-  while True do
-  begin
-    I := Pos(ASeparator, AText);
-    if I = 0 then
-    begin
-      // Last or only segment: Add to list if it's the last. Add also if it's not empty and list is empty.
-      // Do not add if list is empty and text is also empty.
-      if (Result.Count > 0) or (AText <> '') then
-        Result.Add(AText);
-      Break;
-    end;
-    Item := Trim(Copy(AText, 1, I - 1));
-    Result.Add(Item);
-    Delete(AText, 1, I - 1 + Length(ASeparator));
-  end;
-end;
-
 function FindNode(AVT: TVirtualStringTree; AIdx: Integer; AParentNode: PVirtualNode): PVirtualNode;
 var
   Node: PVirtualNode;
@@ -131,7 +105,7 @@ begin
     if Node.Index = Cardinal(AIdx) then
     begin
       Result := Node;
-      break;
+      Break;
     end;
     Node := AVT.GetNextSibling(Node);
   end;

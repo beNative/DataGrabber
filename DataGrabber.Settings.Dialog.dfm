@@ -472,6 +472,10 @@ object frmSettingsDialog: TfrmSettingsDialog
             ImageIndex = 1
             OnExit = tsAdvancedExit
             OnShow = tsAdvancedShow
+            ExplicitLeft = 0
+            ExplicitTop = 0
+            ExplicitWidth = 0
+            ExplicitHeight = 0
           end
         end
       end
@@ -537,6 +541,10 @@ object frmSettingsDialog: TfrmSettingsDialog
     object tsDisplay: TTabSheet
       Caption = '&Display settings'
       ImageIndex = 5
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       DesignSize = (
         670
         365)
@@ -1145,6 +1153,10 @@ object frmSettingsDialog: TfrmSettingsDialog
       Caption = 'Settings files'
       ImageIndex = 11
       OnEnter = tsSettingsEnter
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       DesignSize = (
         664
         359)
@@ -1158,6 +1170,10 @@ object frmSettingsDialog: TfrmSettingsDialog
         TabOrder = 0
         object tsDataGrabberSettings: TTabSheet
           Caption = 'Settings.json'
+          ExplicitLeft = 0
+          ExplicitTop = 0
+          ExplicitWidth = 0
+          ExplicitHeight = 0
           object seSettings: TSynEdit
             AlignWithMargins = True
             Left = 3
@@ -1208,6 +1224,10 @@ object frmSettingsDialog: TfrmSettingsDialog
         object tsFDConnectionDefs: TTabSheet
           Caption = 'FDConnectionDefs.ini'
           ImageIndex = 1
+          ExplicitLeft = 0
+          ExplicitTop = 0
+          ExplicitWidth = 0
+          ExplicitHeight = 0
           object seFDConnectionDefs: TSynEdit
             AlignWithMargins = True
             Left = 3
@@ -1289,6 +1309,10 @@ object frmSettingsDialog: TfrmSettingsDialog
       Caption = 'Connection definitions'
       ImageIndex = -1
       TabVisible = False
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
     end
   end
   object btnApply: TButton
@@ -1483,7 +1507,7 @@ object frmSettingsDialog: TfrmSettingsDialog
     Left = 16
     Top = 200
     Bitmap = {
-      494C010119003000C00010001000FFFFFFFF2110FFFFFFFFFFFFFFFF424D3600
+      494C010119003000CC0010001000FFFFFFFF2110FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000007000000001002000000000000070
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
