@@ -207,7 +207,6 @@
         <DCCReference Include="DataGrabber.MainForm.pas">
             <Form>frmMain</Form>
         </DCCReference>
-        <DCCReference Include="uCustomImageDrawHook.pas"/>
         <DCCReference Include="DataGrabber.ConnectionProfileValueManager.pas"/>
         <DCCReference Include="DataView\DataGrabber.DataView.KGrid.pas"/>
         <DCCReference Include="DataGrabber.Data.pas">

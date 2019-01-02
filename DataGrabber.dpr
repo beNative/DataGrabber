@@ -3,7 +3,8 @@
 program DataGrabber;
 
 uses
-  Forms,
+  Vcl.Forms,
+  DDuce.CustomImageDrawHook,
   DDuce.Logger,
   DDuce.Logger.Channels.WinIPC,
   DataGrabber.Resources in 'DataGrabber.Resources.pas',
@@ -21,7 +22,6 @@ uses
   DataGrabber.Factories in 'DataGrabber.Factories.pas',
   DataGrabber.Interfaces in 'DataGrabber.Interfaces.pas',
   DataGrabber.MainForm in 'DataGrabber.MainForm.pas' {frmMain},
-  uCustomImageDrawHook in 'uCustomImageDrawHook.pas',
   DataGrabber.ConnectionProfileValueManager in 'DataGrabber.ConnectionProfileValueManager.pas',
   DataGrabber.DataView.KGrid in 'DataView\DataGrabber.DataView.KGrid.pas',
   DataGrabber.Data in 'DataGrabber.Data.pas' {dmData: TDataModule},
