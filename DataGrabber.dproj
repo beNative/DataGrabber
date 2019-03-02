@@ -62,14 +62,12 @@
         <SanitizedProjectName>DataGrabber</SanitizedProjectName>
         <DCC_Namespace>Vcl;Vcl.Imaging;Vcl.Touch;Vcl.Samples;Vcl.Shell;System;Xml;Data;Datasnap;Web;Soap;Winapi;Data.Win;ts.Connection;System.Win;$(DCC_Namespace)</DCC_Namespace>
         <DCC_UsePackage>vcl;CodeSiteExpressVcl;rtl;vclx;vclimg;dbrtl;adortl;vcldb;vclactnband;vcldbx;bdertl;DataSnapIndy10ServerTransport;DataSnapClient;dbexpress;xmlrtl;DbxClientDriver;DbxCommonDriver;dbxcds;vclie;inet;IndyProtocols;inetdbbde;inetdbxpress;DataSnapProviderClient;dsnap;inetdb;IndySystem;IndyCore;DataSnapServer;dsnapcon;DBXInterBaseDriver;DBXMySQLDriver;DBXFirebirdDriver;DBXSybaseASEDriver;DBXSybaseASADriver;DBXOracleDriver;DBXMSSQLDriver;DBXInformixDriver;DBXDb2Driver;vclib;ibxpress;webdsnap;vclribbon;soaprtl;VclSmp;vcltouch;websnap;AzureCloud;TeeUI;TeeDB;Tee;intrawebdb_110_150;Intraweb_110_150;VirtualTreesR;JclDeveloperTools;Jcl;JclVcl;JclContainers;SynEdit_RXE;dxCoreD15;cxLibraryD15;cxEditorsD15;cxExtEditorsD15;dxBarD15;dxBarDBNavD15;dxBarExtDBItemsD15;dxBarExtItemsD15;dxRibbonD15;cxBarEditItemD15;dxdbtrD15;dxtrmdD15;dxmdsD15;dxDockingD15;dxFlowChartD15;cxPageControlD15;dxLayoutControlD15;dxNavBarD15;dxorgcD15;dxdborD15;cxGridD15;cxPivotGridD15;cxPivotGridChartD15;cxPivotGridOLAPD15;cxTreeListD15;cxTreeListdxBarPopupMenuD15;cxSchedulerD15;cxSchedulerGridD15;dxComnD15;dxsbD15;dcldxSkinsCoreD15;dxSkinsCoreD15;dxSkinscxPCPainterD15;dxSkinscxScheduler3PainterD15;dxSkinsdxDLPainterD15;dxSkinsdxBarPainterD15;dxSkinsdxNavBar2PainterD15;dxSpellCheckerD15;cxSpreadSheetD15;cxVerticalGridD15;dxPSCoreD15;dxPSLnksD15;dxPScxCommonD15;dxPScxExtCommonD15;dxPScxGrid6LnkD15;dxPScxPivotGrid2LnkD15;dxPScxScheduler3LnkD15;dxPScxSSLnkD15;dxPScxTL5LnkD15;dxPScxVGridLnkD15;dxPSTeeChartD15;dxPSDBTeeChartD15;dxPSdxOCLnkD15;dxPSdxDBOCLnkD15;dxPSdxDBTVLnkD15;dxPSdxFCLnkD15;dxPSdxLC2LnkD15;dxPScxPCProdD15;dxPsPrVwAdvD15;dxPSPrVwRibbonD15;dxSkinsdxRibbonPainterD15;ExtLib_D15;JvCore;JvSystem;JvStdCtrls;JvAppFrm;JvBands;JvDB;JvDlgs;JvBDE;JvControls;JvCmp;JvCrypt;JvCustom;JvDocking;JvDotNetCtrls;JvGlobus;JvHMI;JvJans;JvManagedThreads;JvMM;JvNet;JvPageComps;JvPascalInterpreter;JvPluginSystem;JvPrintPreview;JvRuntimeDesign;JvTimeFramework;JvWizards;JvXPCtrls;KControls_DXER;dac140;unidac140;odbcprovider140;ZComponent;ZDbc;ZPlain;ZCore;ZParseSql;$(DCC_UsePackage)</DCC_UsePackage>
-        <DCC_DebugInfoInExe>true</DCC_DebugInfoInExe>
         <DCC_DependencyCheckOutputName>DataGrabber.exe</DCC_DependencyCheckOutputName>
         <DCC_ImageBase>00400000</DCC_ImageBase>
         <DCC_Platform>x86</DCC_Platform>
         <DCC_ExeOutput>.\Bin\$(Platform)</DCC_ExeOutput>
         <DCC_BplOutput>.\Bin\$(Platform)</DCC_BplOutput>
         <DCC_DcuOutput>.\Lib\$(Platform)\$(Config)</DCC_DcuOutput>
-        <ImageDebugInfo>true</ImageDebugInfo>
         <VerInfo_MajorVer>2</VerInfo_MajorVer>
         <VerInfo_MinorVer>6</VerInfo_MinorVer>
         <VerInfo_Build>49</VerInfo_Build>
@@ -80,11 +78,11 @@
         <DCC_DcpOutput>.\Lib\$(Platform)\$(Config)</DCC_DcpOutput>
         <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
         <VerInfo_AutoIncVersion>true</VerInfo_AutoIncVersion>
+        <DCC_UseMSBuildExternally>true</DCC_UseMSBuildExternally>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base_Win32)'!=''">
         <DCC_UsePackage>dxCoreRS22;cxLibraryRS22;dxGDIPlusRS22;dxThemeRS22;cxBarEditItemRS22;dxBarRS22;dxComnRS22;cxEditorsRS22;cxDataRS22;cxGridRS22;cxPageControlRS22;cxExportRS22;dxServerModeRS22;cxPivotGridRS22;dxmdsRS22;cxPivotGridChartRS22;cxPivotGridOLAPRS22;cxSchedulerRS22;cxSchedulerGridRS22;dxRibbonRS22;cxSchedulerRibbonStyleEventEditorRS22;cxSchedulerTreeBrowserRS22;cxTreeListRS22;cxTreeListdxBarPopupMenuRS22;cxVerticalGridRS22;dxADOServerModeRS22;dxBarDBNavRS22;dxBarExtDBItemsRS22;dxBarExtItemsRS22;dxorgcRS22;dxdborRS22;dxdbtrRS22;dxDockingRS22;dxFireDACServerModeRS22;dxFlowChartRS22;dxLayoutControlRS22;dxMapControlRS22;dxNavBarRS22;dxPSCoreRS22;dxPScxCommonRS22;dxPSLnksRS22;dxPScxExtCommonRS22;dxPScxGridLnkRS22;dxPSdxLCLnkRS22;dxPScxPivotGridLnkRS22;dxPScxSchedulerLnkRS22;dxPScxTLLnkRS22;dxPScxVGridLnkRS22;dxPSDBTeeChartRS22;dxPSTeeChartRS22;dxPSdxDBOCLnkRS22;dxPSdxOCLnkRS22;dxPSdxDBTVLnkRS22;dxPSdxFCLnkRS22;dxPSdxSpreadSheetLnkRS22;dxSpreadSheetRS22;dxPsPrVwAdvRS22;dxPSPrVwRibbonRS22;dxSpellCheckerRS22;dxTabbedMDIRS22;dxTileControlRS22;dxtrmdRS22;dxWizardControlRS22;dxPScxPCProdRS22;$(DCC_UsePackage)</DCC_UsePackage>
         <AppEnableRuntimeThemes>true</AppEnableRuntimeThemes>
-        <Icon_MainIcon>DataGrabber_Icon1.ico</Icon_MainIcon>
         <DCC_Namespace>Datasnap.Win;Web.Win;Soap.Win;Xml.Win;Bde;$(DCC_Namespace)</DCC_Namespace>
         <Manifest_File>$(BDS)\bin\default_app.manifest</Manifest_File>
         <UWP_DelphiLogo44>$(BDS)\bin\Artwork\Windows\UWP\delphi_UwpDefault_44.png</UWP_DelphiLogo44>
@@ -93,6 +91,9 @@
         <VerInfo_PreRelease>true</VerInfo_PreRelease>
         <VerInfo_AutoGenVersion>true</VerInfo_AutoGenVersion>
         <VerInfo_Keys>FileDescription=DataGrabber;FileVersion=2.6.2.49;LegalCopyright=(c) 2011 - 2019 Tim Sinaeve;OriginalFilename=DataGrabber.exe;ProductName=DataGrabber;ProductVersion=2.6.2;InternalName=DataGrabber</VerInfo_Keys>
+        <Icon_MainIcon>DataGrabber_Icon.ico</Icon_MainIcon>
+        <VerInfo_AutoIncVersion>false</VerInfo_AutoIncVersion>
+        <AppEnableHighDPI>true</AppEnableHighDPI>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base_Win64)'!=''">
         <SanitizedProjectName>DataGrabber</SanitizedProjectName>
@@ -105,10 +106,13 @@
         <DCC_DependencyCheckOutputName>DataGrabber.exe</DCC_DependencyCheckOutputName>
         <DCC_ImageBase>00400000</DCC_ImageBase>
         <DCC_Platform>x86</DCC_Platform>
-        <Icon_MainIcon>DataGrabber_Icon1.ico</Icon_MainIcon>
-        <Manifest_File>(None)</Manifest_File>
+        <Icon_MainIcon>DataGrabber_Icon.ico</Icon_MainIcon>
+        <Manifest_File>$(BDS)\bin\default_app.manifest</Manifest_File>
         <UWP_DelphiLogo44>$(BDS)\bin\Artwork\Windows\UWP\delphi_UwpDefault_44.png</UWP_DelphiLogo44>
         <UWP_DelphiLogo150>$(BDS)\bin\Artwork\Windows\UWP\delphi_UwpDefault_150.png</UWP_DelphiLogo150>
+        <VerInfo_AutoIncVersion>false</VerInfo_AutoIncVersion>
+        <AppEnableRuntimeThemes>true</AppEnableRuntimeThemes>
+        <AppEnableHighDPI>true</AppEnableHighDPI>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_1)'!=''">
         <DCC_DebugInfoInExe>false</DCC_DebugInfoInExe>
@@ -124,7 +128,9 @@
         <VerInfo_PreRelease>true</VerInfo_PreRelease>
         <VerInfo_AutoGenVersion>true</VerInfo_AutoGenVersion>
         <VerInfo_Keys>FileDescription=DataGrabber;FileVersion=2.6.2.49;LegalCopyright=(c) 2011 - 2019 Tim Sinaeve;OriginalFilename=DataGrabber.exe;ProductName=DataGrabber;ProductVersion=2.6.2;InternalName=DataGrabber</VerInfo_Keys>
-        <Icon_MainIcon>DataGrabber_Icon1.ico</Icon_MainIcon>
+        <Icon_MainIcon>DataGrabber_Icon.ico</Icon_MainIcon>
+        <VerInfo_AutoIncVersion>false</VerInfo_AutoIncVersion>
+        <AppEnableHighDPI>true</AppEnableHighDPI>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_1_Win64)'!=''">
         <AppEnableRuntimeThemes>true</AppEnableRuntimeThemes>
@@ -134,7 +140,8 @@
         <VerInfo_Debug>true</VerInfo_Debug>
         <VerInfo_PreRelease>true</VerInfo_PreRelease>
         <VerInfo_AutoGenVersion>true</VerInfo_AutoGenVersion>
-        <Icon_MainIcon>DataGrabber_Icon1.ico</Icon_MainIcon>
+        <Icon_MainIcon>DataGrabber_Icon.ico</Icon_MainIcon>
+        <VerInfo_AutoIncVersion>false</VerInfo_AutoIncVersion>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_2)'!=''">
         <VerInfo_Keys>FileDescription=DataGrabber;FileVersion=2.6.2.49;LegalCopyright=(c) 2011 - 2019 Tim Sinaeve;OriginalFilename=DataGrabber.exe;ProductName=DataGrabber;ProductVersion=2.6.2;InternalName=DataGrabber</VerInfo_Keys>
@@ -144,7 +151,6 @@
         <DCC_DebugDCUs>true</DCC_DebugDCUs>
         <DCC_MapFile>3</DCC_MapFile>
         <DCC_Define>DEBUG;$(DCC_Define)</DCC_Define>
-        <VerInfo_Build>49</VerInfo_Build>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_2_Win32)'!=''">
         <VerInfo_Keys>FileDescription=DataGrabber;FileVersion=2.6.2.50;LegalCopyright=(c) 2011 - 2019 Tim Sinaeve;OriginalFilename=DataGrabber.exe;ProductName=DataGrabber;ProductVersion=2.6.2;ProgramID=;InternalName=DataGrabber</VerInfo_Keys>
@@ -159,6 +165,9 @@
         <VerInfo_Debug>true</VerInfo_Debug>
         <VerInfo_PreRelease>true</VerInfo_PreRelease>
         <VerInfo_Build>50</VerInfo_Build>
+        <VerInfo_AutoIncVersion>false</VerInfo_AutoIncVersion>
+        <Icon_MainIcon>DataGrabber_Icon.ico</Icon_MainIcon>
+        <AppEnableHighDPI>true</AppEnableHighDPI>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_2_Win64)'!=''">
         <AppEnableRuntimeThemes>true</AppEnableRuntimeThemes>
@@ -166,9 +175,9 @@
         <BT_BuildType>Debug</BT_BuildType>
         <VerInfo_Debug>true</VerInfo_Debug>
         <VerInfo_PreRelease>true</VerInfo_PreRelease>
-        <Manifest_File>$(BDS)\bin\default_app.manifest</Manifest_File>
         <VerInfo_AutoGenVersion>true</VerInfo_AutoGenVersion>
-        <Icon_MainIcon>DataGrabber_Icon1.ico</Icon_MainIcon>
+        <Icon_MainIcon>DataGrabber_Icon.ico</Icon_MainIcon>
+        <VerInfo_AutoIncVersion>false</VerInfo_AutoIncVersion>
     </PropertyGroup>
     <Import Project="DataGrabber.optset" Condition="'$(Base)'!='' And Exists('DataGrabber.optset')"/>
     <ItemGroup>
