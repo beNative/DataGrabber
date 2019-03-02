@@ -1,5 +1,5 @@
 # DataGrabber
-This is a query tool that started years ago and is now being ported and extended to support Delphi10 and later. It makes extensive use of the DDuce library which holds some common modules that are shared by some of my other projects and is maturing along with this project.
+This is a query tool that started years ago and is now being ported and extended to support Delphi 10 and later. It makes extensive use of the DDuce library which holds some common modules that are shared by some of my other projects and is maturing along with this project.
 
 Connection topology:
 - FireDAC
@@ -15,6 +15,7 @@ External dependencies and references:
 * [SQLite](http://www.sqlite.org/)
 * [SynEdit](http://github.com/SynEdit/SynEdit)
 * [TChromeTabs](http://github.com/norgepaul/TChromeTabs)
+* [KControls](http://bitbucket.org/tomkrysl/kcontrols)
 
 Commercial components (optional):
 - FastReport
