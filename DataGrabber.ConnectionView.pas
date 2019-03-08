@@ -236,6 +236,7 @@ begin
     and (not Data.DataEditMode);
   if B then
   begin
+    if not Assigned(FPageControl) then
     FPageControl := TPageControl.Create(Self);
     FPageControl.Parent      := pnlBottom;
     FPageControl.Align       := alClient;

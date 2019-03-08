@@ -65,14 +65,14 @@ const
     '    on (g.GenreId = t.GenreId)';
 
     CHINOOK_EXAMPLE_QUERY2 =
-    'select '#13#10 +
-    '  * '#13#10 +
-    'from '#13#10 +
-    '  Customer c '#13#10 +
-    '; '#13#10 +
-    'select '#13#10 +
-    '  * '#13#10 +
-    'from '#13#10 +
+    'select '       + #13#10 +
+    '  * '          + #13#10 +
+    'from '         + #13#10 +
+    '  Customer c ' + #13#10 +
+    '; '            + #13#10 +
+    'select '       + #13#10 +
+    '  * '          + #13#10 +
+    'from '         + #13#10 +
     '  Employee e ';
 
   SETTINGS_FILE = 'settings.json';

@@ -350,8 +350,10 @@ end;
 
 procedure TdmData.BeforeDestruction;
 begin
+  Logger.Track(Self, 'BeforeDestruction');
   FConnectionSettings.Free;
   FDriverNames.Free;
+  FOnBeforeExecute.RemoveAll(Self);
   FOnAfterExecute.RemoveAll(Self);
   FResultSets.Free;
   inherited BeforeDestruction;
@@ -439,7 +441,10 @@ end;
 
 function TdmData.GetItem(AIndex: Integer): IResultSet;
 begin
-  Result := FResultSets[AIndex];
+  if not FResultSets.IsEmpty and (AIndex < FResultSets.Count) then
+    Result := FResultSets[AIndex]
+  else
+    Result := nil;
 end;
 
 function TdmData.GetMultipleResultSets: Boolean;
@@ -572,6 +577,7 @@ end;
 procedure TdmData.conMainAfterConnect(Sender: TObject);
 begin
   Logger.Track('TdmDataFireDAC.conMainAfterConnect');
+      FResultSets.Clear;
 end;
 
 procedure TdmData.conMainAfterDisconnect(Sender: TObject);
@@ -813,6 +819,7 @@ begin
     Connection.ResourceOptions.SilentMode := True;
     Connection.ResourceOptions.AutoReconnect := ConnectionSettings.AutoReconnect;
   end;
+  FResultSets.Clear;
 end;
 
 procedure TdmData.InternalExecute(const ACommandText: string);
@@ -821,14 +828,10 @@ var
 begin
   if Trim(ACommandText) <> '' then
   begin
-    FResultSets.Clear;
-
     FConstantFields.Clear;
     FHiddenFields.Clear;
     FEmptyFields.Clear;
     FFavoriteFields.Clear;
-
-
     qryMain.Close;
     FStopWatch.Start;
     qryMain.Open(ACommandText);
@@ -949,9 +952,9 @@ begin
   if OnBeforeExecute.CanInvoke then
     OnBeforeExecute.Invoke(Self);
   InternalExecute(SQL);
-  FStopWatch.Stop;
   if OnAfterExecute.CanInvoke then
     OnAfterExecute.Invoke(Self);
+  FStopWatch.Stop;
   FConstantFields.Clear;
   FEmptyFields.Clear;
   FNonEmptyFields.Clear;

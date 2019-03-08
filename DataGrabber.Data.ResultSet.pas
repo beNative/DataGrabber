@@ -58,9 +58,7 @@ type
     function GetData: IData;
     {$ENDREGION}
 
-    procedure FDataAfterExecute(Sender: TObject);
     procedure FDataBeforeExecute(Sender: TObject);
-
 
   protected
     procedure UpdateFieldLists;
@@ -107,7 +105,9 @@ type
 implementation
 
 uses
-  Spring;
+  Spring,
+
+  DDuce.Logger;
 
 {$REGION 'construction and destruction'}
 procedure TResultSet.AfterConstruction;
@@ -125,8 +125,8 @@ end;
 
 procedure TResultSet.BeforeDestruction;
 begin
+  Logger.Track(Self, 'BeforeDestruction');
   FData.OnBeforeExecute.Remove(FDataBeforeExecute);
-  FData.OnAfterExecute.Remove(FDataAfterExecute);
   FData := nil;
   FreeAndNil(FDataSet);
   inherited BeforeDestruction;
@@ -135,12 +135,12 @@ end;
 constructor TResultSet.Create(AData: IData; AFDDataSetReference:
   IFDDataSetReference);
 begin
+  Logger.Track(Self, 'Create');
   inherited Create;
   Guard.CheckNotNull(AData, 'AData');
   Guard.CheckNotNull(AFDDataSetReference, 'AFDDataSetReference');
   FData := AData;
   FData.OnBeforeExecute.Add(FDataBeforeExecute);
-  FData.OnAfterExecute.Add(FDataAfterExecute);
   FDataSet := TFDMemTable.Create(nil);;
   FDataSet.Data := AFDDataSetReference;
 end;
@@ -227,12 +227,6 @@ begin
   FHiddenFields.Clear;
   FFavoriteFields.Clear;
 end;
-
-procedure TResultSet.FDataAfterExecute(Sender: TObject);
-begin
-  UpdateFieldLists;
-  InitFields(DataSet);
-end;
 {$ENDREGION}
 
 {$REGION 'protected methods'}
@@ -294,6 +288,8 @@ var
   LIsEmpty : Boolean;
   LIsConst : Boolean;
 begin
+  Logger.Track(Self, 'UpdateFieldLists');
+  Logger.SendDataSet('DataSet', DataSet);
   DataSet.DisableControls;
   FConstantFields.Clear;
   FEmptyFields.Clear;

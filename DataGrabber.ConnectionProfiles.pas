@@ -94,6 +94,7 @@ type
     function FindItemID(ID: Integer): TConnectionProfile;
     function Find(const AName: string): TConnectionProfile;
 
+
     { The TCollectionItem decendant class of the collection items. }
     property ItemClass;
 

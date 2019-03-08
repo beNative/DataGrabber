@@ -133,6 +133,7 @@ type
     ResultsasWiki1: TMenuItem;
     actCopyConnectionViewAsWiki: TAction;
     actAbout: TAction;
+    actExecuteTestSequence: TAction;
     {$ENDREGION}
 
     {$REGION 'action handlers'}
@@ -178,6 +179,7 @@ type
     procedure actResultsAsWikiExecute(Sender: TObject);
     procedure actCopyConnectionViewAsWikiExecute(Sender: TObject);
     procedure actAboutExecute(Sender: TObject);
+    procedure actExecuteTestSequenceExecute(Sender: TObject);
     {$ENDREGION}
 
   private
@@ -357,6 +359,12 @@ var
 begin
   F := TfrmMetaData.Create(Self, ActiveData.Connection);
   F.ShowModal;
+end;
+
+procedure TdmConnectionViewManager.actExecuteTestSequenceExecute(Sender: TObject);
+begin
+  ActiveConnectionView.EditorView.Text := CHINOOK_EXAMPLE_QUERY2;
+  Execute(ActiveConnectionView.EditorView.Text);
 end;
 
 procedure TdmConnectionViewManager.actToggleFullScreenExecute(Sender: TObject);

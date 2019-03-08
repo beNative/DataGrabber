@@ -37,7 +37,7 @@ begin
   {$WARNINGS OFF}
   ReportMemoryLeaksOnShutdown := DebugHook > 0;
   {$WARNINGS ON}
-  Logger.Channels.Add(TWinIPCChannel.Create());
+  Logger.Channels.Add(TWinIPCChannel.Create);
   Logger.Clear;
   Application.Initialize;
   Application.CreateForm(TfrmMain, frmMain);
