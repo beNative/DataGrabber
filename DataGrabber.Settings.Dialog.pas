@@ -67,8 +67,8 @@ type
     actMoveDown                  : TAction;
     actMoveUp                    : TAction;
     actMRSAsMultipleTabs         : TAction;
-    actMRSHorizontally           : TAction;
-    actMRSVertically             : TAction;
+    actMRSVertically: TAction;
+    actMRSHorizontally: TAction;
     actOpenSettingsFileLocation  : TAction;
     actRefreshFile               : TAction;
     actSaveFile                  : TAction;
@@ -196,8 +196,8 @@ type
     procedure actMoveDownExecute(Sender: TObject);
     procedure actMoveUpExecute(Sender: TObject);
     procedure actMRSAsMultipleTabsExecute(Sender: TObject);
-    procedure actMRSHorizontallyExecute(Sender: TObject);
     procedure actMRSVerticallyExecute(Sender: TObject);
+    procedure actMRSHorizontallyExecute(Sender: TObject);
     procedure actOpenSettingsFileLocationExecute(Sender: TObject);
     procedure actRefreshFileExecute(Sender: TObject);
     procedure actSaveFileExecute(Sender: TObject);
@@ -566,14 +566,14 @@ begin
   FSettings.ResultDisplayLayout := TResultDisplayLayout.Tabbed;
 end;
 
-procedure TfrmSettingsDialog.actMRSHorizontallyExecute(Sender: TObject);
-begin
-  FSettings.ResultDisplayLayout := TResultDisplayLayout.Horizontal;
-end;
-
 procedure TfrmSettingsDialog.actMRSVerticallyExecute(Sender: TObject);
 begin
   FSettings.ResultDisplayLayout := TResultDisplayLayout.Vertical;
+end;
+
+procedure TfrmSettingsDialog.actMRSHorizontallyExecute(Sender: TObject);
+begin
+  FSettings.ResultDisplayLayout := TResultDisplayLayout.Horizontal;
 end;
 
 procedure TfrmSettingsDialog.actOpenSettingsFileLocationExecute(

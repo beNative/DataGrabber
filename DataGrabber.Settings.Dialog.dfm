@@ -472,10 +472,6 @@ object frmSettingsDialog: TfrmSettingsDialog
             ImageIndex = 1
             OnExit = tsAdvancedExit
             OnShow = tsAdvancedShow
-            ExplicitLeft = 0
-            ExplicitTop = 0
-            ExplicitWidth = 0
-            ExplicitHeight = 0
           end
         end
       end
@@ -541,10 +537,6 @@ object frmSettingsDialog: TfrmSettingsDialog
     object tsDisplay: TTabSheet
       Caption = '&Display settings'
       ImageIndex = 5
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       DesignSize = (
         670
         365)
@@ -750,7 +742,7 @@ object frmSettingsDialog: TfrmSettingsDialog
             Left = 3
             Top = 31
             Width = 54
-            Height = 25
+            Height = 22
             Align = alClient
             Caption = 'Float'
             FocusControl = btnFloatColor
@@ -781,7 +773,7 @@ object frmSettingsDialog: TfrmSettingsDialog
             Left = 3
             Top = 59
             Width = 54
-            Height = 25
+            Height = 22
             Align = alClient
             Caption = 'String'
             FocusControl = btnStringColor
@@ -812,7 +804,7 @@ object frmSettingsDialog: TfrmSettingsDialog
             Left = 3
             Top = 87
             Width = 54
-            Height = 25
+            Height = 22
             Align = alClient
             Caption = 'Memo'
             FocusControl = btnMemoColor
@@ -843,7 +835,7 @@ object frmSettingsDialog: TfrmSettingsDialog
             Left = 3
             Top = 115
             Width = 54
-            Height = 25
+            Height = 22
             Align = alClient
             Caption = 'Date'
             FocusControl = btnDateColor
@@ -874,7 +866,7 @@ object frmSettingsDialog: TfrmSettingsDialog
             Left = 3
             Top = 143
             Width = 54
-            Height = 25
+            Height = 22
             Align = alClient
             Caption = 'Time'
             FocusControl = btnTimeColor
@@ -905,7 +897,7 @@ object frmSettingsDialog: TfrmSettingsDialog
             Left = 3
             Top = 171
             Width = 54
-            Height = 25
+            Height = 22
             Align = alClient
             Caption = 'DateTime'
             FocusControl = btnDateTimeColor
@@ -936,7 +928,7 @@ object frmSettingsDialog: TfrmSettingsDialog
             Left = 3
             Top = 199
             Width = 54
-            Height = 25
+            Height = 22
             Align = alClient
             Caption = 'NULL'
             FocusControl = btnNullColor
@@ -967,7 +959,7 @@ object frmSettingsDialog: TfrmSettingsDialog
             Left = 3
             Top = 227
             Width = 54
-            Height = 25
+            Height = 22
             Align = alClient
             Caption = 'Boolean'
             FocusControl = btnBooleanColor
@@ -1077,13 +1069,13 @@ object frmSettingsDialog: TfrmSettingsDialog
           object btnMRSHorizontally: TToolButton
             Left = 0
             Top = 22
-            Action = actMRSHorizontally
+            Action = actMRSVertically
             Wrap = True
           end
           object btnMRSVertically: TToolButton
             Left = 0
             Top = 44
-            Action = actMRSVertically
+            Action = actMRSHorizontally
             Wrap = True
           end
         end
@@ -1153,10 +1145,6 @@ object frmSettingsDialog: TfrmSettingsDialog
       Caption = 'Settings files'
       ImageIndex = 11
       OnEnter = tsSettingsEnter
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       DesignSize = (
         664
         359)
@@ -1170,10 +1158,6 @@ object frmSettingsDialog: TfrmSettingsDialog
         TabOrder = 0
         object tsDataGrabberSettings: TTabSheet
           Caption = 'Settings.json'
-          ExplicitLeft = 0
-          ExplicitTop = 0
-          ExplicitWidth = 0
-          ExplicitHeight = 0
           object seSettings: TSynEdit
             AlignWithMargins = True
             Left = 3
@@ -1224,10 +1208,6 @@ object frmSettingsDialog: TfrmSettingsDialog
         object tsFDConnectionDefs: TTabSheet
           Caption = 'FDConnectionDefs.ini'
           ImageIndex = 1
-          ExplicitLeft = 0
-          ExplicitTop = 0
-          ExplicitWidth = 0
-          ExplicitHeight = 0
           object seFDConnectionDefs: TSynEdit
             AlignWithMargins = True
             Left = 3
@@ -1309,10 +1289,6 @@ object frmSettingsDialog: TfrmSettingsDialog
       Caption = 'Connection definitions'
       ImageIndex = -1
       TabVisible = False
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
     end
   end
   object btnApply: TButton
@@ -1472,21 +1448,21 @@ object frmSettingsDialog: TfrmSettingsDialog
       ImageIndex = 21
       OnExecute = actMRSAsMultipleTabsExecute
     end
-    object actMRSHorizontally: TAction
-      Category = 'DisplayMultipleResultsets'
-      AutoCheck = True
-      Caption = 'stacked horizontally'
-      GroupIndex = 2
-      ImageIndex = 20
-      OnExecute = actMRSHorizontallyExecute
-    end
     object actMRSVertically: TAction
       Category = 'DisplayMultipleResultsets'
       AutoCheck = True
       Caption = 'stacked vertically'
       GroupIndex = 2
-      ImageIndex = 19
+      ImageIndex = 20
       OnExecute = actMRSVerticallyExecute
+    end
+    object actMRSHorizontally: TAction
+      Category = 'DisplayMultipleResultsets'
+      AutoCheck = True
+      Caption = 'stacked horizontally'
+      GroupIndex = 2
+      ImageIndex = 19
+      OnExecute = actMRSHorizontallyExecute
     end
     object actSaveFile: TAction
       Caption = 'Save'
@@ -1507,7 +1483,7 @@ object frmSettingsDialog: TfrmSettingsDialog
     Left = 16
     Top = 200
     Bitmap = {
-      494C010119003000CC0010001000FFFFFFFF2110FFFFFFFFFFFFFFFF424D3600
+      494C010119003000D00010001000FFFFFFFF2110FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000007000000001002000000000000070
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000

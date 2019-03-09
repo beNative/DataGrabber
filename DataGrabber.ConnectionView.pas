@@ -250,7 +250,7 @@ begin
     FMultiPanel.SplitterSize := 8;
     FMultiPanel.Parent := pnlBottom;
     FMultiPanel.Align  := alClient;
-    if Manager.Settings.ResultDisplayLayout = TResultDisplayLayout.Vertical then
+    if Manager.Settings.ResultDisplayLayout = TResultDisplayLayout.Horizontal then
     begin
       FMultiPanel.PanelType := ptHorizontal;
     end

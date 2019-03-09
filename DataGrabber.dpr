@@ -23,7 +23,7 @@ uses
   DataGrabber.Interfaces in 'DataGrabber.Interfaces.pas',
   DataGrabber.MainForm in 'DataGrabber.MainForm.pas' {frmMain},
   DataGrabber.ConnectionProfileValueManager in 'DataGrabber.ConnectionProfileValueManager.pas',
-  DataGrabber.DataView.KGrid in 'DataView\DataGrabber.DataView.KGrid.pas',
+  DataGrabber.DataView.KGrid in 'DataView\DataGrabber.DataView.KGrid.pas' {frmKGrid},
   DataGrabber.Data in 'DataGrabber.Data.pas' {dmData: TDataModule},
   DataGrabber.ConnectionSettings in 'DataGrabber.ConnectionSettings.pas',
   DataGrabber.DataView.cxGrid in 'DataView\DataGrabber.DataView.cxGrid.pas' {frmcxGrid},

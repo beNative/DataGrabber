@@ -165,7 +165,8 @@ begin
     C.Font.Style := C.Font.Style + [fsBold];
   end;
   grdMain.Cell[ACol, ARow].ApplyDrawProperties;
-  if Settings.GridCellColoring and (State = []) then
+  if Settings.GridCellColoring and
+    (State * [gdSelected, gdFixed, gdMouseOver] = []) then
   begin
     F := DataSet.FindField(TKDBGridCol(grdMain.Cols[ACol]).FieldName);
     if Assigned(F) then
@@ -187,7 +188,13 @@ begin
         C.Brush.Color := Settings.FieldTypeColors[F.DataType];
       end;
     end;
+  end
+  else if gdSelected in State then
+  begin
+    C.Brush.Color := clGray;
+    C.Font.Color  := clWhite;
   end;
+
   C.FillRect(R);
   grdMain.CellPainter.DefaultDraw;
 end;
