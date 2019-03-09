@@ -1,7 +1,6 @@
 inherited frmcxGrid: TfrmcxGrid
   ClientHeight = 319
   ClientWidth = 695
-  DoubleBuffered = True
   Font.Name = 'Se'
   ExplicitWidth = 711
   ExplicitHeight = 358
@@ -15,6 +14,7 @@ inherited frmcxGrid: TfrmcxGrid
     Align = alClient
     BevelInner = bvNone
     BevelOuter = bvNone
+    BorderStyle = cxcbsNone
     Font.Charset = ANSI_CHARSET
     Font.Color = clWindowText
     Font.Height = -11

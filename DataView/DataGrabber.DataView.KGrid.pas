@@ -262,18 +262,31 @@ begin
   Clipboard.AsText := Trim(SelectionToDelimitedTable(#9, False));
 end;
 
+{ A unique feature of this grid is that it allows to have multiple distinct
+  selections. }
+
 procedure TfrmKGrid.HideSelectedColumns;
 var
   I  : Integer;
+  N  : Integer;
   SR : TKGridRect;
+  F  : TField;
 begin
   SR := grdMain.Selection;
-  NormalizeRect(SR);
   BeginUpdate;
   try
-    for I := SR.Col1 to SR.Col2 do
+    for N := 0 to grdMain.SelectionCount - 1 do
     begin
-      Data.HideField(DataSet, TKDBGridCol(grdMain.Cols[I]).FieldName);
+      SR := grdMain.Selections[N];
+      NormalizeRect(SR);
+      for I := SR.Col1 to SR.Col2 do
+      begin
+        F := DataSet.FieldByName(TKDBGridCol(grdMain.Cols[I]).FieldName);
+        Data.HideField(DataSet, F.FieldName);
+        if not ResultSet.HiddenFields.Contains(F) then
+          ResultSet.HiddenFields.Add(F);
+        grdMain.Cols[I].Visible := False;
+      end;
     end;
   finally
     EndUpdate;

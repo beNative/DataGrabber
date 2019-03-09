@@ -116,6 +116,9 @@ type
     property RecordCount: Integer
       read GetRecordCount;
 
+    property ResultSet: IResultSet
+      read GetResultSet;
+
     property Settings: IDataViewSettings
       read GetSettings;
 
@@ -150,21 +153,25 @@ end;
 procedure TBaseDataView.AfterConstruction;
 begin
   inherited AfterConstruction;
-  FToolBarPanel            := TPanel.Create(Self);
-  FToolBarPanel.Parent     := Self;
-  FToolBarPanel.BevelOuter := bvNone;
-  FToolBarPanel.Color      := clWhite;
-  FToolBarPanel.Align      := alRight;
-  FToolBarPanel.Visible    := False;
+  FToolBarPanel             := TPanel.Create(Self);
+  FToolBarPanel.Parent      := Self;
+  FToolBarPanel.BevelOuter  := bvNone;
+  FToolBarPanel.BevelInner  := bvNone;
+  FToolBarPanel.BorderStyle := bsNone;
+  FToolBarPanel.Color       := clBtnFace;
+  FToolBarPanel.Align       := alRight;
+  FToolBarPanel.Visible     := False;
+  FToolBarPanel.AutoSize    := True;
   FToolbar := TDataGrabberFactories.CreateDataViewToolbar(
     Self,
     FToolBarPanel,
     FManager
   );
+  FToolBar.Transparent   := False;
   FToolbar.Align         := alRight;
   FToolbar.Visible       := True;
+  FToolbar.Color         := clBtnFace;
   FToolbar.AutoSize      := True;
-  FToolBarPanel.AutoSize := True;
   Data.OnAfterExecute.Add(DataAfterExecute);
   Settings.OnChanged.Add(SettingsChanged);
 end;

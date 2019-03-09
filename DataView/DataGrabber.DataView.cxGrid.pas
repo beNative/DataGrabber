@@ -571,35 +571,74 @@ end;
 {$ENDREGION}
 
 {$REGION 'public methods'}
-procedure TfrmcxGrid.UpdateView;
+procedure TfrmcxGrid.ApplyGridSettings;
+var
+  GL: TcxGridLines;
 begin
-  if Assigned(DataSet) and DataSet.Active then
+  if Assigned(Settings) then
   begin
-    tvwMain.ClearItems;
-    tvwMain.DataController.CreateAllItems;
-    BeginUpdate;
-    try
-      ApplyGridSettings;
-      AutoSizeColumns;
-    finally
-      EndUpdate;
+    GL := glNone;
+    if Settings.ShowHorizontalGridLines then
+    begin
+      if Settings.ShowVerticalGridLines then
+        GL := glBoth
+      else
+        GL := glHorizontal;
+    end
+    else if Settings.ShowVerticalGridLines then
+    begin
+      GL := glVertical;
     end;
+    tvwMain.OptionsView.GridLines := GL;
+    tvwMain.OptionsView.GroupByBox := Settings.GroupByBoxVisible;
+    MergeColumnCells := Settings.MergeColumnCells;
+    grdMain.Font.Assign(Settings.GridFont);
   end;
 end;
 
-function TfrmcxGrid.SelectionToWikiTable(AIncludeHeader: Boolean): string;
+procedure TfrmcxGrid.AutoSizeColumns;
+var
+  I: Integer;
 begin
-  Result := SelectionToWikiTable(tvwMain.Controller, AIncludeHeader);
+  BeginUpdate;
+  try
+    tvwMain.ApplyBestFit;
+    for I := 0 to tvwMain.ColumnCount - 1 do
+    begin
+      tvwMain.Columns[I].Width := tvwMain.Columns[I].Width + 10;
+    end;
+  finally
+    EndUpdate;
+  end;
 end;
 
-function TfrmcxGrid.SelectionToCommaText(AQuoteItems: Boolean): string;
+procedure TfrmcxGrid.BeginUpdate;
 begin
-  Result := SelectionToCommaText(tvwMain.Controller, AQuoteItems);
+  tvwMain.BeginUpdate;
 end;
 
-function TfrmcxGrid.SelectionToTextTable(AIncludeHeader: Boolean): string;
+procedure TfrmcxGrid.GroupBySelectedColumns;
+var
+  C          : TcxGridTableController;
+  I          : Integer;
+  Col        : TcxGridDBColumn;
+  GroupIndex : Integer;
 begin
-  Result := SelectionToTextTable(tvwMain.Controller, AIncludeHeader);
+  BeginUpdate;
+  try
+    C := tvwMain.Controller;
+    for I := 0 to C.SelectedColumnCount - 1 do
+    begin
+      Col := tvwMain.Columns[C.SelectedColumns[I].Index];
+      if Col.GroupIndex <> -1 then
+        GroupIndex := -1
+      else
+        GroupIndex := tvwMain.GroupedColumnCount;
+      Col.GroupBy(GroupIndex);
+    end;
+  finally
+    EndUpdate;
+  end;
 end;
 
 procedure TfrmcxGrid.HideSelectedColumns;
@@ -618,6 +657,8 @@ begin
       tvwMain.Columns[J].Visible := False;
       F := tvwMain.Columns[J].DataBinding.Field;
       Data.HideField(F.DataSet, F.FieldName);
+      if not ResultSet.HiddenFields.Contains(F) then
+        ResultSet.HiddenFields.Add(F);
     end;
   finally
     EndUpdate;
@@ -687,51 +728,6 @@ begin
   end;
 end;
 
-procedure TfrmcxGrid.AutoSizeColumns;
-var
-  I: Integer;
-begin
-  BeginUpdate;
-  try
-    tvwMain.ApplyBestFit;
-    for I := 0 to tvwMain.ColumnCount - 1 do
-    begin
-      tvwMain.Columns[I].Width := tvwMain.Columns[I].Width + 10;
-    end;
-  finally
-    EndUpdate;
-  end;
-end;
-
-procedure TfrmcxGrid.BeginUpdate;
-begin
-  tvwMain.BeginUpdate;
-end;
-
-procedure TfrmcxGrid.GroupBySelectedColumns;
-var
-  C          : TcxGridTableController;
-  I          : Integer;
-  Col        : TcxGridDBColumn;
-  GroupIndex : Integer;
-begin
-  BeginUpdate;
-  try
-    C := tvwMain.Controller;
-    for I := 0 to C.SelectedColumnCount - 1 do
-    begin
-      Col := tvwMain.Columns[C.SelectedColumns[I].Index];
-      if Col.GroupIndex <> -1 then
-        GroupIndex := -1
-      else
-        GroupIndex := tvwMain.GroupedColumnCount;
-      Col.GroupBy(GroupIndex);
-    end;
-  finally
-    EndUpdate;
-  end;
-end;
-
 function TfrmcxGrid.SelectionToDelimitedTable(ADelimiter: string;
   AIncludeHeader: Boolean): string;
 begin
@@ -770,28 +766,34 @@ begin
   Result := SelectionToFields(tvwMain.Controller, AQuoteItems);
 end;
 
-procedure TfrmcxGrid.ApplyGridSettings;
-var
-  GL: TcxGridLines;
+function TfrmcxGrid.SelectionToWikiTable(AIncludeHeader: Boolean): string;
 begin
-  if Assigned(Settings) then
+  Result := SelectionToWikiTable(tvwMain.Controller, AIncludeHeader);
+end;
+
+function TfrmcxGrid.SelectionToCommaText(AQuoteItems: Boolean): string;
+begin
+  Result := SelectionToCommaText(tvwMain.Controller, AQuoteItems);
+end;
+
+function TfrmcxGrid.SelectionToTextTable(AIncludeHeader: Boolean): string;
+begin
+  Result := SelectionToTextTable(tvwMain.Controller, AIncludeHeader);
+end;
+
+procedure TfrmcxGrid.UpdateView;
+begin
+  if Assigned(DataSet) and DataSet.Active then
   begin
-    GL := glNone;
-    if Settings.ShowHorizontalGridLines then
-    begin
-      if Settings.ShowVerticalGridLines then
-        GL := glBoth
-      else
-        GL := glHorizontal;
-    end
-    else if Settings.ShowVerticalGridLines then
-    begin
-      GL := glVertical;
+    tvwMain.ClearItems;
+    tvwMain.DataController.CreateAllItems;
+    BeginUpdate;
+    try
+      ApplyGridSettings;
+      AutoSizeColumns;
+    finally
+      EndUpdate;
     end;
-    tvwMain.OptionsView.GridLines := GL;
-    tvwMain.OptionsView.GroupByBox := Settings.GroupByBoxVisible;
-    MergeColumnCells := Settings.MergeColumnCells;
-    grdMain.Font.Assign(Settings.GridFont);
   end;
 end;
 {$ENDREGION}

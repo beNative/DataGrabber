@@ -111,6 +111,7 @@ type
 
     procedure DataAfterExecute(Sender: TObject);
     procedure DataBeforeExecute(Sender: TObject);
+    procedure FPageControlChange(Sender: TObject);
 
     function GetDataView(AIndex: Integer): IDataView;
 
@@ -156,6 +157,8 @@ type
 
 implementation
 
+{$R *.dfm}
+
 uses
   System.UITypes,
   Vcl.GraphUtil,
@@ -167,9 +170,7 @@ uses
 
   DDuce.Logger, DDuce.Factories.VirtualTrees, DDuce.Utils,
 
-  DataGrabber.Utils, DataGrabber.Factories;
-
-{$R *.dfm}
+  DataGrabber.Utils, DataGrabber.Factories, DataGrabber.Resources;
 
 {$REGION 'construction and destruction'}
 constructor TfrmConnectionView.Create(AOwner: TComponent;
@@ -241,6 +242,7 @@ begin
     FPageControl.Parent      := pnlBottom;
     FPageControl.Align       := alClient;
     FPageControl.TabPosition := tpBottom;
+    FPageControl.OnChange    := FPageControlChange;
   end
   else
   begin
@@ -268,11 +270,10 @@ begin
         Data.Items[I]
       );
       DV.PopupMenu := Manager.ConnectionViewPopupMenu;
-      FActiveDataView := DV;
       if B then
       begin
         TS := TTabSheet.Create(FPageControl);
-        TS.Caption := Format('[%d]', [I]);
+        TS.Caption := Format(SResultSet, [I]);
         TS.PageControl := FPageControl;
         DV.AssignParent(TS);
       end
@@ -282,6 +283,7 @@ begin
       end;
       FDataViewList.Add(DV);
     end;
+    FActiveDataView := FDataViewList.FirstOrDefault;
   end
   else
   begin
@@ -372,6 +374,11 @@ begin
     FVSTProfiles.FocusedNode := FVSTProfiles.GetFirstVisible;
   end;
   EditorView.SetFocus;
+end;
+
+procedure TfrmConnectionView.FPageControlChange(Sender: TObject);
+begin
+  FActiveDataView := FDataViewList[FPageControl.ActivePageIndex];
 end;
 
 procedure TfrmConnectionView.splVerticalMoved(Sender: TObject);

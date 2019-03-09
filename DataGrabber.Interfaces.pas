@@ -82,6 +82,9 @@ type
     function GetData: IData;
     {$ENDREGION}
 
+    function ShowAllFields: Boolean;
+    procedure UpdateFieldLists;
+
     property Data: IData
       read GetData;
 
@@ -99,8 +102,6 @@ type
 
     property HiddenFields: IList<TField>
       read GetHiddenFields;
-
-    function ShowAllFields: Boolean;
 
     property ConstantFieldsVisible: Boolean
       read GetConstantFieldsVisible write SetConstantFieldsVisible;

@@ -66,11 +66,18 @@ const
 
     CHINOOK_EXAMPLE_QUERY2 =
     'select '       + #13#10 +
+    '  1 as A, '    + #13#10 +
+    '  2 as B, '    + #13#10 +
     '  * '          + #13#10 +
     'from '         + #13#10 +
     '  Customer c ' + #13#10 +
     '; '            + #13#10 +
     'select '       + #13#10 +
+    '  3 as A, '    + #13#10 +
+    '  4 as B, '    + #13#10 +
+    '  5 as C, '    + #13#10 +
+    '  null as D, ' + #13#10 +
+    '  null as E, ' + #13#10 +
     '  * '          + #13#10 +
     'from '         + #13#10 +
     '  Employee e ';
@@ -94,6 +101,7 @@ resourcestring
   SOpenSettingsFileLocation = 'Open settings file location (%s)';
   SConnectionProfileNameCannotBeEmpty =
     'The connection profile name cannot be empty!';
+  SResultSet                = 'Resultset %d';
 
 implementation
 

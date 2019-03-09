@@ -12,11 +12,24 @@ inherited frmKGrid: TfrmKGrid
     Width = 430
     Height = 257
     Align = alClient
-    DBOptions = [dboAutoMoveRecord, dboAutoSizeBooleanCells, dboAutoSizeImageCells, dboColNamesToHeader, dboEntireTable, dboIndicateActiveRecord]
+    BorderStyle = bsNone
+    DBOptions = [dboAutoMoveRecord, dboAutoSizeBooleanCells, dboAutoSizeImageCells, dboColNamesToHeader, dboDontClearFixedCells, dboEntireTable, dboImageHint, dboIndicateActiveRecord]
     ColCount = 2
+    Colors.BrightRangeBkGnd = False
     Colors.CellLines = clSilver
+    Colors.FixedCellBkGnd = clWindow
+    Colors.FixedCellIndication = clBtnFace
+    Colors.FixedCellLines = clWindow
+    Colors.FixedThemedCellLines = clSilver
+    Colors.FixedThemedCellHighlight = clYellow
+    Colors.FixedThemedCellShadow = clNone
+    Colors.SelectedCellBkGnd = clHighlight
+    Colors.SelectedRangeBkGnd = clSilver
+    Colors.SelectedFixedCellBkGnd = clGray
+    Colors.ActiveRecord = clBtnFace
     Columns = <
       item
+        Extent = 16
         Font.Charset = DEFAULT_CHARSET
         Font.Color = clWindowText
         Font.Height = -11
@@ -41,14 +54,15 @@ inherited frmKGrid: TfrmKGrid
         TitleFont.Style = []
       end>
     DataSource = dscMain
+    DragStyle = dsLayeredConst
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWindowText
     Font.Height = -11
     Font.Name = 'Callibri'
     Font.Style = []
     MinRowHeight = 18
-    Options = [goColSizing, goDoubleBufferedCells, goDrawFocusSelected, goEditing, goEnterMoves, goFixedHorzLine, goFixedVertLine, goHeader, goHeaderAlignment, goHorzLine, goRangeSelect, goRowSorting, goTabs, goThemes, goThemedCells, goVertLine]
-    OptionsEx = [gxEnterWraps, gxTabWraps, gxMouseWheelScroll, gxMouseWheelKey]
+    Options = [goEraseBackground, goColMoving, goColSizing, goDoubleBufferedCells, goEditing, goEnterMoves, goHeader, goHeaderAlignment, goHorzLine, goMouseOverCells, goRangeSelect, goRowSizing, goRowSorting, goTabs, goThemes, goVertLine]
+    OptionsEx = [gxFixedCellClickSelect, gxFixedCellClickToggle, gxFixedThemedCells, gxTabWraps, gxMouseWheelScroll, gxMouseWheelKey]
     ParentFont = False
     RangeSelectStyle = rsMultiSelect
     RowCount = 2
@@ -56,10 +70,14 @@ inherited frmKGrid: TfrmKGrid
     OnCustomSortRows = grdMainCustomSortRows
     OnDrawCell = grdMainDrawCell
     ColWidths = (
-      0
+      16
       0)
     RowHeights = (
       0
       0)
+  end
+  inherited dscMain: TDataSource
+    Left = 48
+    Top = 80
   end
 end

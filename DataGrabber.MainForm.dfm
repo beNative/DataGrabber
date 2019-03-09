@@ -45,7 +45,7 @@ object frmMain: TfrmMain
     end
     object pnlElapsedTime: TPanel
       AlignWithMargins = True
-      Left = 157
+      Left = 105
       Top = 1
       Width = 50
       Height = 19
@@ -58,6 +58,8 @@ object frmMain: TfrmMain
       BevelKind = bkFlat
       BevelOuter = bvNone
       TabOrder = 1
+      ExplicitLeft = 93
+      ExplicitTop = 4
     end
     object pnlConnectionStatus: TPanel
       AlignWithMargins = True
@@ -83,7 +85,7 @@ object frmMain: TfrmMain
     end
     object pnlRecordCount: TPanel
       AlignWithMargins = True
-      Left = 105
+      Left = 157
       Top = 1
       Width = 50
       Height = 19
@@ -96,6 +98,7 @@ object frmMain: TfrmMain
       BevelKind = bkFlat
       BevelOuter = bvNone
       TabOrder = 3
+      ExplicitLeft = 105
     end
     object pnlFieldCount: TPanel
       AlignWithMargins = True
@@ -583,7 +586,7 @@ object frmMain: TfrmMain
     Left = 32
     Top = 72
     Bitmap = {
-      494C01010B000D00700010001000FFFFFFFF2110FFFFFFFFFFFFFFFF424D3600
+      494C01010B000D00740010001000FFFFFFFF2110FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000003000000001002000000000000030
       0000000000000000000000000000000000000000000000000000000000000000
       000000000000000000000B0B0B0C000000000000000000000000000000000000
