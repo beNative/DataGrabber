@@ -688,6 +688,8 @@ end;
 procedure TdmData.qryMainBeforeOpen(DataSet: TDataSet);
 begin
   Logger.Track('TdmDataFireDAC.qryMainBeforeOpen');
+  FConstantFieldsVisible := True;
+  FEmptyFieldsVisible    := True;
 end;
 
 procedure TdmData.qryMainBeforeRefresh(DataSet: TDataSet);
