@@ -226,6 +226,8 @@ begin
   FNonEmptyFields.Clear;
   FHiddenFields.Clear;
   FFavoriteFields.Clear;
+  FConstantFieldsVisible := True;
+  FEmptyFieldsVisible    := True;
 end;
 {$ENDREGION}
 
