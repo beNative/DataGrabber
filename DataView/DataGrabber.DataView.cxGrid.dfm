@@ -3,7 +3,7 @@ inherited frmcxGrid: TfrmcxGrid
   ClientWidth = 695
   Font.Name = 'Se'
   ExplicitWidth = 711
-  ExplicitHeight = 358
+  ExplicitHeight = 357
   PixelsPerInch = 96
   TextHeight = 14
   object grdMain: TcxGrid [0]
@@ -26,6 +26,7 @@ inherited frmcxGrid: TfrmcxGrid
     LevelTabs.Style = 6
     LookAndFeel.Kind = lfStandard
     LookAndFeel.NativeStyle = True
+    LookAndFeel.ScrollbarMode = sbmClassic
     object tvwMain: TcxGridDBTableView
       Navigator.Buttons.ConfirmDelete = True
       Navigator.Buttons.CustomButtons = <>
@@ -34,6 +35,7 @@ inherited frmcxGrid: TfrmcxGrid
       Navigator.Visible = True
       FilterBox.MRUItemsListDropDownCount = 10
       FindPanel.ApplyInputDelay = 500
+      FindPanel.DisplayMode = fpdmManual
       FindPanel.MRUItemsListCount = 100
       FindPanel.MRUItemsListDropDownCount = 20
       FindPanel.Position = fppBottom
@@ -63,6 +65,7 @@ inherited frmcxGrid: TfrmcxGrid
       OptionsBehavior.IncSearch = True
       OptionsBehavior.NavigatorHints = True
       OptionsBehavior.BestFitMaxRecordCount = 100
+      OptionsBehavior.ColumnMergedGrouping = True
       OptionsBehavior.ImmediateEditor = False
       OptionsBehavior.ShowLockedStateImageOptions.BestFit = lsimImmediate
       OptionsBehavior.PullFocusing = True
@@ -90,7 +93,6 @@ inherited frmcxGrid: TfrmcxGrid
     end
   end
   object ppmMain: TcxGridPopupMenu
-    Grid = grdMain
     PopupMenus = <>
     AlwaysFireOnPopup = True
     Left = 128

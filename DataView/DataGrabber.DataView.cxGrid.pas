@@ -33,15 +33,17 @@ uses
   cxVGrid, cxOI, cxGridCustomPopupMenu, cxGridPopupMenu,
   cxLookAndFeels, cxLookAndFeelPainters, cxGridCardView, cxGridBandedTableView,
   cxGridDBCardView, cxGridDBBandedTableView, cxNavigator, cxFilter, cxData,
+  dxDateRanges, cxDataControllerConditionalFormattingRulesManagerDialog,
+  dxBarBuiltInMenu,
 
   DataGrabber.Interfaces, DataGrabber.DataView.Base;
 
 type
   TfrmcxGrid = class(TBaseDataView, IDataView, IGroupable, IMergable)
-    grdMain : TcxGrid;
-    grlMain : TcxGridLevel;
     ppmMain : TcxGridPopupMenu;
-    tvwMain : TcxGridDBTableView;
+    grdMain: TcxGrid;
+    tvwMain: TcxGridDBTableView;
+    grlMain: TcxGridLevel;
 
     procedure tvwMainCustomDrawGroupSummaryCell(
       Sender       : TObject;
