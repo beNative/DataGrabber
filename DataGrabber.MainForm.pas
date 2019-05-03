@@ -170,7 +170,6 @@ uses
   Spring.Utils,
 
   DDuce.ObjectInspector.zObjectInspector, DDuce.Utils,
-  //DDuce.Logger, DDuce.Logger.Factories,
 
   DataGrabber.Utils, DataGrabber.Resources, DataGrabber.Factories;
 
@@ -180,8 +179,6 @@ var
   FVI : TFileVersionInfo;
 begin
   inherited AfterConstruction;
-  //Logger.Channels.Add(TLoggerFactories.CreateWinIPCChannel);
-  //Logger.Clear;
   FVI := TFileVersionInfo.GetVersionInfo(Application.ExeName);
   Caption := Format('%s %s', [FVI.ProductName, FVI.ProductVersion]);
   FSettings := TDataGrabberFactories.CreateSettings(Self);
@@ -465,10 +462,6 @@ begin
     pnlElapsedTime.Caption         := Format(
       '%5.0f ms', [Data.ElapsedTime.TotalMilliseconds]
     );
-
-//    pnlConstantFieldsCount.Visible := Data.FieldListsUpdated;
-//    pnlEmptyFieldsCount.Visible    := Data.FieldListsUpdated;
-
     if Data.CanModify then
       S := SUpdateable
     else

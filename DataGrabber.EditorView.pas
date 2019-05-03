@@ -215,7 +215,6 @@ begin
   FEditor.Gutter.Gradient             := True;
   FEditor.Gutter.GradientStartColor   := clWhite;
   FEditor.Gutter.GradientEndColor     := clWhite;
-  //FEditor.Gutter.ModificationBarWidth := 0;
   FEditor.Gutter.LeftOffset           := 0;
   FEditor.Gutter.RightOffset          := 0;
   FEditor.Gutter.RightMargin          := 2;

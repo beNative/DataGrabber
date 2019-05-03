@@ -26,7 +26,7 @@ inherited frmcxGrid: TfrmcxGrid
     LevelTabs.Style = 6
     LookAndFeel.Kind = lfStandard
     LookAndFeel.NativeStyle = True
-    LookAndFeel.ScrollbarMode = sbmClassic
+    LookAndFeel.ScrollbarMode = sbmDefault
     object tvwMain: TcxGridDBTableView
       Navigator.Buttons.ConfirmDelete = True
       Navigator.Buttons.CustomButtons = <>

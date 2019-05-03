@@ -23,8 +23,8 @@ object frmEditorView: TfrmEditorView
     SymbolAttri.Style = [fsBold]
     VariableAttri.Foreground = clPurple
     VariableAttri.Style = [fsBold]
-    Left = 48
-    Top = 40
+    Left = 40
+    Top = 8
   end
   object scpMain: TSynCompletionProposal
     Options = [scoLimitToMatchedText, scoUsePrettyText, scoEndCharCompletion, scoCompleteWithTab, scoCompleteWithEnter]
@@ -58,7 +58,7 @@ object frmEditorView: TfrmEditorView
     TitleFont.Style = [fsBold]
     Columns = <>
     ShortCut = 16416
-    Left = 128
-    Top = 40
+    Left = 120
+    Top = 8
   end
 end

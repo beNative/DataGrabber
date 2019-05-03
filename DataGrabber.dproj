@@ -78,6 +78,7 @@
         <DCC_DcpOutput>.\Lib\$(Platform)\$(Config)</DCC_DcpOutput>
         <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
         <VerInfo_AutoIncVersion>true</VerInfo_AutoIncVersion>
+        <Custom_Styles>Light|VCLSTYLE|$(BDSCOMMONDIR)\Styles\Light.vsf</Custom_Styles>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base_Win32)'!=''">
         <DCC_UsePackage>dxCoreRS22;cxLibraryRS22;dxGDIPlusRS22;dxThemeRS22;cxBarEditItemRS22;dxBarRS22;dxComnRS22;cxEditorsRS22;cxDataRS22;cxGridRS22;cxPageControlRS22;cxExportRS22;dxServerModeRS22;cxPivotGridRS22;dxmdsRS22;cxPivotGridChartRS22;cxPivotGridOLAPRS22;cxSchedulerRS22;cxSchedulerGridRS22;dxRibbonRS22;cxSchedulerRibbonStyleEventEditorRS22;cxSchedulerTreeBrowserRS22;cxTreeListRS22;cxTreeListdxBarPopupMenuRS22;cxVerticalGridRS22;dxADOServerModeRS22;dxBarDBNavRS22;dxBarExtDBItemsRS22;dxBarExtItemsRS22;dxorgcRS22;dxdborRS22;dxdbtrRS22;dxDockingRS22;dxFireDACServerModeRS22;dxFlowChartRS22;dxLayoutControlRS22;dxMapControlRS22;dxNavBarRS22;dxPSCoreRS22;dxPScxCommonRS22;dxPSLnksRS22;dxPScxExtCommonRS22;dxPScxGridLnkRS22;dxPSdxLCLnkRS22;dxPScxPivotGridLnkRS22;dxPScxSchedulerLnkRS22;dxPScxTLLnkRS22;dxPScxVGridLnkRS22;dxPSDBTeeChartRS22;dxPSTeeChartRS22;dxPSdxDBOCLnkRS22;dxPSdxOCLnkRS22;dxPSdxDBTVLnkRS22;dxPSdxFCLnkRS22;dxPSdxSpreadSheetLnkRS22;dxSpreadSheetRS22;dxPsPrVwAdvRS22;dxPSPrVwRibbonRS22;dxSpellCheckerRS22;dxTabbedMDIRS22;dxTileControlRS22;dxtrmdRS22;dxWizardControlRS22;dxPScxPCProdRS22;$(DCC_UsePackage)</DCC_UsePackage>

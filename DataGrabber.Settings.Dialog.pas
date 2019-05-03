@@ -67,8 +67,8 @@ type
     actMoveDown                  : TAction;
     actMoveUp                    : TAction;
     actMRSAsMultipleTabs         : TAction;
-    actMRSVertically: TAction;
-    actMRSHorizontally: TAction;
+    actMRSVertically             : TAction;
+    actMRSHorizontally           : TAction;
     actOpenSettingsFileLocation  : TAction;
     actRefreshFile               : TAction;
     actSaveFile                  : TAction;
@@ -505,7 +505,7 @@ end;
 
 procedure TfrmSettingsDialog.actDuplicateExecute(Sender: TObject);
 var
-  N: Integer;
+  N : Integer;
 begin
   N := FVSTProfiles.FocusedNode.Index;
   with FSettings.ConnectionProfiles.Add do
@@ -543,7 +543,7 @@ end;
 
 procedure TfrmSettingsDialog.actMoveDownExecute(Sender: TObject);
 var
-  N: Integer;
+  N : Integer;
 begin
   N := FVSTProfiles.FocusedNode.Index;
   FSettings.ConnectionProfiles[N].Index := N + 1;
@@ -553,7 +553,7 @@ end;
 
 procedure TfrmSettingsDialog.actMoveUpExecute(Sender: TObject);
 var
-  N: Integer;
+  N : Integer;
 begin
   N := FVSTProfiles.FocusedNode.Index;
   FSettings.ConnectionProfiles[N].Index := N - 1;
@@ -735,7 +735,7 @@ end;
 procedure TfrmSettingsDialog.conTestError(ASender, AInitiator: TObject;
   var AException: Exception);
 begin
-  ShowMessageFmt('Connection failed! %s', [AException.Message]);
+  ShowMessageFmt(SConnectionFailed, [AException.Message]);
 end;
 
 function TfrmSettingsDialog.FObjectInspectorBeforeAddItem(Sender: TControl;

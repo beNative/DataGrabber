@@ -38,10 +38,6 @@ object frmSettingsDialog: TfrmSettingsDialog
     object tsConnectionProfiles: TTabSheet
       Caption = 'Connection &profiles'
       ImageIndex = 9
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object splVertical: TSplitter
         Left = 161
         Top = 0
@@ -70,10 +66,6 @@ object frmSettingsDialog: TfrmSettingsDialog
           TabOrder = 0
           object tsBasic: TTabSheet
             Caption = '&Basic'
-            ExplicitLeft = 0
-            ExplicitTop = 0
-            ExplicitWidth = 0
-            ExplicitHeight = 0
             DesignSize = (
               494
               337)
@@ -382,11 +374,13 @@ object frmSettingsDialog: TfrmSettingsDialog
                   object lblUserName: TLabel
                     Left = 0
                     Top = 0
-                    Width = 52
-                    Height = 13
+                    Width = 65
+                    Height = 23
                     Align = alClient
                     Caption = '&Username:'
                     Layout = tlCenter
+                    ExplicitWidth = 52
+                    ExplicitHeight = 13
                   end
                 end
               end

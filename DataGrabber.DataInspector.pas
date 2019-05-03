@@ -198,7 +198,6 @@ begin
     UpdateView;
   end;
 end;
-
 {$ENDREGION}
 
 {$REGION 'action handlers'}

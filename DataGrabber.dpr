@@ -29,7 +29,9 @@ uses
   DataGrabber.DataView.cxGrid in 'DataView\DataGrabber.DataView.cxGrid.pas' {frmcxGrid},
   DataGrabber.MetaData.Dialog in 'DataGrabber.MetaData.Dialog.pas' {frmMetaData},
   DataGrabber.DataView.Base in 'DataView\DataGrabber.DataView.Base.pas' {BaseDataView},
-  DataGrabber.Data.ResultSet in 'DataGrabber.Data.ResultSet.pas';
+  DataGrabber.Data.ResultSet in 'DataGrabber.Data.ResultSet.pas',
+  Vcl.Themes,
+  Vcl.Styles;
 
 {$R *.res}
 
@@ -40,6 +42,8 @@ begin
   Logger.Channels.Add(TWinIPCChannel.Create);
   Logger.Clear;
   Application.Initialize;
+  Application.Title := 'DataGrabber';
+  //TStyleManager.TrySetStyle('Light');
   Application.CreateForm(TfrmMain, frmMain);
   Application.Run;
 end.
