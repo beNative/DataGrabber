@@ -127,9 +127,11 @@
         <VerInfo_Debug>true</VerInfo_Debug>
         <VerInfo_PreRelease>true</VerInfo_PreRelease>
         <VerInfo_AutoGenVersion>true</VerInfo_AutoGenVersion>
-        <VerInfo_Keys>FileDescription=DataGrabber;FileVersion=2.6.7.71;LegalCopyright=(c) 2011 - 2019 Tim Sinaeve;OriginalFilename=DataGrabber.exe;ProductName=DataGrabber;ProductVersion=2.6.7;InternalName=DataGrabber;Comments=http://github.com/beNative/DataGrabber</VerInfo_Keys>
+        <VerInfo_Keys>FileDescription=DataGrabber;FileVersion=2.6.8.75;LegalCopyright=(c) 2011 - 2019 Tim Sinaeve;OriginalFilename=DataGrabber.exe;ProductName=DataGrabber;ProductVersion=2.6.8;InternalName=DataGrabber;Comments=http://github.com/beNative/DataGrabber</VerInfo_Keys>
         <Icon_MainIcon>DataGrabber_Icon.ico</Icon_MainIcon>
         <VerInfo_AutoIncVersion>false</VerInfo_AutoIncVersion>
+        <VerInfo_Release>8</VerInfo_Release>
+        <VerInfo_Build>75</VerInfo_Build>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_1_Win64)'!=''">
         <AppEnableRuntimeThemes>true</AppEnableRuntimeThemes>
