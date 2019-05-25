@@ -1,8 +1,9 @@
 object frmEditorView: TfrmEditorView
   Left = 0
   Top = 0
-  ClientHeight = 286
-  ClientWidth = 490
+  BorderStyle = bsNone
+  ClientHeight = 324
+  ClientWidth = 506
   Color = clBtnFace
   ParentFont = True
   OldCreateOrder = False
@@ -23,8 +24,8 @@ object frmEditorView: TfrmEditorView
     SymbolAttri.Style = [fsBold]
     VariableAttri.Foreground = clPurple
     VariableAttri.Style = [fsBold]
-    Left = 48
-    Top = 40
+    Left = 40
+    Top = 8
   end
   object scpMain: TSynCompletionProposal
     Options = [scoLimitToMatchedText, scoUsePrettyText, scoEndCharCompletion, scoCompleteWithTab, scoCompleteWithEnter]
@@ -58,7 +59,7 @@ object frmEditorView: TfrmEditorView
     TitleFont.Style = [fsBold]
     Columns = <>
     ShortCut = 16416
-    Left = 128
-    Top = 40
+    Left = 120
+    Top = 8
   end
 end

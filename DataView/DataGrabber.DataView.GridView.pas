@@ -179,6 +179,7 @@ begin
   inherited AfterConstruction;
   FGrid                          := TDBGridView.Create(Self);
   FGrid.Align                    := alClient;
+  FGrid.BorderStyle              := bsNone;
   FGrid.Parent                   := Self;
   FGrid.Visible                  := True;
   FGrid.CheckBoxes               := True;

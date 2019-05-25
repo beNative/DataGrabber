@@ -1,8 +1,9 @@
 object frmGridView: TfrmGridView
   Left = 0
   Top = 0
-  ClientHeight = 219
-  ClientWidth = 447
+  BorderStyle = bsNone
+  ClientHeight = 257
+  ClientWidth = 463
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText

@@ -3,7 +3,7 @@ inherited frmcxGrid: TfrmcxGrid
   ClientWidth = 695
   Font.Name = 'Se'
   ExplicitWidth = 711
-  ExplicitHeight = 358
+  ExplicitHeight = 357
   PixelsPerInch = 96
   TextHeight = 14
   object grdMain: TcxGrid [0]
@@ -34,6 +34,7 @@ inherited frmcxGrid: TfrmcxGrid
       Navigator.Visible = True
       FilterBox.MRUItemsListDropDownCount = 10
       FindPanel.ApplyInputDelay = 500
+      FindPanel.DisplayMode = fpdmManual
       FindPanel.MRUItemsListCount = 100
       FindPanel.MRUItemsListDropDownCount = 20
       FindPanel.Position = fppBottom
@@ -90,7 +91,6 @@ inherited frmcxGrid: TfrmcxGrid
     end
   end
   object ppmMain: TcxGridPopupMenu
-    Grid = grdMain
     PopupMenus = <>
     AlwaysFireOnPopup = True
     Left = 128

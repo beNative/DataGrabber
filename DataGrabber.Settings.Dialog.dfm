@@ -3,7 +3,7 @@ object frmSettingsDialog: TfrmSettingsDialog
   Top = 0
   ActiveControl = pgcMain
   Caption = 'Settings'
-  ClientHeight = 437
+  ClientHeight = 438
   ClientWidth = 684
   Color = clBtnFace
   Constraints.MinHeight = 476
@@ -21,7 +21,7 @@ object frmSettingsDialog: TfrmSettingsDialog
   ShowHint = True
   DesignSize = (
     684
-    437)
+    438)
   PixelsPerInch = 96
   TextHeight = 13
   object pgcMain: TPageControl
@@ -472,6 +472,10 @@ object frmSettingsDialog: TfrmSettingsDialog
             ImageIndex = 1
             OnExit = tsAdvancedExit
             OnShow = tsAdvancedShow
+            ExplicitLeft = 0
+            ExplicitTop = 0
+            ExplicitWidth = 0
+            ExplicitHeight = 0
           end
         end
       end
@@ -537,6 +541,10 @@ object frmSettingsDialog: TfrmSettingsDialog
     object tsDisplay: TTabSheet
       Caption = '&Display settings'
       ImageIndex = 5
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       DesignSize = (
         670
         365)
@@ -742,7 +750,7 @@ object frmSettingsDialog: TfrmSettingsDialog
             Left = 3
             Top = 31
             Width = 54
-            Height = 22
+            Height = 25
             Align = alClient
             Caption = 'Float'
             FocusControl = btnFloatColor
@@ -773,7 +781,7 @@ object frmSettingsDialog: TfrmSettingsDialog
             Left = 3
             Top = 59
             Width = 54
-            Height = 22
+            Height = 25
             Align = alClient
             Caption = 'String'
             FocusControl = btnStringColor
@@ -804,7 +812,7 @@ object frmSettingsDialog: TfrmSettingsDialog
             Left = 3
             Top = 87
             Width = 54
-            Height = 22
+            Height = 25
             Align = alClient
             Caption = 'Memo'
             FocusControl = btnMemoColor
@@ -835,7 +843,7 @@ object frmSettingsDialog: TfrmSettingsDialog
             Left = 3
             Top = 115
             Width = 54
-            Height = 22
+            Height = 25
             Align = alClient
             Caption = 'Date'
             FocusControl = btnDateColor
@@ -866,7 +874,7 @@ object frmSettingsDialog: TfrmSettingsDialog
             Left = 3
             Top = 143
             Width = 54
-            Height = 22
+            Height = 25
             Align = alClient
             Caption = 'Time'
             FocusControl = btnTimeColor
@@ -897,7 +905,7 @@ object frmSettingsDialog: TfrmSettingsDialog
             Left = 3
             Top = 171
             Width = 54
-            Height = 22
+            Height = 25
             Align = alClient
             Caption = 'DateTime'
             FocusControl = btnDateTimeColor
@@ -928,7 +936,7 @@ object frmSettingsDialog: TfrmSettingsDialog
             Left = 3
             Top = 199
             Width = 54
-            Height = 22
+            Height = 25
             Align = alClient
             Caption = 'NULL'
             FocusControl = btnNullColor
@@ -959,7 +967,7 @@ object frmSettingsDialog: TfrmSettingsDialog
             Left = 3
             Top = 227
             Width = 54
-            Height = 22
+            Height = 25
             Align = alClient
             Caption = 'Boolean'
             FocusControl = btnBooleanColor
@@ -1145,6 +1153,10 @@ object frmSettingsDialog: TfrmSettingsDialog
       Caption = 'Settings files'
       ImageIndex = 11
       OnEnter = tsSettingsEnter
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       DesignSize = (
         664
         359)
@@ -1158,6 +1170,10 @@ object frmSettingsDialog: TfrmSettingsDialog
         TabOrder = 0
         object tsDataGrabberSettings: TTabSheet
           Caption = 'Settings.json'
+          ExplicitLeft = 0
+          ExplicitTop = 0
+          ExplicitWidth = 0
+          ExplicitHeight = 0
           object seSettings: TSynEdit
             AlignWithMargins = True
             Left = 3
@@ -1172,13 +1188,11 @@ object frmSettingsDialog: TfrmSettingsDialog
             Font.Name = 'Consolas'
             Font.Style = []
             TabOrder = 0
-            CodeFolding.GutterShapeSize = 11
             CodeFolding.CollapsedLineColor = clGrayText
             CodeFolding.FolderBarLinesColor = clGrayText
+            CodeFolding.ShowCollapsedLine = False
             CodeFolding.IndentGuidesColor = clGray
             CodeFolding.IndentGuides = True
-            CodeFolding.ShowCollapsedLine = False
-            CodeFolding.ShowHintMark = True
             UseCodeFolding = False
             Gutter.AutoSize = True
             Gutter.Color = cl3DLight
@@ -1190,7 +1204,6 @@ object frmSettingsDialog: TfrmSettingsDialog
             Gutter.LeftOffset = 0
             Gutter.RightOffset = 0
             Gutter.ShowLineNumbers = True
-            Gutter.ShowModification = True
             Gutter.Width = 15
             Gutter.Gradient = True
             Gutter.GradientStartColor = clWhite
@@ -1208,6 +1221,10 @@ object frmSettingsDialog: TfrmSettingsDialog
         object tsFDConnectionDefs: TTabSheet
           Caption = 'FDConnectionDefs.ini'
           ImageIndex = 1
+          ExplicitLeft = 0
+          ExplicitTop = 0
+          ExplicitWidth = 0
+          ExplicitHeight = 0
           object seFDConnectionDefs: TSynEdit
             AlignWithMargins = True
             Left = 3
@@ -1223,13 +1240,11 @@ object frmSettingsDialog: TfrmSettingsDialog
             Font.Style = []
             TabOrder = 0
             OnExit = seFDConnectionDefsExit
-            CodeFolding.GutterShapeSize = 11
             CodeFolding.CollapsedLineColor = clGrayText
             CodeFolding.FolderBarLinesColor = clGrayText
+            CodeFolding.ShowCollapsedLine = False
             CodeFolding.IndentGuidesColor = clGray
             CodeFolding.IndentGuides = True
-            CodeFolding.ShowCollapsedLine = False
-            CodeFolding.ShowHintMark = True
             UseCodeFolding = False
             Gutter.AutoSize = True
             Gutter.Color = cl3DLight
@@ -1241,7 +1256,6 @@ object frmSettingsDialog: TfrmSettingsDialog
             Gutter.LeftOffset = 0
             Gutter.RightOffset = 0
             Gutter.ShowLineNumbers = True
-            Gutter.ShowModification = True
             Gutter.Width = 15
             Gutter.Gradient = True
             Gutter.GradientStartColor = clWhite
@@ -1289,6 +1303,10 @@ object frmSettingsDialog: TfrmSettingsDialog
       Caption = 'Connection definitions'
       ImageIndex = -1
       TabVisible = False
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
     end
   end
   object btnApply: TButton
@@ -1483,7 +1501,7 @@ object frmSettingsDialog: TfrmSettingsDialog
     Left = 16
     Top = 200
     Bitmap = {
-      494C010119003000D00010001000FFFFFFFF2110FFFFFFFFFFFFFFFF424D3600
+      494C010119003000040010001000FFFFFFFF2110FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000007000000001002000000000000070
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000

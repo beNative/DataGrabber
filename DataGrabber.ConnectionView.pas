@@ -247,7 +247,7 @@ begin
   else
   begin
     FMultiPanel := TOMultiPanel.Create(Self);
-    FMultiPanel.SplitterSize := 8;
+    FMultiPanel.SplitterSize := 2;
     FMultiPanel.Parent := pnlBottom;
     FMultiPanel.Align  := alClient;
     if Manager.Settings.ResultDisplayLayout = TResultDisplayLayout.Horizontal then
@@ -296,7 +296,7 @@ begin
     DV.AssignParent(pnlBottom);
     FActiveDataView := DV;
   end;
-  pnlMain.SplitterSize                := 8;
+  pnlMain.SplitterSize                := 2;
   pnlMain.PanelCollection[0].Position := 0.2;
 end;
 
@@ -461,6 +461,7 @@ begin
   FVSTProfiles.Margins.Right := 0;
   FVSTProfiles.Indent        := 0;
   FVSTProfiles.Alignment     := taCenter;
+  FVSTProfiles.BorderStyle   := bsNone;
   FVSTProfiles.Constraints.MinWidth  := 150;
   FVSTProfiles.Constraints.MinHeight := 100;
   FVSTProfiles.Constraints.MaxWidth  := 300;

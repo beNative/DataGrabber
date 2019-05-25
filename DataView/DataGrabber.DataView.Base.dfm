@@ -1,9 +1,10 @@
 object BaseDataView: TBaseDataView
   Left = 0
   Top = 0
+  BorderStyle = bsNone
   Caption = 'BaseDataView'
-  ClientHeight = 204
-  ClientWidth = 419
+  ClientHeight = 242
+  ClientWidth = 435
   Color = clBtnFace
   DoubleBuffered = True
   Font.Charset = DEFAULT_CHARSET

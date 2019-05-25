@@ -96,6 +96,7 @@ resourcestring
   SReadOnly                 = 'Offline results';
   SConnected                = 'Connected';
   SDisconnected             = 'Disconnected';
+  SConnectionFailed         = 'Connection failed! %s';
   SAskSaveChanges           = 'Do you want to save changes?';
   SConfirmDeleteProfile     = 'Are you sure you want to delete this profile?';
   SOpenSettingsFileLocation = 'Open settings file location (%s)';

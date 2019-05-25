@@ -62,6 +62,7 @@ type
 
     function GetDataSet: TDataSet;
     procedure SetDataSet(const Value: TDataSet);
+
   protected
     procedure UpdateActions; override;
 
@@ -93,27 +94,27 @@ uses
 {$REGION 'construction and destruction'}
 constructor TfrmFieldInspector.Create(AOwner: TComponent; ADataSet: TDataSet);
 var
-  C: TVirtualTreeColumn;
+  C : TVirtualTreeColumn;
 begin
   inherited Create(AOwner);
   FDataSet := ADataSet;
   FOIField   := TzObjectInspectorFactory.Create(Self, pnlRight);
   FVSTFields := TVirtualStringTreeFactory.CreateGrid(Self, pnlLeft);
-    // cell in first column is fully selected
-  FVSTFields.TreeOptions.PaintOptions :=
+  // cell in first column is fully selected
+  FVSTFields.TreeOptions.PaintOptions := // always show selection
     FVSTFields.TreeOptions.PaintOptions - [toHideSelection];
-  FVSTFields.TreeOptions.PaintOptions :=
+  FVSTFields.TreeOptions.PaintOptions := // show always as focused
     FVSTFields.TreeOptions.PaintOptions + [toPopupMode];
-  FVSTFields.TreeOptions.SelectionOptions :=
+  FVSTFields.TreeOptions.SelectionOptions := // disable selection rectangle
     FVSTFields.TreeOptions.SelectionOptions - [toDisableDrawSelection];
-  FVSTFields.TreeOptions.SelectionOptions :=
+  FVSTFields.TreeOptions.SelectionOptions := // show always a selected node
     FVSTFields.TreeOptions.SelectionOptions + [toAlwaysSelectNode];
   FVSTFields.OnGetText := FVSTFieldsGetText;
   FVSTFields.OnFocusChanged := FVSTFieldsFocusChanged;
   FVSTFields.LineStyle := lsSolid;
   FVSTFields.Header.Font.Style := FVSTFields.Header.Font.Style + [fsBold];
   // required when using it as a grid
-  FVSTFields.Indent    := 0;
+  FVSTFields.Indent := 0;
   C := FVSTFields.Header.Columns.Add;
   C.CaptionAlignment := taCenter;
   C.Text             := 'Fieldname';
