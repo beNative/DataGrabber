@@ -21,8 +21,6 @@ interface
 {  Due to a VCL-bug custom VCL styles are not rendered correctly on popupmenu's
   that have a datamodule as their parent.
   (https://forums.embarcadero.com/thread.jspa?messageID=1003818)
-
-
 }
 
 uses

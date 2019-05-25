@@ -27,52 +27,65 @@ object frmMain: TfrmMain
     Align = alBottom
     BevelOuter = bvNone
     TabOrder = 0
+    object shpLine: TShape
+      Left = 0
+      Top = 0
+      Width = 1124
+      Height = 1
+      Align = alTop
+      Pen.Color = clScrollBar
+    end
     object pnlEditMode: TPanel
       AlignWithMargins = True
       Left = 1
-      Top = 1
+      Top = 2
       Width = 50
-      Height = 19
+      Height = 18
       Hint = 'Data mode'
       Margins.Left = 1
       Margins.Top = 1
       Margins.Right = 1
       Margins.Bottom = 1
       Align = alLeft
+      BevelEdges = [beRight]
       BevelKind = bkFlat
       BevelOuter = bvNone
       TabOrder = 0
+      ExplicitTop = 1
+      ExplicitHeight = 19
     end
     object pnlElapsedTime: TPanel
       AlignWithMargins = True
       Left = 105
-      Top = 1
+      Top = 2
       Width = 50
-      Height = 19
+      Height = 18
       Hint = 'Elapsed execution time'
       Margins.Left = 1
       Margins.Top = 1
       Margins.Right = 1
       Margins.Bottom = 1
       Align = alLeft
+      BevelEdges = [beRight]
       BevelKind = bkFlat
       BevelOuter = bvNone
       TabOrder = 1
-      ExplicitLeft = 93
-      ExplicitTop = 4
+      ExplicitTop = 1
+      ExplicitHeight = 19
     end
     object pnlConnectionStatus: TPanel
       AlignWithMargins = True
       Left = 53
-      Top = 1
+      Top = 2
       Width = 50
-      Height = 19
+      Height = 18
       Hint = 'Connection status'
       Margins.Left = 1
       Margins.Top = 1
       Margins.Right = 1
       Margins.Bottom = 1
       Align = alLeft
+      BevelEdges = [beRight]
       BevelKind = bkFlat
       BevelOuter = bvNone
       Font.Charset = ANSI_CHARSET
@@ -82,87 +95,103 @@ object frmMain: TfrmMain
       Font.Style = [fsBold]
       ParentFont = False
       TabOrder = 2
+      ExplicitTop = 1
+      ExplicitHeight = 19
     end
     object pnlRecordCount: TPanel
       AlignWithMargins = True
       Left = 157
-      Top = 1
+      Top = 2
       Width = 50
-      Height = 19
+      Height = 18
       Hint = 'Recordcount'
       Margins.Left = 1
       Margins.Top = 1
       Margins.Right = 1
       Margins.Bottom = 1
       Align = alLeft
+      BevelEdges = [beRight]
       BevelKind = bkFlat
       BevelOuter = bvNone
       TabOrder = 3
-      ExplicitLeft = 105
+      ExplicitTop = 1
+      ExplicitHeight = 19
     end
     object pnlFieldCount: TPanel
       AlignWithMargins = True
       Left = 209
-      Top = 1
+      Top = 2
       Width = 50
-      Height = 19
+      Height = 18
       Hint = 'Field count'
       Margins.Left = 1
       Margins.Top = 1
       Margins.Right = 1
       Margins.Bottom = 1
       Align = alLeft
+      BevelEdges = [beRight]
       BevelKind = bkFlat
       BevelOuter = bvNone
       TabOrder = 4
+      ExplicitTop = 1
+      ExplicitHeight = 19
     end
     object pnlConstantFieldsCount: TPanel
       AlignWithMargins = True
       Left = 313
-      Top = 1
+      Top = 2
       Width = 50
-      Height = 19
+      Height = 18
       Hint = 'Constant fields count'
       Margins.Left = 1
       Margins.Top = 1
       Margins.Right = 1
       Margins.Bottom = 1
       Align = alLeft
+      BevelEdges = [beRight]
       BevelKind = bkFlat
       BevelOuter = bvNone
       TabOrder = 5
+      ExplicitTop = 1
+      ExplicitHeight = 19
     end
     object pnlEmptyFieldsCount: TPanel
       AlignWithMargins = True
       Left = 261
-      Top = 1
+      Top = 2
       Width = 50
-      Height = 19
+      Height = 18
       Hint = 'Empty fields count'
       Margins.Left = 1
       Margins.Top = 1
       Margins.Right = 1
       Margins.Bottom = 1
       Align = alLeft
+      BevelEdges = [beRight]
       BevelKind = bkFlat
       BevelOuter = bvNone
       TabOrder = 6
+      ExplicitTop = 1
+      ExplicitHeight = 19
     end
     object pnlHiddenFieldsCount: TPanel
       AlignWithMargins = True
       Left = 365
-      Top = 1
+      Top = 2
       Width = 50
-      Height = 19
+      Height = 18
       Hint = 'Hidden fields count'
       Margins.Left = 1
       Margins.Top = 1
       Margins.Right = 1
       Margins.Bottom = 1
       Align = alLeft
+      BevelEdges = [beRight]
       BevelKind = bkFlat
       BevelOuter = bvNone
       TabOrder = 7
+      ExplicitTop = 1
+      ExplicitHeight = 19
     end
   end
   object pnlConnectionViews: TPanel
@@ -312,7 +341,7 @@ object frmMain: TfrmMain
       LookAndFeel.TabsContainer.StopAlpha = 255
       LookAndFeel.TabsContainer.OutlineColor = clSilver
       LookAndFeel.TabsContainer.OutlineAlpha = 0
-      LookAndFeel.Tabs.BaseLine.Color = clActiveBorder
+      LookAndFeel.Tabs.BaseLine.Color = clScrollBar
       LookAndFeel.Tabs.BaseLine.Thickness = 1.000000000000000000
       LookAndFeel.Tabs.BaseLine.Alpha = 255
       LookAndFeel.Tabs.Modified.CentreColor = clBlue

@@ -186,7 +186,7 @@ begin
   FEditor.Parent           := Self;
   FEditor.Align            := alClient;
   FEditor.AlignWithMargins := False;
-  FEditor.BorderStyle      := bsSingle;
+  FEditor.BorderStyle      := bsNone;
   FEditor.Font.Assign(FManager.Settings.EditorFont);
   FEditor.Highlighter      := synSQL;
   FEditor.Options := [

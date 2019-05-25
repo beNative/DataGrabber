@@ -1,8 +1,9 @@
 object frmEditorView: TfrmEditorView
   Left = 0
   Top = 0
-  ClientHeight = 286
-  ClientWidth = 490
+  BorderStyle = bsNone
+  ClientHeight = 324
+  ClientWidth = 506
   Color = clBtnFace
   ParentFont = True
   OldCreateOrder = False

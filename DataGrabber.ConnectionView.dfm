@@ -1,5 +1,4 @@
 object frmConnectionView: TfrmConnectionView
-  AlignWithMargins = True
   Left = 0
   Top = 0
   ClientHeight = 487
@@ -33,7 +32,9 @@ object frmConnectionView: TfrmConnectionView
         Index = 1
       end>
     MinPosition = 0.020000000000000000
-    SplitterSize = 8
+    SplitterSize = 2
+    SplitterColor = clScrollBar
+    SplitterHoverColor = clScrollBar
     Align = alClient
     TabOrder = 0
     object pnlTop: TPanel
@@ -47,10 +48,17 @@ object frmConnectionView: TfrmConnectionView
       object splVertical: TSplitter
         Left = 185
         Top = 0
-        Width = 8
+        Width = 2
         Height = 244
+        Margins.Left = 0
+        Margins.Top = 0
+        Margins.Right = 0
+        Margins.Bottom = 0
+        Color = clScrollBar
+        ParentColor = False
+        ResizeStyle = rsLine
+        StyleElements = [seClient, seBorder]
         OnMoved = splVerticalMoved
-        ExplicitHeight = 232
       end
       object pnlVST: TPanel
         Left = 0
@@ -62,21 +70,24 @@ object frmConnectionView: TfrmConnectionView
         TabOrder = 0
       end
       object pnlTopRight: TPanel
-        Left = 193
+        Left = 187
         Top = 0
-        Width = 713
+        Width = 719
         Height = 244
         Align = alClient
         BevelOuter = bvNone
         TabOrder = 1
+        ExplicitLeft = 193
+        ExplicitWidth = 713
       end
     end
     object pnlBottom: TPanel
       Left = 0
-      Top = 252
+      Top = 246
       Width = 906
-      Height = 235
+      Height = 241
       Align = alClient
+      BevelEdges = []
       BevelOuter = bvNone
       TabOrder = 1
     end
