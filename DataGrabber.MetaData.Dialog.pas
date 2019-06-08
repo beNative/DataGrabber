@@ -85,6 +85,9 @@ type
 
 implementation
 
+uses
+  FireDAC.Phys.Intf;
+
 {$R *.dfm}
 
 {$REGION 'construction and destruction'}
@@ -100,17 +103,17 @@ end;
 {$REGION 'event handlers'}
 procedure TfrmMetaData.lstCatalogsClick(Sender: TObject);
 begin
-  FConnection.GetSchemaNames(Catalog, '', Schemas);
+  FConnection.GetSchemaNames('', '', Schemas);
 end;
 
 procedure TfrmMetaData.lstSchemasClick(Sender: TObject);
 begin
-  FConnection.GetTableNames(Catalog , Schema, '',  Tables);
+  FConnection.GetTableNames(Catalog , Schema, '',  Tables, [osMy], [tkTable], False);
 end;
 
 procedure TfrmMetaData.lstSchemasEnter(Sender: TObject);
 begin
-  FConnection.GetTableNames(Catalog , Schema, '',  Tables);
+  FConnection.GetTableNames(Catalog , Schema, '',  Tables, [osMy], [tkTable], False);
 end;
 
 procedure TfrmMetaData.lstTablesClick(Sender: TObject);

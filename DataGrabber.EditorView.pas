@@ -206,21 +206,21 @@ begin
     eoTabsToSpaces,
     eoTrimTrailingSpaces
   ];
-  FEditor.ActiveLineColor := clYellow;
-  FEditor.WordWrap := True;
-  FEditor.Gutter.AutoSize             := True;
-  FEditor.Gutter.ShowLineNumbers      := True;
-  FEditor.Gutter.Font.Name            := 'Consolas';
-  FEditor.Gutter.Font.Color           := clSilver;
-  FEditor.Gutter.Gradient             := True;
-  FEditor.Gutter.GradientStartColor   := clWhite;
-  FEditor.Gutter.GradientEndColor     := clWhite;
-  FEditor.Gutter.LeftOffset           := 0;
-  FEditor.Gutter.RightOffset          := 0;
-  FEditor.Gutter.RightMargin          := 2;
-  FEditor.Gutter.Color                := cl3DLight;
-  FEditor.RightEdgeColor              := cl3DLight;
-  scpMain.Editor := FEditor;
+  FEditor.ActiveLineColor           := clYellow;
+  FEditor.WordWrap                  := True;
+  FEditor.Gutter.AutoSize           := True;
+  FEditor.Gutter.ShowLineNumbers    := True;
+  FEditor.Gutter.Font.Name          := 'Consolas';
+  FEditor.Gutter.Font.Color         := clSilver;
+  FEditor.Gutter.Gradient           := True;
+  FEditor.Gutter.GradientStartColor := clWhite;
+  FEditor.Gutter.GradientEndColor   := clWhite;
+  FEditor.Gutter.LeftOffset         := 0;
+  FEditor.Gutter.RightOffset        := 0;
+  FEditor.Gutter.RightMargin        := 2;
+  FEditor.Gutter.Color              := cl3DLight;
+  FEditor.RightEdgeColor            := cl3DLight;
+  scpMain.Editor                    := FEditor;
 end;
 {$ENDREGION}
 
@@ -243,7 +243,7 @@ var
   Inserts : TStringList;
 begin
   inherited SetFocus;
-  Items  := scpMain.ItemList as TStringList;
+  Items   := scpMain.ItemList as TStringList;
   Inserts := scpMain.InsertList  as TStringList;
   Items.Clear;
   Inserts.Clear;

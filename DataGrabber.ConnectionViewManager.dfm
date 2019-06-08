@@ -189,24 +189,6 @@ object dmConnectionViewManager: TdmConnectionViewManager
       ImageIndex = 63
       OnExecute = actInspectFieldsExecute
     end
-    object actPreview: TAction
-      Category = 'Print'
-      Caption = 'Print preview'
-      ImageIndex = 56
-      OnExecute = actPreviewExecute
-    end
-    object actDesigner: TAction
-      Category = 'Print'
-      Caption = 'Report designer'
-      ImageIndex = 76
-      OnExecute = actDesignerExecute
-    end
-    object actPrint: TAction
-      Category = 'Print'
-      Caption = 'Print'
-      ImageIndex = 55
-      OnExecute = actPrintExecute
-    end
     object actDebug: TAction
       Caption = 'Debug'
       ImageIndex = 32

@@ -35,7 +35,6 @@ unit DataGrabber.ConnectionSettings;
   PoolCleanupTimeout
   PoolExpireTimeout
   PoolMaximumItems
-
 }
 
 interface

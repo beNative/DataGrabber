@@ -54,17 +54,19 @@ type
   TdmConnectionViewManager = class(TDataModule, IConnectionViewManager)
     {$REGION 'designer controls'}
     aclActions                    : TActionList;
+    actAbout                      : TAction;
     actAddConnectionView          : TAction;
     actAutoSizeCols               : TAction;
     actChinookExampleQuery        : TAction;
     actClearGrouping              : TAction;
     actCollapseAll                : TAction;
     actCopy                       : TAction;
+    actCopyConnectionViewAsWiki   : TAction;
     actDataInspector              : TAction;
     actDebug                      : TAction;
-    actDesigner                   : TAction;
     actExecute                    : TAction;
     actExecuteLiveResultSet       : TAction;
+    actExecuteTestSequence        : TAction;
     actExpandAll                  : TAction;
     actFireDACInfo                : TAction;
     actFormatSQL                  : TAction;
@@ -80,8 +82,7 @@ type
     actInspectFields              : TAction;
     actInspectGrid                : TAction;
     actMergeColumnCells           : TAction;
-    actPreview                    : TAction;
-    actPrint                      : TAction;
+    actResultsAsWiki              : TAction;
     actRtti                       : TAction;
     actSelectionAsCommaText       : TAction;
     actSelectionAsFields          : TAction;
@@ -97,10 +98,12 @@ type
     actToggleFullScreen           : TAction;
     actToggleStayOnTop            : TAction;
     imlMain                       : TImageList;
+    Liveresults1                  : TMenuItem;
     mniAutoSizeCols               : TMenuItem;
     mniClearGrouping              : TMenuItem;
     mniCollapseAll                : TMenuItem;
     mniCopy                       : TMenuItem;
+    mniCopyResults                : TMenuItem;
     mniCopyTextTable              : TMenuItem;
     mniCopyWikiTable              : TMenuItem;
     mniExecute                    : TMenuItem;
@@ -136,13 +139,7 @@ type
     N6                            : TMenuItem;
     ppmConnectionView             : TPopupMenu;
     ppmEditorView                 : TPopupMenu;
-    Liveresults1: TMenuItem;
-    actResultsAsWiki: TAction;
-    mniCopyResults: TMenuItem;
-    ResultsasWiki1: TMenuItem;
-    actCopyConnectionViewAsWiki: TAction;
-    actAbout: TAction;
-    actExecuteTestSequence: TAction;
+    ResultsasWiki1                : TMenuItem;
     {$ENDREGION}
 
     {$REGION 'action handlers'}
@@ -153,7 +150,6 @@ type
     procedure actCollapseAllExecute(Sender: TObject);
     procedure actCopyExecute(Sender: TObject);
     procedure actDataInspectorExecute(Sender: TObject);
-    procedure actDesignerExecute(Sender: TObject);
     procedure actExecuteExecute(Sender: TObject);
     procedure actExecuteLiveResultSetExecute(Sender: TObject);
     procedure actExpandAllExecute(Sender: TObject);
@@ -170,8 +166,6 @@ type
     procedure actInspectFieldsExecute(Sender: TObject);
     procedure actInspectGridExecute(Sender: TObject);
     procedure actMergeColumnCellsExecute(Sender: TObject);
-    procedure actPreviewExecute(Sender: TObject);
-    procedure actPrintExecute(Sender: TObject);
     procedure actSelectionAsCommaTextExecute(Sender: TObject);
     procedure actSelectionAsFieldsExecute(Sender: TObject);
     procedure actSelectionAsQuotedCommaTextExecute(Sender: TObject);
@@ -298,9 +292,6 @@ begin
   FFieldInspector     := TfrmFieldInspector.Create(Self);
 
   // disable actions that are not fully implemented yet
-  actPreview.Visible       := False;
-  actPrint.Visible         := False;
-  actDesigner.Visible      := False;
   actRtti.Visible          := False;
   actDataInspector.Visible := False;
 end;
@@ -572,26 +563,9 @@ begin
   ShowMessageFmt('FireDAC version %s', [C_FD_Version]);
 end;
 
-procedure TdmConnectionViewManager.actPrintExecute(Sender: TObject);
-begin
-  //(ActiveData as IDataReport).PrintReport;
-end;
-
 procedure TdmConnectionViewManager.actResultsAsWikiExecute(Sender: TObject);
 begin
   Clipboard.AsText := ActiveConnectionView.ExportAsWiki;
-end;
-
-procedure TdmConnectionViewManager.actDesignerExecute(Sender: TObject);
-begin
-//  (ActiveData as IDataReport).DesignReport;
-//  (ActiveData as IDataReport).EditProperties;
-end;
-
-procedure TdmConnectionViewManager.actPreviewExecute(Sender: TObject);
-begin
-//  (ActiveData as IDataReport).ReportTitle := 'DataGrabber';
-//  (ActiveData as IDataReport).PreviewReport;
 end;
 {$ENDREGION}
 {$ENDREGION}
@@ -738,11 +712,6 @@ begin
   begin
     actExecute.Enabled := not ActiveConnectionView.EditorView.Text.Trim.IsEmpty;
     actExecuteLiveResultSet.Enabled := actExecute.Enabled;
-
-    B := ActiveData.Active;
-    actPreview.Enabled             := B;
-    actPrint.Enabled               := B;
-    actDesigner.Enabled            := B;
 
     B := Assigned(ActiveDataView) and Assigned(ActiveDataView.ResultSet);
     actHideEmptyColumns.Enabled    := B;

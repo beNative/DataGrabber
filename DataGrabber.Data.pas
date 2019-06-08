@@ -577,7 +577,7 @@ end;
 procedure TdmData.conMainAfterConnect(Sender: TObject);
 begin
   Logger.Track('TdmDataFireDAC.conMainAfterConnect');
-      FResultSets.Clear;
+  FResultSets.Clear;
 end;
 
 procedure TdmData.conMainAfterDisconnect(Sender: TObject);

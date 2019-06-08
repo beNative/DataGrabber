@@ -195,7 +195,7 @@ begin
   ApplySettings;
   pnlMain.MinPosition                 := 0;
   pnlMain.PanelCollection[0].Position := 1;
-  pnlMain.SplitterSize                := 0;
+  pnlMain.SplitterSize                := 4;
 end;
 
 procedure TfrmConnectionView.BeforeDestruction;
@@ -247,7 +247,7 @@ begin
   else
   begin
     FMultiPanel := TOMultiPanel.Create(Self);
-    FMultiPanel.SplitterSize := 2;
+    FMultiPanel.SplitterSize := 4;
     FMultiPanel.Parent := pnlBottom;
     FMultiPanel.Align  := alClient;
     if Manager.Settings.ResultDisplayLayout = TResultDisplayLayout.Horizontal then
@@ -296,7 +296,7 @@ begin
     DV.AssignParent(pnlBottom);
     FActiveDataView := DV;
   end;
-  pnlMain.SplitterSize                := 2;
+  pnlMain.SplitterSize                := 4;
   pnlMain.PanelCollection[0].Position := 0.2;
 end;
 
@@ -432,7 +432,7 @@ end;
 function TfrmConnectionView.ExportAsWiki: string;
 var
   DV : IDataView;
-  S : string;
+  S  : string;
 begin
   if not FDataViewList.IsEmpty then
   begin
@@ -469,7 +469,7 @@ end;
 
 procedure TfrmConnectionView.ApplySettings;
 var
-  CP: TConnectionProfile;
+  CP : TConnectionProfile;
 begin
   FVSTProfiles.RootNodeCount := Manager.Settings.ConnectionProfiles.Count;
   FVSTProfiles.Refresh;

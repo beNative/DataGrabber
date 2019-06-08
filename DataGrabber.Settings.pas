@@ -51,6 +51,8 @@ type
     FOnChanged                : Event<TNotifyEvent>;
     FEditorFont               : TFont;
     FGridFont                 : TFont;
+    FThemingSupport           : Boolean;
+    FEmitDebugLogging         : Boolean;
 
     {$REGION 'property access methods'}
     function GetGridCellColoring: Boolean;
@@ -90,6 +92,10 @@ type
     {$ENDREGION}
 
     procedure FormSettingsChanged(Sender: TObject);
+    function GetThemingSupport: Boolean;
+    procedure SetThemingSupport(const Value: Boolean);
+    function GetEmitDebugLogging: Boolean;
+    procedure SetEmitDebugLogging(const Value: Boolean);
 
   protected
     procedure BeginUpdate;
@@ -156,6 +162,12 @@ type
 
     property DataInspectorVisible: Boolean
       read GetDataInspectorVisible write SetDataInspectorVisible;
+
+    property ThemingSupport: Boolean
+      read GetThemingSupport write SetThemingSupport;
+
+    property EmitDebugLogging: Boolean
+      read GetEmitDebugLogging write SetEmitDebugLogging;
 
     property ResultDisplayLayout: TResultDisplayLayout
       read GetResultDisplayLayout
@@ -376,6 +388,20 @@ begin
   Result := FShowVerticalGridLines;
 end;
 
+function TSettings.GetThemingSupport: Boolean;
+begin
+  Result := FThemingSupport;
+end;
+
+procedure TSettings.SetThemingSupport(const Value: Boolean);
+begin
+  if Value <> ThemingSupport then
+  begin
+    FThemingSupport := Value;
+    Changed;
+  end;
+end;
+
 procedure TSettings.SetShowVerticalGridLines(const Value: Boolean);
 begin
   if Value <> ShowVerticalGridLines then
@@ -446,6 +472,20 @@ procedure TSettings.SetEditorFont(const Value: TFont);
 begin
   FEditorFont.Assign(Value);
   Changed;
+end;
+
+function TSettings.GetEmitDebugLogging: Boolean;
+begin
+  Result := FEmitDebugLogging;
+end;
+
+procedure TSettings.SetEmitDebugLogging(const Value: Boolean);
+begin
+  if Value <> EmitDebugLogging then
+  begin
+    FEmitDebugLogging := Value;
+    Changed;
+  end;
 end;
 
 function TSettings.GetFileName: string;

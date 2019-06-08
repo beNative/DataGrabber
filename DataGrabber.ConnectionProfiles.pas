@@ -194,11 +194,11 @@ end;
 
 function TConnectionProfiles.Owner: TComponent;
 var
-  AOwner: TPersistent;
+  LOwner : TPersistent;
 begin
-  AOwner := inherited Owner;
-  if AOwner is TComponent then
-    Result := TComponent(AOwner)
+  LOwner := inherited Owner;
+  if LOwner is TComponent then
+    Result := TComponent(LOwner)
   else
     Result := nil;
 end;
@@ -279,7 +279,7 @@ end;
 {$REGION 'public methods'}
 procedure TConnectionProfile.Assign(Source: TPersistent);
 var
-  CP: TConnectionProfile;
+  CP : TConnectionProfile;
 begin
  if (Source <> Self) and (Source is TConnectionProfile) then
  begin

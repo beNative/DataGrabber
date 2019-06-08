@@ -154,9 +154,6 @@ begin
   AddButton(AManager, AToolBar, 'actAbout');
   //AddButton(AManager, AToolBar, 'actExecuteTestSequence');
   AddButton(AManager, AToolBar);
-  AddButton(AManager, AToolBar, 'actPreview');
-  AddButton(AManager, AToolBar, 'actDesigner');
-  AddButton(AManager, AToolBar, 'actPrint');
   AddButton(AManager, AToolBar, 'actDataInspector');
   AddButton(AManager, AToolBar);
   AddButton(AManager, AToolBar, 'actMergeColumnCells');
@@ -242,7 +239,9 @@ var
     if AActionName = '' then
       Result := TToolBarFactory.CreateToolButton(AParent, nil)
    else
-     Result := TToolBarFactory.CreateToolButton(AParent, AManager.Actions[AActionName], APopupMenu);
+     Result := TToolBarFactory.CreateToolButton(
+       AParent, AManager.Actions[AActionName], APopupMenu
+     );
   end;
 
 begin

@@ -4,7 +4,8 @@ program DataGrabber;
 
 uses
   Vcl.Forms,
-  DDuce.CustomImageDrawHook,
+
+  //DDuce.CustomImageDrawHook,
   DDuce.Logger,
   DDuce.Logger.Channels.WinIPC,
   DataGrabber.Resources in 'DataGrabber.Resources.pas',
@@ -30,6 +31,7 @@ uses
   DataGrabber.MetaData.Dialog in 'DataGrabber.MetaData.Dialog.pas' {frmMetaData},
   DataGrabber.DataView.Base in 'DataView\DataGrabber.DataView.Base.pas' {BaseDataView},
   DataGrabber.Data.ResultSet in 'DataGrabber.Data.ResultSet.pas',
+  Vcl.Styles.Hooks,
   Vcl.Themes,
   Vcl.Styles;
 
@@ -39,9 +41,10 @@ begin
   {$WARNINGS OFF}
   ReportMemoryLeaksOnShutdown := DebugHook > 0;
   {$WARNINGS ON}
-  Logger.Channels.Add(TWinIPCChannel.Create);
+  //Logger.Channels.Add(TWinIPCChannel.Create);
   Logger.Clear;
   Application.Initialize;
+  TStyleManager.TrySetStyle('Win10IDE_Light');
   Application.Title := 'DataGrabber';
   //TStyleManager.TrySetStyle('Light');
   Application.CreateForm(TfrmMain, frmMain);

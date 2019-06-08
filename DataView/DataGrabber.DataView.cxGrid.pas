@@ -24,26 +24,24 @@ uses
   Winapi.Windows, Winapi.Messages,
   System.SysUtils, System.Variants, System.Classes,
   Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, Vcl.Menus,
-  Vcl.ActnList, Vcl.ToolWin, Vcl.ComCtrls,
+  Vcl.ActnList, Vcl.ComCtrls,
   Data.DB,
 
-  cxStyles, cxCustomData, cxGraphics, cxDataStorage, cxEdit,
-  cxDBData, cxGridLevel, cxClasses, cxControls, cxGridCustomView, cxGrid,
-  cxGridCustomTableView, cxGridTableView, cxGridDBTableView, cxInplaceContainer,
-  cxVGrid, cxOI, cxGridCustomPopupMenu, cxGridPopupMenu,
-  cxLookAndFeels, cxLookAndFeelPainters, cxGridCardView, cxGridBandedTableView,
-  cxGridDBCardView, cxGridDBBandedTableView, cxNavigator, cxFilter, cxData,
+  cxCustomData, cxGraphics, cxDataStorage, cxGridLevel, cxClasses, cxControls,
+  cxGridCustomView, cxGrid, cxGridCustomTableView, cxGridTableView,
+  cxGridDBTableView, cxGridCustomPopupMenu, cxGridPopupMenu, cxLookAndFeels,
+  cxLookAndFeelPainters, cxStyles, cxFilter, cxData, cxEdit, cxNavigator,
   dxDateRanges, cxDataControllerConditionalFormattingRulesManagerDialog,
-  dxBarBuiltInMenu,
+  cxDBData, dxBarBuiltInMenu,
 
   DataGrabber.Interfaces, DataGrabber.DataView.Base;
 
 type
   TfrmcxGrid = class(TBaseDataView, IDataView, IGroupable, IMergable)
     ppmMain : TcxGridPopupMenu;
-    grdMain: TcxGrid;
-    tvwMain: TcxGridDBTableView;
-    grlMain: TcxGridLevel;
+    grdMain : TcxGrid;
+    tvwMain : TcxGridDBTableView;
+    grlMain : TcxGridLevel;
 
     procedure tvwMainCustomDrawGroupSummaryCell(
       Sender       : TObject;
@@ -171,11 +169,9 @@ uses
   System.StrUtils, System.UITypes,
   Vcl.Clipbrd,
 
-  cxGridDBDataDefinitions, cxGridCommon,
+  cxGridDBDataDefinitions,
 
-  DDuce.ObjectInspector.zObjectInspector, DDuce.Logger, DDuce.Utils,
-
-  DataGrabber.Utils;
+  DDuce.ObjectInspector.zObjectInspector, DDuce.Logger, DDuce.Utils;
 
 {$REGION 'construction and destruction'}
 procedure TfrmcxGrid.AfterConstruction;

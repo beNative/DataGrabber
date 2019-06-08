@@ -106,11 +106,12 @@ type
     FResultSet       : IResultSet;
     FInspector       : TInspector;
 
+    {$REGION 'property access methods'}
     procedure SetHideEmptyFields(const Value: Boolean);
     function GetDataSet: TDataSet;
     function GetResultSet: IResultSet;
     procedure SetResultSet(const Value: IResultSet);
-
+    {$ENDREGION}
 
   protected
     procedure AutoSizeWidth;
