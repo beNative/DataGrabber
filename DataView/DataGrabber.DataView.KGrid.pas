@@ -53,10 +53,12 @@ type
     );
 
   protected
-    procedure NormalizeRect(var SR: TKGridRect);
-
+    {$REGION 'property access methods'}
     function GetGridType: string; override;
     procedure SetPopupMenu(const Value: TPopupMenu); override;
+    {$ENDREGION}
+    procedure NormalizeRect(var SR: TKGridRect);
+    procedure UpdateColumns;
 
   public
     procedure AfterConstruction; override;
@@ -469,6 +471,19 @@ begin
 // TODO
 end;
 
+procedure TfrmKGrid.UpdateColumns;
+var
+  I : Integer;
+  F : TField;
+begin
+  for I := 0 to grdMain.ColCount - 1 do
+  begin
+    F := DataSet.FindField(TKDBGridCol(grdMain.Cols[I]).FieldName);
+    if Assigned(F) then
+      grdMain.Cols[I].Visible := not ResultSet.HiddenFields.Contains(F);
+  end;
+end;
+
 procedure TfrmKGrid.UpdateView;
 begin
   BeginUpdate;
@@ -476,6 +491,7 @@ begin
     if Assigned(DataSet) and DataSet.Active then
     begin
       ApplyGridSettings;
+      UpdateColumns;
       AutoSizeColumns;
     end;
   finally

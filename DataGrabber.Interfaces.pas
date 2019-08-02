@@ -32,6 +32,7 @@ uses
   DataGrabber.ConnectionSettings;
 
 type
+// TODO: dtMemo?
   TDataType = (
     dtBoolean,
     dtString,

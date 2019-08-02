@@ -30,7 +30,7 @@ object frmSettingsDialog: TfrmSettingsDialog
     Top = 3
     Width = 678
     Height = 394
-    ActivePage = tsConnectionProfiles
+    ActivePage = tsSettings
     Align = alTop
     Anchors = [akLeft, akTop, akRight, akBottom]
     Images = imlMain
@@ -541,10 +541,6 @@ object frmSettingsDialog: TfrmSettingsDialog
     object tsDisplay: TTabSheet
       Caption = '&Display settings'
       ImageIndex = 5
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       DesignSize = (
         670
         365)
@@ -1153,10 +1149,6 @@ object frmSettingsDialog: TfrmSettingsDialog
       Caption = 'Settings files'
       ImageIndex = 11
       OnEnter = tsSettingsEnter
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       DesignSize = (
         664
         359)
@@ -1170,10 +1162,6 @@ object frmSettingsDialog: TfrmSettingsDialog
         TabOrder = 0
         object tsDataGrabberSettings: TTabSheet
           Caption = 'Settings.json'
-          ExplicitLeft = 0
-          ExplicitTop = 0
-          ExplicitWidth = 0
-          ExplicitHeight = 0
           object seSettings: TSynEdit
             AlignWithMargins = True
             Left = 3

@@ -297,7 +297,7 @@ begin
     FActiveDataView := DV;
   end;
   pnlMain.SplitterSize                := 4;
-  pnlMain.PanelCollection[0].Position := 0.2;
+  pnlMain.PanelCollection[0].Position := 0.6;
 end;
 
 procedure TfrmConnectionView.DataBeforeExecute(Sender: TObject);

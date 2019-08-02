@@ -36,9 +36,7 @@ unit DataGrabber.Data;
   TODO
     - Fieldlists are only built based on the primary (first) resultset if
       multiple resultsets are returned.
-    - support for cached updates on (multiple) resultsets that are assigned to
-      TFDMemTable objects.
-    - support for local SQL on TFDMemTable objects.
+    - support for local SQL on TFDMemTable objects?
 }
 
 interface

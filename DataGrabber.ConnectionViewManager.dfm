@@ -18,6 +18,7 @@ object dmConnectionViewManager: TdmConnectionViewManager
     end
     object actHideEmptyColumns: TAction
       Category = 'Grid'
+      AutoCheck = True
       Caption = 'Hide empty'
       Hint = 'Hide empty columns'
       ImageIndex = 70
@@ -49,6 +50,7 @@ object dmConnectionViewManager: TdmConnectionViewManager
     end
     object actHideConstantColumns: TAction
       Category = 'Grid'
+      AutoCheck = True
       Caption = 'Hide constant'
       Hint = 'Hide grid columns with constant values'
       ImageIndex = 74
@@ -314,7 +316,7 @@ object dmConnectionViewManager: TdmConnectionViewManager
     object mniExecute: TMenuItem
       Action = actExecute
     end
-    object Liveresults1: TMenuItem
+    object mniExecuteLiveResultSet: TMenuItem
       Action = actExecuteLiveResultSet
       Caption = 'Execute and return live resultset'
       Hint = 'Execute SQL and return a live resultset.'
@@ -356,9 +358,11 @@ object dmConnectionViewManager: TdmConnectionViewManager
     end
     object mniHideEmptyColumns: TMenuItem
       Action = actHideEmptyColumns
+      AutoCheck = True
     end
     object mniHideConstantColumns: TMenuItem
       Action = actHideConstantColumns
+      AutoCheck = True
     end
     object mniShowAllColumns: TMenuItem
       Action = actShowAllColumns
@@ -371,7 +375,7 @@ object dmConnectionViewManager: TdmConnectionViewManager
     end
     object mniCopyResults: TMenuItem
       Caption = 'Copy results ...'
-      object ResultsasWiki1: TMenuItem
+      object mniResultsAsWiki: TMenuItem
         Action = actResultsAsWiki
         Caption = '... as Wiki table'
       end

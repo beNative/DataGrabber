@@ -44,9 +44,7 @@ begin
   //Logger.Channels.Add(TWinIPCChannel.Create);
   Logger.Clear;
   Application.Initialize;
-  TStyleManager.TrySetStyle('Win10IDE_Light');
-  Application.Title := 'DataGrabber';
-  //TStyleManager.TrySetStyle('Light');
+  //Application.Title := 'DataGrabber';
   Application.CreateForm(TfrmMain, frmMain);
   Application.Run;
 end.

@@ -2,7 +2,7 @@
     <PropertyGroup>
         <ProjectGuid>{0D221B5C-B333-427E-BB6A-F384BA740104}</ProjectGuid>
         <MainSource>DataGrabber.dpr</MainSource>
-        <Config Condition="'$(Config)'==''">Release</Config>
+        <Config Condition="'$(Config)'==''">Debug</Config>
         <DCC_DCCCompiler>DCC32</DCC_DCCCompiler>
         <ProjectVersion>18.6</ProjectVersion>
         <Base>True</Base>
@@ -70,15 +70,15 @@
         <DCC_DcuOutput>.\Lib\$(Platform)\$(Config)</DCC_DcuOutput>
         <VerInfo_MajorVer>2</VerInfo_MajorVer>
         <VerInfo_MinorVer>6</VerInfo_MinorVer>
-        <VerInfo_Build>75</VerInfo_Build>
+        <VerInfo_Build>79</VerInfo_Build>
         <VerInfo_Locale>1033</VerInfo_Locale>
-        <VerInfo_Keys>FileDescription=DataGrabber;FileVersion=2.6.9.75;LegalCopyright=(c) 2011 - 2019 Tim Sinaeve;OriginalFilename=DataGrabber.exe;ProductName=DataGrabber;ProductVersion=2.6.9;ProgramID=;InternalName=DataGrabber;Comments=http://github.com/beNative/DataGrabber</VerInfo_Keys>
+        <VerInfo_Keys>FileDescription=DataGrabber;FileVersion=2.6.10.79;LegalCopyright=(c) 2011 - 2019 Tim Sinaeve;OriginalFilename=DataGrabber.exe;ProductName=DataGrabber;ProductVersion=2.6.10;ProgramID=;InternalName=DataGrabber;Comments=http://github.com/beNative/DataGrabber</VerInfo_Keys>
         <Icon_MainIcon>DataGrabber\DataGrabber_Icon.ico</Icon_MainIcon>
-        <VerInfo_Release>9</VerInfo_Release>
+        <VerInfo_Release>10</VerInfo_Release>
         <DCC_DcpOutput>.\Lib\$(Platform)\$(Config)</DCC_DcpOutput>
         <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
         <VerInfo_AutoIncVersion>true</VerInfo_AutoIncVersion>
-        <Custom_Styles>Win10IDE_Light|VCLSTYLE|$(BDSCOMMONDIR)\Styles\TSStyle.vsf</Custom_Styles>
+        <Custom_Styles>DataGrabber|VCLSTYLE|$(BDSCOMMONDIR)\Styles\DataGrabber.vsf</Custom_Styles>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base_Win32)'!=''">
         <DCC_UsePackage>dxCoreRS22;cxLibraryRS22;dxGDIPlusRS22;dxThemeRS22;cxBarEditItemRS22;dxBarRS22;dxComnRS22;cxEditorsRS22;cxDataRS22;cxGridRS22;cxPageControlRS22;cxExportRS22;dxServerModeRS22;cxPivotGridRS22;dxmdsRS22;cxPivotGridChartRS22;cxPivotGridOLAPRS22;cxSchedulerRS22;cxSchedulerGridRS22;dxRibbonRS22;cxSchedulerRibbonStyleEventEditorRS22;cxSchedulerTreeBrowserRS22;cxTreeListRS22;cxTreeListdxBarPopupMenuRS22;cxVerticalGridRS22;dxADOServerModeRS22;dxBarDBNavRS22;dxBarExtDBItemsRS22;dxBarExtItemsRS22;dxorgcRS22;dxdborRS22;dxdbtrRS22;dxDockingRS22;dxFireDACServerModeRS22;dxFlowChartRS22;dxLayoutControlRS22;dxMapControlRS22;dxNavBarRS22;dxPSCoreRS22;dxPScxCommonRS22;dxPSLnksRS22;dxPScxExtCommonRS22;dxPScxGridLnkRS22;dxPSdxLCLnkRS22;dxPScxPivotGridLnkRS22;dxPScxSchedulerLnkRS22;dxPScxTLLnkRS22;dxPScxVGridLnkRS22;dxPSDBTeeChartRS22;dxPSTeeChartRS22;dxPSdxDBOCLnkRS22;dxPSdxOCLnkRS22;dxPSdxDBTVLnkRS22;dxPSdxFCLnkRS22;dxPSdxSpreadSheetLnkRS22;dxSpreadSheetRS22;dxPsPrVwAdvRS22;dxPSPrVwRibbonRS22;dxSpellCheckerRS22;dxTabbedMDIRS22;dxTileControlRS22;dxtrmdRS22;dxWizardControlRS22;dxPScxPCProdRS22;$(DCC_UsePackage)</DCC_UsePackage>
@@ -90,7 +90,7 @@
         <VerInfo_Debug>true</VerInfo_Debug>
         <VerInfo_PreRelease>true</VerInfo_PreRelease>
         <VerInfo_AutoGenVersion>true</VerInfo_AutoGenVersion>
-        <VerInfo_Keys>FileDescription=DataGrabber;FileVersion=2.6.9.75;LegalCopyright=(c) 2011 - 2019 Tim Sinaeve;OriginalFilename=DataGrabber.exe;ProductName=DataGrabber;ProductVersion=2.6.9;InternalName=DataGrabber;Comments=http://github.com/beNative/DataGrabber</VerInfo_Keys>
+        <VerInfo_Keys>FileDescription=DataGrabber;FileVersion=2.6.10.79;LegalCopyright=(c) 2011 - 2019 Tim Sinaeve;OriginalFilename=DataGrabber.exe;ProductName=DataGrabber;ProductVersion=2.6.10;InternalName=DataGrabber;Comments=http://github.com/beNative/DataGrabber</VerInfo_Keys>
         <Icon_MainIcon>DataGrabber_Icon.ico</Icon_MainIcon>
         <VerInfo_AutoIncVersion>false</VerInfo_AutoIncVersion>
         <AppDPIAwarenessMode>PerMonitor</AppDPIAwarenessMode>
@@ -100,7 +100,7 @@
         <VerInfo_AutoGenVersion>true</VerInfo_AutoGenVersion>
         <VerInfo_PreRelease>true</VerInfo_PreRelease>
         <VerInfo_Debug>true</VerInfo_Debug>
-        <VerInfo_Keys>FileDescription=DataGrabber;FileVersion=2.6.9.75;LegalCopyright=(c) 2011 - 2019 Tim Sinaeve;OriginalFilename=DataGrabber.exe;ProductName=DataGrabber;ProductVersion=2.6.9;InternalName=DataGrabber;Comments=http://github.com/beNative/DataGrabber</VerInfo_Keys>
+        <VerInfo_Keys>FileDescription=DataGrabber;FileVersion=2.6.10.79;LegalCopyright=(c) 2011 - 2019 Tim Sinaeve;OriginalFilename=DataGrabber.exe;ProductName=DataGrabber;ProductVersion=2.6.10;InternalName=DataGrabber;Comments=http://github.com/beNative/DataGrabber</VerInfo_Keys>
         <DCC_DebugInfoInExe>true</DCC_DebugInfoInExe>
         <ImageDebugInfo>true</ImageDebugInfo>
         <DCC_DependencyCheckOutputName>DataGrabber.exe</DCC_DependencyCheckOutputName>
@@ -126,14 +126,14 @@
         <VerInfo_Debug>true</VerInfo_Debug>
         <VerInfo_PreRelease>true</VerInfo_PreRelease>
         <VerInfo_AutoGenVersion>true</VerInfo_AutoGenVersion>
-        <VerInfo_Keys>FileDescription=DataGrabber;FileVersion=2.6.9.75;LegalCopyright=(c) 2011 - 2019 Tim Sinaeve;OriginalFilename=DataGrabber.exe;ProductName=DataGrabber;ProductVersion=2.6.9;InternalName=DataGrabber;Comments=http://github.com/beNative/DataGrabber</VerInfo_Keys>
+        <VerInfo_Keys>FileDescription=DataGrabber;FileVersion=2.6.10.79;LegalCopyright=(c) 2011 - 2019 Tim Sinaeve;OriginalFilename=DataGrabber.exe;ProductName=DataGrabber;ProductVersion=2.6.10;InternalName=DataGrabber;Comments=http://github.com/beNative/DataGrabber</VerInfo_Keys>
         <Icon_MainIcon>DataGrabber_Icon.ico</Icon_MainIcon>
         <VerInfo_AutoIncVersion>false</VerInfo_AutoIncVersion>
         <AppEnableRuntimeThemes>true</AppEnableRuntimeThemes>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_1_Win64)'!=''">
         <AppEnableRuntimeThemes>true</AppEnableRuntimeThemes>
-        <VerInfo_Keys>FileDescription=DataGrabber;FileVersion=2.6.9.75;LegalCopyright=(c) 2011 - 2019 Tim Sinaeve;OriginalFilename=DataGrabber.exe;ProgramID=;ProductName=DataGrabber;ProductVersion=2.6.9;InternalName=DataGrabber;Comments=http://github.com/beNative/DataGrabber</VerInfo_Keys>
+        <VerInfo_Keys>FileDescription=DataGrabber;FileVersion=2.6.10.79;LegalCopyright=(c) 2011 - 2019 Tim Sinaeve;OriginalFilename=DataGrabber.exe;ProgramID=;ProductName=DataGrabber;ProductVersion=2.6.10;InternalName=DataGrabber;Comments=http://github.com/beNative/DataGrabber</VerInfo_Keys>
         <BT_BuildType>Debug</BT_BuildType>
         <VerInfo_Debug>true</VerInfo_Debug>
         <VerInfo_PreRelease>true</VerInfo_PreRelease>
@@ -142,7 +142,7 @@
         <VerInfo_AutoIncVersion>false</VerInfo_AutoIncVersion>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_2)'!=''">
-        <VerInfo_Keys>FileDescription=DataGrabber;FileVersion=2.6.9.75;LegalCopyright=(c) 2011 - 2019 Tim Sinaeve;OriginalFilename=DataGrabber.exe;ProductName=DataGrabber;ProductVersion=2.6.9;InternalName=DataGrabber;Comments=http://github.com/beNative/DataGrabber</VerInfo_Keys>
+        <VerInfo_Keys>FileDescription=DataGrabber;FileVersion=2.6.10.79;LegalCopyright=(c) 2011 - 2019 Tim Sinaeve;OriginalFilename=DataGrabber.exe;ProductName=DataGrabber;ProductVersion=2.6.10;InternalName=DataGrabber;Comments=http://github.com/beNative/DataGrabber</VerInfo_Keys>
         <ILINK_FullDebugInfo>true</ILINK_FullDebugInfo>
         <BCC_SourceDebuggingOn>true</BCC_SourceDebuggingOn>
         <BCC_DebugLineNumbers>true</BCC_DebugLineNumbers>
@@ -153,11 +153,11 @@
         <DCC_RangeChecking>true</DCC_RangeChecking>
         <DCC_Optimize>false</DCC_Optimize>
         <DCC_DebugInfoInExe>true</DCC_DebugInfoInExe>
-        <VerInfo_Build>75</VerInfo_Build>
-        <VerInfo_Release>9</VerInfo_Release>
+        <VerInfo_Build>79</VerInfo_Build>
+        <VerInfo_Release>10</VerInfo_Release>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_2_Win32)'!=''">
-        <VerInfo_Keys>FileDescription=DataGrabber;FileVersion=2.6.9.75;LegalCopyright=(c) 2011 - 2019 Tim Sinaeve;OriginalFilename=DataGrabber.exe;ProductName=DataGrabber;ProductVersion=2.6.9;ProgramID=;InternalName=DataGrabber;Comments=http://github.com/beNative/DataGrabber</VerInfo_Keys>
+        <VerInfo_Keys>FileDescription=DataGrabber;FileVersion=2.6.10.79;LegalCopyright=(c) 2011 - 2019 Tim Sinaeve;OriginalFilename=DataGrabber.exe;ProductName=DataGrabber;ProductVersion=2.6.10;ProgramID=;InternalName=DataGrabber;Comments=http://github.com/beNative/DataGrabber</VerInfo_Keys>
         <DCC_RangeChecking>true</DCC_RangeChecking>
         <DCC_OutputDependencies>true</DCC_OutputDependencies>
         <DCC_IntegerOverflowCheck>true</DCC_IntegerOverflowCheck>

@@ -18,8 +18,7 @@ External dependencies and references:
 * [KControls](http://bitbucket.org/tomkrysl/kcontrols)
 
 Commercial components (optional):
-- FastReport
-- DevExpress
+- DevExpress cxGrid
 
 Some screenshots:
 

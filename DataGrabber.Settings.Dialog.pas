@@ -933,8 +933,10 @@ begin
     FSettings.DataTypeColors[dtFloat]    := btnFloatColor.DlgColor;
     FSettings.DataTypeColors[dtInteger]  := btnIntegerColor.DlgColor;
     FSettings.DataTypeColors[dtString]   := btnStringColor.DlgColor;
+    // TODO support dtMemo
     FSettings.DataTypeColors[dtNULL]     := btnNULLColor.DlgColor;
     FSettings.DataTypeColors[dtTime]     := btnTimeColor.DlgColor;
+
     FSettings.GridType := rgpGridTypes.Items[rgpGridTypes.ItemIndex];
     if Assigned(ApplySettingsMethod) then
       ApplySettingsMethod;
@@ -985,6 +987,8 @@ begin
   btnFloatColor.DlgColor    := FSettings.DataTypeColors[dtFloat];
   btnIntegerColor.DlgColor  := FSettings.DataTypeColors[dtInteger];
   btnStringColor.DlgColor   := FSettings.DataTypeColors[dtString];
+  // TODO!
+  btnMemoColor.DlgColor     := FSettings.DataTypeColors[dtString];
   btnNULLColor.DlgColor     := FSettings.DataTypeColors[dtNULL];
   btnTimeColor.DlgColor     := FSettings.DataTypeColors[dtTime];
 

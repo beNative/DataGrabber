@@ -43,6 +43,7 @@ object frmConnectionView: TfrmConnectionView
       Top = 0
       Width = 906
       Height = 244
+      ParentCustomHint = False
       Align = alClient
       BevelOuter = bvNone
       TabOrder = 0
@@ -50,7 +51,7 @@ object frmConnectionView: TfrmConnectionView
         Left = 185
         Top = 0
         Width = 4
-        Height = 244
+        Height = 250
         Margins.Left = 0
         Margins.Top = 0
         Margins.Right = 0
@@ -60,26 +61,27 @@ object frmConnectionView: TfrmConnectionView
         ResizeStyle = rsLine
         StyleElements = [seClient, seBorder]
         OnMoved = splVerticalMoved
+        ExplicitHeight = 244
       end
       object pnlVST: TPanel
         Left = 0
         Top = 0
         Width = 185
-        Height = 244
+        Height = 250
         Align = alLeft
         BevelOuter = bvNone
         TabOrder = 0
+        ExplicitHeight = 244
       end
       object pnlTopRight: TPanel
         Left = 189
         Top = 0
         Width = 717
-        Height = 244
+        Height = 250
         Align = alClient
         BevelOuter = bvNone
         TabOrder = 1
-        ExplicitLeft = 187
-        ExplicitWidth = 719
+        ExplicitHeight = 244
       end
     end
     object pnlBottom: TPanel

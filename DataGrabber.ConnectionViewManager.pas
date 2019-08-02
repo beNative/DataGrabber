@@ -98,7 +98,6 @@ type
     actToggleFullScreen           : TAction;
     actToggleStayOnTop            : TAction;
     imlMain                       : TImageList;
-    Liveresults1                  : TMenuItem;
     mniAutoSizeCols               : TMenuItem;
     mniClearGrouping              : TMenuItem;
     mniCollapseAll                : TMenuItem;
@@ -107,6 +106,7 @@ type
     mniCopyTextTable              : TMenuItem;
     mniCopyWikiTable              : TMenuItem;
     mniExecute                    : TMenuItem;
+    mniExecuteLiveResultSet       : TMenuItem;
     mniExpandAll                  : TMenuItem;
     mniFormatSQL1                 : TMenuItem;
     mniGroupByBoxVisible          : TMenuItem;
@@ -123,6 +123,7 @@ type
     mniMergeColumns               : TMenuItem;
     mniN1                         : TMenuItem;
     mniN3                         : TMenuItem;
+    mniResultsAsWiki              : TMenuItem;
     mniSelection                  : TMenuItem;
     mniSelectionAsCommaText       : TMenuItem;
     mniSelectionAsFields          : TMenuItem;
@@ -139,7 +140,6 @@ type
     N6                            : TMenuItem;
     ppmConnectionView             : TPopupMenu;
     ppmEditorView                 : TPopupMenu;
-    ResultsasWiki1                : TMenuItem;
     {$ENDREGION}
 
     {$REGION 'action handlers'}
@@ -718,7 +718,6 @@ begin
     actHideConstantColumns.Enabled := B;
     actHideSelectedColumns.Enabled := B;
     actShowAllColumns.Enabled      := B;
-
     actHideEmptyColumns.Checked    := B and
       not ActiveDataView.ResultSet.EmptyFieldsVisible;
     actHideConstantColumns.Checked := B and

@@ -168,6 +168,7 @@ implementation
 
 uses
   System.Math, System.UITypes,
+  Vcl.Clipbrd,
 
   DDuce.ObjectInspector.zObjectInspector, DDuce.Logger,
 
@@ -588,7 +589,8 @@ end;
 
 procedure TfrmGridView.Copy;
 begin
-// TODO
+  if Assigned(FGrid.SelectedField) then
+    Clipboard.AsText := FGrid.SelectedField.AsString;
 end;
 
 procedure TfrmGridView.BeginUpdate;
