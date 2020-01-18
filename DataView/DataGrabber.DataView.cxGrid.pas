@@ -30,9 +30,9 @@ uses
   cxCustomData, cxGraphics, cxDataStorage, cxGridLevel, cxClasses, cxControls,
   cxGridCustomView, cxGrid, cxGridCustomTableView, cxGridTableView,
   cxGridDBTableView, cxGridCustomPopupMenu, cxGridPopupMenu, cxLookAndFeels,
-  cxLookAndFeelPainters, cxStyles, cxFilter, cxData, cxEdit, cxNavigator,
-  dxDateRanges, cxDataControllerConditionalFormattingRulesManagerDialog,
-  cxDBData, dxBarBuiltInMenu,
+  cxLookAndFeelPainters, cxStyles, cxEdit, cxNavigator,
+  cxDataControllerConditionalFormattingRulesManagerDialog,
+  cxDBData, dxBarBuiltInMenu, cxFilter, cxData, dxDateRanges,
 
   DataGrabber.Interfaces, DataGrabber.DataView.Base;
 

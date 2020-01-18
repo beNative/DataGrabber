@@ -2,7 +2,7 @@
     <PropertyGroup>
         <ProjectGuid>{0D221B5C-B333-427E-BB6A-F384BA740104}</ProjectGuid>
         <MainSource>DataGrabber.dpr</MainSource>
-        <Config Condition="'$(Config)'==''">Debug</Config>
+        <Config Condition="'$(Config)'==''">Release</Config>
         <DCC_DCCCompiler>DCC32</DCC_DCCCompiler>
         <ProjectVersion>18.6</ProjectVersion>
         <Base>True</Base>
@@ -235,7 +235,9 @@
         <DCCReference Include="DataView\DataGrabber.DataView.Base.pas">
             <Form>BaseDataView</Form>
         </DCCReference>
-        <DCCReference Include="DataGrabber.Data.ResultSet.pas"/>
+        <DCCReference Include="DataGrabber.Data.ResultSet.pas">
+            <Form>/Vcl.Styles.Hooks,</Form>
+        </DCCReference>
         <None Include="README.md"/>
         <None Include="Chinook example queries.txt"/>
         <BuildConfiguration Include="Debug">

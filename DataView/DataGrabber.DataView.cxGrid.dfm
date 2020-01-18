@@ -2,8 +2,8 @@ inherited frmcxGrid: TfrmcxGrid
   ClientHeight = 319
   ClientWidth = 695
   Font.Name = 'Se'
-  ExplicitWidth = 711
-  ExplicitHeight = 357
+  ExplicitWidth = 695
+  ExplicitHeight = 319
   PixelsPerInch = 96
   TextHeight = 14
   object grdMain: TcxGrid [0]
@@ -52,7 +52,10 @@ inherited frmcxGrid: TfrmcxGrid
         end>
       DataController.Summary.FooterSummaryItems = <>
       DataController.Summary.SummaryGroups = <>
+      DataController.Summary.Options = [soMultipleSelectedRecords]
+      DateTimeHandling.Filters = [dtfRelativeDays, dtfRelativeDayPeriods, dtfRelativeWeeks, dtfRelativeMonths, dtfRelativeYears, dtfPastFuture, dtfMonths, dtfYears]
       EditForm.DefaultColumnCount = 6
+      EditForm.ItemHotTrack = True
       EditForm.DefaultStretch = fsHorizontal
       Filtering.ColumnFilteredItemsList = True
       Filtering.ColumnMRUItemsListCount = 10
@@ -93,9 +96,10 @@ inherited frmcxGrid: TfrmcxGrid
     end
   end
   object ppmMain: TcxGridPopupMenu
+    Grid = grdMain
     PopupMenus = <>
     AlwaysFireOnPopup = True
-    Left = 128
-    Top = 48
+    Left = 464
+    Top = 248
   end
 end
