@@ -38,6 +38,10 @@ object frmSettingsDialog: TfrmSettingsDialog
     object tsConnectionProfiles: TTabSheet
       Caption = 'Connection &profiles'
       ImageIndex = 9
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       object splVertical: TSplitter
         Left = 161
         Top = 0
@@ -66,6 +70,10 @@ object frmSettingsDialog: TfrmSettingsDialog
           TabOrder = 0
           object tsBasic: TTabSheet
             Caption = '&Basic'
+            ExplicitLeft = 0
+            ExplicitTop = 0
+            ExplicitWidth = 0
+            ExplicitHeight = 0
             DesignSize = (
               494
               337)
@@ -374,13 +382,11 @@ object frmSettingsDialog: TfrmSettingsDialog
                   object lblUserName: TLabel
                     Left = 0
                     Top = 0
-                    Width = 65
-                    Height = 23
+                    Width = 52
+                    Height = 13
                     Align = alClient
                     Caption = '&Username:'
                     Layout = tlCenter
-                    ExplicitWidth = 52
-                    ExplicitHeight = 13
                   end
                 end
               end
@@ -541,6 +547,10 @@ object frmSettingsDialog: TfrmSettingsDialog
     object tsDisplay: TTabSheet
       Caption = '&Display settings'
       ImageIndex = 5
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       DesignSize = (
         670
         365)
@@ -1149,6 +1159,10 @@ object frmSettingsDialog: TfrmSettingsDialog
       Caption = 'Settings files'
       ImageIndex = 11
       OnEnter = tsSettingsEnter
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       DesignSize = (
         664
         359)
@@ -1162,6 +1176,10 @@ object frmSettingsDialog: TfrmSettingsDialog
         TabOrder = 0
         object tsDataGrabberSettings: TTabSheet
           Caption = 'Settings.json'
+          ExplicitLeft = 0
+          ExplicitTop = 0
+          ExplicitWidth = 0
+          ExplicitHeight = 0
           object seSettings: TSynEdit
             AlignWithMargins = True
             Left = 3
@@ -1176,11 +1194,13 @@ object frmSettingsDialog: TfrmSettingsDialog
             Font.Name = 'Consolas'
             Font.Style = []
             TabOrder = 0
+            CodeFolding.GutterShapeSize = 11
             CodeFolding.CollapsedLineColor = clGrayText
             CodeFolding.FolderBarLinesColor = clGrayText
-            CodeFolding.ShowCollapsedLine = False
             CodeFolding.IndentGuidesColor = clGray
             CodeFolding.IndentGuides = True
+            CodeFolding.ShowCollapsedLine = False
+            CodeFolding.ShowHintMark = True
             UseCodeFolding = False
             Gutter.AutoSize = True
             Gutter.Color = cl3DLight
@@ -1228,11 +1248,13 @@ object frmSettingsDialog: TfrmSettingsDialog
             Font.Style = []
             TabOrder = 0
             OnExit = seFDConnectionDefsExit
+            CodeFolding.GutterShapeSize = 11
             CodeFolding.CollapsedLineColor = clGrayText
             CodeFolding.FolderBarLinesColor = clGrayText
-            CodeFolding.ShowCollapsedLine = False
             CodeFolding.IndentGuidesColor = clGray
             CodeFolding.IndentGuides = True
+            CodeFolding.ShowCollapsedLine = False
+            CodeFolding.ShowHintMark = True
             UseCodeFolding = False
             Gutter.AutoSize = True
             Gutter.Color = cl3DLight
@@ -1489,7 +1511,7 @@ object frmSettingsDialog: TfrmSettingsDialog
     Left = 16
     Top = 200
     Bitmap = {
-      494C010119003000040010001000FFFFFFFF2110FFFFFFFFFFFFFFFF424D3600
+      494C010119003000080010001000FFFFFFFF2110FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000007000000001002000000000000070
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000

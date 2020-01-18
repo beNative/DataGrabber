@@ -1,5 +1,5 @@
 {
-  Copyright (C) 2013-2019 Tim Sinaeve tim.sinaeve@gmail.com
+  Copyright (C) 2013-2020 Tim Sinaeve tim.sinaeve@gmail.com
 
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
@@ -29,8 +29,8 @@ uses
   Vcl.ActnList, Vcl.Menus, Vcl.ImgList, Vcl.Controls,
 
   // vcl-style-utilities
-  Vcl.Styles.Utils.Menus, Vcl.Styles.Utils.SysStyleHook,
-  Vcl.Styles.Utils.SysControls,
+//  Vcl.Styles.Utils.Menus, Vcl.Styles.Utils.SysStyleHook,
+//  Vcl.Styles.Utils.SysControls,
 
   Spring.Collections,
 

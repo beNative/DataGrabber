@@ -31,7 +31,7 @@ uses
   DataGrabber.MetaData.Dialog in 'DataGrabber.MetaData.Dialog.pas' {frmMetaData},
   DataGrabber.DataView.Base in 'DataView\DataGrabber.DataView.Base.pas' {BaseDataView},
   DataGrabber.Data.ResultSet in 'DataGrabber.Data.ResultSet.pas',
-  Vcl.Styles.Hooks,
+  //Vcl.Styles.Hooks,
   Vcl.Themes,
   Vcl.Styles;
 
