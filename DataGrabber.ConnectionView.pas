@@ -238,7 +238,7 @@ begin
   if B then
   begin
     if not Assigned(FPageControl) then
-    FPageControl := TPageControl.Create(Self);
+      FPageControl := TPageControl.Create(Self);
     FPageControl.Parent      := pnlBottom;
     FPageControl.Align       := alClient;
     FPageControl.TabPosition := tpBottom;
@@ -248,6 +248,7 @@ begin
   begin
     FMultiPanel := TOMultiPanel.Create(Self);
     FMultiPanel.SplitterSize := 4;
+    //FMultiPanel.SplitterColor := clBlack;
     FMultiPanel.Parent := pnlBottom;
     FMultiPanel.Align  := alClient;
     if Manager.Settings.ResultDisplayLayout = TResultDisplayLayout.Horizontal then
@@ -297,7 +298,7 @@ begin
     FActiveDataView := DV;
   end;
   pnlMain.SplitterSize                := 4;
-  pnlMain.PanelCollection[0].Position := 0.6;
+  pnlMain.PanelCollection[0].Position := 0.2;
 end;
 
 procedure TfrmConnectionView.DataBeforeExecute(Sender: TObject);

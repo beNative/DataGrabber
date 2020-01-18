@@ -21,7 +21,7 @@ object frmConnectionView: TfrmConnectionView
     PanelCollection = <
       item
         Control = pnlTop
-        Position = 0.500000000000000000
+        Position = 0.300000000000000000
         Visible = True
         Index = 0
       end
@@ -42,7 +42,7 @@ object frmConnectionView: TfrmConnectionView
       Left = 0
       Top = 0
       Width = 906
-      Height = 244
+      Height = 146
       ParentCustomHint = False
       Align = alClient
       BevelOuter = bvNone
@@ -51,7 +51,7 @@ object frmConnectionView: TfrmConnectionView
         Left = 185
         Top = 0
         Width = 4
-        Height = 250
+        Height = 146
         Margins.Left = 0
         Margins.Top = 0
         Margins.Right = 0
@@ -67,7 +67,7 @@ object frmConnectionView: TfrmConnectionView
         Left = 0
         Top = 0
         Width = 185
-        Height = 250
+        Height = 146
         Align = alLeft
         BevelOuter = bvNone
         TabOrder = 0
@@ -77,18 +77,20 @@ object frmConnectionView: TfrmConnectionView
         Left = 189
         Top = 0
         Width = 717
-        Height = 250
+        Height = 146
         Align = alClient
         BevelOuter = bvNone
         TabOrder = 1
+        ExplicitLeft = 191
+        ExplicitTop = -2
         ExplicitHeight = 244
       end
     end
     object pnlBottom: TPanel
       Left = 0
-      Top = 248
+      Top = 150
       Width = 906
-      Height = 239
+      Height = 337
       Align = alClient
       BevelEdges = []
       BevelOuter = bvNone

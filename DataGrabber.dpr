@@ -44,7 +44,7 @@ begin
   //Logger.Channels.Add(TWinIPCChannel.Create);
   Logger.Clear;
   Application.Initialize;
-  //Application.Title := 'DataGrabber';
+  Application.Title := 'DataGrabber';
   Application.CreateForm(TfrmMain, frmMain);
   Application.Run;
 end.
