@@ -52,7 +52,7 @@ type
     FEditorFont               : TFont;
     FGridFont                 : TFont;
     FThemingSupport           : Boolean;
-    FEmitDebugLogging         : Boolean;
+    FEmitLogMessages          : Boolean;
 
     {$REGION 'property access methods'}
     function GetGridCellColoring: Boolean;
@@ -89,13 +89,13 @@ type
     procedure SetEditorFont(const Value: TFont);
     function GetGridFont: TFont;
     procedure SetGridFont(const Value: TFont);
+    function GetThemingSupport: Boolean;
+    procedure SetThemingSupport(const Value: Boolean);
+    function GetEmitLogMessages: Boolean;
+    procedure SetEmitLogMessages(const Value: Boolean);
     {$ENDREGION}
 
     procedure FormSettingsChanged(Sender: TObject);
-    function GetThemingSupport: Boolean;
-    procedure SetThemingSupport(const Value: Boolean);
-    function GetEmitDebugLogging: Boolean;
-    procedure SetEmitDebugLogging(const Value: Boolean);
 
   protected
     procedure BeginUpdate;
@@ -166,8 +166,8 @@ type
     property ThemingSupport: Boolean
       read GetThemingSupport write SetThemingSupport;
 
-    property EmitDebugLogging: Boolean
-      read GetEmitDebugLogging write SetEmitDebugLogging;
+    property EmitLogMessages: Boolean
+      read GetEmitLogMessages write SetEmitLogMessages;
 
     property ResultDisplayLayout: TResultDisplayLayout
       read GetResultDisplayLayout
@@ -474,16 +474,16 @@ begin
   Changed;
 end;
 
-function TSettings.GetEmitDebugLogging: Boolean;
+function TSettings.GetEmitLogMessages: Boolean;
 begin
-  Result := FEmitDebugLogging;
+  Result := FEmitLogMessages;
 end;
 
-procedure TSettings.SetEmitDebugLogging(const Value: Boolean);
+procedure TSettings.SetEmitLogMessages(const Value: Boolean);
 begin
-  if Value <> EmitDebugLogging then
+  if Value <> EmitLogMessages then
   begin
-    FEmitDebugLogging := Value;
+    FEmitLogMessages := Value;
     Changed;
   end;
 end;

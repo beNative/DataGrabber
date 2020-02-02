@@ -361,6 +361,8 @@ type
     procedure SetEditorFont(const Value: TFont);
     function GetGridFont: TFont;
     procedure SetGridFont(const Value: TFont);
+    function GetEmitLogMessages: Boolean;
+    procedure SetEmitLogMessages(const Value: Boolean);
     {$ENDREGION}
 
     procedure Load;
@@ -395,6 +397,9 @@ type
 
     property DataInspectorVisible: Boolean
       read GetDataInspectorVisible write SetDataInspectorVisible;
+
+    property EmitLogMessages: Boolean
+      read GetEmitLogMessages write SetEmitLogMessages;
 
     property FieldTypeColors[Index: TFieldType]: TColor
       read GetFieldTypeColor;

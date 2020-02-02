@@ -41,8 +41,7 @@ begin
   {$WARNINGS OFF}
   ReportMemoryLeaksOnShutdown := DebugHook > 0;
   {$WARNINGS ON}
-  //Logger.Channels.Add(TWinIPCChannel.Create);
-  Logger.Clear;
+  Logger.Channels.Add(TWinIPCChannel.Create);
   Application.Initialize;
   Application.Title := 'DataGrabber';
   Application.CreateForm(TfrmMain, frmMain);

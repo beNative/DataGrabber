@@ -28,11 +28,11 @@ uses
   Data.DB,
 
   cxCustomData, cxGraphics, cxDataStorage, cxGridLevel, cxClasses, cxControls,
-  cxGridCustomView, cxGrid, cxGridCustomTableView, cxGridTableView,
+  cxGridCustomView, cxGrid, cxGridCustomTableView, cxGridTableView, cxFilter,
   cxGridDBTableView, cxGridCustomPopupMenu, cxGridPopupMenu, cxLookAndFeels,
-  cxLookAndFeelPainters, cxStyles, cxEdit, cxNavigator,
-  cxDataControllerConditionalFormattingRulesManagerDialog,
-  cxDBData, dxBarBuiltInMenu, cxFilter, cxData, dxDateRanges,
+  cxLookAndFeelPainters, cxStyles, cxEdit, cxNavigator, cxDBData, cxData,
+  cxDataControllerConditionalFormattingRulesManagerDialog, dxBarBuiltInMenu,
+  dxDateRanges,
 
   DataGrabber.Interfaces, DataGrabber.DataView.Base;
 
@@ -324,7 +324,7 @@ begin
     if AIncludeHeader then
     begin
       S := ',';
-      for X := 0 to AController.SelectedColumnCount -1 do
+      for X := 0 to AController.SelectedColumnCount - 1 do
       begin
         S := S + tvwMain.Columns[AController.SelectedColumns[X].Index].Caption + ',';
       end;
@@ -333,7 +333,7 @@ begin
     for Y := 0 to AController.SelectedRowCount - 1 do
     begin
       S := ',';
-      for X := 0 to AController.SelectedColumnCount -1 do
+      for X := 0 to AController.SelectedColumnCount - 1 do
       begin
         V := AController.SelectedRows[Y].Values[AController.SelectedColumns[X].Index];
         T := VarToStr(V);
@@ -388,10 +388,10 @@ begin
     S := '';
     if AIncludeHeader then
     begin
-      for X := 0 to AController.SelectedColumnCount -1 do
+      for X := 0 to AController.SelectedColumnCount - 1 do
       begin
         S := S + tvwMain.Columns[AController.SelectedColumns[X].Index].Caption ;
-        if X < AController.SelectedColumnCount -1 then
+        if X < AController.SelectedColumnCount - 1 then
           S := S + ADelimiter;
       end;
       SL.Add(S);
@@ -399,12 +399,12 @@ begin
     for Y := 0 to AController.SelectedRowCount - 1 do
     begin
       S := '';
-      for X := 0 to AController.SelectedColumnCount -1 do
+      for X := 0 to AController.SelectedColumnCount - 1 do
       begin
         V := AController.SelectedRows[Y].Values[AController.SelectedColumns[X].Index];
         T := VarToStr(V);
         S := S + T;
-        if X < AController.SelectedColumnCount -1 then
+        if X < AController.SelectedColumnCount - 1 then
           S := S + ADelimiter;
       end;
       SL.Add(S);
@@ -428,7 +428,7 @@ begin
     if AIncludeHeader then
     begin
       S := '||';
-      for X := 0 to AController.SelectedColumnCount -1 do
+      for X := 0 to AController.SelectedColumnCount - 1 do
       begin
         S := S + tvwMain.Columns[AController.SelectedColumns[X].Index].Caption + '||';
       end;
@@ -437,7 +437,7 @@ begin
     for Y := 0 to AController.SelectedRowCount - 1 do
     begin
       S := '|';
-      for X := 0 to AController.SelectedColumnCount -1 do
+      for X := 0 to AController.SelectedColumnCount - 1 do
       begin
         V := AController.SelectedRows[Y].Values[AController.SelectedColumns[X].Index];
         T := VarToStr(V);
@@ -474,7 +474,7 @@ begin
       if AQuoteItems then
         T := QuotedStr(T);
       S := S + T;
-      if X < CCount -1 then
+      if X < CCount - 1 then
         S := S + ', ';
     end;
     if (CCount = 1) and (Y < RCount - 1) then
@@ -504,7 +504,7 @@ begin
   try
     SL := TStringList.Create;
     try
-      for X := 0 to AController.SelectedColumnCount -1 do
+      for X := 0 to AController.SelectedColumnCount - 1 do
       begin
         I := AController.SelectedColumns[X].Index;
         SL.Clear;
@@ -544,7 +544,7 @@ begin
     for Y := 0 to AController.SelectedRowCount - 1 do
     begin
       sTxt := '';
-      for X := 0 to AController.SelectedColumnCount -1 do
+      for X := 0 to AController.SelectedColumnCount - 1 do
       begin
         I := AController.SelectedColumns[X].Index;
         V := AController.SelectedRows[Y].Values[I];
@@ -710,7 +710,7 @@ begin
     for Y := 0 to tvwMain.ViewData.RowCount - 1 do
     begin
       S := '|';
-      for X := 0 to tvwMain.VisibleColumnCount -1 do
+      for X := 0 to tvwMain.VisibleColumnCount - 1 do
       begin
         V := tvwMain.ViewData.Rows[Y].Values[tvwMain.VisibleColumns[X].Index];
         T := VarToStr(V);
@@ -743,13 +743,13 @@ begin
   SL := TStringList.Create;
   try
     S := '';
-    for X := 0 to AController.SelectedColumnCount -1 do
+    for X := 0 to AController.SelectedColumnCount - 1 do
     begin
       T := tvwMain.Columns[AController.SelectedColumns[X].Index].Caption;
       if AQuoteItems then
         T := QuotedStr(T);
       S := S + T;
-      if X < AController.SelectedColumnCount -1 then
+      if X < AController.SelectedColumnCount - 1 then
         S := S + ',';
     end;
     SL.Add(S);

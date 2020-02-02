@@ -170,7 +170,7 @@ uses
 
   Spring.Utils,
 
-  DDuce.ObjectInspector.zObjectInspector, DDuce.Utils,
+  DDuce.ObjectInspector.zObjectInspector, DDuce.Utils, DDuce.Logger,
 
   DataGrabber.Utils, DataGrabber.Resources, DataGrabber.Factories;
 
@@ -186,6 +186,7 @@ begin
   FSettings.OnChanged.Add(SettingsChanged);
   FManager  := TDataGrabberFactories.CreateManager(Self, FSettings);
   FSettings.FormSettings.AssignTo(Self);
+  Logger.Enabled := FSettings.EmitLogMessages;
   AddConnectionView;
   tlbMain.Images     := FManager.ActionList.Images;
   tlbTopRight.Images := FManager.ActionList.Images;
@@ -382,8 +383,9 @@ end;
 {$REGION 'protected methods'}
 procedure TfrmMain.SettingsChanged(Sender: TObject);
 begin
-  FormStyle   := FSettings.FormSettings.FormStyle;
-  WindowState := FSettings.FormSettings.WindowState;
+  FormStyle      := FSettings.FormSettings.FormStyle;
+  WindowState    := FSettings.FormSettings.WindowState;
+  Logger.Enabled := FSettings.EmitLogMessages;
 end;
 
 procedure TfrmMain.ShowToolWindow(AForm: TForm);

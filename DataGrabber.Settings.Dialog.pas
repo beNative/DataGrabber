@@ -67,8 +67,8 @@ type
     actMoveDown                  : TAction;
     actMoveUp                    : TAction;
     actMRSAsMultipleTabs         : TAction;
-    actMRSVertically             : TAction;
     actMRSHorizontally           : TAction;
+    actMRSVertically             : TAction;
     actOpenSettingsFileLocation  : TAction;
     actRefreshFile               : TAction;
     actSaveFile                  : TAction;
@@ -108,6 +108,7 @@ type
     cbxDrivers                   : TComboBox;
     chkAutoReconnect             : TCheckBox;
     chkDisconnectedMode          : TCheckBox;
+    chkEmitLogMessages           : TCheckBox;
     chkFetchOnDemand             : TCheckBox;
     chkGridCellColoringEnabled   : TCheckBox;
     chkMultipleResultSets        : TCheckBox;
@@ -132,6 +133,7 @@ type
     grpEditorSettings            : TGroupBox;
     grpGridFont                  : TGroupBox;
     grpGridLines                 : TGroupBox;
+    grpLogging                   : TGroupBox;
     grpProfileSettings           : TGroupBox;
     grpResultSetDisplay          : TGroupBox;
     imlMain                      : TImageList;
@@ -938,6 +940,7 @@ begin
     FSettings.DataTypeColors[dtTime]     := btnTimeColor.DlgColor;
 
     FSettings.GridType := rgpGridTypes.Items[rgpGridTypes.ItemIndex];
+    FSettings.EmitLogMessages := chkEmitLogMessages.Checked;
     if Assigned(ApplySettingsMethod) then
       ApplySettingsMethod;
     Save;
@@ -1020,6 +1023,7 @@ begin
   edtEditorFont.Text := FSettings.EditorFont.Name;
   edtGridFont.Font.Assign(FSettings.GridFont);
   edtGridFont.Text   := FSettings.GridFont.Name;
+  chkEmitLogMessages.Checked := FSettings.EmitLogMessages;
 
   FVSTProfiles := TVirtualStringTreeFactory.CreateGrid(
     Self,
