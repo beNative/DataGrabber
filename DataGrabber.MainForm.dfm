@@ -51,8 +51,6 @@ object frmMain: TfrmMain
       BevelKind = bkFlat
       BevelOuter = bvNone
       TabOrder = 0
-      ExplicitTop = 1
-      ExplicitHeight = 19
     end
     object pnlElapsedTime: TPanel
       AlignWithMargins = True
@@ -70,8 +68,6 @@ object frmMain: TfrmMain
       BevelKind = bkFlat
       BevelOuter = bvNone
       TabOrder = 1
-      ExplicitTop = 1
-      ExplicitHeight = 19
     end
     object pnlConnectionStatus: TPanel
       AlignWithMargins = True
@@ -95,8 +91,6 @@ object frmMain: TfrmMain
       Font.Style = [fsBold]
       ParentFont = False
       TabOrder = 2
-      ExplicitTop = 1
-      ExplicitHeight = 19
     end
     object pnlRecordCount: TPanel
       AlignWithMargins = True
@@ -114,8 +108,6 @@ object frmMain: TfrmMain
       BevelKind = bkFlat
       BevelOuter = bvNone
       TabOrder = 3
-      ExplicitTop = 1
-      ExplicitHeight = 19
     end
     object pnlFieldCount: TPanel
       AlignWithMargins = True
@@ -133,8 +125,6 @@ object frmMain: TfrmMain
       BevelKind = bkFlat
       BevelOuter = bvNone
       TabOrder = 4
-      ExplicitTop = 1
-      ExplicitHeight = 19
     end
     object pnlConstantFieldsCount: TPanel
       AlignWithMargins = True
@@ -152,8 +142,6 @@ object frmMain: TfrmMain
       BevelKind = bkFlat
       BevelOuter = bvNone
       TabOrder = 5
-      ExplicitTop = 1
-      ExplicitHeight = 19
     end
     object pnlEmptyFieldsCount: TPanel
       AlignWithMargins = True
@@ -171,8 +159,6 @@ object frmMain: TfrmMain
       BevelKind = bkFlat
       BevelOuter = bvNone
       TabOrder = 6
-      ExplicitTop = 1
-      ExplicitHeight = 19
     end
     object pnlHiddenFieldsCount: TPanel
       AlignWithMargins = True
@@ -190,8 +176,6 @@ object frmMain: TfrmMain
       BevelKind = bkFlat
       BevelOuter = bvNone
       TabOrder = 7
-      ExplicitTop = 1
-      ExplicitHeight = 19
     end
   end
   object pnlConnectionViews: TPanel
@@ -615,7 +599,7 @@ object frmMain: TfrmMain
     Left = 32
     Top = 72
     Bitmap = {
-      494C01010B000D00080010001000FFFFFFFF2110FFFFFFFFFFFFFFFF424D3600
+      494C01010B000D00100010001000FFFFFFFF2110FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000003000000001002000000000000030
       0000000000000000000000000000000000000000000000000000000000000000
       000000000000000000000B0B0B0C000000000000000000000000000000000000

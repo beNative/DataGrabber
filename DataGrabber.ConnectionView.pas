@@ -248,9 +248,8 @@ begin
   begin
     FMultiPanel := TOMultiPanel.Create(Self);
     FMultiPanel.SplitterSize := 4;
-    //FMultiPanel.SplitterColor := clBlack;
-    FMultiPanel.Parent := pnlBottom;
-    FMultiPanel.Align  := alClient;
+    FMultiPanel.Parent       := pnlBottom;
+    FMultiPanel.Align        := alClient;
     if Manager.Settings.ResultDisplayLayout = TResultDisplayLayout.Horizontal then
     begin
       FMultiPanel.PanelType := ptHorizontal;
@@ -298,7 +297,12 @@ begin
     FActiveDataView := DV;
   end;
   pnlMain.SplitterSize                := 4;
-  pnlMain.PanelCollection[0].Position := 0.2;
+  if Data.RecordCount > 20 then
+    pnlMain.PanelCollection[0].Position := 0.2
+  else
+  begin
+    pnlMain.PanelCollection[0].Position := 0.6
+  end;
 end;
 
 procedure TfrmConnectionView.DataBeforeExecute(Sender: TObject);

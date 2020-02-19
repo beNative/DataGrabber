@@ -17,23 +17,22 @@ object frmFieldInspector: TfrmFieldInspector
   PixelsPerInch = 96
   TextHeight = 13
   object splVertical: TSplitter
-    Left = 333
+    Left = 338
     Top = 0
-    Width = 8
     Height = 606
     Align = alRight
-    ExplicitLeft = 179
-    ExplicitHeight = 575
+    ExplicitLeft = 333
   end
   object pnlLeft: TPanel
     AlignWithMargins = True
     Left = 3
     Top = 3
-    Width = 327
+    Width = 332
     Height = 600
     Align = alClient
     BevelOuter = bvNone
     TabOrder = 0
+    ExplicitWidth = 327
   end
   object pnlRight: TPanel
     AlignWithMargins = True

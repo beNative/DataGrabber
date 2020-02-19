@@ -71,7 +71,7 @@ type
     ppmCVTabs              : TPopupMenu;
     tlbMain                : TToolBar;
     tlbTopRight            : TToolBar;
-    shpLine: TShape;
+    shpLine                : TShape;
     {$ENDREGION}
 
     {$REGION 'action handlers'}

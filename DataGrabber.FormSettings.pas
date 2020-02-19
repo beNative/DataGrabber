@@ -179,17 +179,17 @@ end;
 {$REGION 'public methods'}
 procedure TFormSettings.Assign(Source: TPersistent);
 var
-  Form : TForm;
+  LForm : TForm;
 begin
   if Source is TForm then
   begin
-    Form        := TForm(Source);
-    Left        := Form.Left;
-    Top         := Form.Top;
-    Width       := Form.Width;
-    Height      := Form.Height;
-    FormStyle   := Form.FormStyle;
-    WindowState := Form.WindowState;
+    LForm        := TForm(Source);
+    Left        := LForm.Left;
+    Top         := LForm.Top;
+    Width       := LForm.Width;
+    Height      := LForm.Height;
+    FormStyle   := LForm.FormStyle;
+    WindowState := LForm.WindowState;
   end
   else
     inherited Assign(Source);
@@ -197,17 +197,17 @@ end;
 
 procedure TFormSettings.AssignTo(Dest: TPersistent);
 var
-  Form : TForm;
+  LForm : TForm;
 begin
   if Dest is TForm then
   begin
-    Form             := TForm(Dest);
-    Form.Left        := Left;
-    Form.Top         := Top;
-    Form.Width       := Width;
-    Form.Height      := Height;
-    Form.FormStyle   := FormStyle;
-    Form.WindowState := WindowState;
+    LForm             := TForm(Dest);
+    LForm.Left        := Left;
+    LForm.Top         := Top;
+    LForm.Width       := Width;
+    LForm.Height      := Height;
+    LForm.FormStyle   := FormStyle;
+    LForm.WindowState := WindowState;
   end
   else
     inherited AssignTo(Dest);

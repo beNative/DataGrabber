@@ -61,7 +61,7 @@ inherited frmKGrid: TfrmKGrid
     Font.Name = 'Callibri'
     Font.Style = []
     MinRowHeight = 18
-    Options = [goEraseBackground, goColMoving, goColSizing, goDoubleBufferedCells, goEditing, goEnterMoves, goHeader, goHeaderAlignment, goHorzLine, goMouseOverCells, goRangeSelect, goRowSizing, goRowSorting, goTabs, goThemes, goVertLine]
+    Options = [goEraseBackground, goColSizing, goDoubleBufferedCells, goEditing, goEnterMoves, goHeader, goHeaderAlignment, goHorzLine, goMouseOverCells, goRangeSelect, goRowSizing, goRowSorting, goTabs, goThemes, goVertLine]
     OptionsEx = [gxFixedCellClickSelect, gxFixedCellClickToggle, gxFixedThemedCells, gxTabWraps, gxMouseWheelScroll, gxMouseWheelKey]
     ParentFont = False
     RangeSelectStyle = rsMultiSelect

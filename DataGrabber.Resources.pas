@@ -20,6 +20,11 @@ unit DataGrabber.Resources;
 
 interface
 
+uses
+  Vcl.Graphics,
+
+  DataGrabber.Interfaces;
+
 const
   STableItem     = '\color{clBlue}table\column{}\color{clBlack}%s';
   SFieldItem     = '\color{clRed}field\column{}\color{clBlack}%s';
@@ -84,6 +89,19 @@ const
 
   SETTINGS_FILE = 'settings.json';
 
+  DEFAULT_DATATYPE_COLORS : array [TDataType] of TColor = (
+    $00DFDFDF,
+    $00E1FFE1, // Green
+    $00DFDFFF, // Red
+    $00DFDFFF,
+    $00FFEBD7, // Blue
+    $00FFEBD7,
+    $00FFEBD7,
+    clSilver
+  );
+
+  WHERE_IN = 'where' + #13#10 + '  %s in (%s)';
+
 resourcestring
   SFetchingData             = 'Fetching data...';
   SUpdatingView             = 'Updating view...';
@@ -103,6 +121,8 @@ resourcestring
   SConnectionProfileNameCannotBeEmpty =
     'The connection profile name cannot be empty!';
   SResultSet                = 'Resultset %d';
+  SFieldName                = 'Fieldname';
+  SFieldClass               = 'Field class';
 
 implementation
 

@@ -574,55 +574,54 @@ end;
 {$REGION 'conMain'}
 procedure TdmData.conMainAfterConnect(Sender: TObject);
 begin
-  Logger.Track('TdmDataFireDAC.conMainAfterConnect');
   FResultSets.Clear;
 end;
 
 procedure TdmData.conMainAfterDisconnect(Sender: TObject);
 begin
-  Logger.Track('TdmDataFireDAC.conMainAfterDisconnect');
+  Logger.Track(Self, 'conMainAfterDisconnect');
 end;
 
 procedure TdmData.conMainAfterStartTransaction(Sender: TObject);
 begin
-  Logger.Track('TdmDataFireDAC.conMainAfterStartTransaction');
+  Logger.Track(Self, 'conMainAfterStartTransaction');
 end;
 
 procedure TdmData.conMainBeforeConnect(Sender: TObject);
 begin
-  Logger.Track('TdmDataFireDAC.conMainBeforeConnect');
+  Logger.Track(Self, 'conMainBeforeConnect');
 end;
 
 procedure TdmData.conMainBeforeDisconnect(Sender: TObject);
 begin
-  Logger.Track('TdmDataFireDAC.conMainBeforeDisconnect');
+  Logger.Track(Self, 'conMainBeforeDisconnect');
 end;
 
 procedure TdmData.conMainBeforeStartTransaction(Sender: TObject);
 begin
-  Logger.Track('TdmDataFireDAC.conMainBeforeStartTransaction');
+  Logger.Track(Self, 'conMainBeforeStartTransaction');
 end;
 
 procedure TdmData.conMainError(ASender, AInitiator: TObject;
   var AException: Exception);
 begin
-  Logger.Track('TdmDataFireDAC.conMainError');
+  Logger.Track(Self, 'conMainError');
 end;
 
 procedure TdmData.conMainLost(Sender: TObject);
 begin
-  Logger.Track('TdmDataFireDAC.conMainLost');
+  Logger.Track(Self, 'conMainLost');
 end;
 
 procedure TdmData.conMainRecover(ASender, AInitiator: TObject;
   AException: Exception; var AAction: TFDPhysConnectionRecoverAction);
 begin
-  Logger.Track('TdmDataFireDAC.conMainRecover');
+  Logger.Track(Self, 'conMainRecover');
 end;
 
 procedure TdmData.conMainRestored(Sender: TObject);
 begin
-  Logger.Track('TdmDataFireDAC.conMainRestored');
+  Logger.Track(Self, 'conMainRestored');
 end;
 {$ENDREGION}
 
@@ -630,96 +629,96 @@ end;
 procedure TdmData.qryMainAfterApplyUpdates(DataSet: TFDDataSet;
   AErrors: Integer);
 begin
-  Logger.Track('TdmDataFireDAC.qryMainAfterApplyUpdates');
+  Logger.Track(Self, 'qryMainAfterApplyUpdates');
 end;
 
 procedure TdmData.qryMainAfterClose(DataSet: TDataSet);
 begin
-  Logger.Track('TdmDataFireDAC.qryMainAfterClose');
+  Logger.Track(Self, 'qryMainAfterClose');
 end;
 
 procedure TdmData.qryMainAfterExecute(DataSet: TFDDataSet);
 begin
-  Logger.Track('TdmDataFireDAC.qryMainAfterExecute');
+  Logger.Track(Self, 'qryMainAfterExecute');
 end;
 
 procedure TdmData.qryMainAfterGetRecords(DataSet: TFDDataSet);
 begin
-  Logger.Track('TdmDataFireDAC.qryMainAfterGetRecords');
+  Logger.Track(Self, 'qryMainAfterGetRecords');
 end;
 
 procedure TdmData.qryMainAfterOpen(DataSet: TDataSet);
 begin
-  Logger.Track('TdmDataFireDAC.qryMainAfterOpen');
+  Logger.Track(Self, 'qryMainAfterOpen');
 end;
 
 procedure TdmData.qryMainAfterRefresh(DataSet: TDataSet);
 begin
-  Logger.Track('TdmDataFireDAC.qryMainAfterRefresh');
+  Logger.Track(Self, 'qryMainAfterRefresh');
 end;
 
 procedure TdmData.qryMainAfterRowRequest(DataSet: TFDDataSet);
 begin
-  Logger.Track('TdmDataFireDAC.qryMainAfterRowRequest');
+  Logger.Track(Self, 'qryMainAfterRowRequest');
 end;
 
 procedure TdmData.qryMainBeforeApplyUpdates(DataSet: TFDDataSet);
 begin
-  Logger.Track('TdmDataFireDAC.qryMainBeforeApplyUpdates');
+  Logger.Track(Self, 'qryMainBeforeApplyUpdates');
 end;
 
 procedure TdmData.qryMainBeforeClose(DataSet: TDataSet);
 begin
-  Logger.Track('TdmDataFireDAC.qryMainBeforeClose');
+  Logger.Track(Self, 'qryMainBeforeClose');
 end;
 
 procedure TdmData.qryMainBeforeExecute(DataSet: TFDDataSet);
 begin
-  Logger.Track('TdmDataFireDAC.qryMainBeforeExecute');
+  Logger.Track(Self, 'qryMainBeforeExecute');
 end;
 
 procedure TdmData.qryMainBeforeGetRecords(DataSet: TFDDataSet);
 begin
-  Logger.Track('TdmDataFireDAC.qryMainBeforeGetRecords');
+  Logger.Track(Self, 'qryMainBeforeGetRecords');
 end;
 
 procedure TdmData.qryMainBeforeOpen(DataSet: TDataSet);
 begin
-  Logger.Track('TdmDataFireDAC.qryMainBeforeOpen');
+  Logger.Track(Self, 'qryMainBeforeOpen');
   FConstantFieldsVisible := True;
   FEmptyFieldsVisible    := True;
 end;
 
 procedure TdmData.qryMainBeforeRefresh(DataSet: TDataSet);
 begin
-  Logger.Track('TdmDataFireDAC.qryMainBeforeRefresh');
+  Logger.Track(Self, 'qryMainBeforeRefresh');
 end;
 
 procedure TdmData.qryMainBeforeRowRequest(DataSet: TFDDataSet);
 begin
-  Logger.Track('TdmDataFireDAC.qryMainBeforeRowRequest');
+  Logger.Track(Self, 'qryMainBeforeRowRequest');
 end;
 
 procedure TdmData.qryMainCommandChanged(Sender: TObject);
 begin
-  Logger.Track('TdmDataFireDAC.qryMainCommandChanged');
+  Logger.Track(Self, 'qryMainCommandChanged');
 end;
 
 procedure TdmData.qryMainError(ASender, AInitiator: TObject;
   var AException: Exception);
 begin
-  Logger.Track('TdmDataFireDAC.qryMainError');
+  Logger.Track(Self, 'qryMainError');
 end;
 
 procedure TdmData.qryMainExecuteError(ASender: TObject; ATimes,
   AOffset: Integer; AError: EFDDBEngineException; var AAction: TFDErrorAction);
 begin
-  Logger.Track('TdmDataFireDAC.qryMainExecuteError');
+  Logger.Track(Self, 'qryMainExecuteError');
 end;
 
 procedure TdmData.qryMainMasterSetValues(DataSet: TFDDataSet);
 begin
-  Logger.Track('TdmDataFireDAC.qryMainMasterSetValues');
+  Logger.Track(Self, 'qryMainMasterSetValues');
 end;
 {$ENDREGION}
 {$ENDREGION}
@@ -756,11 +755,11 @@ end;
 
 procedure TdmData.InitFields(ADataSet: TDataSet);
 var
-  Field : TField;
+  LField : TField;
 begin
-  for Field in ADataSet.Fields do
+  for LField in ADataSet.Fields do
   begin
-    InitField(Field);
+    InitField(LField);
   end;
 end;
 

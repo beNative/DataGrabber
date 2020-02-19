@@ -102,7 +102,6 @@ type
 
   private
     FHideEmptyFields : Boolean;
-    FData            : IData;
     FResultSet       : IResultSet;
     FInspector       : TInspector;
 
@@ -111,6 +110,7 @@ type
     function GetDataSet: TDataSet;
     function GetResultSet: IResultSet;
     procedure SetResultSet(const Value: IResultSet);
+    function GetData: IData;
     {$ENDREGION}
 
   protected
@@ -131,6 +131,9 @@ type
     property DataSet : TDataSet
       read GetDataSet;
 
+    property Data: IData
+      read GetData;
+
     property ResultSet: IResultSet
       read GetResultSet write SetResultSet;
 
@@ -143,7 +146,9 @@ implementation
 {$R *.dfm}
 
 uses
-  System.Math;
+  System.Math,
+
+  DDuce.Logger;
 
 {$REGION 'construction and destruction'}
 constructor TfrmDataInspector.Create(AOwner: TComponent; AResultSet: IResultSet);
@@ -155,6 +160,7 @@ begin
   FInspector.FlatBorder := True;
   FInspector.Parent     := pnlMain;
   FInspector.Align      := alClient;
+  FInspector.Editing    := False;
 
   FInspector.OnGetCellText       := FInspectorGetCellText;
   FInspector.OnSetEditText       := FInspectorSetEditText;
@@ -171,9 +177,20 @@ end;
 {$ENDREGION}
 
 {$REGION 'property access methods'}
+function TfrmDataInspector.GetData: IData;
+begin
+  if Assigned(ResultSet) then
+    Result := ResultSet.Data
+  else
+    Result := nil;
+end;
+
 function TfrmDataInspector.GetDataSet: TDataSet;
 begin
-  Result := FResultSet.DataSet;
+  if Assigned(FResultSet) then
+    Result := FResultSet.DataSet
+  else
+    Result := nil;
 end;
 
 procedure TfrmDataInspector.SetHideEmptyFields(const Value: Boolean);
@@ -192,10 +209,11 @@ end;
 
 procedure TfrmDataInspector.SetResultSet(const Value: IResultSet);
 begin
+  Logger.Track(Self, 'SetResultSet');
   if Assigned(Value) then
   begin
-    FResultSet := Value;
-    dscMain.DataSet := DataSet;
+    FResultSet      := Value;
+    dscMain.DataSet := FResultSet.DataSet;
     UpdateView;
   end;
 end;
@@ -222,15 +240,21 @@ end;
 
 procedure TfrmDataInspector.FInspectorGetCellText(Sender: TObject; Cell: TGridCell;
   var Value: string);
+var
+  F : TField;
 begin
-  if Cell.Col = 0 then
-    Value := FieldOf(Cell).FieldName
-  else
+  F := FieldOf(Cell);
+  if Assigned(F) then
   begin
-    if IsCellCheckBox(Cell) then
-      Value := ''
+    if Cell.Col = 0 then
+      Value := F.FieldName
     else
-      Value := FieldOf(Cell).AsString;
+    begin
+      if IsCellCheckBox(Cell) then
+        Value := ''
+      else
+        Value := F.AsString;
+    end;
   end;
 end;
 
@@ -262,7 +286,8 @@ end;
 procedure TfrmDataInspector.FInspectorGetEditStyle(Sender: TObject;
   Cell: TGridCell; var Style: TGridEditStyle);
 begin
-  Style := geEllipsis;
+  //Style := geEllipsis;
+
 end;
 
 procedure TfrmDataInspector.FInspectorSetEditText(Sender: TObject;
@@ -289,18 +314,21 @@ begin
   if IsCellCheckBox(Cell) then
   begin
     F := FieldOf(Cell);
-    DataSet.Edit;
-    if F.IsNull then
-       F.Value := 1
-    else
+    if Assigned(F) then
     begin
-      if F.Value = 0 then
-        F.Value := 1
+      DataSet.Edit;
+      if F.IsNull then
+         F.Value := 1
       else
-        F.Value := 0
+      begin
+        if F.Value = 0 then
+          F.Value := 1
+        else
+          F.Value := 0
+      end;
+      if DataSet.State in dsEditModes then
+        DataSet.Post;
     end;
-    if DataSet.State in dsEditModes then
-      DataSet.Post;
   end;
 end;
 
@@ -320,31 +348,31 @@ end;
 {$REGION 'protected methods'}
 procedure TfrmDataInspector.AutoSizeWidth;
 var
-  Left  : Integer;
-  Right : Integer;
+  LLeft  : Integer;
+  LRight : Integer;
 begin
   if Assigned(DataSet) and DataSet.Active and not DataSet.IsEmpty then
   begin
-    Left  := FInspector.GetColumnMaxWidth(0, False, False) + 2;
-    Right := FInspector.GetColumnMaxWidth(1, False, False) + 2;
-    if Right > MAX_WIDTH then
-      Right := MAX_WIDTH;
-    FInspector.Columns[0].Width := Left;
-    FInspector.Columns[1].Width := Right;
-    Width := Left + Right + 32;
+    LLeft  := FInspector.GetColumnMaxWidth(0, False, False) + 2;
+    LRight := FInspector.GetColumnMaxWidth(1, False, False) + 2;
+    if LRight > MAX_WIDTH then
+      LRight := MAX_WIDTH;
+    FInspector.Columns[0].Width := LLeft;
+    FInspector.Columns[1].Width := LRight;
+    Width := LLeft + LRight + 32;
   end;
 end;
 
 function TfrmDataInspector.FieldOf(const ACell: TGridCell): TField;
 begin
-//  if ACell.Row < FieldCount then
-//  begin
+  if ACell.Row < DataSet.FieldCount then
+  begin
 //    if HideEmptyFields then
 //      Result := FNonEmptyFields[ACell.Row]
 //    else
-//      Result := DataSet.Fields[ACell.Row];
-//  end
-//  else
+    Result := DataSet.Fields[ACell.Row];
+  end
+  else
     Exit(nil);
 end;
 
@@ -364,13 +392,13 @@ end;
 {$REGION 'public methods'}
 procedure TfrmDataInspector.UpdateView;
 begin
-  if Assigned(FData) then
+  if Assigned(Data) then
   begin
     FInspector.LockUpdate;
     try
       FInspector.Rows.Count := DataSet.FieldCount;
       FInspector.UpdateEditContents(False);
-      AutoSizeWidth;
+      //AutoSizeWidth;
     finally
       FInspector.UnLockUpdate(True);
     end;

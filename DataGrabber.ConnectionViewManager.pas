@@ -293,6 +293,7 @@ begin
 
   // disable actions that are not fully implemented yet
   actRtti.Visible          := False;
+
   actDataInspector.Visible := False;
 end;
 
@@ -688,10 +689,10 @@ begin
   FStopWatch.Start;
   ActiveData.Execute;
   FStopWatch.Stop;
-//  if Assigned(FDataInspector) and FDataInspector.Visible then
-//  begin
-//    FDataInspector.Data := ActiveData;
-//  end;
+  if Assigned(FDataInspector) and FDataInspector.Visible then
+  begin
+    FDataInspector.ResultSet := ActiveDataView.ResultSet;
+  end;
   if Assigned(FFieldInspector) and FFieldInspector.Visible then
   begin
     FFieldInspector.DataSet := ActiveDataView.DataSet;

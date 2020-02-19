@@ -7,6 +7,7 @@ if %errorlevel% neq 0 (
 ) else (
   call rsvars
 msbuild %project%.dproj /t:make /p:config=Release /p:platform=Win32
+::msbuild %project%.dproj /t:make /p:config=Debug /p:platform=Win32
 where upx.exe /q
   if %errorlevel% neq 0 (  
     echo upx not found

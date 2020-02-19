@@ -21,7 +21,7 @@ unit DataGrabber.Interfaces;
 interface
 
 uses
-  System.Classes, System.TimeSpan,
+  System.Classes,
   Vcl.Graphics, Vcl.Controls, Vcl.Menus, Vcl.Forms, Vcl.ActnList,
   Data.DB,
   FireDAC.Comp.Client, FireDAC.Stan.Intf, FireDAC.Comp.DataSet,
@@ -49,20 +49,6 @@ type
     Horizontal,
     Vertical
   );
-
-const
-  DEFAULT_DATATYPE_COLORS : array [TDataType] of TColor = (
-    $00DFDFDF,
-    $00E1FFE1, // Green
-    $00DFDFFF, // Red
-    $00DFDFFF,
-    $00FFEBD7, // Blue
-    $00FFEBD7,
-    $00FFEBD7,
-    clSilver
-  );
-
-  WHERE_IN = 'where' + #13#10 + '  %s in (%s)';
 
 type
   IEditorView = interface;

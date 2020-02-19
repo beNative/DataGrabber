@@ -74,7 +74,6 @@ type
 
     procedure UpdateView;
 
-
     property DataSet : TDataSet
       read GetDataSet write SetDataSet;
   end;
@@ -89,7 +88,9 @@ uses
   Spring,
 
   DDuce.Factories.VirtualTrees, DDuce.Factories.zObjInspector,
-  DDuce.ObjectInspector.zObjectInspector;
+  DDuce.ObjectInspector.zObjectInspector,
+
+  DataGrabber.Resources;
 
 {$REGION 'construction and destruction'}
 constructor TfrmFieldInspector.Create(AOwner: TComponent; ADataSet: TDataSet);
@@ -97,7 +98,7 @@ var
   C : TVirtualTreeColumn;
 begin
   inherited Create(AOwner);
-  FDataSet := ADataSet;
+  FDataSet   := ADataSet;
   FOIField   := TzObjectInspectorFactory.Create(Self, pnlRight);
   FVSTFields := TVirtualStringTreeFactory.CreateGrid(Self, pnlLeft);
   // cell in first column is fully selected
@@ -114,16 +115,16 @@ begin
   FVSTFields.LineStyle := lsSolid;
   FVSTFields.Header.Font.Style := FVSTFields.Header.Font.Style + [fsBold];
   // required when using it as a grid
-  FVSTFields.Indent := 0;
+  FVSTFields.Indent  := 0;
   C := FVSTFields.Header.Columns.Add;
   C.CaptionAlignment := taCenter;
-  C.Text             := 'Fieldname';
+  C.Text             := SFieldName;
   C := FVSTFields.Header.Columns.Add;
   C.CaptionAlignment := taCenter;
-  C.Text             := 'Field class';
+  C.Text             := SFieldClass;
   C.CaptionAlignment := taCenter;
   C.Alignment        := taCenter;
-  C.Width := 120;
+  C.Width            := 120;
   FVSTFields.Margins.Right := 0;
 end;
 {$ENDREGION}
@@ -180,7 +181,7 @@ end;
 procedure TfrmFieldInspector.UpdateActions;
 begin
   inherited UpdateActions;
-  FOIField.Invalidate;
+  //FOIField.Invalidate;
 end;
 {$ENDREGION}
 
