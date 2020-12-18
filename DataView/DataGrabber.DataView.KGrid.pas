@@ -57,11 +57,9 @@ type
     function GetGridType: string; override;
     procedure SetPopupMenu(const Value: TPopupMenu); override;
     {$ENDREGION}
+
     procedure NormalizeRect(var SR: TKGridRect);
     procedure UpdateColumns;
-
-  public
-    procedure AfterConstruction; override;
 
     function SelectionToCommaText(
       AQuoteItems: Boolean = True
@@ -92,6 +90,10 @@ type
     procedure EndUpdate; override;
 
     procedure Inspect; override;
+
+  public
+    procedure AfterConstruction; override;
+
   end;
 
 implementation
@@ -223,7 +225,7 @@ begin
 end;
 {$ENDREGION}
 
-{$REGION 'public methods'}
+{$REGION 'protected methods'}
 procedure TfrmKGrid.ApplyGridSettings;
 begin
   if Settings.ShowHorizontalGridLines then
@@ -314,15 +316,15 @@ end;
 
 function TfrmKGrid.SelectionToCommaText(AQuoteItems: Boolean): string;
 var
-  X, Y   : Integer;
-  S, T   : string;
-  SR     : TKGridRect;
-  CCount : Integer;
+  X, Y      : Integer;
+  S, T      : string;
+  SR        : TKGridRect;
+  LColCount : Integer;
 begin
   S := '';
   SR := grdMain.Selection;
   NormalizeRect(SR);
-  CCount := SR.Col2 - SR.Col1;
+  LColCount := SR.Col2 - SR.Col1;
   for Y := SR.Row1 to SR.Row2 do
   begin
     for X := SR.Col1 to SR.Col2 do
@@ -334,7 +336,7 @@ begin
       if X < SR.Col2 then
         S := S + ', ';
     end;
-    if (CCount = 1) and (Y < SR.Row2) then
+    if (LColCount = 1) and (Y < SR.Row2) then
       S := S + ', '
     else if Y < SR.Row2 then
       S := S + #13#10
@@ -392,23 +394,23 @@ end;
 
 function TfrmKGrid.SelectionToTextTable(AIncludeHeader: Boolean): string;
 var
-  X, Y   : Integer;
-  S      : string;
-  N      : Integer;
-  sTxt   : string;
-  sLine  : string;
-  sFmt   : string;
-  Widths : array of Integer;
-  SL     : TStringList;
-  SR     : TKGridRect;
+  X, Y    : Integer;
+  S       : string;
+  N       : Integer;
+  LTxt    : string;
+  LLine   : string;
+  LFmt    : string;
+  LWidths : array of Integer;
+  SL      : TStringList;
+  SR      : TKGridRect;
 begin
   BeginUpdate;
   try
-    sLine := '';
-    sTxt := '';
+    LLine := '';
+    LTxt := '';
     SR := grdMain.Selection;
     NormalizeRect(SR);
-    SetLength(Widths, SR.Col2 - SR.Col1);
+    SetLength(LWidths, SR.Col2 - SR.Col1);
     try
       SL := TStringList.Create;
       try
@@ -424,7 +426,7 @@ begin
             S := grdMain.Cells[X, Y];
             SL.Add(S);
           end;
-          Widths[X] := GetMaxTextWidth(SL);
+          LWidths[X] := GetMaxTextWidth(SL);
         end;
       finally
         FreeAndNil(SL);
@@ -434,32 +436,32 @@ begin
       begin
         for X := SR.Col1 to SR.Col2 do
         begin
-          N := Widths[X];
-          sFmt := '%-' + IntToStr(N) + 's';
-          sLine := sLine + '+' + Format(sFmt, [DupeString('-', N)]);
-          sTxt := sTxt + '|' + Format(sFmt, [TKDBGridCol(grdMain.Cols[X]).FieldName]);
+          N := LWidths[X];
+          LFmt := '%-' + IntToStr(N) + 's';
+          LLine := LLine + '+' + Format(LFmt, [DupeString('-', N)]);
+          LTxt := LTxt + '|' + Format(LFmt, [TKDBGridCol(grdMain.Cols[X]).FieldName]);
         end;
-        sTxt := sTxt + '|';
-        sLine := sLine + '+';
-        Result := sLine + #13#10 + sTxt + #13#10 + sLine;
+        LTxt := LTxt + '|';
+        LLine := LLine + '+';
+        Result := LLine + #13#10 + LTxt + #13#10 + LLine;
       end;
       for Y := SR.Row1 to SR.Row2 do
       begin
-        sTxt := '';
+        LTxt := '';
         for X := SR.Col1 to SR.Col2 do
         begin
           S := grdMain.Cells[X, Y];
-          N := Widths[X];
-          sFmt := '%-' + IntToStr(N) + 's';
-          sTxt := sTxt + '|' + Format(sFmt, [S]);
+          N := LWidths[X];
+          LFmt := '%-' + IntToStr(N) + 's';
+          LTxt := LTxt + '|' + Format(LFmt, [S]);
         end;
-        sTxt := sTxt + '|';
-        Result := Result + #13#10 + sTxt;
-        sTxt := '';
+        LTxt := LTxt + '|';
+        Result := Result + #13#10 + LTxt;
+        LTxt := '';
       end;
-      Result := Result + #13#10 + sLine;
+      Result := Result + #13#10 + LLine;
     finally
-      Finalize(Widths);
+      Finalize(LWidths);
     end;
   finally
     EndUpdate;

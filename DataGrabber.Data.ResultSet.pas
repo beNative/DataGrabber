@@ -291,7 +291,6 @@ var
   LIsConst : Boolean;
 begin
   Logger.Track(Self, 'UpdateFieldLists');
-  Logger.SendDataSet('DataSet', DataSet);
   DataSet.DisableControls;
   FConstantFields.Clear;
   FEmptyFields.Clear;

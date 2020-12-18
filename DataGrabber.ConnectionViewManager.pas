@@ -36,15 +36,13 @@ uses
 
   DataGrabber.DataInspector, DataGrabber.FieldInspector,
 
-  DataGrabber.Interfaces, DataGrabber.ConnectionProfiles,
-
-  DDuce.Logger;
+  DataGrabber.Interfaces, DataGrabber.ConnectionProfiles;
 
 {$REGION 'documentation'}
 {
   The ConnectionViewManager is a singleton instance which manages:
-    - the application settings  (TDGSettings)
-    - the ConnectionView instances (ConnectionViews)
+    - the application settings (TDGSettings)
+    - a list of all IConnectionView instances (IList<IConnectionView>)
     - the active connection view (ActiveConnectionView)
     - all actions that can be executed on the active connectionview
 }
@@ -269,7 +267,7 @@ uses
 
   Spring,
 
-  DDuce.ObjectInspector.zObjectInspector, DDuce.AboutDialog,
+  DDuce.ObjectInspector.zObjectInspector, DDuce.AboutDialog, DDuce.Logger,
 
   DataGrabber.Settings.Dialog, DataGrabber.Factories, DataGrabber.Resources,
   DataGrabber.MetaData.Dialog;
@@ -284,6 +282,7 @@ end;
 
 procedure TdmConnectionViewManager.AfterConstruction;
 begin
+  Logger.Track(Self, 'AfterConstruction');
   inherited AfterConstruction;
   FSettings.Load;
   FSettings.OnChanged.Add(SettingsChanged);
@@ -293,12 +292,12 @@ begin
 
   // disable actions that are not fully implemented yet
   actRtti.Visible          := False;
-
   actDataInspector.Visible := False;
 end;
 
 procedure TdmConnectionViewManager.BeforeDestruction;
 begin
+  Logger.Track(Self, 'BeforeDestruction');
   FSettings.Save;
   FConnectionViewList := nil;
   FreeAndNil(FDataInspector);
@@ -329,6 +328,7 @@ procedure TdmConnectionViewManager.actCopyConnectionViewAsWikiExecute(
   Sender: TObject);
 begin
   Clipboard.AsText := ActiveConnectionView.ExportAsWiki;
+  Logger.SendText('Clipboard.AsText', Clipboard.AsText);
 end;
 
 procedure TdmConnectionViewManager.actCopyExecute(Sender: TObject);
@@ -356,7 +356,7 @@ end;
 
 procedure TdmConnectionViewManager.actShowMetaDataExecute(Sender: TObject);
 var
-  F: TfrmMetaData;
+  F : TfrmMetaData;
 begin
   F := TfrmMetaData.Create(Self, ActiveData.Connection);
   F.ShowModal;
@@ -394,34 +394,40 @@ procedure TdmConnectionViewManager.actSelectionAsCommaTextExecute(
   Sender: TObject);
 begin
   Clipboard.AsText := ActiveDataView.SelectionToCommaText(False);
+  Logger.SendText(Clipboard.AsText);
 end;
 
 procedure TdmConnectionViewManager.actSelectionAsFieldsExecute(Sender: TObject);
 begin
   Clipboard.AsText := ActiveDataView.SelectionToFields(False);
+  Logger.SendText(Clipboard.AsText);
 end;
 
 procedure TdmConnectionViewManager.actSelectionAsQuotedCommaTextExecute(
   Sender: TObject);
 begin
   Clipboard.AsText := ActiveDataView.SelectionToCommaText(True);
+  Logger.SendText(Clipboard.AsText);
 end;
 
 procedure TdmConnectionViewManager.actSelectionAsQuotedFieldsExecute(
   Sender: TObject);
 begin
   Clipboard.AsText := ActiveDataView.SelectionToFields;
+  Logger.SendText(Clipboard.AsText);
 end;
 
 procedure TdmConnectionViewManager.actSelectionAsTextExecute(Sender: TObject);
 begin
   Clipboard.AsText := ActiveDataView.SelectionToDelimitedTable;
+  Logger.SendText(Clipboard.AsText);
 end;
 
 procedure TdmConnectionViewManager.actSelectionAsTextTableExecute(
   Sender: TObject);
 begin
   Clipboard.AsText := ActiveDataView.SelectionToTextTable(True);
+  Logger.SendText(Clipboard.AsText);
 end;
 
 procedure TdmConnectionViewManager.actSelectionAsWhereInExecute(
@@ -433,6 +439,7 @@ end;
 procedure TdmConnectionViewManager.actSelectionAsWikiExecute(Sender: TObject);
 begin
   Clipboard.AsText := ActiveDataView.SelectionToWikiTable(True);
+  Logger.SendText(Clipboard.AsText);
 end;
 
 procedure TdmConnectionViewManager.actHideConstantColumnsExecute(
@@ -560,13 +567,18 @@ begin
 end;
 
 procedure TdmConnectionViewManager.actFireDACInfoExecute(Sender: TObject);
+var
+  S : string;
 begin
-  ShowMessageFmt('FireDAC version %s', [C_FD_Version]);
+  S := Format('FireDAC version %s', [C_FD_Version]);
+  ShowMessage(S);
+  Logger.Info(S);
 end;
 
 procedure TdmConnectionViewManager.actResultsAsWikiExecute(Sender: TObject);
 begin
   Clipboard.AsText := ActiveConnectionView.ExportAsWiki;
+  Logger.SendText(Clipboard.AsText);
 end;
 {$ENDREGION}
 {$ENDREGION}
@@ -631,7 +643,7 @@ end;
 
 function TdmConnectionViewManager.GetAction(AName: string): TCustomAction;
 var
-  I: Integer;
+  I : Integer;
 begin
   I := ActionList.ActionCount - 1;
   while (I >= 0) and (CompareText(TAction(ActionList[I]).Name, AName) <> 0) do
@@ -701,7 +713,7 @@ end;
 
 procedure TdmConnectionViewManager.UpdateActions;
 var
-  B: Boolean;
+  B : Boolean;
 begin
   if Assigned(FSettings) then
   begin
@@ -747,7 +759,10 @@ begin
   begin
     CV := FConnectionViewList[I] as IConnectionView;
     if Assigned(CV.ActiveConnectionProfile) then
+    begin
       CV.Form.Caption := Format('(%d) %s', [I + 1, CV.ActiveConnectionProfile.Name]);
+      Logger.Send('CV.ActiveConnectionProfile.Name', CV.ActiveConnectionProfile.Name);
+    end;
   end;
 end;
 {$ENDREGION}
@@ -757,14 +772,13 @@ function TdmConnectionViewManager.AddConnectionView: IConnectionView;
 var
   CP : TConnectionProfile;
   CV : IConnectionView;
-  D  : IData;
 begin
+  Logger.Track(Self, 'AddConnectionView');
   if Assigned(FActiveConnectionView) then
     CP := FActiveConnectionView.ActiveConnectionProfile
   else
     CP := DefaultConnectionProfile;
-  D  := TDataGrabberFactories.CreateData(Self, CP.ConnectionSettings);
-  CV := TDataGrabberFactories.CreateConnectionView(Self, Self, D);
+  CV := TDataGrabberFactories.CreateConnectionView(Self, Self, CP);
   FConnectionViewList.Add(CV);
   ActiveConnectionView := CV;
   UpdateConnectionViewCaptions;

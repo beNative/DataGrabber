@@ -37,23 +37,6 @@ type
     FUpSortImage     : TBitmap;
     FDownSortImage   : TBitmap;
 
-  protected
-    {$REGION 'property access methods'}
-    function GetPopupMenu: TPopupMenu; reintroduce; override;
-    procedure SetPopupMenu(const Value: TPopupMenu); override;
-    function GetGridType: string; override;
-    {$ENDREGION}
-
-    procedure InitializeGridColumns;
-    procedure InitializeGridColumn(AGridColumn: TDBGridColumn);
-
-    procedure ApplyGridSettings; override;
-
-    // shortcut methods
-    function IsLookupField(const AFieldName: string) : Boolean;
-    function IsCheckBoxField(const AFieldName: string) : Boolean;
-    function IsCellReadOnly(const ACell: TGridCell) : Boolean;
-
     procedure FGridKeyPress(
       Sender  : TObject;
       var Key : Char
@@ -130,9 +113,22 @@ type
       SortImage : TBitmap
     );
 
-  public
-    procedure AfterConstruction; override;
-    procedure BeforeDestruction; override;
+  protected
+    {$REGION 'property access methods'}
+    function GetPopupMenu: TPopupMenu; reintroduce; override;
+    procedure SetPopupMenu(const Value: TPopupMenu); override;
+    function GetGridType: string; override;
+    {$ENDREGION}
+
+    procedure InitializeGridColumns;
+    procedure InitializeGridColumn(AGridColumn: TDBGridColumn);
+
+    procedure ApplyGridSettings; override;
+
+    // shortcut methods
+    function IsLookupField(const AFieldName: string) : Boolean;
+    function IsCheckBoxField(const AFieldName: string) : Boolean;
+    function IsCellReadOnly(const ACell: TGridCell) : Boolean;
 
     procedure BeginUpdate; override;
     procedure EndUpdate; override;
@@ -160,6 +156,11 @@ type
     ): string; override;
 
     procedure UpdateView; override;
+
+  public
+    procedure AfterConstruction; override;
+    destructor Destroy; override;
+
   end;
 
 implementation
@@ -247,12 +248,11 @@ begin
   UpdateView;
 end;
 
-
-procedure TfrmGridView.BeforeDestruction;
+destructor TfrmGridView.Destroy;
 begin
   FUpSortImage.Free;
   FDownSortImage.Free;
-  inherited BeforeDestruction;
+  inherited Destroy;
 end;
 {$ENDREGION}
 
@@ -429,22 +429,22 @@ end;
 procedure TfrmGridView.FGridHeaderClick(Sender: TObject;
   Section: TGridHeaderSection);
 var
-  Field : TField;
+  LField : TField;
 begin
-  Field := FGrid.Columns[Section.ColumnIndex].Field;
-  if Assigned(Field) and (Field.FieldKind = fkData) then
+  LField := FGrid.Columns[Section.ColumnIndex].Field;
+  if Assigned(LField) and (LField.FieldKind = fkData) then
   begin
     case FSortDirection of
       gsNone, gsDescending:
         FSortDirection := gsAscending;
       gsAscending:
       begin
-        if Field.FieldName = FSortedFieldName then
+        if LField.FieldName = FSortedFieldName then
           FSortDirection := gsDescending
       end;
     end;
-    FSortedFieldName := Field.FieldName;
-    Data.Sort(DataSet, Field.FieldName, FSortDirection = gsDescending);
+    FSortedFieldName := LField.FieldName;
+    Data.Sort(DataSet, LField.FieldName, FSortDirection = gsDescending);
     DataSet.First;
   end
   else
@@ -561,9 +561,7 @@ begin
   for I := 0 to FGrid.Columns.Count - 1 do
     InitializeGridColumn(FGrid.Columns[I]);
 end;
-{$ENDREGION}
 
-{$REGION 'public methods'}
 procedure TfrmGridView.ApplyGridSettings;
 begin
   FGrid.GridLines := True;

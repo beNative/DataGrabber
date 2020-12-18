@@ -78,6 +78,7 @@ type
     procedure actAddConnectionViewExecute(Sender: TObject);
     procedure actInspectChromeTabExecute(Sender : TObject);
     procedure actCloseAllOtherTabsExecute(Sender: TObject);
+    procedure actCloseTabExecute(Sender: TObject);
     {$ENDREGION}
 
     {$REGION 'event handlers'}
@@ -108,7 +109,6 @@ type
       ATab            : TChromeTab;
       var DragControl : TWinControl
     );
-    procedure actCloseTabExecute(Sender: TObject);
     {$ENDREGION}
 
   private
@@ -339,7 +339,7 @@ end;
 {$REGION 'private methods'}
 procedure TfrmMain.OptimizeWidth(APanel: TPanel);
 var
-  S: string;
+  S : string;
 begin
   S := APanel.Caption;
   if Trim(S) <> '' then
@@ -427,7 +427,7 @@ begin
   if Assigned(Manager.ActiveConnectionView) then
   begin
     UpdateTabs;
-    actCloseTab.Enabled := Manager.Count > 1;
+    actCloseTab.Enabled          := Manager.Count > 1;
     actCloseAllOtherTabs.Enabled := Manager.Count > 1;
   end;
 end;

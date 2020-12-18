@@ -198,14 +198,14 @@ object dmConnectionViewManager: TdmConnectionViewManager
     end
     object actSelectionAsFields: TAction
       Category = 'Grid'
-      Caption = 'Selection as fields'
+      Caption = 'Selection as comma seperated list of fieldnames'
       Hint = 'Copy selection as comma seperated list of fieldnames'
       ImageIndex = 25
       OnExecute = actSelectionAsFieldsExecute
     end
     object actSelectionAsQuotedFields: TAction
       Category = 'Grid'
-      Caption = 'Selection as quoted fields'
+      Caption = 'Selection as comma seperated list of quoted fieldnames'
       Hint = 'Copy selection as comma seperated list of quoted fieldnames'
       ImageIndex = 6
       OnExecute = actSelectionAsQuotedFieldsExecute
@@ -411,11 +411,11 @@ object dmConnectionViewManager: TdmConnectionViewManager
       end
       object mniSelectionAsFields: TMenuItem
         Action = actSelectionAsFields
-        Caption = '... as fields'
+        Caption = '... as comma seperated list of fieldnames'
       end
       object mniSelectionAsQuotedFields: TMenuItem
         Action = actSelectionAsQuotedFields
-        Caption = '... as quoted fields'
+        Caption = '... as comma seperated list of quoted fieldnames'
       end
     end
     object mniInspect: TMenuItem
@@ -458,7 +458,7 @@ object dmConnectionViewManager: TdmConnectionViewManager
     Left = 24
     Top = 80
     Bitmap = {
-      494C010156002003080010001000FFFFFFFF2110FFFFFFFFFFFFFFFF424D3600
+      494C010156002003180010001000FFFFFFFF2110FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000006001000001002000000000000060
       0100000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000

@@ -115,7 +115,6 @@ type
     FConstantFieldsVisible  : Boolean;
     FEmptyFieldsVisible     : Boolean;
     FShowFavoriteFieldsOnly : Boolean;
-    FExecuted               : Boolean;
     FSQL                    : string;
     FConnectionSettings     : TConnectionSettings;
     FDriverNames            : TStrings;
@@ -325,6 +324,7 @@ end;
 
 procedure TdmData.AfterConstruction;
 begin
+  Logger.Track(Self, 'AfterConstruction');
   inherited AfterConstruction;
   FConstantFields := TCollections.CreateObjectList<TField>(False);
   FEmptyFields    := TCollections.CreateObjectList<TField>(False);
@@ -340,7 +340,7 @@ begin
   // Blocking with cancel dialog.
   FDManager.ResourceOptions.CmdExecMode := amCancelDialog;
   // Enable dialogs.
-  FDManager.ResourceOptions.SilentMode  := False;
+  FDManager.ResourceOptions.SilentMode := False;
   FDManager.GetDriverNames(DriverNames);
   InitializeConnection;
   FStopWatch := TStopwatch.Create;
@@ -574,6 +574,7 @@ end;
 {$REGION 'conMain'}
 procedure TdmData.conMainAfterConnect(Sender: TObject);
 begin
+  Logger.Track(Self, 'conMainAfterConnect');
   FResultSets.Clear;
 end;
 
@@ -757,6 +758,7 @@ procedure TdmData.InitFields(ADataSet: TDataSet);
 var
   LField : TField;
 begin
+  Logger.Track(Self, 'InitFields');
   for LField in ADataSet.Fields do
   begin
     InitField(LField);
@@ -791,7 +793,8 @@ begin
     end;
     if MultipleResultSets then
     begin
-      Connection.FetchOptions.AutoClose := False; // required to support multiple resultsets
+      // This setting is required to support multiple resultsets.
+      Connection.FetchOptions.AutoClose := False;
     end
     else
     begin
@@ -814,8 +817,8 @@ begin
       Values['OSAuthent'] := IfThen(ConnectionSettings.OSAuthent, 'Yes', 'No');
     end;
     Connection.LoginPrompt := False;
-    // Set this to prevent issues with FireDac's need for a cursor object﻿
-    Connection.ResourceOptions.SilentMode := True;
+    // Set this to prevent issues with FireDac's need for a cursor object﻿.
+    Connection.ResourceOptions.SilentMode    := True;
     Connection.ResourceOptions.AutoReconnect := ConnectionSettings.AutoReconnect;
   end;
   FResultSets.Clear;
@@ -825,6 +828,7 @@ procedure TdmData.InternalExecute(const ACommandText: string);
 var
   B : Boolean;
 begin
+  Logger.Track(Self, 'InternalExecute');
   if Trim(ACommandText) <> '' then
   begin
     FConstantFields.Clear;
@@ -833,6 +837,7 @@ begin
     FFavoriteFields.Clear;
     qryMain.Close;
     FStopWatch.Start;
+    Logger.SendSQL('ACommandText', ACommandText);
     qryMain.Open(ACommandText);
     FStopWatch.Stop;
     if MultipleResultSets then
@@ -859,6 +864,7 @@ function TdmData.ShowAllFields: Boolean;
 var
   F : TField;
 begin
+  Logger.Track(Self, 'ShowAllFields');
   Result := False;
   DataSet.DisableControls;
   try
@@ -906,6 +912,8 @@ var
   LIsEmpty : Boolean;
   LIsConst : Boolean;
 begin
+  Logger.Track(Self, 'UpdateFieldLists');
+  Logger.Watch('FFieldListsUpdated', FFieldListsUpdated);
   if not FFieldListsUpdated then
   begin
     DataSet.DisableControls;
@@ -945,6 +953,7 @@ end;
 
 procedure TdmData.Execute;
 begin
+  Logger.Track(Self, 'Execute');
   FStopWatch.Reset;
   InitializeConnection;
   FStopWatch.Start;
@@ -961,7 +970,6 @@ begin
   FFieldListsUpdated := False;
   if not EmptyFieldsVisible or not ConstantFieldsVisible then
     UpdateFieldLists;
-  FExecuted := True;
 end;
 
 procedure TdmData.LoadFromFile(ADataSet: TDataSet; const AFileName: string;

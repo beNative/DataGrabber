@@ -23,7 +23,8 @@ uses
   Vcl.ComCtrls, Vcl.Controls, Vcl.Menus,
   Data.DB,
 
-  DataGrabber.Interfaces, DataGrabber.ConnectionSettings;
+  DataGrabber.Interfaces, DataGrabber.ConnectionSettings,
+  DataGrabber.ConnectionProfiles;
 
 type
   TDataGrabberFactories = class sealed
@@ -56,9 +57,9 @@ type
     ): IData;
 
     class function CreateConnectionView(
-      AOwner   : TComponent;
-      AManager : IConnectionViewManager;
-      AData    : IData
+      AOwner             : TComponent;
+      AManager           : IConnectionViewManager;
+      AConnectionProfile : TConnectionProfile
     ): IConnectionView;
 
     class function CreateEditorView(
@@ -97,7 +98,7 @@ uses
 
   Spring,
 
-  DDuce.Factories.ToolBar,
+  DDuce.Factories.ToolBar, DDuce.Logger,
 
   DataGrabber.ConnectionViewManager, DataGrabber.Settings,
   DataGrabber.EditorView, DataGrabber.Data, DataGrabber.ConnectionView,
@@ -151,7 +152,6 @@ begin
   Guard.CheckTrue(AToolBar.ButtonCount = 0, '0');
 
   //AddButton(AManager, AToolBar, 'actFireDACInfo');
-  AddButton(AManager, AToolBar, 'actAbout');
   //AddButton(AManager, AToolBar, 'actExecuteTestSequence');
   AddButton(AManager, AToolBar);
   AddButton(AManager, AToolBar, 'actDataInspector');
@@ -184,16 +184,17 @@ begin
   Guard.CheckNotNull(AManager, 'AManager');
   Guard.CheckTrue(AToolBar.ButtonCount = 0, '0');
 
-  AddButton(AManager, AToolBar, 'actToggleFullScreen');
   AddButton(AManager, AToolBar, 'actToggleStayOnTop');
-
+  AddButton(AManager, AToolBar, 'actAbout');
   TToolBarFactory.CleanupToolBar(AToolBar);
 end;
 
 class function TDataGrabberFactories.CreateConnectionView(AOwner: TComponent;
-  AManager: IConnectionViewManager; AData: IData): IConnectionView;
+  AManager: IConnectionViewManager; AConnectionProfile: TConnectionProfile): IConnectionView;
 begin
-  Result := TfrmConnectionView.Create(AOwner, AManager, AData);
+  Logger.Info('Create new IConnectionView instance');
+  Logger.SendObject('AConnectionProfile', AConnectionProfile);
+  Result := TfrmConnectionView.Create(AOwner, AManager, AConnectionProfile);
 end;
 
 class function TDataGrabberFactories.CreateData(AOwner: TComponent;

@@ -69,32 +69,10 @@ type
     FMergeColumnCells : Boolean;
     FAutoSizeCols     : Boolean;
 
-  protected
-    {$REGION 'property access methods'}
-    function GetRecordCount: Integer; override;
-    function GetMergeColumnCells: Boolean;
-    procedure SetMergeColumnCells(const Value: Boolean);
-    function GetAutoSizeCols: Boolean;
-    procedure SetAutoSizeCols(const Value: Boolean);
-    function GetPopupMenu: TPopupMenu; reintroduce;
-    procedure SetPopupMenu(const Value: TPopupMenu); override;
-    function GetGridType: string; override;
-    {$ENDREGION}
-
-    procedure ApplyGridSettings; override;
-
     procedure CopySelectionToClipboard(
       AController    : TcxGridTableController;
       AIncludeHeader : Boolean = False
     );
-
-    function ResultsToWikiTable(
-      AIncludeHeader: Boolean = False
-    ): string; override;
-    function ResultsToTextTable(
-      AIncludeHeader: Boolean = False
-    ): string; override;
-
     function SelectionToDelimitedTable(
       AController    : TcxGridTableController;
       ADelimiter     : string = #9; // TAB
@@ -117,16 +95,29 @@ type
       AIncludeHeader : Boolean = False
     ): string; reintroduce; overload;
 
-  public
-    procedure AfterConstruction; override;
+  protected
+    {$REGION 'property access methods'}
+    function GetRecordCount: Integer; override;
+    function GetMergeColumnCells: Boolean;
+    procedure SetMergeColumnCells(const Value: Boolean);
+    function GetAutoSizeCols: Boolean;
+    procedure SetAutoSizeCols(const Value: Boolean);
+    function GetPopupMenu: TPopupMenu; reintroduce;
+    procedure SetPopupMenu(const Value: TPopupMenu); override;
+    function GetGridType: string; override;
+    {$ENDREGION}
 
-    procedure HideSelectedColumns; override;
-    procedure MergeAllColumnCells(AActive: Boolean);
+    procedure ApplyGridSettings; override;
+
+    function ResultsToWikiTable(
+      AIncludeHeader: Boolean = False
+    ): string; override;
+    function ResultsToTextTable(
+      AIncludeHeader: Boolean = False
+    ): string; override;
+
     procedure AutoSizeColumns; override;
-    procedure GroupBySelectedColumns;
-    procedure ExpandAll;
-    procedure CollapseAll;
-    procedure ClearGrouping;
+    procedure HideSelectedColumns; override;
     procedure Copy; override;
     procedure Inspect; override;
     procedure UpdateView; override;
@@ -150,6 +141,15 @@ type
     function SelectionToFields(
       AQuoteItems : Boolean = True
     ): string; overload; override;
+
+    procedure MergeAllColumnCells(AActive: Boolean);
+    procedure GroupBySelectedColumns;
+    procedure ExpandAll;
+    procedure CollapseAll;
+    procedure ClearGrouping;
+
+  public
+    procedure AfterConstruction; override;
 
     property MergeColumnCells: Boolean
       read GetMergeColumnCells write SetMergeColumnCells;
@@ -306,11 +306,6 @@ end;
 {$ENDREGION}
 
 {$REGION 'private methods'}
-procedure TfrmcxGrid.Copy;
-begin
-  Clipboard.AsText := Trim(SelectionToDelimitedTable(#9, False));
-end;
-
 procedure TfrmcxGrid.CopySelectionToClipboard(AController: TcxGridTableController;
   AIncludeHeader: Boolean);
 var
@@ -349,31 +344,6 @@ begin
   end;
 end;
 
-procedure TfrmcxGrid.EndUpdate;
-begin
-  tvwMain.EndUpdate;
-end;
-
-procedure TfrmcxGrid.ClearGrouping;
-var
-  I : Integer;
-begin
-  for I := 0 to tvwMain.GroupedColumnCount - 1 do
-  begin
-    tvwMain.GroupedColumns[I].GroupIndex := -1;
-  end;
-end;
-
-procedure TfrmcxGrid.CollapseAll;
-begin
-  tvwMain.ViewData.Collapse(True);
-end;
-
-procedure TfrmcxGrid.ExpandAll;
-begin
-  tvwMain.ViewData.Expand(True);
-end;
-
 function TfrmcxGrid.SelectionToDelimitedTable(
   AController: TcxGridTableController; ADelimiter: string;
   AIncludeHeader: Boolean): string;
@@ -390,7 +360,7 @@ begin
     begin
       for X := 0 to AController.SelectedColumnCount - 1 do
       begin
-        S := S + tvwMain.Columns[AController.SelectedColumns[X].Index].Caption ;
+        S := S + tvwMain.Columns[AController.SelectedColumns[X].Index].Caption;
         if X < AController.SelectedColumnCount - 1 then
           S := S + ADelimiter;
       end;
@@ -488,19 +458,19 @@ end;
 function TfrmcxGrid.SelectionToTextTable(AController: TcxGridTableController;
   AIncludeHeader: Boolean): string;
 var
-  X, Y   : Integer;
-  S      : string;
-  V      : Variant;
-  F      : TField;
-  I      : Integer;
-  N      : Integer;
-  sTxt   : string;
-  sLine  : string;
-  sFmt   : string;
-  Widths : array of Integer;
-  SL     : TStringList;
+  X, Y    : Integer;
+  S       : string;
+  V       : Variant;
+  F       : TField;
+  I       : Integer;
+  N       : Integer;
+  LTxt    : string;
+  LLine   : string;
+  LFmt    : string;
+  LWidths : array of Integer;
+  SL      : TStringList;
 begin
-  SetLength(Widths, AController.SelectedColumnCount);
+  SetLength(LWidths, AController.SelectedColumnCount);
   try
     SL := TStringList.Create;
     try
@@ -520,7 +490,7 @@ begin
           S := VarToStr(V);
           SL.Add(S);
         end;
-        Widths[X] := GetMaxTextWidth(SL);
+        LWidths[X] := GetMaxTextWidth(SL);
       end;
     finally
       FreeAndNil(SL);
@@ -532,18 +502,18 @@ begin
       begin
         I := AController.SelectedColumns[X].Index;
         F := tvwMain.Columns[I].DataBinding.Field;
-        N := Widths[X];
-        sFmt := '%-' + IntToStr(N) + 's';
-        sLine := sLine + '+' + Format(sFmt, [DupeString('-', N)]);
-        sTxt := sTxt + '|' + Format(sFmt, [F.FieldName]);
+        N := LWidths[X];
+        LFmt := '%-' + IntToStr(N) + 's';
+        LLine := LLine + '+' + Format(LFmt, [DupeString('-', N)]);
+        LTxt := LTxt + '|' + Format(LFmt, [F.FieldName]);
       end;
-      sTxt := sTxt + '|';
-      sLine := sLine + '+';
-      Result := sLine + #13#10 + sTxt + #13#10 + sLine;
+      LTxt := LTxt + '|';
+      LLine := LLine + '+';
+      Result := LLine + #13#10 + LTxt + #13#10 + LLine;
     end;
     for Y := 0 to AController.SelectedRowCount - 1 do
     begin
-      sTxt := '';
+      LTxt := '';
       for X := 0 to AController.SelectedColumnCount - 1 do
       begin
         I := AController.SelectedColumns[X].Index;
@@ -552,26 +522,77 @@ begin
         F := tvwMain.Columns[I].DataBinding.Field;
         if Assigned(F) then
         begin
-          N := Widths[X];
-          sFmt := '%-' + IntToStr(N) + 's';
-          sTxt := sTxt + '|' + Format(sFmt, [S]);
+          N := LWidths[X];
+          LFmt := '%-' + IntToStr(N) + 's';
+          LTxt := LTxt + '|' + Format(LFmt, [S]);
         end;
       end;
-      sTxt := sTxt + '|';
-      Result := Result + #13#10 + sTxt;
-      sTxt := '';
+      LTxt := LTxt + '|';
+      Result := Result + #13#10 + LTxt;
+      LTxt := '';
     end;
-    Result := Result + #13#10 + sLine;
+    Result := Result + #13#10 + LLine;
   finally
-    Finalize(Widths);
+    Finalize(LWidths);
+  end;
+end;
+
+function TfrmcxGrid.SelectionToFields(AController: TcxGridTableController;
+  AQuoteItems: Boolean): string;
+var
+  X    : Integer;
+  S, T : string;
+  SL   : TStringList;
+begin
+  SL := TStringList.Create;
+  try
+    S := '';
+    for X := 0 to AController.SelectedColumnCount - 1 do
+    begin
+      T := tvwMain.Columns[AController.SelectedColumns[X].Index].Caption;
+      if AQuoteItems then
+        T := QuotedStr(T);
+      S := S + T;
+      if X < AController.SelectedColumnCount - 1 then
+        S := S + ',' + #13#10;
+    end;
+    SL.Add(S);
+    Result := SL.Text;
+  finally
+    FreeAndNil(SL);
   end;
 end;
 {$ENDREGION}
 
-{$REGION 'public methods'}
+{$REGION 'protected methods'}
+procedure TfrmcxGrid.Copy;
+begin
+  Clipboard.AsText := Trim(SelectionToDelimitedTable(#9, False));
+end;
+
+procedure TfrmcxGrid.ClearGrouping;
+var
+  I : Integer;
+begin
+  for I := 0 to tvwMain.GroupedColumnCount - 1 do
+  begin
+    tvwMain.GroupedColumns[I].GroupIndex := -1;
+  end;
+end;
+
+procedure TfrmcxGrid.CollapseAll;
+begin
+  tvwMain.ViewData.Collapse(True);
+end;
+
+procedure TfrmcxGrid.ExpandAll;
+begin
+  tvwMain.ViewData.Expand(True);
+end;
+
 procedure TfrmcxGrid.ApplyGridSettings;
 var
-  GL: TcxGridLines;
+  GL : TcxGridLines;
 begin
   if Assigned(Settings) then
   begin
@@ -596,7 +617,7 @@ end;
 
 procedure TfrmcxGrid.AutoSizeColumns;
 var
-  I: Integer;
+  I : Integer;
 begin
   BeginUpdate;
   try
@@ -615,24 +636,29 @@ begin
   tvwMain.BeginUpdate;
 end;
 
+procedure TfrmcxGrid.EndUpdate;
+begin
+  tvwMain.EndUpdate;
+end;
+
 procedure TfrmcxGrid.GroupBySelectedColumns;
 var
-  C          : TcxGridTableController;
-  I          : Integer;
-  Col        : TcxGridDBColumn;
-  GroupIndex : Integer;
+  C           : TcxGridTableController;
+  I           : Integer;
+  LCol        : TcxGridDBColumn;
+  LGroupIndex : Integer;
 begin
   BeginUpdate;
   try
     C := tvwMain.Controller;
     for I := 0 to C.SelectedColumnCount - 1 do
     begin
-      Col := tvwMain.Columns[C.SelectedColumns[I].Index];
-      if Col.GroupIndex <> -1 then
-        GroupIndex := -1
+      LCol := tvwMain.Columns[C.SelectedColumns[I].Index];
+      if LCol.GroupIndex <> -1 then
+        LGroupIndex := -1
       else
-        GroupIndex := tvwMain.GroupedColumnCount;
-      Col.GroupBy(GroupIndex);
+        LGroupIndex := tvwMain.GroupedColumnCount;
+      LCol.GroupBy(LGroupIndex);
     end;
   finally
     EndUpdate;
@@ -670,7 +696,7 @@ end;
 
 procedure TfrmcxGrid.MergeAllColumnCells(AActive: Boolean);
 var
-  I: Integer;
+  I : Integer;
 begin
   BeginUpdate;
   try
@@ -731,32 +757,6 @@ function TfrmcxGrid.SelectionToDelimitedTable(ADelimiter: string;
 begin
   Result :=
     SelectionToDelimitedTable(tvwMain.Controller, ADelimiter, AIncludeHeader);
-end;
-
-function TfrmcxGrid.SelectionToFields(AController: TcxGridTableController;
-  AQuoteItems: Boolean): string;
-var
-  X    : Integer;
-  S, T : string;
-  SL   : TStringList;
-begin
-  SL := TStringList.Create;
-  try
-    S := '';
-    for X := 0 to AController.SelectedColumnCount - 1 do
-    begin
-      T := tvwMain.Columns[AController.SelectedColumns[X].Index].Caption;
-      if AQuoteItems then
-        T := QuotedStr(T);
-      S := S + T;
-      if X < AController.SelectedColumnCount - 1 then
-        S := S + ',';
-    end;
-    SL.Add(S);
-    Result := SL.Text;
-  finally
-    FreeAndNil(SL);
-  end;
 end;
 
 function TfrmcxGrid.SelectionToFields(AQuoteItems: Boolean): string;

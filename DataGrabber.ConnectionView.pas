@@ -35,15 +35,18 @@ uses
 {$REGION 'documentation'}
 {
    A IConnectionView instance consists of
-     - one editorview (IEditorView)
+     - one editor view (IEditorView)
      - one or more dataviews corresponding to the user input in the editor as
        multiple datasets can be returned as a result of one statement
        (IDataView).
 
-     - a list of connectionprofiles (those defined in the settings)
+     - a list of connection profiles (those defined in the settings)
 
      - an active connection profile (of the available profiles in
-        FSettings.ConnectionProfiles)
+       FSettings.ConnectionProfiles)
+
+     - an IData instance created with the connection settings associated with
+       the active connection profile.
 }
 {$ENDREGION}
 
@@ -90,15 +93,15 @@ type
     procedure splVerticalMoved(Sender: TObject);
 
   private
-    FEditorView     : IEditorView;
-    FActiveDataView : IDataView;
-    FData           : IData;
-    FVSTProfiles    : TVirtualStringTree;
-    FDefaultNode    : PVirtualNode;
-    FDataViewList   : IList<IDataView>;
-    FPageControl    : TPageControl;
-    FMultiPanel     : TOMultiPanel;
-    FManager        : IConnectionViewManager;
+    FEditorView              : IEditorView;
+    FActiveDataView          : IDataView;
+    FData                    : IData;
+    FVSTProfiles             : TVirtualStringTree;
+    FDataViewList            : IList<IDataView>;
+    FPageControl             : TPageControl;
+    FMultiPanel              : TOMultiPanel;
+    FManager                 : IConnectionViewManager;
+    FActiveConnectionProfile : TConnectionProfile;
 
     {$REGION 'property access methods'}
     function GetManager: IConnectionViewManager;
@@ -107,13 +110,13 @@ type
     function GetActiveDataView: IDataView;
     function GetEditorView: IEditorView;
     function GetActiveConnectionProfile: TConnectionProfile;
+    function GetDataView(AIndex: Integer): IDataView;
     {$ENDREGION}
 
     procedure DataAfterExecute(Sender: TObject);
     procedure DataBeforeExecute(Sender: TObject);
     procedure FPageControlChange(Sender: TObject);
 
-    function GetDataView(AIndex: Integer): IDataView;
 
   protected
     procedure InitializeConnectionProfilesView;
@@ -126,11 +129,11 @@ type
 
   public
     procedure AfterConstruction; override;
-    procedure BeforeDestruction; override;
+    destructor Destroy; override;
     constructor Create(
-      AOwner   : TComponent;
-      AManager : IConnectionViewManager;
-      AData    : IData
+      AOwner             : TComponent;
+      AManager           : IConnectionViewManager;
+      AConnectionProfile : TConnectionProfile
     ); reintroduce; virtual;
 
     property Form: TForm
@@ -174,31 +177,36 @@ uses
 
 {$REGION 'construction and destruction'}
 constructor TfrmConnectionView.Create(AOwner: TComponent;
-  AManager: IConnectionViewManager; AData: IData);
+  AManager: IConnectionViewManager; AConnectionProfile: TConnectionProfile);
 begin
   inherited Create(AOwner);
   Guard.CheckNotNull(AManager, 'AManager');
-  Guard.CheckNotNull(AData, 'AData');
+  Guard.CheckNotNull(AConnectionProfile, 'AConnectionProfile');
+  FActiveConnectionProfile := AConnectionProfile;
   FManager := AManager;
-  FData    := AData;
 end;
 
 procedure TfrmConnectionView.AfterConstruction;
 begin
   inherited AfterConstruction;
+  FManager.ActiveConnectionView := Self;
+  FData := TDataGrabberFactories.CreateData(
+    Self,
+    FActiveConnectionProfile.ConnectionSettings
+  );
   Data.OnBeforeExecute.Add(DataBeforeExecute);
   Data.OnAfterExecute.Add(DataAfterExecute);
   FDataViewList := TCollections.CreateInterfaceList<IDataView>;
-  InitializeConnectionProfilesView;
   FEditorView := TDataGrabberFactories.CreateEditorView(Self, Manager);
   FEditorView.AssignParent(pnlTopRight);
-  ApplySettings;
   pnlMain.MinPosition                 := 0;
   pnlMain.PanelCollection[0].Position := 1;
   pnlMain.SplitterSize                := 4;
+  InitializeConnectionProfilesView;
+  ApplySettings;
 end;
 
-procedure TfrmConnectionView.BeforeDestruction;
+destructor TfrmConnectionView.Destroy;
 begin
   if Assigned(Data) then
   begin
@@ -209,7 +217,7 @@ begin
   FActiveDataView := nil;
   FData           := nil;
   FDataViewList   := nil;
-  inherited BeforeDestruction;
+  inherited Destroy;
 end;
 {$ENDREGION}
 
@@ -222,6 +230,7 @@ var
   DV : IDataView;
   B  : Boolean;
 begin
+  Logger.Track(Self, 'DataAfterExecute');
   if Assigned(FMultiPanel) then
   begin
     FMultiPanel.PanelCollection.Clear;
@@ -296,7 +305,7 @@ begin
     DV.AssignParent(pnlBottom);
     FActiveDataView := DV;
   end;
-  pnlMain.SplitterSize                := 4;
+  pnlMain.SplitterSize := 4;
   if Data.RecordCount > 20 then
     pnlMain.PanelCollection[0].Position := 0.2
   else
@@ -333,8 +342,12 @@ end;
 procedure TfrmConnectionView.FVSTProfilesFocusChanged(Sender: TBaseVirtualTree;
   Node: PVirtualNode; Column: TColumnIndex);
 begin
+  Logger.Track(Self, 'FVSTProfilesFocusChanged');
   if ContainsFocus(Self) then
+  begin
+    FActiveConnectionProfile := Manager.Settings.ConnectionProfiles[FVSTProfiles.FocusedNode.Index];
     ApplySettings;
+  end;
 end;
 
 procedure TfrmConnectionView.FVSTProfilesGetText(Sender: TBaseVirtualTree;
@@ -342,10 +355,6 @@ procedure TfrmConnectionView.FVSTProfilesGetText(Sender: TBaseVirtualTree;
   var CellText: string);
 begin
   CellText := Manager.Settings.ConnectionProfiles[Node.Index].DisplayName;
-  if Manager.Settings.ConnectionProfiles[Node.Index] =
-    (Owner as IConnectionViewManager).DefaultConnectionProfile
-  then
-    FDefaultNode := Node;
 end;
 
 procedure TfrmConnectionView.FVSTProfilesPaintText(Sender: TBaseVirtualTree;
@@ -369,15 +378,6 @@ end;
 
 procedure TfrmConnectionView.FormShow(Sender: TObject);
 begin
-  FVSTProfiles.SetFocus;
-  if Assigned(FDefaultNode) then
-  begin
-    FVSTProfiles.FocusedNode := FDefaultNode
-  end
-  else
-  begin
-    FVSTProfiles.FocusedNode := FVSTProfiles.GetFirstVisible;
-  end;
   EditorView.SetFocus;
 end;
 
@@ -395,10 +395,7 @@ end;
 {$REGION 'property access methods'}
 function TfrmConnectionView.GetActiveConnectionProfile: TConnectionProfile;
 begin
-  if Assigned(FVSTProfiles.FocusedNode) then
-    Exit(Manager.Settings.ConnectionProfiles.Items[FVSTProfiles.FocusedNode.Index])
-  else
-    Exit(nil);
+  Result := FActiveConnectionProfile;
 end;
 
 function TfrmConnectionView.GetData: IData;
@@ -439,6 +436,7 @@ var
   DV : IDataView;
   S  : string;
 begin
+  Logger.Track(Self, 'ExportAsWiki');
   if not FDataViewList.IsEmpty then
   begin
     for DV in FDataViewList do
@@ -452,6 +450,7 @@ end;
 
 procedure TfrmConnectionView.InitializeConnectionProfilesView;
 begin
+  Logger.Track(Self, 'InitializeConnectionProfilesView');
   FVSTProfiles := TVirtualStringTreeFactory.CreateGrid(Self, pnlVST);
   FVSTProfiles.AlignWithMargins  := False;
   FVSTProfiles.RootNodeCount     := Manager.Settings.ConnectionProfiles.Count;
@@ -470,27 +469,22 @@ begin
   FVSTProfiles.Constraints.MinWidth  := 150;
   FVSTProfiles.Constraints.MinHeight := 100;
   FVSTProfiles.Constraints.MaxWidth  := 300;
+  SelectNode(FVSTProfiles, FActiveConnectionProfile.Index);
 end;
 
 procedure TfrmConnectionView.ApplySettings;
-var
-  CP : TConnectionProfile;
 begin
+  Logger.Track(Self, 'ApplySettings');
   FVSTProfiles.RootNodeCount := Manager.Settings.ConnectionProfiles.Count;
   FVSTProfiles.Refresh;
   if FVSTProfiles.RootNodeCount > 0 then
   begin
-    if not Assigned(FVSTProfiles.FocusedNode) then
-    begin
-      FVSTProfiles.FocusedNode := FVSTProfiles.GetFirst;
-    end;
-    CP := Manager.Settings.ConnectionProfiles.Items[
-      FVSTProfiles.FocusedNode.Index
-    ];
-    Application.Title := CP.Name;
-    Caption := CP.Name;
-    FEditorView.Color := ColorAdjustLuma(CP.ProfileColor, 25, True);
-    Data.ConnectionSettings.Assign(CP.ConnectionSettings);
+    SelectNode(FVSTProfiles, FActiveConnectionProfile.Index);
+    Application.Title := FActiveConnectionProfile.Name;
+    Caption           := FActiveConnectionProfile.Name;
+    FEditorView.Color :=
+      ColorAdjustLuma(FActiveConnectionProfile.ProfileColor, 25, True);
+    Data.ConnectionSettings.Assign(FActiveConnectionProfile.ConnectionSettings);
   end;
 end;
 
@@ -522,6 +516,7 @@ procedure TfrmConnectionView.UpdateActiveDataView;
 var
   DV : IDataView;
 begin
+  Logger.Track(Self, 'UpdateActiveDataView');
   for DV in FDataViewList do
   begin
     if DV.IsActiveDataView then

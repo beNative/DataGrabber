@@ -72,9 +72,9 @@
         <VerInfo_MinorVer>7</VerInfo_MinorVer>
         <VerInfo_Build>84</VerInfo_Build>
         <VerInfo_Locale>1033</VerInfo_Locale>
-        <VerInfo_Keys>FileDescription=DataGrabber;FileVersion=2.7.2.84;LegalCopyright=(c) 2011 - 2020 Tim Sinaeve;OriginalFilename=DataGrabber.exe;ProductName=DataGrabber;ProductVersion=2.7.2;InternalName=DataGrabber;Comments=http://github.com/beNative/DataGrabber</VerInfo_Keys>
+        <VerInfo_Keys>FileDescription=DataGrabber;FileVersion=2.7.3.84;LegalCopyright=(c) 2011 - 2020 Tim Sinaeve;OriginalFilename=DataGrabber.exe;ProductName=DataGrabber;ProductVersion=2.7.3;InternalName=DataGrabber;Comments=http://github.com/beNative/DataGrabber</VerInfo_Keys>
         <Icon_MainIcon>DataGrabber\DataGrabber_Icon.ico</Icon_MainIcon>
-        <VerInfo_Release>2</VerInfo_Release>
+        <VerInfo_Release>3</VerInfo_Release>
         <DCC_DcpOutput>.\Lib\$(Platform)\$(Config)</DCC_DcpOutput>
         <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
         <VerInfo_AutoIncVersion>true</VerInfo_AutoIncVersion>
@@ -145,9 +145,6 @@
         <DCC_RangeChecking>true</DCC_RangeChecking>
         <DCC_Optimize>false</DCC_Optimize>
         <DCC_DebugInfoInExe>true</DCC_DebugInfoInExe>
-        <VerInfo_Keys>FileDescription=DataGrabber;FileVersion=2.7.2.84;LegalCopyright=(c) 2011 - 2020 Tim Sinaeve;OriginalFilename=DataGrabber.exe;ProductName=DataGrabber;ProductVersion=2.7.2;InternalName=DataGrabber;Comments=http://github.com/beNative/DataGrabber</VerInfo_Keys>
-        <VerInfo_Release>2</VerInfo_Release>
-        <VerInfo_Build>84</VerInfo_Build>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_2_Win32)'!=''">
         <DCC_RangeChecking>true</DCC_RangeChecking>
@@ -273,6 +270,7 @@
                     <VersionInfo Name="CodePage">1252</VersionInfo>
                 </VersionInfo>
                 <Excluded_Packages>
+                    <Excluded_Packages Name="C:\Users\Public\Documents\Embarcadero\Studio\19.0\Bpl\PngComponentsDDesign260.bpl">File C:\Users\Public\Documents\Embarcadero\Studio\19.0\Bpl\PngComponentsDDesign260.bpl not found</Excluded_Packages>
                     <Excluded_Packages Name="$(BDSBIN)\bcboffice2k250.bpl">Embarcadero C++Builder Office 2000 Servers Package</Excluded_Packages>
                     <Excluded_Packages Name="$(BDSBIN)\bcbofficexp250.bpl">Embarcadero C++Builder Office XP Servers Package</Excluded_Packages>
                     <Excluded_Packages Name="$(BDSBIN)\dcloffice2k250.bpl">Microsoft Office 2000 Sample Automation Server Wrapper Components</Excluded_Packages>

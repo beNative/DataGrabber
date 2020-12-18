@@ -287,6 +287,7 @@ type
     function SelectionToTextTable(AIncludeHeader: Boolean = False): string;
     function SelectionToWikiTable(AIncludeHeader: Boolean = False): string;
     function SelectionToFields(AQuoteItems: Boolean = True): string;
+    // TODO: ABreakItems (insert new lines after comma)
 
     property Name: string
       read GetName;
