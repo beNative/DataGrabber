@@ -52,13 +52,15 @@ type
       var Sorted : Boolean
     );
 
+  private
+    procedure NormalizeRect(var SR: TKGridRect);
+
   protected
     {$REGION 'property access methods'}
     function GetGridType: string; override;
     procedure SetPopupMenu(const Value: TPopupMenu); override;
     {$ENDREGION}
 
-    procedure NormalizeRect(var SR: TKGridRect);
     procedure UpdateColumns;
 
     function SelectionToCommaText(
@@ -104,7 +106,7 @@ uses
   System.StrUtils, System.Math, System.UITypes,
   Vcl.Clipbrd,
 
-  DDuce.ObjectInspector.zObjectInspector, DDuce.Utils,
+  DDuce.ObjectInspector.zObjectInspector, DDuce.Utils, DDuce.Logger,
 
   KFunctions,
 
@@ -138,22 +140,22 @@ end;
 procedure TfrmKGrid.grdMainCustomSortRows(Sender: TObject; ByIndex: Integer;
   SortMode: TKGridSortMode; var Sorted: Boolean);
 var
-  Field : TField;
+  LField : TField;
 begin
-  Field := DataSet.FieldByName(TKDBGridCol(grdMain.Columns[ByIndex]).FieldName);
-  if Assigned(Field) and (Field.FieldKind = fkData) then
+  LField := DataSet.FieldByName(TKDBGridCol(grdMain.Columns[ByIndex]).FieldName);
+  if Assigned(LField) and (LField.FieldKind = fkData) then
   begin
     case SortMode of
       smNone, smDown:
-        Data.Sort(DataSet, Field.FieldName, False);
+        Data.Sort(DataSet, LField.FieldName, False);
       smUp:
       begin
-        Data.Sort(DataSet, Field.FieldName, True);
+        Data.Sort(DataSet, LField.FieldName, True);
       end;
     end;
     Sorted := True;
     DataSet.First;
-  end
+  end;
 end;
 
 procedure TfrmKGrid.grdMainDrawCell(Sender: TObject; ACol, ARow: Integer;
@@ -208,7 +210,7 @@ end;
 {$REGION 'private methods'}
 procedure TfrmKGrid.NormalizeRect(var SR: TKGridRect);
 var
-  T: Integer;
+  T : Integer;
 begin
   if SR.Row1 > SR.Row2 then
   begin
@@ -228,6 +230,7 @@ end;
 {$REGION 'protected methods'}
 procedure TfrmKGrid.ApplyGridSettings;
 begin
+  Logger.Track(Self, 'ApplyGridSettings');
   if Settings.ShowHorizontalGridLines then
     grdMain.Options := grdMain.Options + [goHorzLine]
   else
@@ -242,10 +245,11 @@ end;
 
 procedure TfrmKGrid.AutoSizeColumns;
 var
-  C : TKDBGridCol;
-  I : Integer;
-  CF: TKCurrencyFormat;
+  C  : TKDBGridCol;
+  I  : Integer;
+  CF : TKCurrencyFormat;
 begin
+  Logger.Track(Self, 'AutoSizeColumns');
   BeginUpdate;
   try
     CF.CurrencyFormat   := FormatSettings.CurrencyFormat;
@@ -283,6 +287,7 @@ var
   SR : TKGridRect;
   F  : TField;
 begin
+  Logger.Track(Self, 'HideSelectedColumns');
   SR := grdMain.Selection;
   BeginUpdate;
   try
@@ -321,6 +326,7 @@ var
   SR        : TKGridRect;
   LColCount : Integer;
 begin
+  Logger.Track(Self, 'SelectionToCommaText');
   S := '';
   SR := grdMain.Selection;
   NormalizeRect(SR);
@@ -352,6 +358,7 @@ var
   SL   : TStringList;
   SR   : TKGridRect;
 begin
+  Logger.Track(Self, 'SelectionToDelimitedTable');
   SL := TStringList.Create;
   try
     S := '';
@@ -404,13 +411,14 @@ var
   SL      : TStringList;
   SR      : TKGridRect;
 begin
+  Logger.Track(Self, 'SelectionToTextTable');
   BeginUpdate;
   try
     LLine := '';
     LTxt := '';
     SR := grdMain.Selection;
     NormalizeRect(SR);
-    SetLength(LWidths, SR.Col2 - SR.Col1);
+    SetLength(LWidths, SR.Col2 - SR.Col1 + 1);
     try
       SL := TStringList.Create;
       try
@@ -426,7 +434,7 @@ begin
             S := grdMain.Cells[X, Y];
             SL.Add(S);
           end;
-          LWidths[X] := GetMaxTextWidth(SL);
+          LWidths[X - SR.Col1] := GetMaxTextWidth(SL);
         end;
       finally
         FreeAndNil(SL);
@@ -436,7 +444,7 @@ begin
       begin
         for X := SR.Col1 to SR.Col2 do
         begin
-          N := LWidths[X];
+          N := LWidths[X - SR.Col1];
           LFmt := '%-' + IntToStr(N) + 's';
           LLine := LLine + '+' + Format(LFmt, [DupeString('-', N)]);
           LTxt := LTxt + '|' + Format(LFmt, [TKDBGridCol(grdMain.Cols[X]).FieldName]);
@@ -451,7 +459,7 @@ begin
         for X := SR.Col1 to SR.Col2 do
         begin
           S := grdMain.Cells[X, Y];
-          N := LWidths[X];
+          N := LWidths[X - SR.Col1];
           LFmt := '%-' + IntToStr(N) + 's';
           LTxt := LTxt + '|' + Format(LFmt, [S]);
         end;
