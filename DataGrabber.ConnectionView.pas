@@ -1,5 +1,5 @@
 {
-  Copyright (C) 2013-2020 Tim Sinaeve tim.sinaeve@gmail.com
+  Copyright (C) 2013-2021 Tim Sinaeve tim.sinaeve@gmail.com
 
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
@@ -113,10 +113,11 @@ type
     function GetDataView(AIndex: Integer): IDataView;
     {$ENDREGION}
 
+    {$REGION 'event handlers'}
     procedure DataAfterExecute(Sender: TObject);
     procedure DataBeforeExecute(Sender: TObject);
     procedure FPageControlChange(Sender: TObject);
-
+    {$ENDREGION}
 
   protected
     procedure InitializeConnectionProfilesView;
@@ -516,7 +517,6 @@ procedure TfrmConnectionView.UpdateActiveDataView;
 var
   DV : IDataView;
 begin
-  Logger.Track(Self, 'UpdateActiveDataView');
   for DV in FDataViewList do
   begin
     if DV.IsActiveDataView then

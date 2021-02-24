@@ -389,6 +389,7 @@ object frmSettingsDialog: TfrmSettingsDialog
                 Top = 17
                 Width = 233
                 Height = 21
+                Hint = 'Connection definitions are defined in FDConnectionDefs.ini.'
                 Anchors = [akLeft, akTop, akRight]
                 DropDownCount = 30
                 TabOrder = 4
@@ -473,10 +474,6 @@ object frmSettingsDialog: TfrmSettingsDialog
             ImageIndex = 1
             OnExit = tsAdvancedExit
             OnShow = tsAdvancedShow
-            ExplicitLeft = 0
-            ExplicitTop = 0
-            ExplicitWidth = 494
-            ExplicitHeight = 337
           end
         end
       end
@@ -542,10 +539,6 @@ object frmSettingsDialog: TfrmSettingsDialog
     object tsDisplay: TTabSheet
       Caption = '&Display settings'
       ImageIndex = 5
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 670
-      ExplicitHeight = 365
       DesignSize = (
         708
         364)
@@ -1006,7 +999,6 @@ object frmSettingsDialog: TfrmSettingsDialog
         Caption = 'Grid type'
         Columns = 3
         TabOrder = 0
-        ExplicitWidth = 276
       end
       object grpGridLines: TGroupBox
         Left = 135
@@ -1236,10 +1228,6 @@ object frmSettingsDialog: TfrmSettingsDialog
         object tsFDConnectionDefs: TTabSheet
           Caption = 'FDConnectionDefs.ini'
           ImageIndex = 1
-          ExplicitLeft = 0
-          ExplicitTop = 0
-          ExplicitWidth = 656
-          ExplicitHeight = 331
           object seFDConnectionDefs: TSynEdit
             AlignWithMargins = True
             Left = 3
@@ -1284,8 +1272,6 @@ object frmSettingsDialog: TfrmSettingsDialog
             WordWrap = True
             OnChange = seFDConnectionDefsChange
             FontSmoothing = fsmNone
-            ExplicitWidth = 650
-            ExplicitHeight = 325
           end
         end
       end
@@ -1322,10 +1308,6 @@ object frmSettingsDialog: TfrmSettingsDialog
       Caption = 'Connection definitions'
       ImageIndex = -1
       TabVisible = False
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 670
-      ExplicitHeight = 365
     end
   end
   object btnApply: TButton
@@ -1521,7 +1503,7 @@ object frmSettingsDialog: TfrmSettingsDialog
     Left = 16
     Top = 200
     Bitmap = {
-      494C010119003000100010001000FFFFFFFF2110FFFFFFFFFFFFFFFF424D3600
+      494C0101190030001C0010001000FFFFFFFF2110FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000007000000001002000000000000070
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
@@ -2461,11 +2443,12 @@ object frmSettingsDialog: TfrmSettingsDialog
     Options.AutoDetectLineLimit = 0
     Options.Visible = False
     CommentAttri.Foreground = clMedGray
+    CommentAttri.Style = []
     KeyAttri.Foreground = clBlue
     NumberAttri.Foreground = clRed
-    NumberAttri.Style = [fsBold, fsItalic]
+    NumberAttri.Style = [fsBold]
     StringAttri.Foreground = clGreen
-    StringAttri.Style = [fsBold, fsItalic]
+    StringAttri.Style = [fsBold]
     SymbolAttri.Foreground = clRed
     SymbolAttri.Style = [fsBold]
     Left = 95
@@ -2476,14 +2459,15 @@ object frmSettingsDialog: TfrmSettingsDialog
     Options.AutoDetectLineLimit = 0
     Options.Visible = False
     CommentAttri.Foreground = clMedGray
+    CommentAttri.Style = []
     SectionAttri.Foreground = clMaroon
     SectionAttri.Style = [fsBold, fsUnderline]
     KeyAttri.Foreground = clBlue
     KeyAttri.Style = [fsBold]
     NumberAttri.Foreground = clRed
-    NumberAttri.Style = [fsBold, fsItalic]
+    NumberAttri.Style = [fsBold]
     StringAttri.Foreground = clGreen
-    StringAttri.Style = [fsBold, fsItalic]
+    StringAttri.Style = [fsBold]
     SymbolAttri.Foreground = clRed
     SymbolAttri.Style = [fsBold]
     Left = 14
