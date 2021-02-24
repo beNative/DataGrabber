@@ -389,6 +389,7 @@ object frmSettingsDialog: TfrmSettingsDialog
                 Top = 17
                 Width = 233
                 Height = 21
+                Hint = 'Connection definitions are defined in FDConnectionDefs.ini.'
                 Anchors = [akLeft, akTop, akRight]
                 DropDownCount = 30
                 TabOrder = 4
@@ -473,10 +474,6 @@ object frmSettingsDialog: TfrmSettingsDialog
             ImageIndex = 1
             OnExit = tsAdvancedExit
             OnShow = tsAdvancedShow
-            ExplicitLeft = 0
-            ExplicitTop = 0
-            ExplicitWidth = 494
-            ExplicitHeight = 337
           end
         end
       end
@@ -542,10 +539,6 @@ object frmSettingsDialog: TfrmSettingsDialog
     object tsDisplay: TTabSheet
       Caption = '&Display settings'
       ImageIndex = 5
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 670
-      ExplicitHeight = 365
       DesignSize = (
         708
         364)
@@ -752,7 +745,7 @@ object frmSettingsDialog: TfrmSettingsDialog
             Left = 3
             Top = 31
             Width = 54
-            Height = 25
+            Height = 22
             Align = alClient
             Caption = 'Float'
             FocusControl = btnFloatColor
@@ -783,7 +776,7 @@ object frmSettingsDialog: TfrmSettingsDialog
             Left = 3
             Top = 59
             Width = 54
-            Height = 25
+            Height = 22
             Align = alClient
             Caption = 'String'
             FocusControl = btnStringColor
@@ -814,7 +807,7 @@ object frmSettingsDialog: TfrmSettingsDialog
             Left = 3
             Top = 87
             Width = 54
-            Height = 25
+            Height = 22
             Align = alClient
             Caption = 'Memo'
             FocusControl = btnMemoColor
@@ -845,7 +838,7 @@ object frmSettingsDialog: TfrmSettingsDialog
             Left = 3
             Top = 115
             Width = 54
-            Height = 25
+            Height = 22
             Align = alClient
             Caption = 'Date'
             FocusControl = btnDateColor
@@ -876,7 +869,7 @@ object frmSettingsDialog: TfrmSettingsDialog
             Left = 3
             Top = 143
             Width = 54
-            Height = 25
+            Height = 22
             Align = alClient
             Caption = 'Time'
             FocusControl = btnTimeColor
@@ -907,7 +900,7 @@ object frmSettingsDialog: TfrmSettingsDialog
             Left = 3
             Top = 171
             Width = 54
-            Height = 25
+            Height = 22
             Align = alClient
             Caption = 'DateTime'
             FocusControl = btnDateTimeColor
@@ -938,7 +931,7 @@ object frmSettingsDialog: TfrmSettingsDialog
             Left = 3
             Top = 199
             Width = 54
-            Height = 25
+            Height = 22
             Align = alClient
             Caption = 'NULL'
             FocusControl = btnNullColor
@@ -969,7 +962,7 @@ object frmSettingsDialog: TfrmSettingsDialog
             Left = 3
             Top = 227
             Width = 54
-            Height = 25
+            Height = 22
             Align = alClient
             Caption = 'Boolean'
             FocusControl = btnBooleanColor
@@ -1006,7 +999,6 @@ object frmSettingsDialog: TfrmSettingsDialog
         Caption = 'Grid type'
         Columns = 3
         TabOrder = 0
-        ExplicitWidth = 276
       end
       object grpGridLines: TGroupBox
         Left = 135
@@ -1236,10 +1228,6 @@ object frmSettingsDialog: TfrmSettingsDialog
         object tsFDConnectionDefs: TTabSheet
           Caption = 'FDConnectionDefs.ini'
           ImageIndex = 1
-          ExplicitLeft = 0
-          ExplicitTop = 0
-          ExplicitWidth = 656
-          ExplicitHeight = 331
           object seFDConnectionDefs: TSynEdit
             AlignWithMargins = True
             Left = 3
@@ -1284,8 +1272,6 @@ object frmSettingsDialog: TfrmSettingsDialog
             WordWrap = True
             OnChange = seFDConnectionDefsChange
             FontSmoothing = fsmNone
-            ExplicitWidth = 650
-            ExplicitHeight = 325
           end
         end
       end
@@ -1322,10 +1308,6 @@ object frmSettingsDialog: TfrmSettingsDialog
       Caption = 'Connection definitions'
       ImageIndex = -1
       TabVisible = False
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 670
-      ExplicitHeight = 365
     end
   end
   object btnApply: TButton
@@ -1521,7 +1503,7 @@ object frmSettingsDialog: TfrmSettingsDialog
     Left = 16
     Top = 200
     Bitmap = {
-      494C010119003000100010001000FFFFFFFF2110FFFFFFFFFFFFFFFF424D3600
+      494C010119003000180010001000FFFFFFFF2110FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000007000000001002000000000000070
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000

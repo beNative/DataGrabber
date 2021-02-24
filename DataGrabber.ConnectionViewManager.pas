@@ -1,5 +1,5 @@
 {
-  Copyright (C) 2013-2020 Tim Sinaeve tim.sinaeve@gmail.com
+  Copyright (C) 2013-2021 Tim Sinaeve tim.sinaeve@gmail.com
 
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
@@ -191,8 +191,6 @@ type
     FDataInspector        : TfrmDataInspector;
     FFieldInspector       : TfrmFieldInspector;
 
-    procedure SettingsChanged(Sender: TObject);
-
     {$REGION 'property access methods'}
     function GetSettings: ISettings;
     function GetActiveConnectionView: IConnectionView;
@@ -207,6 +205,8 @@ type
     function GetCount: Integer;
     {$ENDREGION}
 
+    procedure SettingsChanged(Sender: TObject);
+
   protected
     procedure Execute(const ASQL: string);
     procedure ApplySettings;
@@ -215,7 +215,8 @@ type
 
   public
     procedure AfterConstruction; override;
-    procedure BeforeDestruction; override;
+    destructor Destroy; override;
+
     constructor Create(
       AOwner    : TComponent;
       ASettings : ISettings
@@ -295,14 +296,13 @@ begin
   actDataInspector.Visible := False;
 end;
 
-procedure TdmConnectionViewManager.BeforeDestruction;
+destructor TdmConnectionViewManager.Destroy;
 begin
-  Logger.Track(Self, 'BeforeDestruction');
   FSettings.Save;
   FConnectionViewList := nil;
   FreeAndNil(FDataInspector);
   FreeAndNil(FFieldInspector);
-  inherited BeforeDestruction;
+  inherited Destroy;
 end;
 {$ENDREGION}
 
@@ -782,6 +782,7 @@ begin
   FConnectionViewList.Add(CV);
   ActiveConnectionView := CV;
   UpdateConnectionViewCaptions;
+  UpdateActions;
   Result := CV;
 end;
 {$ENDREGION}
