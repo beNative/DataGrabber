@@ -22,7 +22,25 @@ Commercial components (optional):
 
 Some screenshots:
 
-![Main view](https://github.com/beNative/DataGrabber/blob/master/Wiki/DataGrabber%2018-11-2017%2020-11-05.png)
-![Field inspector](https://github.com/beNative/DataGrabber/blob/master/Wiki/DataGrabber%20-%20FieldInspector%2018-11-2017%2020-23-13.png)
-![Settings dialog](https://github.com/beNative/DataGrabber/blob/master/Wiki/DataGrabber%20-%20Settings%2018-11-2017%2020-22-30.png)
-![Popup menu](https://github.com/beNative/DataGrabber/blob/master/Wiki/DataGrabber%20-%20PopupMenu18-11-2017%2020-24-30.png)
+## Main form
+
+![DataGrabber](https://github.com/beNative/DataGrabber/blob/master/Images/DataGrabber.png)
+
+## Grouping
+
+![DataGrabber](https://github.com/beNative/DataGrabber/blob/master/Images/DataGrabber.Grouping.png)
+
+## Data export
+
+![DataGrabber](https://github.com/beNative/DataGrabber/blob/master/Images/DataGrabber.Export.png)
+
+## Multiple resultsets
+DataGrabber supports multi-resultset outputs, which can be displayed horizontally, vertically or as seperate tabs.
+
+![DataGrabber](https://github.com/beNative/DataGrabber/blob/master/Images/DataGrabber.MultipleResultSets1.png)
+![DataGrabber](https://github.com/beNative/DataGrabber/blob/master/Images/DataGrabber.MultipleResultSets2.png)
+![DataGrabber](https://github.com/beNative/DataGrabber/blob/master/Images/DataGrabber.MultipleResultSets3.png)
+
+## Field inspector
+
+![DataGrabber](https://github.com/beNative/DataGrabber/blob/master/Images/DataGrabber.FieldInspector.png)
