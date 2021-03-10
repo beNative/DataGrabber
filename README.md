@@ -2,7 +2,7 @@
 
 ## Introduction
 
-**DataGrabber** is a simple yet powerful query tool that supports many SQL databases. 
+**DataGrabber** is a simple yet powerful query tool for Windows that supports many SQL databases. 
 
 **Connection topology:**
 - FireDAC
