@@ -22,7 +22,9 @@ Commercial components (optional):
 
 Some screenshots:
 
-![Main view](https://github.com/beNative/DataGrabber/blob/master/Wiki/DataGrabber%2018-11-2017%2020-11-05.png)
-![Field inspector](https://github.com/beNative/DataGrabber/blob/master/Wiki/DataGrabber%20-%20FieldInspector%2018-11-2017%2020-23-13.png)
-![Settings dialog](https://github.com/beNative/DataGrabber/blob/master/Wiki/DataGrabber%20-%20Settings%2018-11-2017%2020-22-30.png)
-![Popup menu](https://github.com/beNative/DataGrabber/blob/master/Wiki/DataGrabber%20-%20PopupMenu18-11-2017%2020-24-30.png)
+![DataGrabber](https://github.com/beNative/DataGrabber/blob/master/Images/DataGrabber.png)
+![DataGrabber](https://github.com/beNative/DataGrabber/blob/master/Images/DataGrabber.Grouping.png)
+![DataGrabber](https://github.com/beNative/DataGrabber/blob/master/Images/DataGrabber.Export.png)
+![DataGrabber](https://github.com/beNative/DataGrabber/blob/master/Images/DataGrabber.MiltipleResultSets1.png)
+![DataGrabber](https://github.com/beNative/DataGrabber/blob/master/Images/DataGrabber.MiltipleResultSets2.png)
+![DataGrabber](https://github.com/beNative/DataGrabber/blob/master/Images/DataGrabber.MiltipleResultSets3.png)
