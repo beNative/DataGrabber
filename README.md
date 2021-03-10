@@ -28,3 +28,4 @@ Some screenshots:
 ![DataGrabber](https://github.com/beNative/DataGrabber/blob/master/Images/DataGrabber.MultipleResultSets1.png)
 ![DataGrabber](https://github.com/beNative/DataGrabber/blob/master/Images/DataGrabber.MultipleResultSets2.png)
 ![DataGrabber](https://github.com/beNative/DataGrabber/blob/master/Images/DataGrabber.MultipleResultSets3.png)
+![DataGrabber](https://github.com/beNative/DataGrabber/blob/master/Images/DataGrabber.FieldInspector.png)
