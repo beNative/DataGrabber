@@ -1,5 +1,6 @@
 # DataGrabber
-This is a query tool that started years ago and is now being ported and extended to support Delphi 10 and later. It makes extensive use of the DDuce library which holds some common modules that are shared by some of my other projects and is maturing along with this project.
+**DataGrabber** is a query tool that started years ago and is now being ported and extended to support Delphi 10 and later. 
+It makes use of my **DDuce** library which holds some common modules that are shared by some of my other projects and is maturing along with this project.
 
 Connection topology:
 - FireDAC
