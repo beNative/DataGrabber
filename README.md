@@ -35,7 +35,7 @@ Some screenshots:
 ![DataGrabber](https://github.com/beNative/DataGrabber/blob/master/Images/DataGrabber.Export.png)
 
 ## Multiple resultsets
-DataGrabber supports multi-resultsets outputs, which can be displayed horizontally, vertically or as seperate tabs.
+DataGrabber supports multi-resultset outputs, which can be displayed horizontally, vertically or as seperate tabs.
 
 ![DataGrabber](https://github.com/beNative/DataGrabber/blob/master/Images/DataGrabber.MultipleResultSets1.png)
 ![DataGrabber](https://github.com/beNative/DataGrabber/blob/master/Images/DataGrabber.MultipleResultSets2.png)
