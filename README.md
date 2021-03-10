@@ -27,9 +27,13 @@
 
 ![DataGrabber](https://github.com/beNative/DataGrabber/blob/master/Images/DataGrabber.png)
 
-## Grouping
+## Grouping of columns
 
 ![DataGrabber](https://github.com/beNative/DataGrabber/blob/master/Images/DataGrabber.Grouping.png)
+
+## Merging of columns
+
+![DataGrabber](https://github.com/beNative/DataGrabber/blob/master/Images/DataGrabber.Merging.png)
 
 ## Data export
 
