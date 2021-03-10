@@ -61,8 +61,8 @@
 |7|King|Robert|IT Staff|6|29/05/1970|2/01/2004|590 Columbia Boulevard West|
 |8|Callahan|Laura|IT Staff|6|9/01/1968|4/03/2004|923 7 ST NW|
 
-
 ## Multiple resultsets
+
 DataGrabber supports multi-resultset outputs, which can be displayed horizontally, vertically or as seperate tabs.
 
 ![DataGrabber](https://github.com/beNative/DataGrabber/blob/master/Images/DataGrabber.MultipleResultSets1.png)
@@ -70,6 +70,7 @@ DataGrabber supports multi-resultset outputs, which can be displayed horizontall
 ![DataGrabber](https://github.com/beNative/DataGrabber/blob/master/Images/DataGrabber.MultipleResultSets3.png)
 
 ## Settings
+
 Connection settings for multiple databases are configured in connection profiles.
 
 ![DataGrabber](https://github.com/beNative/DataGrabber/blob/master/Images/DataGrabber.Settings.ConnectionProfiles.png)
