@@ -36,6 +36,16 @@ It makes use of my **DDuce** library which holds some common modules that are sh
 
 ![DataGrabber](https://github.com/beNative/DataGrabber/blob/master/Images/DataGrabber.Export.png)
 
+||EmployeeId||LastName||FirstName||Title||ReportsTo||BirthDate||HireDate||Address||
+|1|Adams|Andrew|General Manager| |18/02/1962|14/08/2002|11120 Jasper Ave NW|
+|2|Edwards|Nancy|Sales Manager|1|8/12/1958|1/05/2002|825 8 Ave SW|
+|3|Peacock|Jane|Sales Support Agent|2|29/08/1973|1/04/2002|1111 6 Ave SW|
+|4|Park|Margaret|Sales Support Agent|2|19/09/1947|3/05/2003|683 10 Street SW|
+|5|Johnson|Steve|Sales Support Agent|2|3/03/1965|17/10/2003|7727B 41 Ave|
+|6|Mitchell|Michael|IT Manager|1|1/07/1973|17/10/2003|5827 Bowness Road NW|
+|7|King|Robert|IT Staff|6|29/05/1970|2/01/2004|590 Columbia Boulevard West|
+|8|Callahan|Laura|IT Staff|6|9/01/1968|4/03/2004|923 7 ST NW|
+
 ## Multiple resultsets
 DataGrabber supports multi-resultset outputs, which can be displayed horizontally, vertically or as seperate tabs.
 
