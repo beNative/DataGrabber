@@ -1,5 +1,4 @@
 
-
 select
   al.*,
   ar.*,
@@ -21,7 +20,6 @@ select
   *
 from
   Customer c
-
 
 select
   *
