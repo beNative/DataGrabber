@@ -42,6 +42,14 @@ DataGrabber supports multi-resultset outputs, which can be displayed horizontall
 ![DataGrabber](https://github.com/beNative/DataGrabber/blob/master/Images/DataGrabber.MultipleResultSets2.png)
 ![DataGrabber](https://github.com/beNative/DataGrabber/blob/master/Images/DataGrabber.MultipleResultSets3.png)
 
+## Settings
+
+![DataGrabber](https://github.com/beNative/DataGrabber/blob/master/Images/DataGrabber.Settings.ConnectionProfiles.png)
+![DataGrabber](https://github.com/beNative/DataGrabber/blob/master/Images/DataGrabber.Settings.DisplaySettings.png)
+![DataGrabber](https://github.com/beNative/DataGrabber/blob/master/Images/DataGrabber.Settings.SettingsFiles.png)
+
+
+
 ## Field inspector
 
 ![DataGrabber](https://github.com/beNative/DataGrabber/blob/master/Images/DataGrabber.FieldInspector.png)
