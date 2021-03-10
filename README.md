@@ -47,6 +47,8 @@ Connection settings for multiple databases are configured in connection profiles
 
 ![DataGrabber](https://github.com/beNative/DataGrabber/blob/master/Images/DataGrabber.Settings.ConnectionProfiles.png)
 ![DataGrabber](https://github.com/beNative/DataGrabber/blob/master/Images/DataGrabber.Settings.DisplaySettings.png)
+
+Settings are stored in {{JSON}} format, and can also be changed by editing the file directly.
 ![DataGrabber](https://github.com/beNative/DataGrabber/blob/master/Images/DataGrabber.Settings.SettingsFiles.png)
 
 ## Field inspector
