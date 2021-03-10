@@ -1,11 +1,14 @@
 # DataGrabber
+
+## Introduction
+
 **DataGrabber** is a query tool that started years ago and is now being ported and extended to support Delphi 10 and later. 
 It makes use of my **DDuce** library which holds some common modules that are shared by some of my other projects and is maturing along with this project.
 
-Connection topology:
+**Connection topology:**
 - FireDAC
 
-External dependencies and references:
+**External dependencies and references:**
 * [Spring4D](http://bitbucket.org/sglienke/spring4d)
 * [DSharp](http://bitbucket.org/sglienke/dsharp)
 * [DDuce](http://github.com/beNative/dduce)
