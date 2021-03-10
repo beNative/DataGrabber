@@ -22,10 +22,24 @@ Commercial components (optional):
 
 Some screenshots:
 
+## Main form
+
 ![DataGrabber](https://github.com/beNative/DataGrabber/blob/master/Images/DataGrabber.png)
+
+## Grouping
+
 ![DataGrabber](https://github.com/beNative/DataGrabber/blob/master/Images/DataGrabber.Grouping.png)
+
+## Data export
+
 ![DataGrabber](https://github.com/beNative/DataGrabber/blob/master/Images/DataGrabber.Export.png)
+
+## Multiple resultsets
+
 ![DataGrabber](https://github.com/beNative/DataGrabber/blob/master/Images/DataGrabber.MultipleResultSets1.png)
 ![DataGrabber](https://github.com/beNative/DataGrabber/blob/master/Images/DataGrabber.MultipleResultSets2.png)
 ![DataGrabber](https://github.com/beNative/DataGrabber/blob/master/Images/DataGrabber.MultipleResultSets3.png)
+
+## Field inspector
+
 ![DataGrabber](https://github.com/beNative/DataGrabber/blob/master/Images/DataGrabber.FieldInspector.png)
