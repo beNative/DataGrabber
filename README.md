@@ -21,10 +21,8 @@ It makes use of my **DDuce** library which holds some common modules that are sh
 * [TChromeTabs](http://github.com/norgepaul/TChromeTabs)
 * [KControls](http://bitbucket.org/tomkrysl/kcontrols)
 
-Commercial components (optional):
+**Commercial components (optional):**
 - DevExpress cxGrid
-
-Some screenshots:
 
 ## Main form
 
