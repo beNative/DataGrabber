@@ -4,6 +4,7 @@ program DataGrabber;
 
 uses
   Vcl.Forms,
+  System.SysUtils,
   DDuce.Logger,
   DDuce.Logger.Channels.WinIPC,
   DataGrabber.Resources in 'DataGrabber.Resources.pas',
@@ -28,7 +29,7 @@ uses
   DataGrabber.DataView.cxGrid in 'DataView\DataGrabber.DataView.cxGrid.pas' {frmcxGrid},
   DataGrabber.MetaData.Dialog in 'DataGrabber.MetaData.Dialog.pas' {frmMetaData},
   DataGrabber.DataView.Base in 'DataView\DataGrabber.DataView.Base.pas' {BaseDataView},
-  DataGrabber.Data.ResultSet in 'DataGrabber.Data.ResultSet.pas' {/Vcl.Styles.Hooks,};
+  DataGrabber.Data.ResultSet in 'DataGrabber.Data.ResultSet.pas';
 
 //Vcl.Styles.Hooks,
 //  Vcl.Themes,
@@ -41,6 +42,11 @@ begin
   ReportMemoryLeaksOnShutdown := DebugHook > 0;
   {$WARNINGS ON}
   Logger.Channels.Add(TWinIPCChannel.Create);
+  if CheckWin32Version(6) then // at least Vista
+  begin
+   Application.DefaultFont.Name := 'Segoe UI';
+   Application.DefaultFont.Size := 9;
+  end;
   Application.Initialize;
   Application.Title := 'DataGrabber';
   Application.CreateForm(TfrmMain, frmMain);

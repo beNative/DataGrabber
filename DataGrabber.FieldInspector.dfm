@@ -10,7 +10,7 @@ object frmFieldInspector: TfrmFieldInspector
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
   Font.Height = -11
-  Font.Name = 'Tahoma'
+  Font.Name = 'Segoe UI'
   Font.Style = []
   OldCreateOrder = False
   Position = poOwnerFormCenter
@@ -32,7 +32,6 @@ object frmFieldInspector: TfrmFieldInspector
     Align = alClient
     BevelOuter = bvNone
     TabOrder = 0
-    ExplicitWidth = 327
   end
   object pnlRight: TPanel
     AlignWithMargins = True

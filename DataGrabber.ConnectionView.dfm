@@ -5,7 +5,11 @@ object frmConnectionView: TfrmConnectionView
   ClientWidth = 906
   Color = clBtnFace
   DoubleBuffered = True
-  ParentFont = True
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Segoe UI'
+  Font.Style = []
   OldCreateOrder = False
   ShowHint = True
   OnShortCut = FormShortCut
