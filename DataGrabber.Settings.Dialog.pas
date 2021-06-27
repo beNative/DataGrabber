@@ -327,6 +327,8 @@ uses
 
   FireDAC.VCLUI.ConnEdit, FireDAC.Stan.Consts,
 
+  VirtualTrees.Types, VirtualTrees.Header,
+
   Spring,
 
   DDuce.Factories.VirtualTrees, DDuce.Factories.zObjInspector, DDuce.Logger,

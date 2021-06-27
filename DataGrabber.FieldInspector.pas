@@ -85,6 +85,8 @@ implementation
 uses
   System.Math, System.UITypes,
 
+  VirtualTrees.Types, VirtualTrees.Header,
+
   Spring,
 
   DDuce.Factories.VirtualTrees, DDuce.Factories.zObjInspector,

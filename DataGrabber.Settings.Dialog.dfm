@@ -374,13 +374,11 @@ object frmSettingsDialog: TfrmSettingsDialog
                   object lblUserName: TLabel
                     Left = 0
                     Top = 0
-                    Width = 65
-                    Height = 23
+                    Width = 52
+                    Height = 13
                     Align = alClient
                     Caption = '&Username:'
                     Layout = tlCenter
-                    ExplicitWidth = 52
-                    ExplicitHeight = 13
                   end
                 end
               end
@@ -1503,7 +1501,7 @@ object frmSettingsDialog: TfrmSettingsDialog
     Left = 16
     Top = 200
     Bitmap = {
-      494C0101190030001C0010001000FFFFFFFF2110FFFFFFFFFFFFFFFF424D3600
+      494C010119003000040010001000FFFFFFFF2110FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000007000000001002000000000000070
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000

@@ -168,10 +168,11 @@ uses
   Vcl.GraphUtil,
   Data.DB,
 
+  VirtualTrees.Types, VirtualTrees.Header,
+
   Spring, Spring.Container,
 
   DDuce.ObjectInspector.zObjectInspector,
-
   DDuce.Logger, DDuce.Factories.VirtualTrees, DDuce.Utils,
 
   DataGrabber.Utils, DataGrabber.Factories, DataGrabber.Resources;
