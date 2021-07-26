@@ -20,6 +20,7 @@ interface
 
 {$I DataGrabber.inc}
 
+{$IFDEF DEVEXPRESS}
 uses
   Winapi.Windows, Winapi.Messages,
   System.SysUtils, System.Variants, System.Classes,
@@ -160,9 +161,11 @@ type
     property PopupMenu: TPopupMenu
       read GetPopupMenu write SetPopupMenu;
   end;
+{$ENDIF}
 
 implementation
 
+{$IFDEF DEVEXPRESS}
 {$R *.dfm}
 
 uses
@@ -795,5 +798,5 @@ begin
   end;
 end;
 {$ENDREGION}
-
+{$ENDIF}
 end.

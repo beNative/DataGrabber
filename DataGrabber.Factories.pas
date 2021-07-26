@@ -102,7 +102,10 @@ uses
 
   DataGrabber.ConnectionViewManager, DataGrabber.Settings,
   DataGrabber.EditorView, DataGrabber.Data, DataGrabber.ConnectionView,
-  DataGrabber.DataView.cxGrid, DataGrabber.DataView.GridView,
+  {$IFDEF DEVEXPRESS}
+  DataGrabber.DataView.cxGrid,
+  {$ENDIF}
+  DataGrabber.DataView.GridView,
   DataGrabber.DataView.KGrid;
 
 {$REGION 'TDataGrabberFactories'}
@@ -212,18 +215,20 @@ begin
   Guard.CheckNotNull(AResultSet, 'AResultSet');
 
   LGridType := AManager.Settings.GridType;
-  if LGridType = 'cxGrid' then
-  begin
-    Result := TfrmcxGrid.Create(AOwner, AManager, AResultSet);
-  end
-  else if LGridType = 'KGrid' then
+  if LGridType = 'KGrid' then
   begin
     Result := TfrmKGrid.Create(AOwner, AManager, AResultSet);
   end
-  else
+  else if LGridType = 'GridView' then
   begin
     Result := TfrmGridView.Create(AOwner, AManager, AResultSet);
-  end;
+  end
+  {$IFDEF DEVEXPRESS}
+  else if LGridType = 'cxGrid' then
+  begin
+    Result := TfrmcxGrid.Create(AOwner, AManager, AResultSet);
+  end
+  {$ENDIF}
 end;
 
 class function TDataGrabberFactories.CreateDataViewToolbar(AOwner: TComponent;

@@ -227,9 +227,7 @@
         <DCCReference Include="DataView\DataGrabber.DataView.Base.pas">
             <Form>BaseDataView</Form>
         </DCCReference>
-        <DCCReference Include="DataGrabber.Data.ResultSet.pas">
-            <Form>/Vcl.Styles.Hooks,</Form>
-        </DCCReference>
+        <DCCReference Include="DataGrabber.Data.ResultSet.pas"/>
         <None Include="README.md"/>
         <None Include="Chinook example queries.txt"/>
         <BuildConfiguration Include="Debug">
