@@ -1,5 +1,5 @@
 {
-  Copyright (C) 2013-2021 Tim Sinaeve tim.sinaeve@gmail.com
+  Copyright (C) 2013-2022 Tim Sinaeve tim.sinaeve@gmail.com
 
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
@@ -14,23 +14,16 @@
   limitations under the License.
 }
 
+{$I DataGrabber.inc}
+
 unit DataGrabber.ConnectionViewManager;
 
 interface
-
-{  Due to a VCL-bug custom VCL styles are not rendered correctly on popupmenu's
-  that have a datamodule as their parent.
-  (https://forums.embarcadero.com/thread.jspa?messageID=1003818)
-}
 
 uses
   System.SysUtils, System.Classes, System.Diagnostics, System.Actions,
   System.ImageList,
   Vcl.ActnList, Vcl.Menus, Vcl.ImgList, Vcl.Controls,
-
-  // vcl-style-utilities
-//  Vcl.Styles.Utils.Menus, Vcl.Styles.Utils.SysStyleHook,
-//  Vcl.Styles.Utils.SysControls,
 
   Spring.Collections,
 
@@ -731,10 +724,6 @@ begin
     actHideConstantColumns.Enabled := B;
     actHideSelectedColumns.Enabled := B;
     actShowAllColumns.Enabled      := B;
-    actHideEmptyColumns.Checked    := B and
-      not ActiveDataView.ResultSet.EmptyFieldsVisible;
-    actHideConstantColumns.Checked := B and
-      not ActiveDataView.ResultSet.ConstantFieldsVisible;
     actAutoSizeCols.Visible      := B;
     actAutoSizeCols.Enabled      := actAutoSizeCols.Visible;
     actGroupBySelection.Visible  := B and Supports(ActiveDataView, IGroupable);

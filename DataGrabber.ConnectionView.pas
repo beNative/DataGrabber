@@ -1,5 +1,5 @@
 {
-  Copyright (C) 2013-2021 Tim Sinaeve tim.sinaeve@gmail.com
+  Copyright (C) 2013-2022 Tim Sinaeve tim.sinaeve@gmail.com
 
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
@@ -13,6 +13,8 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 }
+
+{$I DataGrabber.inc}
 
 unit DataGrabber.ConnectionView;
 
@@ -462,7 +464,7 @@ begin
   FVSTProfiles.OnPaintText       := FVSTProfilesPaintText;
   FVSTProfiles.Header.Options    := FVSTProfiles.Header.Options - [hoVisible];
   FVSTProfiles.TreeOptions.PaintOptions := FVSTProfiles.TreeOptions.PaintOptions
-    - [toHideSelection, toUseExplorerTheme, toHotTrack];
+    - [toHideSelection, toHotTrack, toShowTreeLines, toShowHorzGridLines];
   FVSTProfiles.Colors.FocusedSelectionColor := clBtnHighlight;
   FVSTProfiles.Margins.Right := 0;
   FVSTProfiles.Indent        := 0;

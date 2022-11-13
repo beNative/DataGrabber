@@ -1,5 +1,5 @@
 {
-  Copyright (C) 2013-2021 Tim Sinaeve tim.sinaeve@gmail.com
+  Copyright (C) 2013-2022 Tim Sinaeve tim.sinaeve@gmail.com
 
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
@@ -13,6 +13,8 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 }
+
+{$I DataGrabber.inc}
 
 unit DataGrabber.DataInspector;
 
@@ -287,7 +289,6 @@ procedure TfrmDataInspector.FInspectorGetEditStyle(Sender: TObject;
   Cell: TGridCell; var Style: TGridEditStyle);
 begin
   //Style := geEllipsis;
-
 end;
 
 procedure TfrmDataInspector.FInspectorSetEditText(Sender: TObject;

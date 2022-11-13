@@ -7,12 +7,11 @@ object frmDataInspector: TfrmDataInspector
   ClientWidth = 233
   Color = clBtnFace
   DoubleBuffered = True
-  Font.Charset = DEFAULT_CHARSET
+  Font.Charset = ANSI_CHARSET
   Font.Color = clWindowText
   Font.Height = -11
-  Font.Name = 'Tahoma'
+  Font.Name = 'Segoe UI'
   Font.Style = []
-  OldCreateOrder = False
   Position = poMainFormCenter
   OnShow = FormShow
   PixelsPerInch = 96
@@ -32,7 +31,7 @@ object frmDataInspector: TfrmDataInspector
     Top = 8
   end
   object aclMain: TActionList
-    Left = 120
+    Left = 128
     Top = 8
     object actHideEmptyFields: TAction
       AutoCheck = True
@@ -42,7 +41,7 @@ object frmDataInspector: TfrmDataInspector
     end
   end
   object ppmMain: TPopupMenu
-    Left = 64
+    Left = 72
     Top = 8
     object mniHideEmptyFields: TMenuItem
       Action = actHideEmptyFields

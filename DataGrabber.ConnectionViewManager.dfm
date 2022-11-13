@@ -18,7 +18,6 @@ object dmConnectionViewManager: TdmConnectionViewManager
     end
     object actHideEmptyColumns: TAction
       Category = 'Grid'
-      AutoCheck = True
       Caption = 'Hide empty'
       Hint = 'Hide empty columns'
       ImageIndex = 70
@@ -50,7 +49,6 @@ object dmConnectionViewManager: TdmConnectionViewManager
     end
     object actHideConstantColumns: TAction
       Category = 'Grid'
-      AutoCheck = True
       Caption = 'Hide constant'
       Hint = 'Hide grid columns with constant values'
       ImageIndex = 74
@@ -358,11 +356,9 @@ object dmConnectionViewManager: TdmConnectionViewManager
     end
     object mniHideEmptyColumns: TMenuItem
       Action = actHideEmptyColumns
-      AutoCheck = True
     end
     object mniHideConstantColumns: TMenuItem
       Action = actHideConstantColumns
-      AutoCheck = True
     end
     object mniShowAllColumns: TMenuItem
       Action = actShowAllColumns
@@ -458,7 +454,7 @@ object dmConnectionViewManager: TdmConnectionViewManager
     Left = 24
     Top = 80
     Bitmap = {
-      494C010156002003180010001000FFFFFFFF2110FFFFFFFFFFFFFFFF424D3600
+      494C010156002003040010001000FFFFFFFF2110FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000006001000001002000000000000060
       0100000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000

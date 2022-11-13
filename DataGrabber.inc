@@ -14,4 +14,4 @@
   limitations under the License.
 }
 
-{.$DEFINE DEVEXPRESS}  // use cxGrid
+{$DEFINE DEVEXPRESS}  // use cxGrid

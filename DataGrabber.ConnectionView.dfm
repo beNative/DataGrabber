@@ -10,7 +10,6 @@ object frmConnectionView: TfrmConnectionView
   Font.Height = -11
   Font.Name = 'Segoe UI'
   Font.Style = []
-  OldCreateOrder = False
   ShowHint = True
   OnShortCut = FormShortCut
   OnShow = FormShow

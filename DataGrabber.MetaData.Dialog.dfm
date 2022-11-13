@@ -4,10 +4,10 @@ object frmMetaData: TfrmMetaData
   ClientHeight = 512
   ClientWidth = 858
   Color = clBtnFace
-  Font.Charset = DEFAULT_CHARSET
+  Font.Charset = ANSI_CHARSET
   Font.Color = clWindowText
   Font.Height = -11
-  Font.Name = 'Tahoma'
+  Font.Name = 'Segoe UI'
   Font.Style = []
   OldCreateOrder = False
   PixelsPerInch = 96
@@ -54,6 +54,7 @@ object frmMetaData: TfrmMetaData
       Width = 214
       Height = 512
       Anchors = []
+      BorderStyle = bsNone
       ItemHeight = 13
       TabOrder = 0
       OnClick = lstCatalogsClick
@@ -64,6 +65,7 @@ object frmMetaData: TfrmMetaData
       Width = 212
       Height = 512
       Anchors = []
+      BorderStyle = bsNone
       ItemHeight = 13
       TabOrder = 1
       OnClick = lstSchemasClick
@@ -75,6 +77,7 @@ object frmMetaData: TfrmMetaData
       Width = 212
       Height = 512
       Anchors = []
+      BorderStyle = bsNone
       ItemHeight = 13
       TabOrder = 2
       OnClick = lstTablesClick
@@ -85,6 +88,7 @@ object frmMetaData: TfrmMetaData
       Width = 211
       Height = 512
       Anchors = []
+      BorderStyle = bsNone
       ItemHeight = 13
       TabOrder = 3
     end

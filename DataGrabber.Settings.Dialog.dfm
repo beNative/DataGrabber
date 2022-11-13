@@ -12,7 +12,7 @@ object frmSettingsDialog: TfrmSettingsDialog
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
   Font.Height = -11
-  Font.Name = 'Tahoma'
+  Font.Name = 'Segoe UI'
   Font.Style = []
   GlassFrame.Enabled = True
   KeyPreview = True
@@ -78,17 +78,20 @@ object frmSettingsDialog: TfrmSettingsDialog
               Caption = 'Client settings'
               TabOrder = 2
               TabStop = True
+              DesignSize = (
+                526
+                135)
               object lblPacketrecords: TLabel
                 Left = 139
-                Top = 23
-                Width = 75
+                Top = 21
+                Width = 77
                 Height = 13
                 Caption = 'Packet &records:'
                 FocusControl = edtPacketRecords
               end
               object edtPacketRecords: TEdit
                 Left = 220
-                Top = 17
+                Top = 18
                 Width = 58
                 Height = 21
                 Alignment = taCenter
@@ -98,8 +101,8 @@ object frmSettingsDialog: TfrmSettingsDialog
               end
               object chkFetchOnDemand: TCheckBox
                 Left = 10
-                Top = 21
-                Width = 100
+                Top = 20
+                Width = 111
                 Height = 17
                 Caption = '&Fetch on demand'
                 Checked = True
@@ -111,8 +114,8 @@ object frmSettingsDialog: TfrmSettingsDialog
               end
               object chkAutoReconnect: TCheckBox
                 Left = 10
-                Top = 39
-                Width = 337
+                Top = 40
+                Width = 391
                 Height = 17
                 Hint = 
                   'When enabled, the automatic connection recovery will detect when' +
@@ -124,7 +127,7 @@ object frmSettingsDialog: TfrmSettingsDialog
               end
               object chkMultipleResultSets: TCheckBox
                 Left = 10
-                Top = 58
+                Top = 61
                 Width = 425
                 Height = 17
                 Caption = 
@@ -135,7 +138,7 @@ object frmSettingsDialog: TfrmSettingsDialog
               end
               object chkReadOnlyResultSets: TCheckBox
                 Left = 10
-                Top = 77
+                Top = 82
                 Width = 393
                 Height = 17
                 Caption = 'Readonly resultsets'
@@ -143,7 +146,7 @@ object frmSettingsDialog: TfrmSettingsDialog
               end
               object chkDisconnectedMode: TCheckBox
                 Left = 10
-                Top = 95
+                Top = 103
                 Width = 137
                 Height = 19
                 Caption = 'Disconnected mode'
@@ -151,13 +154,15 @@ object frmSettingsDialog: TfrmSettingsDialog
                 OnClick = chkDisconnectedModeClick
               end
               object btnTestConnection: TButton
-                Left = 335
-                Top = 15
-                Width = 150
-                Height = 25
+                Left = 412
+                Top = 14
+                Width = 103
+                Height = 44
                 Action = actTestConnection
+                Anchors = [akTop, akRight]
                 Images = imlMain
                 TabOrder = 6
+                WordWrap = True
               end
             end
             object grpConnectionSettings: TGroupBox
@@ -183,7 +188,7 @@ object frmSettingsDialog: TfrmSettingsDialog
               object lblDatabase: TLabel
                 Left = 12
                 Top = 47
-                Width = 50
+                Width = 51
                 Height = 13
                 Caption = 'Data&base:'
                 FocusControl = edtDatabase
@@ -191,7 +196,7 @@ object frmSettingsDialog: TfrmSettingsDialog
               object lblCatalog: TLabel
                 Left = 12
                 Top = 75
-                Width = 41
+                Width = 43
                 Height = 13
                 Caption = '&Catalog:'
                 FocusControl = edtCatalog
@@ -199,7 +204,7 @@ object frmSettingsDialog: TfrmSettingsDialog
               object lblConnectionDefinitionName: TLabel
                 Left = 175
                 Top = 20
-                Width = 105
+                Width = 117
                 Height = 13
                 Caption = 'Connection definition:'
                 FocusControl = cbxConnectionDefs
@@ -209,12 +214,12 @@ object frmSettingsDialog: TfrmSettingsDialog
                 Left = 76
                 Top = 17
                 Width = 93
-                Height = 21
+                Height = 23
                 DropDownCount = 30
-                Font.Charset = DEFAULT_CHARSET
+                Font.Charset = ANSI_CHARSET
                 Font.Color = clWindowText
-                Font.Height = -11
-                Font.Name = 'Tahoma'
+                Font.Height = -12
+                Font.Name = 'Segoe UI'
                 Font.Style = [fsBold]
                 ParentFont = False
                 TabOrder = 0
@@ -283,14 +288,14 @@ object frmSettingsDialog: TfrmSettingsDialog
                       Value = 65.000000000000000000
                     end
                     item
-                      Value = 54.248366013071890000
+                      Value = 54.248366013071880000
                     end
                     item
                       SizeStyle = ssAbsolute
                       Value = 60.000000000000000000
                     end
                     item
-                      Value = 45.751633986928110000
+                      Value = 45.751633986928120000
                     end>
                   ControlCollection = <
                     item
@@ -374,18 +379,20 @@ object frmSettingsDialog: TfrmSettingsDialog
                   object lblUserName: TLabel
                     Left = 0
                     Top = 0
-                    Width = 52
-                    Height = 13
+                    Width = 65
+                    Height = 23
                     Align = alClient
                     Caption = '&Username:'
                     Layout = tlCenter
+                    ExplicitWidth = 54
+                    ExplicitHeight = 13
                   end
                 end
               end
               object cbxConnectionDefs: TComboBox
-                Left = 286
+                Left = 296
                 Top = 17
-                Width = 233
+                Width = 223
                 Height = 21
                 Hint = 'Connection definitions are defined in FDConnectionDefs.ini.'
                 Anchors = [akLeft, akTop, akRight]
@@ -409,12 +416,11 @@ object frmSettingsDialog: TfrmSettingsDialog
               object lblProfileColor: TLabel
                 Left = 407
                 Top = 11
-                Width = 60
+                Width = 65
                 Height = 13
                 Anchors = [akTop, akRight]
                 Caption = 'Profile c&olor:'
                 FocusControl = btnProfileColor
-                ExplicitLeft = 369
               end
               object btnProfileColor: TKColorButton
                 Left = 479
@@ -437,15 +443,15 @@ object frmSettingsDialog: TfrmSettingsDialog
                 Left = 76
                 Top = 7
                 Width = 225
-                Height = 21
+                Height = 23
                 Anchors = [akLeft, akTop, akRight]
-                EditLabel.Width = 63
+                EditLabel.Width = 67
                 EditLabel.Height = 13
                 EditLabel.Caption = 'Profile &name:'
-                Font.Charset = DEFAULT_CHARSET
+                Font.Charset = ANSI_CHARSET
                 Font.Color = clWindowText
-                Font.Height = -11
-                Font.Name = 'Tahoma'
+                Font.Height = -12
+                Font.Name = 'Segoe UI'
                 Font.Style = [fsBold]
                 LabelPosition = lpLeft
                 ParentFont = False
@@ -454,7 +460,7 @@ object frmSettingsDialog: TfrmSettingsDialog
               end
               object chkSetAsDefault: TCheckBox
                 Left = 307
-                Top = 9
+                Top = 10
                 Width = 94
                 Height = 17
                 Hint = 
@@ -717,7 +723,7 @@ object frmSettingsDialog: TfrmSettingsDialog
             Caption = 'Integer'
             FocusControl = btnIntegerColor
             Layout = tlCenter
-            ExplicitWidth = 36
+            ExplicitWidth = 37
             ExplicitHeight = 13
           end
           object btnIntegerColor: TKColorButton
@@ -748,7 +754,7 @@ object frmSettingsDialog: TfrmSettingsDialog
             Caption = 'Float'
             FocusControl = btnFloatColor
             Layout = tlCenter
-            ExplicitWidth = 24
+            ExplicitWidth = 26
             ExplicitHeight = 13
           end
           object btnFloatColor: TKColorButton
@@ -779,7 +785,7 @@ object frmSettingsDialog: TfrmSettingsDialog
             Caption = 'String'
             FocusControl = btnStringColor
             Layout = tlCenter
-            ExplicitWidth = 28
+            ExplicitWidth = 31
             ExplicitHeight = 13
           end
           object btnStringColor: TKColorButton
@@ -810,7 +816,7 @@ object frmSettingsDialog: TfrmSettingsDialog
             Caption = 'Memo'
             FocusControl = btnMemoColor
             Layout = tlCenter
-            ExplicitWidth = 28
+            ExplicitWidth = 32
             ExplicitHeight = 13
           end
           object btnMemoColor: TKColorButton
@@ -841,7 +847,7 @@ object frmSettingsDialog: TfrmSettingsDialog
             Caption = 'Date'
             FocusControl = btnDateColor
             Layout = tlCenter
-            ExplicitWidth = 23
+            ExplicitWidth = 24
             ExplicitHeight = 13
           end
           object btnDateColor: TKColorButton
@@ -872,7 +878,7 @@ object frmSettingsDialog: TfrmSettingsDialog
             Caption = 'Time'
             FocusControl = btnTimeColor
             Layout = tlCenter
-            ExplicitWidth = 22
+            ExplicitWidth = 24
             ExplicitHeight = 13
           end
           object btnTimeColor: TKColorButton
@@ -903,7 +909,7 @@ object frmSettingsDialog: TfrmSettingsDialog
             Caption = 'DateTime'
             FocusControl = btnDateTimeColor
             Layout = tlCenter
-            ExplicitWidth = 45
+            ExplicitWidth = 48
             ExplicitHeight = 13
           end
           object btnDateTimeColor: TKColorButton
@@ -934,7 +940,7 @@ object frmSettingsDialog: TfrmSettingsDialog
             Caption = 'NULL'
             FocusControl = btnNullColor
             Layout = tlCenter
-            ExplicitWidth = 24
+            ExplicitWidth = 26
             ExplicitHeight = 13
           end
           object btnNullColor: TKColorButton
@@ -965,7 +971,7 @@ object frmSettingsDialog: TfrmSettingsDialog
             Caption = 'Boolean'
             FocusControl = btnBooleanColor
             Layout = tlCenter
-            ExplicitWidth = 38
+            ExplicitWidth = 42
             ExplicitHeight = 13
           end
           object btnBooleanColor: TKColorButton
@@ -1012,7 +1018,7 @@ object frmSettingsDialog: TfrmSettingsDialog
           Width = 80
           Height = 91
           Align = alClient
-          ButtonWidth = 75
+          ButtonWidth = 81
           Images = imlMain
           List = True
           ShowCaptions = True
@@ -1056,7 +1062,7 @@ object frmSettingsDialog: TfrmSettingsDialog
           Width = 137
           Height = 91
           Align = alClient
-          ButtonWidth = 122
+          ButtonWidth = 130
           Images = imlMain
           List = True
           ShowCaptions = True
@@ -1092,7 +1098,7 @@ object frmSettingsDialog: TfrmSettingsDialog
         object lblEditorFont: TLabel
           Left = 19
           Top = 22
-          Width = 77
+          Width = 81
           Height = 13
           Caption = 'SQL editor font:'
           FocusControl = edtEditorFont
@@ -1122,13 +1128,13 @@ object frmSettingsDialog: TfrmSettingsDialog
         object lblGridFont: TLabel
           Left = 12
           Top = 27
-          Width = 46
+          Width = 50
           Height = 13
           Caption = 'Grid font:'
           FocusControl = edtGridFont
         end
         object edtGridFont: TButtonedEdit
-          Left = 64
+          Left = 68
           Top = 24
           Width = 162
           Height = 21
@@ -1199,6 +1205,7 @@ object frmSettingsDialog: TfrmSettingsDialog
             CodeFolding.ShowCollapsedLine = False
             CodeFolding.ShowHintMark = True
             UseCodeFolding = False
+            BorderStyle = bsNone
             Gutter.AutoSize = True
             Gutter.Color = cl3DLight
             Gutter.Font.Charset = ANSI_CHARSET
@@ -1207,20 +1214,19 @@ object frmSettingsDialog: TfrmSettingsDialog
             Gutter.Font.Name = 'Consolas'
             Gutter.Font.Style = []
             Gutter.LeftOffset = 0
-            Gutter.RightOffset = 0
+            Gutter.RightOffset = 17
             Gutter.ShowLineNumbers = True
             Gutter.Width = 15
             Gutter.Gradient = True
             Gutter.GradientStartColor = clWhite
             Gutter.GradientEndColor = clWhite
             Highlighter = synJScript
-            Options = [eoAltSetsColumnMode, eoAutoIndent, eoDragDropEditing, eoEnhanceHomeKey, eoEnhanceEndKey, eoGroupUndo, eoScrollPastEol, eoShowScrollHint, eoSmartTabDelete, eoSmartTabs, eoTabsToSpaces]
+            Options = [eoAltSetsColumnMode, eoAutoIndent, eoDragDropEditing, eoEnhanceHomeKey, eoEnhanceEndKey, eoGroupUndo, eoHideShowScrollbars, eoScrollPastEol, eoShowScrollHint, eoSmartTabDelete, eoSmartTabs, eoTabsToSpaces, eoTrimTrailingSpaces]
             ReadOnly = True
             RightEdgeColor = cl3DLight
             TabWidth = 2
-            WordWrap = True
             OnChange = seSettingsChange
-            FontSmoothing = fsmNone
+            FontSmoothing = fsmClearType
           end
         end
         object tsFDConnectionDefs: TTabSheet
@@ -1249,6 +1255,7 @@ object frmSettingsDialog: TfrmSettingsDialog
             CodeFolding.ShowCollapsedLine = False
             CodeFolding.ShowHintMark = True
             UseCodeFolding = False
+            BorderStyle = bsNone
             Gutter.AutoSize = True
             Gutter.Color = cl3DLight
             Gutter.Font.Charset = ANSI_CHARSET
@@ -1264,12 +1271,11 @@ object frmSettingsDialog: TfrmSettingsDialog
             Gutter.GradientStartColor = clWhite
             Gutter.GradientEndColor = clWhite
             Highlighter = synIni
-            Options = [eoAltSetsColumnMode, eoAutoIndent, eoDragDropEditing, eoEnhanceHomeKey, eoEnhanceEndKey, eoGroupUndo, eoScrollPastEol, eoShowScrollHint, eoSmartTabDelete, eoSmartTabs, eoTabsToSpaces]
+            Options = [eoAltSetsColumnMode, eoAutoIndent, eoDragDropEditing, eoEnhanceHomeKey, eoEnhanceEndKey, eoGroupUndo, eoHideShowScrollbars, eoScrollPastEol, eoShowScrollHint, eoSmartTabDelete, eoSmartTabs, eoTabsToSpaces, eoTrimTrailingSpaces]
             RightEdgeColor = cl3DLight
             TabWidth = 2
-            WordWrap = True
             OnChange = seFDConnectionDefsChange
-            FontSmoothing = fsmNone
+            FontSmoothing = fsmClearType
           end
         end
       end

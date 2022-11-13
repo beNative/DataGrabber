@@ -1,5 +1,5 @@
 ﻿{
-  Copyright (C) 2013-2021 Tim Sinaeve tim.sinaeve@gmail.com
+  Copyright (C) 2013-2022 Tim Sinaeve tim.sinaeve@gmail.com
 
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
@@ -13,6 +13,8 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 }
+
+{$I DataGrabber.inc}
 
 unit DataGrabber.Data;
 
@@ -34,8 +36,6 @@ unit DataGrabber.Data;
 
 {
   TODO
-    - Fieldlists are only built based on the primary (first) resultset if
-      multiple resultsets are returned.
     - support for local SQL on TFDMemTable objects?
 }
 
@@ -968,8 +968,7 @@ begin
   FNonEmptyFields.Clear;
   FHiddenFields.Clear;
   FFieldListsUpdated := False;
-  if not EmptyFieldsVisible or not ConstantFieldsVisible then
-    UpdateFieldLists;
+  UpdateFieldLists;
 end;
 
 procedure TdmData.LoadFromFile(ADataSet: TDataSet; const AFileName: string;

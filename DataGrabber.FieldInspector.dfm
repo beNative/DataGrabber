@@ -12,22 +12,22 @@ object frmFieldInspector: TfrmFieldInspector
   Font.Height = -11
   Font.Name = 'Segoe UI'
   Font.Style = []
-  OldCreateOrder = False
   Position = poOwnerFormCenter
   PixelsPerInch = 96
   TextHeight = 13
   object splVertical: TSplitter
-    Left = 338
+    Left = 337
     Top = 0
+    Width = 4
     Height = 606
     Align = alRight
-    ExplicitLeft = 333
+    ExplicitLeft = 336
   end
   object pnlLeft: TPanel
     AlignWithMargins = True
     Left = 3
     Top = 3
-    Width = 332
+    Width = 331
     Height = 600
     Align = alClient
     BevelOuter = bvNone
@@ -44,8 +44,8 @@ object frmFieldInspector: TfrmFieldInspector
     TabOrder = 1
   end
   object aclMain: TActionList
-    Left = 296
-    Top = 296
+    Left = 16
+    Top = 8
     object actInspect: TAction
       Caption = 'actInspect'
       ShortCut = 16457

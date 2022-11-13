@@ -1,37 +1,44 @@
 object frmMain: TfrmMain
   Left = 731
   Top = 411
-  ClientHeight = 593
-  ClientWidth = 1124
+  ClientHeight = 728
+  ClientWidth = 1403
   Color = clBtnFace
   TransparentColorValue = clGray
   DoubleBuffered = True
   Font.Charset = ANSI_CHARSET
   Font.Color = clWindowText
-  Font.Height = -11
+  Font.Height = -14
   Font.Name = 'Segoe UI'
   Font.Style = []
-  OldCreateOrder = False
   PopupMode = pmAuto
   Position = poMainFormCenter
   ScreenSnap = True
   ShowHint = True
   OnShortCut = FormShortCut
-  PixelsPerInch = 96
-  TextHeight = 13
+  PixelsPerInch = 120
+  TextHeight = 19
   object pnlStatusBar: TPanel
     Left = 0
-    Top = 572
-    Width = 1124
-    Height = 21
+    Top = 701
+    Width = 1403
+    Height = 27
+    Margins.Left = 4
+    Margins.Top = 4
+    Margins.Right = 4
+    Margins.Bottom = 4
     Align = alBottom
     BevelOuter = bvNone
     TabOrder = 0
     object shpLine: TShape
       Left = 0
       Top = 0
-      Width = 1124
+      Width = 1403
       Height = 1
+      Margins.Left = 4
+      Margins.Top = 4
+      Margins.Right = 4
+      Margins.Bottom = 4
       Align = alTop
       Pen.Color = clScrollBar
     end
@@ -39,8 +46,8 @@ object frmMain: TfrmMain
       AlignWithMargins = True
       Left = 1
       Top = 2
-      Width = 50
-      Height = 18
+      Width = 63
+      Height = 24
       Hint = 'Data mode'
       Margins.Left = 1
       Margins.Top = 1
@@ -51,13 +58,15 @@ object frmMain: TfrmMain
       BevelKind = bkFlat
       BevelOuter = bvNone
       TabOrder = 0
+      ExplicitTop = 3
+      ExplicitHeight = 22
     end
     object pnlElapsedTime: TPanel
       AlignWithMargins = True
-      Left = 105
+      Left = 131
       Top = 2
-      Width = 50
-      Height = 18
+      Width = 63
+      Height = 24
       Hint = 'Elapsed execution time'
       Margins.Left = 1
       Margins.Top = 1
@@ -68,13 +77,15 @@ object frmMain: TfrmMain
       BevelKind = bkFlat
       BevelOuter = bvNone
       TabOrder = 1
+      ExplicitTop = 3
+      ExplicitHeight = 22
     end
     object pnlConnectionStatus: TPanel
       AlignWithMargins = True
-      Left = 53
+      Left = 66
       Top = 2
-      Width = 50
-      Height = 18
+      Width = 63
+      Height = 24
       Hint = 'Connection status'
       Margins.Left = 1
       Margins.Top = 1
@@ -86,18 +97,20 @@ object frmMain: TfrmMain
       BevelOuter = bvNone
       Font.Charset = ANSI_CHARSET
       Font.Color = clWindowText
-      Font.Height = -11
-      Font.Name = 'Tahoma'
+      Font.Height = -15
+      Font.Name = 'Segoe UI'
       Font.Style = [fsBold]
       ParentFont = False
       TabOrder = 2
+      ExplicitTop = 3
+      ExplicitHeight = 22
     end
     object pnlRecordCount: TPanel
       AlignWithMargins = True
-      Left = 157
+      Left = 196
       Top = 2
-      Width = 50
-      Height = 18
+      Width = 63
+      Height = 24
       Hint = 'Recordcount'
       Margins.Left = 1
       Margins.Top = 1
@@ -108,13 +121,15 @@ object frmMain: TfrmMain
       BevelKind = bkFlat
       BevelOuter = bvNone
       TabOrder = 3
+      ExplicitTop = 3
+      ExplicitHeight = 22
     end
     object pnlFieldCount: TPanel
       AlignWithMargins = True
-      Left = 209
+      Left = 261
       Top = 2
-      Width = 50
-      Height = 18
+      Width = 63
+      Height = 24
       Hint = 'Field count'
       Margins.Left = 1
       Margins.Top = 1
@@ -125,13 +140,15 @@ object frmMain: TfrmMain
       BevelKind = bkFlat
       BevelOuter = bvNone
       TabOrder = 4
+      ExplicitTop = 3
+      ExplicitHeight = 22
     end
     object pnlConstantFieldsCount: TPanel
       AlignWithMargins = True
-      Left = 313
+      Left = 391
       Top = 2
-      Width = 50
-      Height = 18
+      Width = 63
+      Height = 24
       Hint = 'Constant fields count'
       Margins.Left = 1
       Margins.Top = 1
@@ -142,13 +159,15 @@ object frmMain: TfrmMain
       BevelKind = bkFlat
       BevelOuter = bvNone
       TabOrder = 5
+      ExplicitTop = 3
+      ExplicitHeight = 22
     end
     object pnlEmptyFieldsCount: TPanel
       AlignWithMargins = True
-      Left = 261
+      Left = 326
       Top = 2
-      Width = 50
-      Height = 18
+      Width = 63
+      Height = 24
       Hint = 'Empty fields count'
       Margins.Left = 1
       Margins.Top = 1
@@ -159,13 +178,15 @@ object frmMain: TfrmMain
       BevelKind = bkFlat
       BevelOuter = bvNone
       TabOrder = 6
+      ExplicitTop = 3
+      ExplicitHeight = 22
     end
     object pnlHiddenFieldsCount: TPanel
       AlignWithMargins = True
-      Left = 365
+      Left = 456
       Top = 2
-      Width = 50
-      Height = 18
+      Width = 63
+      Height = 24
       Hint = 'Hidden fields count'
       Margins.Left = 1
       Margins.Top = 1
@@ -176,21 +197,31 @@ object frmMain: TfrmMain
       BevelKind = bkFlat
       BevelOuter = bvNone
       TabOrder = 7
+      ExplicitTop = 3
+      ExplicitHeight = 22
     end
   end
   object pnlConnectionViews: TPanel
     Left = 0
-    Top = 23
-    Width = 1124
-    Height = 549
+    Top = 29
+    Width = 1403
+    Height = 672
+    Margins.Left = 4
+    Margins.Top = 4
+    Margins.Right = 4
+    Margins.Bottom = 4
     Align = alClient
     BevelOuter = bvNone
     TabOrder = 1
     object ctMain: TChromeTabs
       Left = 0
       Top = 0
-      Width = 1124
-      Height = 29
+      Width = 1403
+      Height = 36
+      Margins.Left = 4
+      Margins.Top = 4
+      Margins.Right = 4
+      Margins.Bottom = 4
       OnActiveTabChanged = ctMainActiveTabChanged
       OnButtonAddClick = ctMainButtonAddClick
       OnButtonCloseTabClick = ctMainButtonCloseTabClick
@@ -522,8 +553,12 @@ object frmMain: TfrmMain
   object pnlTop: TPanel
     Left = 0
     Top = 0
-    Width = 1124
-    Height = 23
+    Width = 1403
+    Height = 29
+    Margins.Left = 4
+    Margins.Top = 4
+    Margins.Right = 4
+    Margins.Bottom = 4
     Align = alTop
     BevelOuter = bvNone
     ParentBackground = False
@@ -531,13 +566,17 @@ object frmMain: TfrmMain
     object tlbMain: TToolBar
       Left = 0
       Top = 0
-      Width = 1081
-      Height = 23
+      Width = 1349
+      Height = 29
+      Margins.Left = 4
+      Margins.Top = 4
+      Margins.Right = 4
+      Margins.Bottom = 4
       Align = alLeft
       Anchors = [akLeft, akTop, akRight, akBottom]
       AutoSize = True
-      ButtonHeight = 20
-      ButtonWidth = 20
+      ButtonHeight = 25
+      ButtonWidth = 25
       Customizable = True
       EdgeInner = esNone
       EdgeOuter = esNone
@@ -553,13 +592,18 @@ object frmMain: TfrmMain
       OnCustomDraw = tlbMainCustomDraw
     end
     object tlbTopRight: TToolBar
-      Left = 1074
+      Left = 1340
       Top = 0
-      Width = 50
-      Height = 23
+      Width = 63
+      Height = 29
+      Margins.Left = 4
+      Margins.Top = 4
+      Margins.Right = 4
+      Margins.Bottom = 4
       Align = alRight
       Anchors = [akLeft, akTop, akBottom]
-      ButtonHeight = 20
+      ButtonHeight = 25
+      ButtonWidth = 29
       Customizable = True
       EdgeInner = esNone
       EdgeOuter = esNone

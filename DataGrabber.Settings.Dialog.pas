@@ -1,5 +1,5 @@
 {
-  Copyright (C) 2013-2021 Tim Sinaeve tim.sinaeve@gmail.com
+  Copyright (C) 2013-2022 Tim Sinaeve tim.sinaeve@gmail.com
 
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
@@ -13,6 +13,8 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 }
+
+{$I DataGrabber.inc}
 
 unit DataGrabber.Settings.Dialog;
 
@@ -867,7 +869,7 @@ begin
   if FileExists(S_FD_DefCfgFileName) then
   begin
     seFDConnectionDefs.Lines.LoadFromFile(S_FD_DefCfgFileName);
-    //seFDConnectionDefs.ResetModificationIndicator;
+    seFDConnectionDefs.ResetModificationIndicator;
     seFDConnectionDefs.Modified := False;
   end;
 end;
@@ -880,7 +882,7 @@ end;
 procedure TfrmSettingsDialog.SaveConnectionDefinitionsFile;
 begin
   seFDConnectionDefs.Lines.SaveToFile(S_FD_DefCfgFileName);
-  //seFDConnectionDefs.MarkModifiedLinesAsSaved;
+  seFDConnectionDefs.MarkModifiedLinesAsSaved;
   seFDConnectionDefs.Modified := False;
 end;
 
@@ -1040,7 +1042,7 @@ begin
   FVSTProfiles.TreeOptions.PaintOptions := FVSTProfiles.TreeOptions.PaintOptions
     - [toHideSelection, toUseExplorerTheme, toHotTrack];
   FVSTProfiles.TreeOptions.PaintOptions := FVSTProfiles.TreeOptions.PaintOptions
-    + [toShowHorzGridLines];
+    - [toShowHorzGridLines];
 
   FVSTProfiles.Colors.FocusedSelectionColor := clBtnHighlight;
   FVSTProfiles.Indent    := 0;
