@@ -28,7 +28,7 @@ uses
 
   Spring.Collections,
 
-  VirtualTrees,
+  VirtualTrees, VirtualTrees.BaseTree,
 
   OMultiPanel,
 

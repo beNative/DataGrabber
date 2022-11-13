@@ -30,7 +30,7 @@ uses
 
   zObjInspector,
 
-  VirtualTrees;
+  VirtualTrees, VirtualTrees.BaseTree;
 
 type
   TfrmFieldInspector = class(TForm)

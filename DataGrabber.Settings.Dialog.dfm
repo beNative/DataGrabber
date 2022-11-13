@@ -16,13 +16,12 @@ object frmSettingsDialog: TfrmSettingsDialog
   Font.Style = []
   GlassFrame.Enabled = True
   KeyPreview = True
-  OldCreateOrder = False
   Position = poMainFormCenter
   ShowHint = True
+  PixelsPerInch = 96
   DesignSize = (
     722
     437)
-  PixelsPerInch = 96
   TextHeight = 13
   object pgcMain: TPageControl
     AlignWithMargins = True
@@ -379,13 +378,11 @@ object frmSettingsDialog: TfrmSettingsDialog
                   object lblUserName: TLabel
                     Left = 0
                     Top = 0
-                    Width = 65
-                    Height = 23
+                    Width = 54
+                    Height = 13
                     Align = alClient
                     Caption = '&Username:'
                     Layout = tlCenter
-                    ExplicitWidth = 54
-                    ExplicitHeight = 13
                   end
                 end
               end
@@ -456,6 +453,7 @@ object frmSettingsDialog: TfrmSettingsDialog
                 LabelPosition = lpLeft
                 ParentFont = False
                 TabOrder = 0
+                Text = ''
                 OnChange = edtProfileNameChange
               end
               object chkSetAsDefault: TCheckBox

@@ -34,7 +34,7 @@ uses
   FireDAC.VCLUI.Wait,
   FireDAC.Comp.Client,
 
-  VirtualTrees,
+  VirtualTrees, VirtualTrees.BaseTree,
 
   zObjInspector, zObjInspTypes,
 
@@ -46,7 +46,7 @@ uses
   DataGrabber.Interfaces,
 
   DataGrabber.Settings, DataGrabber.ConnectionProfiles,
-  DataGrabber.ConnectionProfileValueManager;
+  DataGrabber.ConnectionProfileValueManager, Vcl.Mask;
 
 type
   TApplySettingsMethod = reference to procedure;

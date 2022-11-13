@@ -25,7 +25,7 @@ uses
   System.Classes,
   Vcl.Controls, Vcl.Graphics,
 
-  VirtualTrees;
+  VirtualTrees, VirtualTrees.BaseTree;
 
 function FindNode(
   AVT         : TVirtualStringTree;
