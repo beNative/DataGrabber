@@ -1,5 +1,4 @@
 object dmData: TdmData
-  OldCreateOrder = False
   Height = 88
   Width = 232
   object conMain: TFDConnection

@@ -1,5 +1,5 @@
 {
-  Copyright (C) 2013-2022 Tim Sinaeve tim.sinaeve@gmail.com
+  Copyright (C) 2013-2024 Tim Sinaeve tim.sinaeve@gmail.com
 
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
@@ -560,12 +560,12 @@ begin
 end;
 
 procedure TdmConnectionViewManager.actFireDACInfoExecute(Sender: TObject);
-var
-  S : string;
+//var
+//  S : string;
 begin
-  S := Format('FireDAC version %s', [C_FD_Version]);
-  ShowMessage(S);
-  Logger.Info(S);
+//  S := Format('FireDAC version %s', [C_FD_Version]);
+//  ShowMessage(S);
+//  Logger.Info(S);
 end;
 
 procedure TdmConnectionViewManager.actResultsAsWikiExecute(Sender: TObject);

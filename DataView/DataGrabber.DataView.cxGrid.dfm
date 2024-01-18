@@ -4,7 +4,6 @@ inherited frmcxGrid: TfrmcxGrid
   Font.Name = 'Se'
   ExplicitWidth = 695
   ExplicitHeight = 319
-  PixelsPerInch = 96
   TextHeight = 14
   object grdMain: TcxGrid [0]
     Left = 0
@@ -83,7 +82,6 @@ inherited frmcxGrid: TfrmcxGrid
       OptionsCustomize.ColumnsQuickCustomization = True
       OptionsCustomize.ColumnsQuickCustomizationSorted = True
       OptionsCustomize.DataRowSizing = True
-      OptionsCustomize.GroupBySorting = True
       OptionsCustomize.GroupRowSizing = True
       OptionsData.Appending = True
       OptionsSelection.MultiSelect = True

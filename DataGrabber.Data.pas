@@ -1,5 +1,5 @@
 ﻿{
-  Copyright (C) 2013-2022 Tim Sinaeve tim.sinaeve@gmail.com
+  Copyright (C) 2013-2024 Tim Sinaeve tim.sinaeve@gmail.com
 
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
@@ -124,7 +124,7 @@ type
     FStopWatch              : TStopwatch;
     FFieldListsUpdated      : Boolean;
     FDataEditMode           : Boolean;
-    FResultSets             : TResultSets;
+    FResultSets             : IList<IResultSet>;
 
     {$REGION 'property access methods'}
     function GetConstantFields: IList<TField>;
@@ -274,7 +274,7 @@ type
       ASettings : TConnectionSettings
     ); reintroduce;
     procedure AfterConstruction; override;
-    procedure BeforeDestruction; override;
+    destructor Destroy; override;
 
     {$REGION 'IResultSet'}
     property ConstantFields: IList<TField>
@@ -334,7 +334,7 @@ begin
   FConstantFieldsVisible := True;
   FEmptyFieldsVisible    := True;
   FDriverNames := TStringList.Create;
-  FResultSets  := TResultSets.Create;
+  FResultSets  := TCollections.CreateInterfaceList<IResultSet>;
 
   FDManager.ResourceOptions.AutoReconnect := True;
   // Blocking with cancel dialog.
@@ -346,15 +346,14 @@ begin
   FStopWatch := TStopwatch.Create;
 end;
 
-procedure TdmData.BeforeDestruction;
+destructor TdmData.Destroy;
 begin
-  Logger.Track(Self, 'BeforeDestruction');
+  Logger.Track(Self, 'Destroy');
   FConnectionSettings.Free;
   FDriverNames.Free;
   FOnBeforeExecute.RemoveAll(Self);
   FOnAfterExecute.RemoveAll(Self);
-  FResultSets.Free;
-  inherited BeforeDestruction;
+  inherited Destroy;
 end;
 {$ENDREGION}
 
@@ -439,7 +438,7 @@ end;
 
 function TdmData.GetItem(AIndex: Integer): IResultSet;
 begin
-  if not FResultSets.IsEmpty and (AIndex < FResultSets.Count) then
+  if FResultSets.Any and (AIndex < FResultSets.Count) then
     Result := FResultSets[AIndex]
   else
     Result := nil;
@@ -812,6 +811,7 @@ begin
     begin
       Values['Server']    := ConnectionSettings.HostName;
       Values['Database']  := ConnectionSettings.Database;
+      Values['Port']      := ConnectionSettings.Port.ToString;
       Values['User_Name'] := ConnectionSettings.UserName;
       Values['Password']  := ConnectionSettings.Password;
       Values['OSAuthent'] := IfThen(ConnectionSettings.OSAuthent, 'Yes', 'No');

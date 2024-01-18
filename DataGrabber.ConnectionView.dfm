@@ -13,7 +13,6 @@ object frmConnectionView: TfrmConnectionView
   ShowHint = True
   OnShortCut = FormShortCut
   OnShow = FormShow
-  PixelsPerInch = 96
   TextHeight = 13
   object pnlMain: TOMultiPanel
     Left = 0
@@ -41,6 +40,8 @@ object frmConnectionView: TfrmConnectionView
     Align = alClient
     BevelEdges = []
     TabOrder = 0
+    ExplicitWidth = 902
+    ExplicitHeight = 486
     object pnlTop: TPanel
       Left = 0
       Top = 0
@@ -83,6 +84,7 @@ object frmConnectionView: TfrmConnectionView
         Align = alClient
         BevelOuter = bvNone
         TabOrder = 1
+        ExplicitWidth = 713
       end
     end
     object pnlBottom: TPanel

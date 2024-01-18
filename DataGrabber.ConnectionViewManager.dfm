@@ -1,5 +1,4 @@
 object dmConnectionViewManager: TdmConnectionViewManager
-  OldCreateOrder = False
   Height = 162
   Width = 301
   object aclActions: TActionList

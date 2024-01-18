@@ -1,5 +1,5 @@
 {
-  Copyright (C) 2013-2022 Tim Sinaeve tim.sinaeve@gmail.com
+  Copyright (C) 2013-2024 Tim Sinaeve tim.sinaeve@gmail.com
 
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
@@ -20,7 +20,7 @@ interface
 
 {$I DataGrabber.inc}
 
-//{$IFDEF DEVEXPRESS}
+{$IFDEF DEVEXPRESS}
 uses
   Winapi.Windows, Winapi.Messages,
   System.SysUtils, System.Variants, System.Classes,
@@ -33,9 +33,9 @@ uses
   cxGridDBTableView, cxGridCustomPopupMenu, cxGridPopupMenu, cxLookAndFeels,
   cxLookAndFeelPainters, cxStyles, cxEdit, cxNavigator, cxDBData, cxData,
   cxDataControllerConditionalFormattingRulesManagerDialog, dxBarBuiltInMenu,
-  dxDateRanges,
+  dxDateRanges, dxScrollbarAnnotations,
 
-  DataGrabber.Interfaces, DataGrabber.DataView.Base, dxScrollbarAnnotations;
+  DataGrabber.Interfaces, DataGrabber.DataView.Base;
 
 type
   TfrmcxGrid = class(TBaseDataView, IDataView, IGroupable, IMergable)
@@ -161,11 +161,11 @@ type
     property PopupMenu: TPopupMenu
       read GetPopupMenu write SetPopupMenu;
   end;
-//{$ENDIF}
+{$ENDIF}
 
 implementation
 
-//{$IFDEF DEVEXPRESS}
+{$IFDEF DEVEXPRESS}
 {$R *.dfm}
 
 uses
@@ -798,5 +798,5 @@ begin
   end;
 end;
 {$ENDREGION}
-//{$ENDIF}
+{$ENDIF}
 end.

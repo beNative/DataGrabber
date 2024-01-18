@@ -1,5 +1,5 @@
 {
-  Copyright (C) 2013-2022 Tim Sinaeve tim.sinaeve@gmail.com
+  Copyright (C) 2013-2024 Tim Sinaeve tim.sinaeve@gmail.com
 
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
@@ -349,15 +349,25 @@ begin
     LConn.Temporary := True;
     LConn.Params.SetStrings(AConnDef.Params);
     LConn.ConnectionDefName := AConnDef.Name;
-    AConnDef.ReadOptions(LConn.FormatOptions, LConn.UpdateOptions,
-      LConn.FetchOptions, LConn.ResourceOptions);
+    AConnDef.ReadOptions(
+      LConn.FormatOptions,
+      LConn.UpdateOptions,
+      LConn.FetchOptions,
+      LConn.ResourceOptions
+      {$IFDEF DELPHIX_ATHENS_UP}, LConn.SecurityOptions{$ENDIF}
+    );
     LName := AConnDef.Name;
     Result := TfrmFDGUIxFormsConnEdit.Execute(LConn, ACaption, nil);
     if Result then
     begin
       AConnDef.Params.SetStrings(LConn.Params);
-      AConnDef.WriteOptions(LConn.FormatOptions, LConn.UpdateOptions,
-        LConn.FetchOptions, LConn.ResourceOptions);
+      AConnDef.WriteOptions(
+        LConn.FormatOptions,
+        LConn.UpdateOptions,
+        LConn.FetchOptions,
+        LConn.ResourceOptions
+        {$IFDEF DELPHIX_ATHENS_UP}, LConn.SecurityOptions{$ENDIF}
+      );
       AConnDef.Name := LName;
     end;
   finally
@@ -647,7 +657,7 @@ var
   CP : TConnectionProfile;
 begin
   if Node.Index >= Cardinal(FSettings.ConnectionProfiles.Count) then
-    Node.Index := FSettings.ConnectionProfiles.Count - 1;
+    Node.SetIndex(FSettings.ConnectionProfiles.Count - 1);
   CP := FSettings.ConnectionProfiles[Node.Index];
   InspectConnectionProfile(CP);
   UpdateConnectionProfileControls(CP);

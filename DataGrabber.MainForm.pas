@@ -1,5 +1,5 @@
 {
-  Copyright (C) 2013-2022 Tim Sinaeve tim.sinaeve@gmail.com
+  Copyright (C) 2013-2024 Tim Sinaeve tim.sinaeve@gmail.com
 
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
@@ -138,7 +138,7 @@ type
 
   public
     procedure AfterConstruction; override;
-    procedure BeforeDestruction; override;
+    destructor Destroy; override;
 
     function AddConnectionView: IConnectionView;
 
@@ -195,12 +195,12 @@ begin
   InitializeActions;
 end;
 
-procedure TfrmMain.BeforeDestruction;
+destructor TfrmMain.Destroy;
 begin
   FSettings.FormSettings.Assign(Self);
   FManager  := nil;
   FSettings := nil;
-  inherited BeforeDestruction;
+  inherited Destroy;
 end;
 {$ENDREGION}
 
