@@ -14,4 +14,6 @@
   limitations under the License.
 }
 
-{$DEFINE DEVEXPRESS}  // use cxGrid
+{$I jedi.inc}
+
+{.$DEFINE DEVEXPRESS}  // use cxGrid
