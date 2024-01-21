@@ -2,9 +2,9 @@ inherited frmKGrid: TfrmKGrid
   ClientHeight = 257
   ClientWidth = 430
   ShowHint = True
+  StyleElements = [seFont, seClient, seBorder]
   ExplicitWidth = 430
   ExplicitHeight = 257
-  PixelsPerInch = 96
   TextHeight = 13
   object grdMain: TKDBGrid [0]
     Left = 0

@@ -345,7 +345,7 @@ begin
     if (LColCount = 1) and (Y < SR.Row2) then
       S := S + ', '
     else if Y < SR.Row2 then
-      S := S + #13#10
+      S := S + sLineBreak
   end;
   Result := S;
 end;
@@ -451,7 +451,7 @@ begin
         end;
         LTxt := LTxt + '|';
         LLine := LLine + '+';
-        Result := LLine + #13#10 + LTxt + #13#10 + LLine;
+        Result := LLine + sLineBreak + LTxt + sLineBreak + LLine;
       end;
       for Y := SR.Row1 to SR.Row2 do
       begin
@@ -464,10 +464,10 @@ begin
           LTxt := LTxt + '|' + Format(LFmt, [S]);
         end;
         LTxt := LTxt + '|';
-        Result := Result + #13#10 + LTxt;
+        Result := Result + sLineBreak + LTxt;
         LTxt := '';
       end;
-      Result := Result + #13#10 + LLine;
+      Result := Result + sLineBreak + LLine;
     finally
       Finalize(LWidths);
     end;
@@ -477,8 +477,60 @@ begin
 end;
 
 function TfrmKGrid.SelectionToWikiTable(AIncludeHeader: Boolean): string;
+var
+  X, Y : Integer;
+  S, T : string;
+  V    : Variant;
+  SR   : TKGridRect;
+  SL   : TStringList;
 begin
-// TODO
+  SL := TStringList.Create;
+  SR := grdMain.Selection;
+  NormalizeRect(SR);
+  try
+    if AIncludeHeader then
+    begin
+      S := '||';
+      for X := SR.Col1 to SR.Col2 do
+      begin
+        S := S + TKDBGridCol(grdMain.Cols[X]).FieldName + '||';
+      end;
+      SL.Add(S);
+//      for X := 0 to AController.SelectedColumnCount - 1 do
+//      begin
+//        S := S + tvwMain.Columns[AController.SelectedColumns[X].Index].Caption + '||';
+//      end;
+//      SL.Add(S);
+    end;
+    for Y := SR.Row1 to SR.Row2 do
+    begin
+      S := '|';
+      for X := SR.Col1 to SR.Col2 do
+      begin
+        T := grdMain.Cells[X, Y];
+        if T = '' then
+          T := ' ';
+        S := S + T + '|';
+      end;
+      SL.Add(S);
+    end;
+//    for Y := 0 to AController.SelectedRowCount - 1 do
+//    begin
+//      S := '|';
+//      for X := 0 to AController.SelectedColumnCount - 1 do
+//      begin
+//        V := AController.SelectedRows[Y].Values[AController.SelectedColumns[X].Index];
+//        T := VarToStr(V);
+//        if T = '' then
+//          T := ' ';
+//        S := S + T + '|';
+//      end;
+//      SL.Add(S);
+//    end;
+    Result := SL.Text;
+  finally
+    FreeAndNil(SL);
+  end;
 end;
 
 procedure TfrmKGrid.UpdateColumns;
