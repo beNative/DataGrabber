@@ -393,8 +393,31 @@ begin
 end;
 
 function TfrmKGrid.SelectionToFields(AQuoteItems: Boolean): string;
+var
+  X    : Integer;
+  S, T : string;
+  SL   : TStringList;
+  SR   : TKGridRect;
 begin
-// TODO
+  SR := grdMain.Selection;
+  NormalizeRect(SR);
+  SL := TStringList.Create;
+  try
+    S := '';
+    for X := SR.Col1 to SR.Col2 do
+    begin
+      T := TKDBGridCol(grdMain.Cols[X]).FieldName;
+      if AQuoteItems then
+        T := QuotedStr(T);
+      S := S + T;
+      if X < SR.Col2 then
+        S := S + ',' + ' ';
+    end;
+    SL.Add(S);
+    Result := SL.Text;
+  finally
+    FreeAndNil(SL);
+  end;
 end;
 
 { does not take hidden columns into account! }
@@ -480,7 +503,6 @@ function TfrmKGrid.SelectionToWikiTable(AIncludeHeader: Boolean): string;
 var
   X, Y : Integer;
   S, T : string;
-  V    : Variant;
   SR   : TKGridRect;
   SL   : TStringList;
 begin
@@ -490,17 +512,12 @@ begin
   try
     if AIncludeHeader then
     begin
-      S := '||';
+      S := '|';
       for X := SR.Col1 to SR.Col2 do
       begin
-        S := S + TKDBGridCol(grdMain.Cols[X]).FieldName + '||';
+        S := S + TKDBGridCol(grdMain.Cols[X]).FieldName + '|';
       end;
       SL.Add(S);
-//      for X := 0 to AController.SelectedColumnCount - 1 do
-//      begin
-//        S := S + tvwMain.Columns[AController.SelectedColumns[X].Index].Caption + '||';
-//      end;
-//      SL.Add(S);
     end;
     for Y := SR.Row1 to SR.Row2 do
     begin
@@ -514,19 +531,6 @@ begin
       end;
       SL.Add(S);
     end;
-//    for Y := 0 to AController.SelectedRowCount - 1 do
-//    begin
-//      S := '|';
-//      for X := 0 to AController.SelectedColumnCount - 1 do
-//      begin
-//        V := AController.SelectedRows[Y].Values[AController.SelectedColumns[X].Index];
-//        T := VarToStr(V);
-//        if T = '' then
-//          T := ' ';
-//        S := S + T + '|';
-//      end;
-//      SL.Add(S);
-//    end;
     Result := SL.Text;
   finally
     FreeAndNil(SL);
