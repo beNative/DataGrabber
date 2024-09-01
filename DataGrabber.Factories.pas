@@ -156,8 +156,8 @@ begin
   Guard.CheckNotNull(AManager, 'AManager');
   Guard.CheckTrue(AToolBar.ButtonCount = 0, '0');
 
-  //AddButton(AManager, AToolBar, 'actFireDACInfo');
-  //AddButton(AManager, AToolBar, 'actExecuteTestSequence');
+  AddButton(AManager, AToolBar, 'actFireDACInfo');
+  AddButton(AManager, AToolBar, 'actExecuteTestSequence');
   AddButton(AManager, AToolBar);
   AddButton(AManager, AToolBar, 'actDataInspector');
   AddButton(AManager, AToolBar);
@@ -217,11 +217,7 @@ begin
   Guard.CheckNotNull(AResultSet, 'AResultSet');
 
   LGridType := AManager.Settings.GridType;
-  if LGridType = 'KGrid' then
-  begin
-    Result := TfrmKGrid.Create(AOwner, AManager, AResultSet);
-  end
-  else if LGridType = 'GridView' then
+  if LGridType = 'GridView' then
   begin
     Result := TfrmGridView.Create(AOwner, AManager, AResultSet);
   end
@@ -231,6 +227,10 @@ begin
     Result := TfrmcxGrid.Create(AOwner, AManager, AResultSet);
   end
   {$ENDIF}
+  else // LGridType = 'KGrid'
+  begin
+    Result := TfrmKGrid.Create(AOwner, AManager, AResultSet);
+  end
 end;
 
 class function TDataGrabberFactories.CreateDataViewToolbar(AOwner: TComponent;
@@ -263,12 +263,16 @@ begin
   CreateToolButton(TB, 'actHideSelectedColumns');
   CreateToolButton(TB, 'actHideConstantColumns');
   CreateToolButton(TB, 'actHideEmptyColumns');
-  CreateToolButton(TB);
-  CreateToolButton(TB, 'actExpandAll');
-  CreateToolButton(TB, 'actCollapseAll');
-  CreateToolButton(TB, 'actGroupByBoxVisible');
-  CreateToolButton(TB, 'actGroupBySelection');
-  CreateToolButton(TB, 'actClearGrouping');
+
+  if AManager.Actions['actExpandAll'].Visible then
+  begin
+    CreateToolButton(TB);
+    CreateToolButton(TB, 'actExpandAll');
+    CreateToolButton(TB, 'actCollapseAll');
+    CreateToolButton(TB, 'actGroupByBoxVisible');
+    CreateToolButton(TB, 'actGroupBySelection');
+    CreateToolButton(TB, 'actClearGrouping');
+  end;
   TToolBarFactory.CleanupToolBar(TB);
   Result := TB;
 end;
