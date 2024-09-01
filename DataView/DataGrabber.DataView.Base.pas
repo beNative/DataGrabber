@@ -66,27 +66,28 @@ type
     procedure EndUpdate; virtual;
 
     function ResultsToWikiTable(
-      AIncludeHeader: Boolean = False
+      AIncludeHeader : Boolean = False
     ): string; virtual;
     function ResultsToTextTable(
-      AIncludeHeader: Boolean = False
+      AIncludeHeader : Boolean = False
     ): string; virtual;
 
     function SelectionToCommaText(
-      AQuoteItems: Boolean = True
+      AQuoteItems : Boolean = True
     ): string; virtual;
     function SelectionToDelimitedTable(
       ADelimiter     : string = #9;
       AIncludeHeader : Boolean = True
     ): string; virtual;
     function SelectionToTextTable(
-      AIncludeHeader: Boolean = False
+      AIncludeHeader : Boolean = False
     ): string; virtual;
     function SelectionToWikiTable(
-      AIncludeHeader: Boolean = False
+      AIncludeHeader : Boolean = False
     ): string; virtual;
     function SelectionToFields(
-      AQuoteItems: Boolean = True
+      AQuoteItems : Boolean = True;
+      ABreakItems : Boolean = False
     ): string; virtual;
 
     procedure ApplyGridSettings; virtual;
@@ -99,7 +100,7 @@ type
        AResultSet : IResultSet
      ); reintroduce; virtual;
     procedure AfterConstruction; override;
-    procedure BeforeDestruction; override;
+    destructor Destroy; override;
 
     property Name: string
       read GetName;
@@ -176,12 +177,12 @@ begin
   Settings.OnChanged.Add(SettingsChanged);
 end;
 
-procedure TBaseDataView.BeforeDestruction;
+destructor TBaseDataView.Destroy;
 begin
   Settings.OnChanged.Remove(SettingsChanged);
   Data.OnAfterExecute.Remove(DataAfterExecute);
   FResultSet := nil;
-  inherited BeforeDestruction;
+  inherited Destroy;
 end;
 {$ENDREGION}
 
@@ -326,7 +327,8 @@ begin
   Result := '';
 end;
 
-function TBaseDataView.SelectionToFields(AQuoteItems: Boolean): string;
+function TBaseDataView.SelectionToFields(AQuoteItems: Boolean;
+  ABreakItems: Boolean): string;
 begin
   Result := '';
 end;
