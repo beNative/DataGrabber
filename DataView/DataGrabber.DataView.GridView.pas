@@ -152,7 +152,8 @@ type
       AIncludeHeader: Boolean = False
     ): string; override;
     function SelectionToFields(
-      AQuoteItems: Boolean = True
+      AQuoteItems : Boolean = True;
+      ABreakItems : Boolean = False
     ): string; override;
 
     procedure UpdateView; override;
@@ -626,7 +627,8 @@ begin
 // TODO
 end;
 
-function TfrmGridView.SelectionToFields(AQuoteItems: Boolean): string;
+function TfrmGridView.SelectionToFields(AQuoteItems: Boolean;
+  ABreakItems: Boolean): string;
 begin
 // TODO
 end;

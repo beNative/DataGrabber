@@ -140,7 +140,8 @@ type
       AQuoteItems : Boolean = True
     ): string; overload; override;
     function SelectionToFields(
-      AQuoteItems : Boolean = True
+      AQuoteItems : Boolean = True;
+      ABreakItems : Boolean = False
     ): string; overload; override;
 
     procedure MergeAllColumnCells(AActive: Boolean);
@@ -541,7 +542,7 @@ begin
 end;
 
 function TfrmcxGrid.SelectionToFields(AController: TcxGridTableController;
-  AQuoteItems: Boolean): string;
+  AQuoteItems: Boolean; ABreakItems: Boolean): string;
 var
   X    : Integer;
   S, T : string;
@@ -557,7 +558,13 @@ begin
         T := QuotedStr(T);
       S := S + T;
       if X < AController.SelectedColumnCount - 1 then
-        S := S + ',' + #13#10;
+      begin
+        S := S + ',';
+        if ABreakItems then
+          S := S + sLineBreak
+        else
+          S := S + ' ';
+      end
     end;
     SL.Add(S);
     Result := SL.Text;

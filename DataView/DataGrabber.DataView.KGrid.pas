@@ -73,7 +73,8 @@ type
       AIncludeHeader: Boolean = False
     ): string; override;
     function SelectionToFields(
-      AQuoteItems: Boolean = True
+      AQuoteItems : Boolean = True;
+      ABreakItems : Boolean = False
     ): string; override;
     function SelectionToDelimitedTable(
       ADelimiter     : string = #9;
@@ -392,7 +393,8 @@ begin
   end;
 end;
 
-function TfrmKGrid.SelectionToFields(AQuoteItems: Boolean): string;
+function TfrmKGrid.SelectionToFields(AQuoteItems: Boolean;
+  ABreakItems: Boolean): string;
 var
   X    : Integer;
   S, T : string;
@@ -411,7 +413,13 @@ begin
         T := QuotedStr(T);
       S := S + T;
       if X < SR.Col2 then
-        S := S + ',' + ' ';
+      begin
+        S := S + ',';
+        if ABreakItems then
+          S := S + sLineBreak
+        else
+          S := S + ' ';
+      end;
     end;
     SL.Add(S);
     Result := SL.Text;
