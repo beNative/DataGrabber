@@ -354,7 +354,7 @@ begin
       LConn.UpdateOptions,
       LConn.FetchOptions,
       LConn.ResourceOptions
-      {$IFDEF DELPHIX_ATHENS_UP}, LConn.SecurityOptions{$ENDIF}
+      {$IFDEF VER360}, LConn.SecurityOptions{$ENDIF}
     );
     LName := AConnDef.Name;
     Result := TfrmFDGUIxFormsConnEdit.Execute(LConn, ACaption, nil);
@@ -366,7 +366,7 @@ begin
         LConn.UpdateOptions,
         LConn.FetchOptions,
         LConn.ResourceOptions
-        {$IFDEF DELPHIX_ATHENS_UP}, LConn.SecurityOptions{$ENDIF}
+        {$IFDEF VER360}, LConn.SecurityOptions{$ENDIF}
       );
       AConnDef.Name := LName;
     end;

@@ -89,12 +89,19 @@ object frmSettingsDialog: TfrmSettingsDialog
               end
               object edtPacketRecords: TEdit
                 Left = 220
-                Top = 18
+                Top = 17
                 Width = 58
-                Height = 21
+                Height = 23
                 Alignment = taCenter
+                Font.Charset = DEFAULT_CHARSET
+                Font.Color = clWindowText
+                Font.Height = -12
+                Font.Name = 'Segoe UI'
+                Font.Style = []
+                ParentFont = False
                 TabOrder = 0
                 Text = '100'
+                StyleElements = [seFont]
                 OnChange = edtPacketRecordsChange
               end
               object chkFetchOnDemand: TCheckBox
@@ -161,7 +168,6 @@ object frmSettingsDialog: TfrmSettingsDialog
                 Images = imlMain
                 TabOrder = 6
                 WordWrap = True
-                ExplicitLeft = 412
               end
             end
             object grpConnectionSettings: TGroupBox
@@ -178,7 +184,7 @@ object frmSettingsDialog: TfrmSettingsDialog
                 154)
               object lblDriverID: TLabel
                 Left = 12
-                Top = 20
+                Top = 21
                 Width = 47
                 Height = 13
                 Caption = '&Driver ID:'
@@ -202,7 +208,7 @@ object frmSettingsDialog: TfrmSettingsDialog
               end
               object lblConnectionDefinitionName: TLabel
                 Left = 175
-                Top = 20
+                Top = 21
                 Width = 117
                 Height = 13
                 Caption = 'Connection definition:'
@@ -222,35 +228,48 @@ object frmSettingsDialog: TfrmSettingsDialog
                 Font.Style = [fsBold]
                 ParentFont = False
                 TabOrder = 0
+                StyleElements = [seFont]
                 OnChange = cbxDriversChange
               end
               object edtDatabase: TButtonedEdit
                 Left = 76
                 Top = 44
                 Width = 435
-                Height = 21
+                Height = 23
                 Hint = 'Database (server or path).'
                 Anchors = [akLeft, akTop, akRight]
+                Font.Charset = DEFAULT_CHARSET
+                Font.Color = clWindowText
+                Font.Height = -12
+                Font.Name = 'Segoe UI'
+                Font.Style = []
                 Images = imlMain
+                ParentFont = False
                 RightButton.ImageIndex = 10
                 RightButton.Visible = True
                 TabOrder = 1
+                StyleElements = [seFont]
                 OnChange = edtDatabaseChange
                 OnRightButtonClick = edtDatabaseRightButtonClick
-                ExplicitWidth = 443
               end
               object edtCatalog: TButtonedEdit
                 Left = 76
                 Top = 72
                 Width = 435
-                Height = 21
+                Height = 23
                 Anchors = [akLeft, akTop, akRight]
+                Font.Charset = DEFAULT_CHARSET
+                Font.Color = clWindowText
+                Font.Height = -12
+                Font.Name = 'Segoe UI'
+                Font.Style = []
                 Images = imlMain
+                ParentFont = False
                 RightButton.Enabled = False
                 RightButton.ImageIndex = 10
                 TabOrder = 2
+                StyleElements = [seFont]
                 OnChange = edtCatalogChange
-                ExplicitWidth = 443
               end
               object grpDBMSUserLogin: TGroupBox
                 Left = 8
@@ -319,7 +338,6 @@ object frmSettingsDialog: TfrmSettingsDialog
                       Control = lblUserName
                       Row = 0
                     end>
-                  ParentBackground = False
                   RowCollection = <
                     item
                       Value = 100.000000000000000000
@@ -329,12 +347,11 @@ object frmSettingsDialog: TfrmSettingsDialog
                     end>
                   ShowCaption = False
                   TabOrder = 1
-                  ExplicitWidth = 352
                   object edtUserName: TEdit
                     AlignWithMargins = True
                     Left = 66
                     Top = 1
-                    Width = 121
+                    Width = 117
                     Height = 21
                     Hint = 'The DBMS server login name.'
                     Margins.Left = 1
@@ -342,12 +359,20 @@ object frmSettingsDialog: TfrmSettingsDialog
                     Margins.Right = 1
                     Margins.Bottom = 1
                     Align = alClient
+                    Font.Charset = DEFAULT_CHARSET
+                    Font.Color = clWindowText
+                    Font.Height = -12
+                    Font.Name = 'Segoe UI'
+                    Font.Style = []
+                    ParentFont = False
                     TabOrder = 0
+                    StyleElements = [seFont]
                     OnChange = edtUserNameChange
+                    ExplicitHeight = 23
                   end
                   object lblPassword: TLabel
                     AlignWithMargins = True
-                    Left = 190
+                    Left = 186
                     Top = 2
                     Width = 56
                     Height = 19
@@ -365,9 +390,9 @@ object frmSettingsDialog: TfrmSettingsDialog
                   end
                   object edtPassword: TEdit
                     AlignWithMargins = True
-                    Left = 249
+                    Left = 245
                     Top = 1
-                    Width = 102
+                    Width = 98
                     Height = 21
                     Hint = 'The DBMS server login password.'
                     Margins.Left = 1
@@ -375,17 +400,27 @@ object frmSettingsDialog: TfrmSettingsDialog
                     Margins.Right = 1
                     Margins.Bottom = 1
                     Align = alClient
+                    Font.Charset = DEFAULT_CHARSET
+                    Font.Color = clWindowText
+                    Font.Height = -12
+                    Font.Name = 'Segoe UI'
+                    Font.Style = []
+                    ParentFont = False
                     TabOrder = 1
+                    StyleElements = [seFont]
                     OnChange = edtPasswordChange
+                    ExplicitHeight = 23
                   end
                   object lblUserName: TLabel
                     Left = 0
                     Top = 0
-                    Width = 54
-                    Height = 13
+                    Width = 65
+                    Height = 23
                     Align = alClient
                     Caption = '&Username:'
                     Layout = tlCenter
+                    ExplicitWidth = 54
+                    ExplicitHeight = 13
                   end
                 end
               end
@@ -393,11 +428,18 @@ object frmSettingsDialog: TfrmSettingsDialog
                 Left = 296
                 Top = 17
                 Width = 215
-                Height = 21
+                Height = 23
                 Hint = 'Connection definitions are defined in FDConnectionDefs.ini.'
                 Anchors = [akLeft, akTop, akRight]
                 DropDownCount = 30
+                Font.Charset = DEFAULT_CHARSET
+                Font.Color = clWindowText
+                Font.Height = -12
+                Font.Name = 'Segoe UI'
+                Font.Style = []
+                ParentFont = False
                 TabOrder = 4
+                StyleElements = [seFont]
                 OnChange = cbxConnectionDefsChange
                 OnDropDown = cbxConnectionDefsDropDown
               end
@@ -439,7 +481,6 @@ object frmSettingsDialog: TfrmSettingsDialog
                 TabOrder = 1
                 OnClick = btnProfileColorClick
                 ColorDlgOptions = [cdAnyColor]
-                ExplicitLeft = 479
               end
               object edtProfileName: TLabeledEdit
                 Left = 76
@@ -459,8 +500,8 @@ object frmSettingsDialog: TfrmSettingsDialog
                 ParentFont = False
                 TabOrder = 0
                 Text = ''
+                StyleElements = [seFont]
                 OnChange = edtProfileNameChange
-                ExplicitWidth = 225
               end
               object chkSetAsDefault: TCheckBox
                 Left = 299
@@ -474,7 +515,6 @@ object frmSettingsDialog: TfrmSettingsDialog
                 Caption = 'Set as d&efault'
                 TabOrder = 2
                 OnClick = chkSetAsDefaultClick
-                ExplicitLeft = 307
               end
             end
           end
@@ -495,7 +535,6 @@ object frmSettingsDialog: TfrmSettingsDialog
         BevelOuter = bvNone
         Constraints.MinWidth = 137
         TabOrder = 1
-        ExplicitHeight = 364
         object tlbConnectionProfiles: TToolBar
           Left = 0
           Top = 0
@@ -755,7 +794,7 @@ object frmSettingsDialog: TfrmSettingsDialog
             Left = 3
             Top = 31
             Width = 54
-            Height = 22
+            Height = 25
             Align = alClient
             Caption = 'Float'
             FocusControl = btnFloatColor
@@ -786,7 +825,7 @@ object frmSettingsDialog: TfrmSettingsDialog
             Left = 3
             Top = 59
             Width = 54
-            Height = 22
+            Height = 25
             Align = alClient
             Caption = 'String'
             FocusControl = btnStringColor
@@ -817,7 +856,7 @@ object frmSettingsDialog: TfrmSettingsDialog
             Left = 3
             Top = 87
             Width = 54
-            Height = 22
+            Height = 25
             Align = alClient
             Caption = 'Memo'
             FocusControl = btnMemoColor
@@ -848,7 +887,7 @@ object frmSettingsDialog: TfrmSettingsDialog
             Left = 3
             Top = 115
             Width = 54
-            Height = 22
+            Height = 25
             Align = alClient
             Caption = 'Date'
             FocusControl = btnDateColor
@@ -879,7 +918,7 @@ object frmSettingsDialog: TfrmSettingsDialog
             Left = 3
             Top = 143
             Width = 54
-            Height = 22
+            Height = 25
             Align = alClient
             Caption = 'Time'
             FocusControl = btnTimeColor
@@ -910,7 +949,7 @@ object frmSettingsDialog: TfrmSettingsDialog
             Left = 3
             Top = 171
             Width = 54
-            Height = 22
+            Height = 25
             Align = alClient
             Caption = 'DateTime'
             FocusControl = btnDateTimeColor
@@ -941,7 +980,7 @@ object frmSettingsDialog: TfrmSettingsDialog
             Left = 3
             Top = 199
             Width = 54
-            Height = 22
+            Height = 25
             Align = alClient
             Caption = 'NULL'
             FocusControl = btnNullColor
@@ -972,7 +1011,7 @@ object frmSettingsDialog: TfrmSettingsDialog
             Left = 3
             Top = 227
             Width = 54
-            Height = 22
+            Height = 25
             Align = alClient
             Caption = 'Boolean'
             FocusControl = btnBooleanColor
@@ -1009,7 +1048,6 @@ object frmSettingsDialog: TfrmSettingsDialog
         Caption = 'Grid type'
         Columns = 3
         TabOrder = 0
-        ExplicitWidth = 314
       end
       object grpGridLines: TGroupBox
         Left = 135
@@ -1102,8 +1140,6 @@ object frmSettingsDialog: TfrmSettingsDialog
         Anchors = [akLeft, akTop, akRight, akBottom]
         Caption = 'Editor settings'
         TabOrder = 4
-        ExplicitWidth = 314
-        ExplicitHeight = 260
         object lblEditorFont: TLabel
           Left = 19
           Top = 22
@@ -1134,7 +1170,6 @@ object frmSettingsDialog: TfrmSettingsDialog
         Anchors = [akLeft, akTop, akBottom]
         Caption = 'Grid font settings'
         TabOrder = 5
-        ExplicitHeight = 240
         object lblGridFont: TLabel
           Left = 12
           Top = 27
@@ -1165,8 +1200,6 @@ object frmSettingsDialog: TfrmSettingsDialog
         Anchors = [akLeft, akRight, akBottom]
         Caption = 'Logging'
         TabOrder = 6
-        ExplicitTop = 320
-        ExplicitWidth = 314
         object chkEmitLogMessages: TCheckBox
           Left = 16
           Top = 17
@@ -1193,16 +1226,14 @@ object frmSettingsDialog: TfrmSettingsDialog
         ActivePage = tsDataGrabberSettings
         Align = alClient
         TabOrder = 0
-        ExplicitWidth = 702
-        ExplicitHeight = 358
         object tsDataGrabberSettings: TTabSheet
           Caption = 'Settings.json'
           object seSettings: TSynEdit
             AlignWithMargins = True
             Left = 3
             Top = 3
-            Width = 688
-            Height = 324
+            Width = 684
+            Height = 323
             Align = alClient
             ActiveLineColor = clYellow
             Font.Charset = DEFAULT_CHARSET
@@ -1250,8 +1281,8 @@ object frmSettingsDialog: TfrmSettingsDialog
             AlignWithMargins = True
             Left = 3
             Top = 3
-            Width = 688
-            Height = 324
+            Width = 684
+            Height = 323
             Align = alClient
             ActiveLineColor = clYellow
             Font.Charset = DEFAULT_CHARSET
@@ -1305,7 +1336,6 @@ object frmSettingsDialog: TfrmSettingsDialog
         Images = imlMain
         List = True
         TabOrder = 1
-        ExplicitLeft = 630
         object btnSaveFile: TToolButton
           Left = 0
           Top = 0
@@ -1340,8 +1370,6 @@ object frmSettingsDialog: TfrmSettingsDialog
     ImageMargins.Right = 4
     Images = imlMain
     TabOrder = 1
-    ExplicitLeft = 252
-    ExplicitTop = 402
   end
   object btnClose: TButton
     Left = 556
@@ -1356,8 +1384,6 @@ object frmSettingsDialog: TfrmSettingsDialog
     Images = imlMain
     ModalResult = 11
     TabOrder = 3
-    ExplicitLeft = 564
-    ExplicitTop = 402
   end
   object btnCancel: TButton
     Left = 400
@@ -1373,8 +1399,6 @@ object frmSettingsDialog: TfrmSettingsDialog
     Images = imlMain
     ModalResult = 2
     TabOrder = 2
-    ExplicitLeft = 408
-    ExplicitTop = 402
   end
   object aclMain: TActionList
     Images = imlMain

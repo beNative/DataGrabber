@@ -44,7 +44,6 @@ uses
     - Working set of tables (cache meta info and links and make them
       customizable as a profile setting)
     - Statement builder, smart joining
-    - Profile color for tab backgrounds
 }
 
 type
