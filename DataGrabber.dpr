@@ -29,7 +29,8 @@ uses
   DataGrabber.DataView.cxGrid in 'DataView\DataGrabber.DataView.cxGrid.pas' {frmcxGrid},
   DataGrabber.MetaData.Dialog in 'DataGrabber.MetaData.Dialog.pas' {frmMetaData},
   DataGrabber.DataView.Base in 'DataView\DataGrabber.DataView.Base.pas' {BaseDataView},
-  DataGrabber.Data.ResultSet in 'DataGrabber.Data.ResultSet.pas';
+  DataGrabber.Data.ResultSet in 'DataGrabber.Data.ResultSet.pas',
+  DataGrabber.Assets in 'DataGrabber.Assets.pas' {dmAssets: TDataModule};
 
 {$R *.res}
 
@@ -46,5 +47,6 @@ begin
   Application.Initialize;
   Application.Title := 'DataGrabber';
   Application.CreateForm(TfrmMain, frmMain);
+  Application.CreateForm(TdmAssets, dmAssets);
   Application.Run;
 end.

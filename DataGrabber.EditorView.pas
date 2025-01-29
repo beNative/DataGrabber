@@ -1,5 +1,5 @@
 {
-  Copyright (C) 2013-2024 Tim Sinaeve tim.sinaeve@gmail.com
+  Copyright (C) 2013-2025 Tim Sinaeve tim.sinaeve@gmail.com
 
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
@@ -172,6 +172,7 @@ end;
 procedure TfrmEditorView.ApplySettings;
 begin
   FEditor.Font.Assign(FManager.Settings.EditorFont);
+  FEditor.Font.Size := 12;
 end;
 
 procedure TfrmEditorView.AssignParent(AParent: TWinControl);
@@ -190,6 +191,7 @@ begin
   FEditor.AlignWithMargins := False;
   FEditor.BorderStyle      := bsNone;
   FEditor.Font.Assign(FManager.Settings.EditorFont);
+  FEditor.Font.Size        := 12;
   FEditor.Highlighter      := synSQL;
   FEditor.Options := [
     eoAltSetsColumnMode,

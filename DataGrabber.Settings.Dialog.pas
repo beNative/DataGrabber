@@ -1,5 +1,5 @@
 {
-  Copyright (C) 2013-2024 Tim Sinaeve tim.sinaeve@gmail.com
+  Copyright (C) 2013-2025 Tim Sinaeve tim.sinaeve@gmail.com
 
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
@@ -26,13 +26,11 @@ uses
   System.Classes, System.TypInfo,
   Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls,
   Vcl.StdCtrls, Vcl.ComCtrls, Vcl.ActnList, Vcl.ImgList, Vcl.ToolWin,
+  Vcl.Mask, Vcl.VirtualImageList,
   Data.DB,
   FireDAC.Stan.Intf, FireDAC.Stan.Option, FireDAC.Stan.Error, FireDAC.Stan.Def,
-  FireDAC.Stan.Pool, FireDAC.Stan.Async,
-  FireDAC.UI.Intf,
-  FireDAC.Phys.Intf, FireDAC.Phys,
-  FireDAC.VCLUI.Wait,
-  FireDAC.Comp.Client,
+  FireDAC.Stan.Pool, FireDAC.Stan.Async, FireDAC.UI.Intf, FireDAC.Phys.Intf,
+  FireDAC.Phys, FireDAC.VCLUI.Wait, FireDAC.Comp.Client,
 
   VirtualTrees, VirtualTrees.BaseTree,
 
@@ -46,7 +44,7 @@ uses
   DataGrabber.Interfaces,
 
   DataGrabber.Settings, DataGrabber.ConnectionProfiles,
-  DataGrabber.ConnectionProfileValueManager, Vcl.Mask;
+  DataGrabber.ConnectionProfileValueManager;
 
 type
   TApplySettingsMethod = reference to procedure;
@@ -138,7 +136,6 @@ type
     grpLogging                   : TGroupBox;
     grpProfileSettings           : TGroupBox;
     grpResultSetDisplay          : TGroupBox;
-    imlMain                      : TImageList;
     lblBoolean                   : TLabel;
     lblCatalog                   : TLabel;
     lblConnectionDefinitionName  : TLabel;
@@ -183,6 +180,7 @@ type
     tsDisplay                    : TTabSheet;
     tsFDConnectionDefs           : TTabSheet;
     tsSettings                   : TTabSheet;
+    imlMain                      : TVirtualImageList;
     {$ENDREGION}
 
     {$REGION 'action handlers'}
@@ -335,7 +333,8 @@ uses
 
   DDuce.Factories.VirtualTrees, DDuce.Factories.zObjInspector, DDuce.Logger,
 
-  DataGrabber.Utils, DataGrabber.ConnectionSettings, DataGrabber.Resources;
+  DataGrabber.Utils, DataGrabber.ConnectionSettings, DataGrabber.Resources,
+  DataGrabber.Assets;
 
 {$REGION 'non-interfaced routines'}
 function ExecuteFDConnectionDialog(AConnDef: IFDStanConnectionDef;

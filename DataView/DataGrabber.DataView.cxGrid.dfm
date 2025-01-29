@@ -2,6 +2,7 @@ inherited frmcxGrid: TfrmcxGrid
   ClientHeight = 319
   ClientWidth = 695
   Font.Name = 'Se'
+  StyleElements = [seFont, seClient, seBorder]
   ExplicitWidth = 695
   ExplicitHeight = 319
   TextHeight = 14
@@ -16,7 +17,7 @@ inherited frmcxGrid: TfrmcxGrid
     BorderStyle = cxcbsNone
     Font.Charset = ANSI_CHARSET
     Font.Color = clWindowText
-    Font.Height = -11
+    Font.Height = -12
     Font.Name = 'Calibri'
     Font.Style = []
     ParentFont = False

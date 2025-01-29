@@ -1,5 +1,5 @@
 {
-  Copyright (C) 2013-2024 Tim Sinaeve tim.sinaeve@gmail.com
+  Copyright (C) 2013-2025 Tim Sinaeve tim.sinaeve@gmail.com
 
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
@@ -193,6 +193,7 @@ begin
   FGrid.ColumnClick              := True;
   FGrid.EndEllipsis              := True;
   FGrid.Font.Name                := 'Callibri';
+  FGrid.Font.Size                := 12;
   FGrid.ShowCellTips             := True;
   FGrid.CheckStyle               := csFlat;
   FGrid.ColumnsFullDrag          := True;
@@ -580,7 +581,9 @@ begin
   else
     FGrid.GridStyle := FGrid.GridStyle - [gsVertLine];
   FGrid.Font.Assign(Settings.GridFont);
+  FGrid.Font.Size := 10;
   FGrid.Header.Font.Assign(Settings.GridFont);
+  FGrid.Header.Font.Size := 10;
   FGrid.Header.Font.Style := FGrid.Header.Font.Style + [fsBold];
 end;
 

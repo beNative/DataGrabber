@@ -1,5 +1,5 @@
 {
-  Copyright (C) 2013-2024 Tim Sinaeve tim.sinaeve@gmail.com
+  Copyright (C) 2013-2025 Tim Sinaeve tim.sinaeve@gmail.com
 
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
@@ -29,7 +29,8 @@ uses
 
   DataGrabber.DataInspector, DataGrabber.FieldInspector,
 
-  DataGrabber.Interfaces, DataGrabber.ConnectionProfiles;
+  DataGrabber.Interfaces, DataGrabber.ConnectionProfiles,
+  Vcl.BaseImageCollection, Vcl.ImageCollection;
 
 {$REGION 'documentation'}
 {
@@ -88,7 +89,6 @@ type
     actShowMetaData               : TAction;
     actToggleFullScreen           : TAction;
     actToggleStayOnTop            : TAction;
-    imlMain                       : TImageList;
     mniAutoSizeCols               : TMenuItem;
     mniClearGrouping              : TMenuItem;
     mniCollapseAll                : TMenuItem;
@@ -131,6 +131,7 @@ type
     N6                            : TMenuItem;
     ppmConnectionView             : TPopupMenu;
     ppmEditorView                 : TPopupMenu;
+    imcMain: TImageCollection;
     {$ENDREGION}
 
     {$REGION 'action handlers'}
@@ -195,10 +196,12 @@ type
     function GetConnectionViewPopupMenu: TPopupMenu;
     function GetDefaultConnectionProfile: TConnectionProfile;
     function GetItem(AIndex: Integer): IConnectionView;
+    function GetImageCollection: TImageCollection;
     function GetCount: Integer;
     {$ENDREGION}
 
     procedure SettingsChanged(Sender: TObject);
+
 
   protected
     procedure Execute(const ASQL: string);
@@ -248,6 +251,9 @@ type
 
     property DefaultConnectionProfile: TConnectionProfile
       read GetDefaultConnectionProfile;
+
+    property ImageCollection: TImageCollection
+      read GetImageCollection;
   end;
 
 implementation
@@ -627,6 +633,11 @@ end;
 function TdmConnectionViewManager.GetDefaultConnectionProfile: TConnectionProfile;
 begin
   Result := FSettings.ConnectionProfiles.Find(FSettings.DefaultConnectionProfile);
+end;
+
+function TdmConnectionViewManager.GetImageCollection: TImageCollection;
+begin
+  Result := imcMain;
 end;
 
 function TdmConnectionViewManager.GetItem(AIndex: Integer): IConnectionView;

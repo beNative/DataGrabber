@@ -1,5 +1,5 @@
 {
-  Copyright (C) 2013-2024 Tim Sinaeve tim.sinaeve@gmail.com
+  Copyright (C) 2013-2025 Tim Sinaeve tim.sinaeve@gmail.com
 
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
@@ -20,7 +20,7 @@ interface
 
 {$I DataGrabber.inc}
 
-{$IFDEF DEVEXPRESS}
+//{$IFDEF DEVEXPRESS}
 uses
   Winapi.Windows, Winapi.Messages,
   System.SysUtils, System.Variants, System.Classes,
@@ -85,7 +85,8 @@ type
     ): string; reintroduce; overload;
     function SelectionToFields(
       AController : TcxGridTableController;
-      AQuoteItems : Boolean = True
+      AQuoteItems : Boolean = True;
+      ABreakItems : Boolean = False
     ): string; reintroduce; overload;
     function SelectionToTextTable(
       AController    : TcxGridTableController;
@@ -162,11 +163,11 @@ type
     property PopupMenu: TPopupMenu
       read GetPopupMenu write SetPopupMenu;
   end;
-{$ENDIF}
+//{$ENDIF}
 
 implementation
 
-{$IFDEF DEVEXPRESS}
+//{$IFDEF DEVEXPRESS}
 {$R *.dfm}
 
 uses
@@ -622,6 +623,7 @@ begin
     tvwMain.OptionsView.GroupByBox := Settings.GroupByBoxVisible;
     MergeColumnCells := Settings.MergeColumnCells;
     grdMain.Font.Assign(Settings.GridFont);
+    grdMain.Font.Size := 10;
   end;
 end;
 
@@ -769,7 +771,7 @@ begin
     SelectionToDelimitedTable(tvwMain.Controller, ADelimiter, AIncludeHeader);
 end;
 
-function TfrmcxGrid.SelectionToFields(AQuoteItems: Boolean): string;
+function TfrmcxGrid.SelectionToFields(AQuoteItems: Boolean; ABreakItems: Boolean): string;
 begin
   Result := SelectionToFields(tvwMain.Controller, AQuoteItems);
 end;
@@ -805,5 +807,5 @@ begin
   end;
 end;
 {$ENDREGION}
-{$ENDIF}
+//{$ENDIF}
 end.

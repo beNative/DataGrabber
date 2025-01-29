@@ -40,8 +40,8 @@ object frmConnectionView: TfrmConnectionView
     Align = alClient
     BevelEdges = []
     TabOrder = 0
-    ExplicitWidth = 902
-    ExplicitHeight = 486
+    ExplicitWidth = 900
+    ExplicitHeight = 470
     object pnlTop: TPanel
       Left = 0
       Top = 0
@@ -75,6 +75,7 @@ object frmConnectionView: TfrmConnectionView
         Align = alLeft
         BevelOuter = bvNone
         TabOrder = 0
+        ExplicitHeight = 141
       end
       object pnlTopRight: TPanel
         Left = 189
@@ -84,7 +85,8 @@ object frmConnectionView: TfrmConnectionView
         Align = alClient
         BevelOuter = bvNone
         TabOrder = 1
-        ExplicitWidth = 713
+        ExplicitWidth = 711
+        ExplicitHeight = 141
       end
     end
     object pnlBottom: TPanel

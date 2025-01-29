@@ -1,5 +1,5 @@
 {
-  Copyright (C) 2013-2024 Tim Sinaeve tim.sinaeve@gmail.com
+  Copyright (C) 2013-2025 Tim Sinaeve tim.sinaeve@gmail.com
 
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
@@ -117,8 +117,8 @@ uses
 procedure TfrmKGrid.AfterConstruction;
 begin
   inherited AfterConstruction;
-  grdMain.MinRowHeight             := 17;
-  grdMain.DefaultRowHeight         := 17;
+  grdMain.MinRowHeight             := ScaleSize(20);
+  grdMain.DefaultRowHeight         := ScaleSize(20);
   grdMain.Colors.FocusedRangeBkGnd := clGray;
   UpdateView;
 end;
@@ -242,6 +242,7 @@ begin
   else
     grdMain.Options := grdMain.Options - [goVertLine];
   grdMain.Font.Assign(Settings.GridFont);
+  grdMain.Font.Size := 10;
 end;
 
 procedure TfrmKGrid.AutoSizeColumns;
@@ -266,7 +267,9 @@ begin
       C := TKDBGridCol(grdMain.Cols[I]);
       C.CurrencyFormat := CF;
       C.Font.Assign(grdMain.Font);
+      C.Font.Size := 10;
       C.TitleFont.Assign(grdMain.Font);
+      C.TitleFont.Size := 10;
     end;
   finally
     EndUpdate;

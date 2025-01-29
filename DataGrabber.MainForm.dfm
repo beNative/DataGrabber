@@ -25,6 +25,8 @@ object frmMain: TfrmMain
     Align = alBottom
     BevelOuter = bvNone
     TabOrder = 0
+    ExplicitTop = 544
+    ExplicitWidth = 1116
     object shpLine: TShape
       Left = 0
       Top = 0
@@ -184,6 +186,8 @@ object frmMain: TfrmMain
     Align = alClient
     BevelOuter = bvNone
     TabOrder = 1
+    ExplicitWidth = 1116
+    ExplicitHeight = 521
     object ctMain: TChromeTabs
       Left = 0
       Top = 0
@@ -307,6 +311,7 @@ object frmMain: TfrmMain
       Options.Behaviour.TabRightClickSelect = True
       Options.Behaviour.ActivateNewTab = True
       Options.Behaviour.DebugMode = False
+      Options.Behaviour.CloseOnWheel = True
       Options.Behaviour.IgnoreDoubleClicksWhileAnimatingMovement = True
       Options.Scrolling.Enabled = True
       Options.Scrolling.ScrollButtons = csbRight
@@ -515,6 +520,7 @@ object frmMain: TfrmMain
       Align = alTop
       PopupMenu = ppmCVTabs
       TabOrder = 0
+      ExplicitWidth = 1116
     end
   end
   object pnlTop: TPanel
@@ -526,6 +532,7 @@ object frmMain: TfrmMain
     BevelOuter = bvNone
     ParentBackground = False
     TabOrder = 2
+    ExplicitWidth = 1116
     object tlbMain: TToolBar
       Left = 0
       Top = 0
@@ -549,6 +556,7 @@ object frmMain: TfrmMain
       Transparent = True
       Wrapable = False
       OnCustomDraw = tlbMainCustomDraw
+      ExplicitHeight = 26
     end
     object tlbTopRight: TToolBar
       Left = 1072
@@ -568,10 +576,11 @@ object frmMain: TfrmMain
       Transparent = True
       Wrapable = False
       OnCustomDraw = tlbMainCustomDraw
+      ExplicitLeft = 1066
     end
   end
   object aclMain: TActionList
-    Left = 104
+    Left = 140
     Top = 72
     object actAddConnectionView: TAction
       Caption = 'Add connectionview'
@@ -1002,12 +1011,19 @@ object frmMain: TfrmMain
   end
   object ppmCVTabs: TPopupMenu
     Left = 32
-    Top = 128
+    Top = 188
     object mniCloseAllOtherTabs: TMenuItem
       Action = actCloseAllOtherTabs
     end
     object mniCloseTab: TMenuItem
       Action = actCloseTab
     end
+  end
+  object imlMain: TVirtualImageList
+    AutoFill = True
+    Images = <>
+    ImageNameAvailable = False
+    Left = 280
+    Top = 80
   end
 end

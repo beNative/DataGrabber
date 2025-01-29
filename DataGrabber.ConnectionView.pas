@@ -1,5 +1,5 @@
 {
-  Copyright (C) 2013-2024 Tim Sinaeve tim.sinaeve@gmail.com
+  Copyright (C) 2013-2025 Tim Sinaeve tim.sinaeve@gmail.com
 
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
@@ -282,7 +282,7 @@ begin
         Manager,
         Data.Items[I]
       );
-      DV.PopupMenu := Manager.ConnectionViewPopupMenu;
+//      DV.PopupMenu := Manager.ConnectionViewPopupMenu;
       if B then
       begin
         TS := TTabSheet.Create(FPageControl);
@@ -305,7 +305,7 @@ begin
       Manager,
       Data.ResultSet
     );
-    DV.PopupMenu := Manager.ConnectionViewPopupMenu;
+//    DV.PopupMenu := Manager.ConnectionViewPopupMenu;
     DV.AssignParent(pnlBottom);
     FActiveDataView := DV;
   end;

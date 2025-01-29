@@ -1,5 +1,5 @@
 {
-  Copyright (C) 2013-2024 Tim Sinaeve tim.sinaeve@gmail.com
+  Copyright (C) 2013-2025 Tim Sinaeve tim.sinaeve@gmail.com
 
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
@@ -25,11 +25,12 @@ uses
   Vcl.ExtCtrls,
   Data.DB,
 
-  DataGrabber.Interfaces;
+  DataGrabber.Interfaces, System.ImageList, Vcl.ImgList, Vcl.VirtualImageList;
 
 type
   TBaseDataView = class(TForm, IDataView)
     dscMain : TDataSource;
+    imlMain : TVirtualImageList;
 
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
 
@@ -149,6 +150,10 @@ begin
   FResultSet := AResultSet;
   FManager   := AManager;
   dscMain.DataSet := AResultSet.DataSet;
+  imlMain.ImageCollection := FManager.ImageCollection;
+  PopupMenu := FManager.ConnectionViewPopupMenu;
+  FManager.ActionList.Images := imlMain;
+  FManager.ConnectionViewPopupMenu.Images := imlMain;
 end;
 
 procedure TBaseDataView.AfterConstruction;
