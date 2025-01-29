@@ -6,9 +6,7 @@ object frmEditorView: TfrmEditorView
   ClientWidth = 506
   Color = clBtnFace
   ParentFont = True
-  OldCreateOrder = False
-  PixelsPerInch = 96
-  TextHeight = 13
+  TextHeight = 15
   object synSQL: TSynSQLSyn
     Options.AutoDetectEnabled = True
     Options.AutoDetectLineLimit = 0

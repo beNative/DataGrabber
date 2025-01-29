@@ -1,5 +1,5 @@
 {
-  Copyright (C) 2013-2021 Tim Sinaeve tim.sinaeve@gmail.com
+  Copyright (C) 2013-2025 Tim Sinaeve tim.sinaeve@gmail.com
 
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
@@ -16,4 +16,4 @@
 
 {$I jedi.inc}
 
-{.$DEFINE DEVEXPRESS}  // use cxGrid
+{$DEFINE DEVEXPRESS}  // use cxGrid

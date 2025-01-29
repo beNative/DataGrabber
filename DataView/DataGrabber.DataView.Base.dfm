@@ -18,4 +18,11 @@ object BaseDataView: TBaseDataView
     Left = 8
     Top = 16
   end
+  object imlMain: TVirtualImageList
+    AutoFill = True
+    Images = <>
+    ImageNameAvailable = False
+    Left = 224
+    Top = 32
+  end
 end

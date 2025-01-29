@@ -1,5 +1,5 @@
 {
-  Copyright (C) 2013-2024 Tim Sinaeve tim.sinaeve@gmail.com
+  Copyright (C) 2013-2025 Tim Sinaeve tim.sinaeve@gmail.com
 
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
@@ -25,6 +25,7 @@ interface
 uses
   System.Classes,
   Vcl.Graphics, Vcl.Controls, Vcl.Menus, Vcl.Forms, Vcl.ActnList,
+  Vcl.ImageCollection,
   Data.DB,
   FireDAC.Comp.Client, FireDAC.Stan.Intf, FireDAC.Comp.DataSet,
 
@@ -461,6 +462,7 @@ type
     function GetConnectionViewPopupMenu: TPopupMenu;
     function GetDefaultConnectionProfile: TConnectionProfile;
     function GetItem(AIndex: Integer): IConnectionView;
+    function GetImageCollection: TImageCollection;
     function GetCount: Integer;
     {$ENDREGION}
 
@@ -493,6 +495,9 @@ type
 
     property Items[AIndex: Integer]: IConnectionView
       read GetItem; default;
+
+    property ImageCollection: TImageCollection
+      read GetImageCollection;
 
     property ConnectionViewPopupMenu: TPopupMenu
       read GetConnectionViewPopupMenu;

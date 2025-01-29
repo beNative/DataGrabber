@@ -1,5 +1,5 @@
 {
-  Copyright (C) 2013-2024 Tim Sinaeve tim.sinaeve@gmail.com
+  Copyright (C) 2013-2025 Tim Sinaeve tim.sinaeve@gmail.com
 
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
@@ -25,7 +25,7 @@ uses
   System.SysUtils, System.Variants, System.Classes, System.Actions,
   System.ImageList,
   Vcl.Menus, Vcl.ActnList, Vcl.Controls, Vcl.Forms, Vcl.ToolWin, Vcl.ExtCtrls,
-  Vcl.Graphics, Vcl.Dialogs, Vcl.ComCtrls, Vcl.ImgList,
+  Vcl.Graphics, Vcl.Dialogs, Vcl.ComCtrls, Vcl.ImgList, Vcl.VirtualImageList,
 
   VirtualTrees,
 
@@ -73,6 +73,7 @@ type
     tlbMain                : TToolBar;
     tlbTopRight            : TToolBar;
     shpLine                : TShape;
+    imlMain                : TVirtualImageList;
     {$ENDREGION}
 
     {$REGION 'action handlers'}
@@ -189,8 +190,11 @@ begin
   FSettings.FormSettings.AssignTo(Self);
   Logger.Enabled := FSettings.EmitLogMessages;
   AddConnectionView;
-  tlbMain.Images     := FManager.ActionList.Images;
-  tlbTopRight.Images := FManager.ActionList.Images;
+  imlMain.ImageCollection := FManager.ImageCollection;
+//  tlbMain.Images     := FManager.ActionList.Images;
+//  tlbTopRight.Images := FManager.ActionList.Images;
+  tlbMain.Images     := imlMain;
+  tlbTopRight.Images := imlMain;
   InitializeActions;
 end;
 
