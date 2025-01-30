@@ -282,7 +282,6 @@ begin
         Manager,
         Data.Items[I]
       );
-//      DV.PopupMenu := Manager.ConnectionViewPopupMenu;
       if B then
       begin
         TS := TTabSheet.Create(FPageControl);
@@ -305,7 +304,6 @@ begin
       Manager,
       Data.ResultSet
     );
-//    DV.PopupMenu := Manager.ConnectionViewPopupMenu;
     DV.AssignParent(pnlBottom);
     FActiveDataView := DV;
   end;

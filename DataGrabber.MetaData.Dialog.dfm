@@ -1,29 +1,20 @@
 object frmMetaData: TfrmMetaData
   Left = 0
   Top = 0
-  Margins.Left = 5
-  Margins.Top = 5
-  Margins.Right = 5
-  Margins.Bottom = 5
-  ClientHeight = 768
-  ClientWidth = 1296
+  ClientHeight = 512
+  ClientWidth = 860
   Color = clBtnFace
   Font.Charset = ANSI_CHARSET
   Font.Color = clWindowText
-  Font.Height = -17
+  Font.Height = -11
   Font.Name = 'Segoe UI'
   Font.Style = []
-  PixelsPerInch = 144
-  TextHeight = 23
+  TextHeight = 13
   object pnlMain: TOMultiPanel
     Left = 0
     Top = 0
-    Width = 1296
-    Height = 768
-    Margins.Left = 5
-    Margins.Top = 5
-    Margins.Right = 5
-    Margins.Bottom = 5
+    Width = 860
+    Height = 512
     PanelCollection = <
       item
         Control = lstCatalogs
@@ -52,67 +43,53 @@ object frmMetaData: TfrmMetaData
     MinPosition = 0.020000000000000000
     Align = alClient
     TabOrder = 0
+    ExplicitWidth = 854
+    ExplicitHeight = 495
     DesignSize = (
-      1296
-      768)
+      860
+      512)
     object lstCatalogs: TListBox
       Left = 0
       Top = 0
-      Width = 324
-      Height = 768
-      Margins.Left = 5
-      Margins.Top = 5
-      Margins.Right = 5
-      Margins.Bottom = 5
+      Width = 215
+      Height = 512
       Anchors = []
       BorderStyle = bsNone
-      ItemHeight = 23
+      ItemHeight = 13
       TabOrder = 0
       OnClick = lstCatalogsClick
     end
     object lstSchemas: TListBox
-      Left = 327
+      Left = 218
       Top = 0
-      Width = 321
-      Height = 768
-      Margins.Left = 5
-      Margins.Top = 5
-      Margins.Right = 5
-      Margins.Bottom = 5
+      Width = 212
+      Height = 512
       Anchors = []
       BorderStyle = bsNone
-      ItemHeight = 23
+      ItemHeight = 13
       TabOrder = 1
       OnClick = lstSchemasClick
       OnEnter = lstSchemasEnter
     end
     object lstTables: TListBox
-      Left = 651
+      Left = 433
       Top = 0
-      Width = 321
-      Height = 768
-      Margins.Left = 5
-      Margins.Top = 5
-      Margins.Right = 5
-      Margins.Bottom = 5
+      Width = 212
+      Height = 512
       Anchors = []
       BorderStyle = bsNone
-      ItemHeight = 23
+      ItemHeight = 13
       TabOrder = 2
       OnClick = lstTablesClick
     end
     object lstFields: TListBox
-      Left = 975
+      Left = 648
       Top = 0
-      Width = 321
-      Height = 768
-      Margins.Left = 5
-      Margins.Top = 5
-      Margins.Right = 5
-      Margins.Bottom = 5
+      Width = 212
+      Height = 512
       Anchors = []
       BorderStyle = bsNone
-      ItemHeight = 23
+      ItemHeight = 13
       TabOrder = 3
     end
   end

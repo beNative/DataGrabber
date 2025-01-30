@@ -158,7 +158,7 @@
         <Icon_MainIcon>DataGrabber_Icon.ico</Icon_MainIcon>
         <DCC_DebugInfoInTds>true</DCC_DebugInfoInTds>
         <VerInfo_Build>104</VerInfo_Build>
-        <VerInfo_Keys>FileDescription=DataGrabber;FileVersion=2.9.0.104;LegalCopyright=(c) 2011 - 2024 Tim Sinaeve;OriginalFilename=DataGrabber.exe;ProductName=DataGrabber;ProductVersion=2.9;InternalName=DataGrabber;Comments=http://github.com/beNative/DataGrabber</VerInfo_Keys>
+        <VerInfo_Keys>FileDescription=DataGrabber;FileVersion=2.9.0.104;LegalCopyright=(c) 2011 - 2025 Tim Sinaeve;OriginalFilename=DataGrabber.exe;ProductName=DataGrabber;ProductVersion=2.9;InternalName=DataGrabber;Comments=http://github.com/beNative/DataGrabber</VerInfo_Keys>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_2_Win64)'!=''">
         <BT_BuildType>Debug</BT_BuildType>

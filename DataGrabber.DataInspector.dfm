@@ -1,37 +1,30 @@
 object frmDataInspector: TfrmDataInspector
   Left = 0
   Top = 0
-  Margins.Left = 5
-  Margins.Top = 5
-  Margins.Right = 5
-  Margins.Bottom = 5
   BorderStyle = bsSizeToolWin
   Caption = 'Datainspector'
-  ClientHeight = 338
-  ClientWidth = 359
+  ClientHeight = 225
+  ClientWidth = 235
   Color = clBtnFace
   DoubleBuffered = True
   Font.Charset = ANSI_CHARSET
   Font.Color = clWindowText
-  Font.Height = -17
+  Font.Height = -11
   Font.Name = 'Segoe UI'
   Font.Style = []
   Position = poMainFormCenter
   OnShow = FormShow
-  PixelsPerInch = 144
-  TextHeight = 23
+  TextHeight = 13
   object pnlMain: TPanel
     Left = 0
     Top = 0
-    Width = 359
-    Height = 338
-    Margins.Left = 5
-    Margins.Top = 5
-    Margins.Right = 5
-    Margins.Bottom = 5
+    Width = 235
+    Height = 225
     Align = alClient
     BevelOuter = bvNone
     TabOrder = 0
+    ExplicitWidth = 229
+    ExplicitHeight = 208
   end
   object dscMain: TDataSource
     OnDataChange = dscMainDataChange

@@ -337,7 +337,7 @@ object frmMain: TfrmMain
       LookAndFeel.Tabs.Modified.OutsideAlpha = 0
       LookAndFeel.Tabs.DefaultFont.Name = 'Segoe UI'
       LookAndFeel.Tabs.DefaultFont.Color = clBlack
-      LookAndFeel.Tabs.DefaultFont.Size = 8
+      LookAndFeel.Tabs.DefaultFont.Size = 6
       LookAndFeel.Tabs.DefaultFont.Alpha = 255
       LookAndFeel.Tabs.DefaultFont.TextRenderingMode = TextRenderingHintClearTypeGridFit
       LookAndFeel.Tabs.MouseGlow.CentreColor = clWhite
@@ -350,9 +350,9 @@ object frmMain: TfrmMain
       LookAndFeel.Tabs.Spinners.Download.Color = 14388040
       LookAndFeel.Tabs.Spinners.Download.Thickness = 2.500000000000000000
       LookAndFeel.Tabs.Spinners.Download.Alpha = 255
-      LookAndFeel.Tabs.Active.Font.Name = 'Tahoma'
+      LookAndFeel.Tabs.Active.Font.Name = 'Segoe UI'
       LookAndFeel.Tabs.Active.Font.Color = clBlack
-      LookAndFeel.Tabs.Active.Font.Size = 8
+      LookAndFeel.Tabs.Active.Font.Size = 6
       LookAndFeel.Tabs.Active.Font.Alpha = 100
       LookAndFeel.Tabs.Active.Font.TextRenderingMode = TextRenderingHintClearTypeGridFit
       LookAndFeel.Tabs.Active.Font.UseDefaultFont = True
@@ -363,9 +363,9 @@ object frmMain: TfrmMain
       LookAndFeel.Tabs.Active.Style.OutlineColor = clGray
       LookAndFeel.Tabs.Active.Style.OutlineSize = 1.000000000000000000
       LookAndFeel.Tabs.Active.Style.OutlineAlpha = 255
-      LookAndFeel.Tabs.NotActive.Font.Name = 'Tahoma'
+      LookAndFeel.Tabs.NotActive.Font.Name = 'Segoe UI'
       LookAndFeel.Tabs.NotActive.Font.Color = clBlack
-      LookAndFeel.Tabs.NotActive.Font.Size = 8
+      LookAndFeel.Tabs.NotActive.Font.Size = 6
       LookAndFeel.Tabs.NotActive.Font.Alpha = 255
       LookAndFeel.Tabs.NotActive.Font.TextRenderingMode = TextRenderingHintClearTypeGridFit
       LookAndFeel.Tabs.NotActive.Font.UseDefaultFont = True
@@ -376,9 +376,9 @@ object frmMain: TfrmMain
       LookAndFeel.Tabs.NotActive.Style.OutlineColor = clGray
       LookAndFeel.Tabs.NotActive.Style.OutlineSize = 1.000000000000000000
       LookAndFeel.Tabs.NotActive.Style.OutlineAlpha = 255
-      LookAndFeel.Tabs.Hot.Font.Name = 'Tahoma'
+      LookAndFeel.Tabs.Hot.Font.Name = 'Segoe UI'
       LookAndFeel.Tabs.Hot.Font.Color = clBlack
-      LookAndFeel.Tabs.Hot.Font.Size = 8
+      LookAndFeel.Tabs.Hot.Font.Size = 6
       LookAndFeel.Tabs.Hot.Font.Alpha = 255
       LookAndFeel.Tabs.Hot.Font.TextRenderingMode = TextRenderingHintClearTypeGridFit
       LookAndFeel.Tabs.Hot.Font.UseDefaultFont = True
@@ -518,6 +518,11 @@ object frmMain: TfrmMain
       LookAndFeel.ScrollButtons.Arrow.Disabled.OutlineSize = 1.000000000000000000
       LookAndFeel.ScrollButtons.Arrow.Disabled.OutlineAlpha = 255
       Align = alTop
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -8
+      Font.Name = 'Segoe UI'
+      Font.Style = []
       PopupMenu = ppmCVTabs
       TabOrder = 0
       ExplicitWidth = 1116
@@ -556,7 +561,7 @@ object frmMain: TfrmMain
       Transparent = True
       Wrapable = False
       OnCustomDraw = tlbMainCustomDraw
-      ExplicitHeight = 26
+      ExplicitWidth = 1069
     end
     object tlbTopRight: TToolBar
       Left = 1072

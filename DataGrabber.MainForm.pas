@@ -191,8 +191,6 @@ begin
   Logger.Enabled := FSettings.EmitLogMessages;
   AddConnectionView;
   imlMain.ImageCollection := FManager.ImageCollection;
-//  tlbMain.Images     := FManager.ActionList.Images;
-//  tlbTopRight.Images := FManager.ActionList.Images;
   tlbMain.Images     := imlMain;
   tlbTopRight.Images := imlMain;
   InitializeActions;
